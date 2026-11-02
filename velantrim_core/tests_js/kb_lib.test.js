@@ -162,7 +162,7 @@ test('size and speed budgets (sharded index)', async () => {
   }
   assert.ok(man < 10 * 1024, 'manifest gzip (≤10 KiB for the 150k lazy domain map) ' + man);
   assert.ok(maxShard < 200 * 1024, 'largest shard gzip ' + maxShard);
-  assert.ok(shards < 700 * 1024, 'all start-up shards gzip ' + shards);   // v14.3.0: ~28.5k entries, compact v3 shards
+  assert.ok(shards < 730 * 1024, 'all start-up shards gzip ' + shards);   // v14.16.15: +регионы мира (admin_regions, ~7 KiB gzip)   // v14.3.0: ~28.5k entries, compact v3 shards
   assert.ok(lazyShards < 3 * 1024 * 1024, 'lazy KB shards gzip ' + lazyShards);   // kn_* + longtail — только при соответствующем fallback
   assert.ok(maxPack < 40 * 1024, 'largest pack part gzip ' + maxPack);
   let t0 = process.hrtime.bigint();

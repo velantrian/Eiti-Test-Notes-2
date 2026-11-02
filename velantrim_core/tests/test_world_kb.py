@@ -120,7 +120,7 @@ def test_world_entities_have_entity_specific_reasoning_and_category_floors():
 
 def test_all_longtail_rows_have_explanations_and_english_answer():
     cards = _all_tail_cards()
-    assert len(cards) == 118_291
+    assert len(cards) == 118_091   # v14.16.15: −200 строк хвоста под регионы (admin_regions)
     for filename, line_no, record in cards:
         location = f"{filename}:{line_no}"
         assert record["english"], location
