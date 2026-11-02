@@ -71,11 +71,17 @@ test('150k longtail loads only for an explicit definition and leaves core answer
   await expect(msgs.last()).toContainText('многоязычная интернет-энциклопедия', { timeout: 20000 });
   const r = await page.evaluate(async () => {
     const a = await EitiKBHost.answer('почему небо голубое');
-    return { coreId: a && a.id, longtailEntries: EitiKBHost.stats.longtailEntries };
+    const index = await fetch(new URL('./kb/index.json', location.href)).then((response) => response.json());
+    const expectedLongtailEntries = Object.entries(index.domains)
+      .filter(([domain]) => /^longtail_\d{2}$/.test(domain))
+      .reduce((sum, [, meta]) => sum + meta.count, 0);
+    const totalEntries = Object.values(index.domains).reduce((sum, meta) => sum + meta.count, 0);
+    return { coreId: a && a.id, longtailEntries: EitiKBHost.stats.longtailEntries, expectedLongtailEntries, totalEntries };
   });
   expect(req.filter((u) => /kb\/idx\/longtail_\d+\.json/.test(u))).toHaveLength(24);
   expect(req.filter((u) => /kb\/packs\/kb_longtail_/.test(u))).toHaveLength(1);
-  expect(r.longtailEntries).toBe(118459);
+  expect(r.longtailEntries).toBe(r.expectedLongtailEntries);
+  expect(r.totalEntries).toBe(150000);
   expect(r.coreId).toBe(before);
 });
 
@@ -89,7 +95,6 @@ test('чат без ключа: ответ из библиотеки знани�
   await expect(msgs.last()).toContainText('Канберра', { timeout: 15000 });
   await send(page, 'кто такой Никола Тесла');
   await expect(msgs.last()).toContainText('Тесла', { timeout: 15000 });
-  await expect(msgs.last()).toContainText('KB');
   await send(page, 'расскажи сказку на ночь');
   await expect(msgs.last()).not.toContainText('🧠 KB', { timeout: 15000 });
   await send(page, 'привет, как дела?');

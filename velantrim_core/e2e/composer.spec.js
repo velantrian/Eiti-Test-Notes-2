@@ -80,6 +80,9 @@ test('plus, microphone and send controls are inside the full-width composer shel
       panelSideColumns: panel ? Array.from(panel.children).filter((el) => el.classList.contains('chat-left-col') || el.classList.contains('chat-right-col')).length : -1,
       inputPaddingLeft: input ? getComputedStyle(input).paddingLeft : '',
       inputPaddingRight: input ? getComputedStyle(input).paddingRight : '',
+      shellWrap: shell ? getComputedStyle(shell).flexWrap : '',
+      inputBasis: input ? getComputedStyle(input).flexBasis : '',
+      inputOrder: input ? getComputedStyle(input).order : '',
     };
   });
   expect(layout).toMatchObject({
@@ -90,8 +93,11 @@ test('plus, microphone and send controls are inside the full-width composer shel
     sendInside: true,
     panelSideColumns: 0,
     inputPaddingLeft: '4px',
+    shellWrap: 'wrap',
+    inputBasis: '100%',
+    inputOrder: '1',
   });
-  expect(['4px','6px']).toContain(layout.inputPaddingRight);
+  expect(['4px', '6px']).toContain(layout.inputPaddingRight);
 });
 
 test('classic button mode reserves composer space for the attachment control', async ({ page }) => {

@@ -785,7 +785,8 @@
     }
     return out;
   }
-  function near(card, t) { var a = stem(norm(card.title).split(' ')[0] || ''), b = stem(norm(t).split(' ')[0] || ''); return !!a && !!b && a.slice(0, 4) === b.slice(0, 4); }
+  function near(card, t) { var a = stem(norm(card.title).split(' ')[0] || ''), b = stem(norm(t).split(' ')[0] || ''); // v14.16.14: «правда» ≠ «право» — 4 общих буквы мало; основы равны или отличаются ≤1 буквой в конце при общей основе ≥5
+    if (!a || !b) return false; if (a === b) return true; var n = Math.min(a.length, b.length); return n >= 5 && Math.abs(a.length - b.length) <= 1 && a.slice(0, n) === b.slice(0, n); }
   function emoText(text) { if (!P) return false; try { return emoGuard(toks(text)); } catch (e) { return false; } }
   // тема для запасных путей (журнал «нет в базе», карточки из Википедии, кнопки) — из фрейма, иначе вся фраза без паразитов
   function topicOf(text) {

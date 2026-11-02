@@ -50,11 +50,27 @@ test.describe('v14.5.0 storage settings', () => {
     expect(await count(page, 'notes')).toBe(notes);
     expect(notes).toBeGreaterThan(0);
 
-    await page.evaluate(() => caches.open('eiti-offline-test').then((c) => c.put('/offline/x.json', new Response('{"a":1}'))));
+    // Snapshot all existing offline caches and seed each with a uniquely named object.
+    // The active SW may re-create an empty cache; no previously stored marker may survive.
+    const cacheProbe = '/offline/__eiti_clear_cache_test_probe__.json';
+    await page.evaluate(async (probe) => {
+      const names = (await caches.keys()).filter((name) => /^eiti-offline/.test(name));
+      if (!names.includes('eiti-offline-test')) names.push('eiti-offline-test');
+      for (const name of names) {
+        const cache = await caches.open(name);
+        await cache.put(probe, new Response('probe-before-clear'));
+      }
+    }, cacheProbe);
     await page.locator('#eiti-clear-cache-btn').click();
-    // Clear removes every eiti-offline* name; the live SW may immediately recreate
-    // OFFLINE_CACHE (eiti-offline-v…), so assert the seeded test cache is gone.
-    await expect.poll(() => page.evaluate(() => caches.keys().then((k) => k.includes('eiti-offline-test')))).toBe(false);
+    await expect.poll(() => page.evaluate(async (probe) => {
+      const names = (await caches.keys()).filter((name) => /^eiti-offline/.test(name));
+      if (names.includes('eiti-offline-test')) return false;
+      for (const name of names) {
+        const cache = await caches.open(name);
+        if (await cache.match(probe)) return false;
+      }
+      return true;
+    }, cacheProbe)).toBe(true);
 
     expect(await page.evaluate(() => !!EitiDialogHost.state().slots.place)).toBe(true);
     await page.locator('#eiti-reset-dialog-btn').click();

@@ -8,7 +8,8 @@ async function boot(page, loc) {
     localStorage.setItem('eiti_locale', l); localStorage.setItem('eiti_ai_reply_lang', 'auto');
   }, loc);
   await page.goto('/index.html');
-  await page.waitForFunction(() => !!window.EitiDState && !!window.EitiDialogHost && typeof eitiDb !== 'undefined' && !!eitiDb);
+  // Do not send messages before KB init finishes and the real chat send handler is wired.
+  await page.waitForFunction(() => window.eitiChatReady === true && !!window.EitiDState && !!window.EitiDialogHost && typeof eitiDb !== 'undefined' && !!eitiDb, null, { timeout: 30000 });
   await page.addStyleTag({ content: '#eiti-pin-modal{display:none!important}' });
   await page.evaluate(() => { document.querySelectorAll('#eiti-onboarding,#eiti-pin-modal,.toast').forEach((e) => e.remove()); localStorage.removeItem('eiti_ds_off'); });
 }
