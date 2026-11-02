@@ -10,7 +10,7 @@ SW = (ROOT / "sw.js").read_text(encoding="utf-8")
 
 def test_version_sync():
     # v14.16.2 functionality must keep working as the runtime version advances.
-    match = re.search(r'var EITI_VERSION = "(\\d+\\.\\d+\\.\\d+)"', HTML)
+    match = re.search(r'var EITI_VERSION = "(\d+\.\d+\.\d+)"', HTML)
     assert match, "missing runtime version"
     version = match.group(1)
     assert tuple(map(int, version.split("."))) >= (14, 16, 2), "version regressed before v14.16.2"
