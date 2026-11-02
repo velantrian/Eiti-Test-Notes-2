@@ -23,6 +23,12 @@ MAX_OFFSET = 600_000
 SHARD_RECORDS = 5_000
 OUT_PREFIX = 'w_longtail_'
 
+# Keep this previously shipped entry stable across regenerated Wikidata windows.
+# Its slot is reserved after the prioritized world-entity and generic tail rows.
+PINNED_RECORDS = (
+    ('что такое Tha Last Meal', 'Tha Last Meal — альбом Snoop Dogg.', ''),
+)
+
 sys.path.insert(0, HERE)
 from gen_kb import cap, clean, desc, ok_label, sent  # noqa: E402
 from gen_more import BADL, GENERIC, HAND, NOISE, SEEN, known, load_seen, norm  # noqa: E402
@@ -131,16 +137,29 @@ def main():
     needed = TARGET_COUNT - current
     if needed <= 0:
         raise SystemExit('Base KB already has %d records; target is %d.' % (current, TARGET_COUNT))
+    pinned_records = list(PINNED_RECORDS)
+    record_budget = needed - len(pinned_records)
+    if record_budget < 0:
+        raise SystemExit('Pinned longtail records exceed the available KB capacity.')
 
     old_files = sorted(name for name in os.listdir(SRC) if is_longtail_file(name))
     load_seen(skip=set(old_files))
     hand_words = {word for phrase in HAND for word in phrase.strip().split()}
     added_labels = set()
+    for trigger, answer, _fields in pinned_records:
+        label = trigger[len('что такое '):] if trigger.startswith('что такое ') else ''
+        trigger_key, answer_key = norm(trigger), norm(answer)
+        if not label or trigger_key in seen_triggers or answer_key in seen_answers:
+            raise SystemExit('Pinned longtail record collides with the base KB: %s' % trigger)
+        seen_triggers[trigger_key] = 'pinned longtail record'
+        seen_answers.add(answer_key)
+        added_labels.add(norm(label))
+
     records = []
-    records.extend(generate_world_entities(needed, seen_triggers, seen_answers, added_labels, hand_words))
+    records.extend(generate_world_entities(record_budget, seen_triggers, seen_answers, added_labels, hand_words))
     print('prioritized world entities', len(records), flush=True)
     offset = 0
-    while len(records) < needed and offset < MAX_OFFSET:
+    while len(records) < record_budget and offset < MAX_OFFSET:
         rows = query_page(offset)
         if not rows:
             break
@@ -173,16 +192,17 @@ def main():
             seen_triggers[trigger_key] = 'w_longtail:%d' % len(records)
             seen_answers.add(answer_key)
             added_labels.add(label_key)
-            if len(records) >= needed:
+            if len(records) >= record_budget:
                 break
         offset += len(rows)
         if len(rows) < PAGE_SIZE:
             break
 
-    if len(records) != needed:
-        raise SystemExit('Only %d new records qualified; need %d to reach %d. Existing tail files left untouched.' %
-                         (len(records), needed, TARGET_COUNT))
+    if len(records) != record_budget:
+        raise SystemExit('Only %d new records qualified; need %d generated records plus %d pinned records to reach %d. Existing tail files left untouched.' %
+                         (len(records), record_budget, len(pinned_records), TARGET_COUNT))
 
+    records.extend(pinned_records)
     write_sources(records, old_files)
     print('records', TARGET_COUNT, 'added', len(records), 'longtail shards',
           (len(records) + SHARD_RECORDS - 1) // SHARD_RECORDS)
