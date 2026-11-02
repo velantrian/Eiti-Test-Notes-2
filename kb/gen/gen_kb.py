@@ -8,7 +8,7 @@ import os, re, sys
 from wd import sparql
 SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')
 
-def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31', en=False):
+def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31', en=False, offset=0):
     sel, body = [], []
     for name, p, kind in props:
         if kind == 'label':
@@ -23,6 +23,8 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
     q = ('SELECT ?x ?l ?d ?sl %s WHERE { %s ?x wikibase:sitelinks ?sl . FILTER(?sl >= %d) '
          + ('OPTIONAL { ?x rdfs:label ?lr FILTER(LANG(?lr)="ru") } OPTIONAL { ?x rdfs:label ?le FILTER(LANG(?le)="en") } BIND(COALESCE(?lr, ?le) AS ?l) FILTER(BOUND(?l)) ' if en else '?x rdfs:label ?l FILTER(LANG(?l)="ru") ') + 'OPTIONAL { ?x schema:description ?d FILTER(LANG(?d)="ru") } %s %s } '
          'GROUP BY ?x ?l ?d ?sl ORDER BY DESC(?sl) LIMIT %d') % (' '.join(sel), cls_stmt, minsl, extra, ' '.join(body), limit)
+    if offset:
+        q += ' OFFSET %d' % int(offset)
     rows = sparql(q, tag or ('it_' + __import__('hashlib').sha1(q.encode()).hexdigest()[:12]))
     out, seen = [], set()
     for r in rows:

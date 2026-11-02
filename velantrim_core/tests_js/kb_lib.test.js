@@ -94,7 +94,9 @@ test('held-out questions on encyclopedic sections (people, cities, countries, �
 test('longtail is split into lazy shards and only answers explicit topic lookups', () => {
   const tails = Object.keys(idx.domains).filter((d) => /^longtail_\d{2}$/.test(d));
   assert.strictEqual(tails.length, 24);
-  assert.strictEqual(tails.reduce((n, d) => n + idx.domains[d].count, 0), 118459);
+  const tailCount = tails.reduce((n, d) => n + idx.domains[d].count, 0);
+  assert.strictEqual(tailCount, TAIL.entries.length);
+  assert.strictEqual(tailCount, idx.count - CORE.entries.length);
   assert.ok(tails.every((d) => idx.domains[d].lazy && !idx.order.includes(d) && idx.domains[d].count <= 5000));
   const e = K.create(TAIL);
   const row = FULL.entries.find((x) => /^longtail_\d{2}$/.test(x.d));
@@ -103,6 +105,31 @@ test('longtail is split into lazy shards and only answers explicit topic lookups
   assert.ok(!e.search(topic, 5).some((h) => h.d.indexOf('longtail_') === 0));
   assert.ok(!e.search('доброе утро', 5).some((h) => h.d.indexOf('longtail_') === 0));
   assert.ok(!e.search('сколько стран входит в оон', 5).some((h) => h.d.indexOf('longtail_') === 0));
+});
+
+test('people region aggregates are ordinary core records found from natural phrasing', () => {
+  const domain = 'peoples_regions';
+  const entries = CORE.entries.filter((entry) => entry.d === domain);
+  assert.ok(entries.length >= 100, 'regional/country people summaries are indexed in core');
+  assert.ok(idx.order.includes(domain) && !(idx.lazy || []).includes(domain));
+  const engine = K.create({ domains: idx.domains, entries });
+  const cases = [
+    ['расскажи о народах Африки', 'Народы Африки'],
+    ['народности в Африке', 'Народы Африки'],
+    ['народы России', 'Народы России'],
+    ['народности в России', 'Народы России'],
+    ['народности в Китае', 'Народы Китая'],
+    ['народы Сибири', 'Народы Сибири'],
+    ['народы Кавказа', 'Народы Кавказа'],
+    ['народы Центральной Азии', 'Народы Центральной Азии'],
+  ];
+  for (const [question, title] of cases) {
+    const hit = engine.search(question, 5).find((candidate) => candidate.d === domain);
+    assert.ok(hit, question + ' should retrieve a people aggregate');
+    const row = packEntries(domain)[hit.id];
+    assert.ok(row && row.a.startsWith(title), question + ' → ' + (row && row.a.slice(0, 60)));
+    assert.ok(engine.confident(hit), question + ' should be confident');
+  }
 });
 
 test('chit-chat and tale requests are not hijacked by KB', () => {

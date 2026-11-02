@@ -27,6 +27,6 @@ def test_kb_index_has_exactly_150k_records():
     core_count = sum(meta["count"] for name, meta in index["domains"].items() if not name.startswith("longtail_"))
     assert index["count"] == 150_000
     assert len(longtail) == 24
-    assert longtail_count == 118_459
-    assert core_count == 31_541
+    assert longtail_count == 118_280
+    assert core_count == 31_720
     assert core_count + longtail_count == index["count"]

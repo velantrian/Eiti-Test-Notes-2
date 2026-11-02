@@ -69,6 +69,7 @@ test('world-entity reasoning fields are visible in the offline detail card', () 
     candidate.gen && candidate.f && candidate.f.short && candidate.f.short.startsWith('Класс:'));
   assert.ok(entry, 'typed world-entity record exists in the lazy longtail');
   for (const key of ['short', 'why', 'origin', 'verify']) assert.ok(entry.f[key], `world entity lacks ${key}`);
+  assert.ok(entry.f.why.includes('P31/P279') || entry.f.why.includes('P31=Q41710'));
   const detail = R.kbDetailCard(entry, entry.rd || [], 'ru');
   assert.ok(detail.includes('Wikidata (CC0)'), 'world-entity source is attributed');
   for (const key of ['short', 'why', 'origin', 'verify']) assert.ok(detail.includes(entry.f[key]), `detail card omits world-entity ${key}`);

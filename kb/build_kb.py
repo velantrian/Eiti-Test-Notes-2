@@ -112,7 +112,9 @@ def build():
             if fields: rec['f'] = fields
             recs.append((eid, h[:n], rec))
         if not recs: continue
-        rel = related_of(recs)   # «Похожие»: same-section neighbours, stored in packs only (not in the search shards)
+        # Population/region list cards are query aids; comparing entire lists as
+        # "related records" is noisy and needlessly inflates their offline packs.
+        rel = {} if dom == 'peoples_regions' else related_of(recs)
         rec_by_hash = {hh: r for _, hh, r in recs}
         for _, hh, r in recs:
             if hh in rel:

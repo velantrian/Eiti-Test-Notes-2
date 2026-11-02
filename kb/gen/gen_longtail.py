@@ -22,9 +22,6 @@ PAGE_SIZE = 20_000
 MAX_OFFSET = 600_000
 SHARD_RECORDS = 5_000
 OUT_PREFIX = 'w_longtail_'
-
-# Keep this previously shipped entry stable across regenerated Wikidata windows.
-# Its slot is reserved after the prioritized world-entity and generic tail rows.
 PINNED_RECORDS = (
     ('что такое Tha Last Meal', 'Tha Last Meal — альбом Snoop Dogg.', ''),
 )
@@ -34,6 +31,7 @@ from gen_kb import cap, clean, desc, ok_label, sent  # noqa: E402
 from gen_more import BADL, GENERIC, HAND, NOISE, SEEN, known, load_seen, norm  # noqa: E402
 from wd import sparql  # noqa: E402
 from world_entities import generate_world_entities  # noqa: E402
+from world_peoples import build_people_region_source, fetch_people_items  # noqa: E402
 
 MEDICAL = re.compile(
     r'болезн|заболеван|синдром|лекарств|препарат|лечени|медицин|диагност|'
@@ -51,16 +49,18 @@ def is_longtail_file(name):
     return bool(TAIL_FILE.match(name))
 
 
-def source_state(exclude_longtail=False):
-    """Count records exactly as build_kb.py does; optionally omit old tail files."""
+def source_state(exclude_longtail=False, replacements=None):
+    """Count records as build_kb.py does, optionally overlaying generated sources."""
+    replacements = replacements or {}
     seen_t, seen_a = {}, set()
     total = 0
-    files = sorted(os.listdir(SRC), key=lambda name: (name.startswith('w_'), name))
+    files = sorted(set(os.listdir(SRC)) | set(replacements), key=lambda name: (name.startswith('w_'), name))
     for name in files:
         if not name.endswith('.txt') or (exclude_longtail and is_longtail_file(name)):
             continue
         path = os.path.join(SRC, name)
-        for line_no, line in enumerate(open(path, encoding='utf-8'), 1):
+        lines = replacements[name] if name in replacements else open(path, encoding='utf-8')
+        for line_no, line in enumerate(lines, 1):
             if not line.strip() or line.startswith('#'):
                 continue
             parts = [part.strip() for part in line.split('||')]
@@ -96,13 +96,55 @@ def query_page(offset):
     return sparql(query, tag)
 
 
-def write_sources(records, old_files):
+def preserved_world_records(old_files, seen_triggers, seen_answers, added_labels):
+    """Keep previously generated typed world cards; generic tail is refillable."""
+    records = []
+    for name in old_files:
+        path = os.path.join(SRC, name)
+        for line in open(path, encoding='utf-8'):
+            if not line.strip() or line.startswith('#'):
+                continue
+            parts = [part.strip() for part in line.split('||')]
+            if len(parts) < 3 or not parts[-1].startswith('@short:') or 'Класс:' not in parts[-1]:
+                continue
+            fields = parts[-1]
+            if not all(marker in fields for marker in ('why:', 'origin:', 'verify:')):
+                continue
+            trigger_text, answer = parts[0], parts[1]
+            trigger_pairs = [(text.strip(), norm(text)) for text in trigger_text.split(';')]
+            trigger_pairs = [(text, key) for text, key in trigger_pairs if key]
+            answer_key = norm(answer)
+            if not answer_key or answer_key in seen_answers or not trigger_pairs:
+                continue
+            if any(key in seen_triggers for _, key in trigger_pairs):
+                continue
+            records.append((trigger_text, answer, fields))
+            for text, key in trigger_pairs:
+                seen_triggers[key] = 'preserved_world'
+                if text.lower().startswith('что такое '):
+                    added_labels.add(norm(text[len('что такое '):].strip()))
+            seen_answers.add(answer_key)
+    return records
+
+
+def write_sources(records, old_files, replacements=None):
     """Replace prior long-tail output atomically enough to restore it on failure."""
-    backups = {name: open(os.path.join(SRC, name), 'rb').read() for name in old_files}
+    replacements = replacements or {}
+    affected = set(old_files) | set(replacements)
+    backups = {}
+    for name in affected:
+        path = os.path.join(SRC, name)
+        backups[name] = open(path, 'rb').read() if os.path.exists(path) else None
     new_names = []
     try:
         for name in old_files:
             os.remove(os.path.join(SRC, name))
+        for name, lines in replacements.items():
+            path = os.path.join(SRC, name)
+            new_names.append(name)
+            with open(path, 'w', encoding='utf-8') as out:
+                for line in lines:
+                    out.write(str(line).rstrip('\n') + '\n')
         for shard_no, start in enumerate(range(0, len(records), SHARD_RECORDS)):
             domain = 'longtail_%02d' % shard_no
             name = OUT_PREFIX + '%02d.txt' % shard_no
@@ -126,26 +168,34 @@ def write_sources(records, old_files):
             if os.path.exists(path):
                 os.remove(path)
         for name, content in backups.items():
-            with open(os.path.join(SRC, name), 'wb') as out:
-                out.write(content)
+            path = os.path.join(SRC, name)
+            if content is None:
+                if os.path.exists(path):
+                    os.remove(path)
+            else:
+                with open(path, 'wb') as out:
+                    out.write(content)
         raise
 
 
 def main():
     os.makedirs(SRC, exist_ok=True)
-    current, seen_triggers, seen_answers = source_state(exclude_longtail=True)
-    needed = TARGET_COUNT - current
-    if needed <= 0:
-        raise SystemExit('Base KB already has %d records; target is %d.' % (current, TARGET_COUNT))
-    pinned_records = list(PINNED_RECORDS)
-    record_budget = needed - len(pinned_records)
-    if record_budget < 0:
-        raise SystemExit('Pinned longtail records exceed the available KB capacity.')
-
     old_files = sorted(name for name in os.listdir(SRC) if is_longtail_file(name))
     load_seen(skip=set(old_files))
     hand_words = {word for phrase in HAND for word in phrase.strip().split()}
     added_labels = set()
+    people_items = fetch_people_items()
+    people_source = build_people_region_source(people_items)
+    replacements = {'w_peoples_regions.txt': people_source}
+    current, seen_triggers, seen_answers = source_state(exclude_longtail=True, replacements=replacements)
+    needed = TARGET_COUNT - current
+    if needed <= 0:
+        raise SystemExit('Base KB already has %d records; target is %d.' % (current, TARGET_COUNT))
+
+    pinned_records = list(PINNED_RECORDS)
+    record_budget = needed - len(pinned_records)
+    if record_budget < 0:
+        raise SystemExit('Pinned longtail records exceed the available KB capacity.')
     for trigger, answer, _fields in pinned_records:
         label = trigger[len('что такое '):] if trigger.startswith('что такое ') else ''
         trigger_key, answer_key = norm(trigger), norm(answer)
@@ -155,9 +205,16 @@ def main():
         seen_answers.add(answer_key)
         added_labels.add(norm(label))
 
-    records = []
-    records.extend(generate_world_entities(record_budget, seen_triggers, seen_answers, added_labels, hand_words))
-    print('prioritized world entities', len(records), flush=True)
+    records = preserved_world_records(old_files, seen_triggers, seen_answers, added_labels)
+    print('preserved existing typed world entries', len(records), flush=True)
+    remaining = record_budget - len(records)
+    if remaining < 0:
+        raise SystemExit('Existing typed world entries (%d) exceed remaining longtail slots (%d).' %
+                         (len(records), record_budget))
+    new_world = generate_world_entities(remaining, seen_triggers, seen_answers, added_labels, hand_words,
+                                        people_items=people_items)
+    records.extend(new_world)
+    print('new prioritized world entities', len(new_world), 'total typed world entities', len(records), flush=True)
     offset = 0
     while len(records) < record_budget and offset < MAX_OFFSET:
         rows = query_page(offset)
@@ -203,7 +260,7 @@ def main():
                          (len(records), record_budget, len(pinned_records), TARGET_COUNT))
 
     records.extend(pinned_records)
-    write_sources(records, old_files)
+    write_sources(records, old_files, replacements=replacements)
     print('records', TARGET_COUNT, 'added', len(records), 'longtail shards',
           (len(records) + SHARD_RECORDS - 1) // SHARD_RECORDS)
 

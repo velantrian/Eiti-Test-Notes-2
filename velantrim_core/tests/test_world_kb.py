@@ -15,6 +15,7 @@ CATEGORY_MARKERS = {
     "admin_units": "Класс: административная территория",
     "institutions": "Класс: учреждение конкретного типа",
     "organizations": "Класс: организация",
+    "peoples": "Класс: народ/этническая группа",
 }
 
 
@@ -55,9 +56,38 @@ def test_world_entities_have_grounded_reasoning_and_verifiable_qids():
         assert "CC0" in origin, location
         assert qids, location
         assert f"https://www.wikidata.org/wiki/{qids[0]}" in origin, location
-        assert "P31/P279" in fields["why"], location
-        assert "P31/P279" in fields["verify"], location
+        if "Q41710" in fields["short"]:
+            assert "P31=Q41710" in fields["why"], location
+            assert "P31=Q41710" in fields["verify"], location
+        else:
+            assert "P31/P279" in fields["why"], location
+            assert "P31/P279" in fields["verify"], location
         assert "первоисточник" in fields["verify"].lower(), location
+
+
+def test_people_region_aggregates_are_grounded_and_searchable_core_sources():
+    path = SRC / "w_peoples_regions.txt"
+    records = [line for line in path.read_text(encoding="utf-8").splitlines()
+               if line.strip() and not line.startswith("#")]
+    assert len(records) >= 100
+    triggers = "\n".join(line.split("||")[0] for line in records)
+    for phrase in (
+        "народы Африки", "народности в Африке", "расскажи о народах Африки",
+        "народы России", "народности в России", "народы Китая", "народности в Китае",
+        "народы Сибири", "народы Кавказа", "народы Центральной Азии",
+    ):
+        assert phrase in triggers, f"missing people-list query: {phrase}"
+
+    for line in records:
+        parts = [part.strip() for part in line.split("||")]
+        assert len(parts) >= 3
+        answer = parts[1]
+        fields = _parse_fields(parts[-1])
+        assert len(answer) <= 700
+        qids = re.findall(r"\bQ\d+\b", fields["origin"])
+        assert qids and len(answer.split("; ")) == len(qids)
+        assert "Wikidata CC0" in fields["origin"]
+        assert "P31=Q41710" in fields["why"] and "P30" in fields["why"]
 
 
 def test_world_reasoning_fields_are_embedded_in_lazy_pack():
