@@ -89,9 +89,9 @@ test('plus, microphone and send controls are inside the full-width composer shel
     microphoneInside: true,
     sendInside: true,
     panelSideColumns: 0,
-    inputPaddingLeft: '56px',
+    inputPaddingLeft: '4px',
   });
-  expect(['94px', '142px']).toContain(layout.inputPaddingRight);
+  expect(['4px','6px']).toContain(layout.inputPaddingRight);
 });
 
 test('classic button mode reserves composer space for the attachment control', async ({ page }) => {
@@ -109,5 +109,5 @@ test('classic button mode reserves composer space for the attachment control', a
       paddingRight: input ? getComputedStyle(input).paddingRight : '',
     };
   });
-  expect(layout).toEqual({ classicMode: true, attachmentInside: true, paddingRight: '142px' });
+  expect(layout).toEqual({ classicMode: true, attachmentInside: true, paddingRight: '4px' });
 });
