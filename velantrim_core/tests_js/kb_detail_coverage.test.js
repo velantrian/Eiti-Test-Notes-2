@@ -46,19 +46,23 @@ test('kbDetailCard renders grounded, self-contained detail for every packed reco
   assert.strictEqual(total, 150000, 'accepted test KB target is 150,000 records');
 });
 
-test('Wikidata longtail reasoning stays attributable and self-contained offline', () => {
+test('Wikidata longtail fallback reasoning stays attributable and self-contained offline', () => {
   const index = readIndex();
   const domains = Object.keys(index.domains).filter((d) => /^longtail_\d{2}$/.test(d)).reverse();
   let entry = null;
   for (const domain of domains) {
-    entry = Object.values(loadDomain(index, domain)).find((candidate) => candidate.gen && (!candidate.f || !candidate.f.why));
+    entry = Object.values(loadDomain(index, domain)).find((candidate) =>
+      candidate.gen && candidate.f && candidate.f.why && candidate.f.origin &&
+      !String(candidate.f.short || '').startsWith('Класс:'));
     if (entry) break;
   }
-  assert.ok(entry && entry.gen, 'a generated sparse Wikidata longtail record exists');
+  assert.ok(entry && entry.gen && entry.f, 'a generated generic longtail record with stored provenance exists');
   const detail = R.kbDetailCard(entry, entry.rd || [], 'ru');
   assert.ok(detail.includes('Wikidata (CC0)'), 'longtail source is attributed');
   assert.ok(detail.indexOf('**Суть**') < detail.indexOf('**Подробнее**'));
-  assert.ok(detail.includes('дополнительные факты не придумываются'), 'sparse longtail records do not invent extra facts');
+  assert.ok(detail.includes(entry.f.why), 'stored explanation is shown, not replaced by invented facts');
+  assert.ok(detail.includes('Wikidata longtail (CC0)'), 'stored CC0 provenance is visible offline');
+  assert.ok(detail.includes('исходный QID не записан'), 'missing individual QID is disclosed offline');
 });
 
 test('world-entity reasoning fields are visible in the offline detail card', () => {

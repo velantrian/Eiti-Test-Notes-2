@@ -17,7 +17,7 @@ from gen_kb import clean, ok_label, q_items
 from gen_more import BADL, GENERIC, NOISE, norm
 
 CLASS = "wd:Q41710"
-PROPS = [("country", "wdt:P17", "label"), ("parent", "wdt:P131", "label")]
+PROPS = [("country", "wdt:P17", "country"), ("parent", "wdt:P131", "label")]
 SENSITIVE = re.compile(r"порно|porn|эрот|adult|fuck|shit|cunt|пизд|бляд|ебал|ебат", re.I)
 
 def fetch_people_items():
@@ -61,14 +61,40 @@ def _valid_items(items):
 def _country_groups(items):
     groups = defaultdict(list)
     for it in items:
-        for country in it["country"]:
+        for country in _p17_countries(it):
             groups[norm(country)].append((country, it))
     return groups
 
 
+def _p17_countries(it):
+    """P17 labels already restricted by q_items() to current Q6256 countries."""
+    return sorted({clean(x) for x in it.get("country", []) if clean(x)}, key=norm)
+
+
+def _primary_country_keys(it):
+    """Heuristically find a described home country to filter obvious diaspora matches.
+
+    This is only a relevance guard for continental summaries: P17 itself remains a
+    recorded link, never evidence of population distribution or settlement.
+    """
+    words = re.findall(r"[a-zа-яё]+", norm(" ".join((it.get("l", ""), it.get("d", "")))))
+    mentioned = set()
+    for country in _p17_countries(it):
+        for token in norm(country).split():
+            if len(token) <= 3:
+                found = token in words
+            else:
+                stem = token[:4]
+                found = any(word.startswith(stem) for word in words)
+            if found:
+                mentioned.add(norm(country))
+                break
+    return mentioned
+
+
 def _region_match(region, it):
     text = norm(" ".join([it.get("l", ""), it.get("d", ""), *it.get("parent", [])]))
-    countries = {norm(c) for c in it.get("country", [])}
+    countries = _primary_country_keys(it) or {norm(c) for c in _p17_countries(it)}
     if region == "Сибирь":
         return bool(re.search(r"сибир|siberia|якут|тыва|тува|бурят|алтай|хакас|краснояр|иркут|омск|томск|новосибир|кемеров|забайкал", text, re.I))
     if region == "Кавказ":
@@ -80,28 +106,31 @@ def _region_match(region, it):
     return False
 
 
-def _countries_for(it, preferred=()):
+def _countries_for(it, preferred=(), allowed=()):
     preferred = {norm(x) for x in preferred}
-    vals = sorted({clean(x) for x in it.get("country", []) if clean(x)},
-                  key=lambda value: (norm(value) not in preferred, norm(value)))
+    allowed = {norm(x) for x in allowed}
+    vals = [x for x in _p17_countries(it) if not allowed or norm(x) in allowed]
+    vals.sort(key=lambda value: (norm(value) not in preferred, norm(value)))
     return vals[:3]
 
 
-def _answer(title, selected, total, preferred_countries=()):
+def _answer(title, selected, total, allowed_countries=(), preferred_countries=()):
     bits = []
     used = []
     for it in selected[:10]:
-        countries = _countries_for(it, preferred_countries)
-        suffix = (" (" + ", ".join(countries) + (", и др." if len(it.get("country", [])) > 3 else "") + ")") if countries else ""
+        countries = _countries_for(it, preferred_countries, allowed_countries)
+        available = [x for x in _p17_countries(it)
+                     if not allowed_countries or norm(x) in {norm(c) for c in allowed_countries}]
+        suffix = (" (P17: " + ", ".join(countries) + (", и др." if len(available) > 3 else "") + ")") if countries else ""
         if not countries and title in ("Сибирь", "Кавказ"):
             parents = sorted({clean(x) for x in it.get("parent", []) if clean(x)}, key=norm)
             if parents:
-                suffix = " (P131: " + parents[0] + ")"
+                suffix = " (административная связь P131: " + parents[0] + ")"
         bits.append(f"{it['l']}{suffix}")
         used.append(it)
     display = TRIGGER_FORMS.get(title, (title, ""))[0]
-    prefix = f"Народы {display} — выборка: "
-    ending = f". В выборке Wikidata найдено {total} записей, но список не полный: связи P17/P131 не задают полного расселения."
+    prefix = f"Народы {display} — выборка по записям Wikidata: "
+    ending = f". Найдено {total}; P17/P131 и P30 — только записанные связи и приближение, не карта расселения и не полный список."
     while bits and len(prefix + "; ".join(bits) + ending) > 690:
         bits.pop()
         used.pop()
@@ -111,10 +140,10 @@ def _answer(title, selected, total, preferred_countries=()):
 def _fields(title, qids, basis):
     joined = ", ".join(qids)
     return (f"@short: агрегированный список народов для {title}; обычный домен, не longtail. | "
-            f"why: прямой P31=Q41710 (ethnic group); группировка по recorded P17/P30/P131, "
-            f"без P172 и без утверждения демографической полноты. | origin: Wikidata CC0; "
-            f"QIDs в порядке списка: {joined}; {basis}. | verify: проверить карточки QID, P31, P17, P30 и P131; "
-            "официальные этнографические источники использовать отдельно.")
+            f"why: прямой P31=Q41710; группировка {basis}; P17 отфильтрован до объектов класса страны Q6256, "
+            "P131 остаётся отдельной административной связью; без P172 и без утверждения о расселении. | "
+            f"origin: Wikidata CC0; QIDs в порядке списка: {joined}; P30 классифицирует страну, а не группу. | "
+            "verify: сверить QID, P31, P17, P30 и P131 в карточках Wikidata; для фактического расселения нужны отдельные этнографические источники.")
 
 
 TRIGGER_FORMS = {
@@ -150,22 +179,30 @@ def build_people_region_source(items=None):
     for region in ("Сибирь", "Кавказ", "Центральная Азия"):
         selected = [it for it in valid if _region_match(region, it)]
         selected.sort(key=lambda x: (-int(x.get("sl", 0)), norm(x["l"]), x["qid"]))
-        if selected: cards.append((region, selected[:10], len(selected), region, region_countries[region]))
+        if selected: cards.append((region, selected[:10], len(selected), region,
+                                   region_countries[region], region_countries[region]))
     continent_names = ("Африка", "Азия", "Европа", "Северная Америка", "Южная Америка", "Океания")
     for continent in continent_names:
         countries = {country for country, areas in country_continents.items() if norm(continent) in areas}
-        selected = [it for it in valid if any(norm(c) in countries for c in it.get("country", []))]
+        selected = []
+        for it in valid:
+            # If label/description names a primary P17 country, do not let
+            # unrelated diaspora links make the group an apparent continent match.
+            relevant = _primary_country_keys(it) or {norm(c) for c in _p17_countries(it)}
+            if relevant & countries:
+                selected.append(it)
         selected.sort(key=lambda x: (-int(x.get("sl", 0)), norm(x["l"]), x["qid"]))
-        if selected: cards.append((continent, selected[:10], len(selected), "P30→P17", countries))
+        if selected: cards.append((continent, selected[:10], len(selected), "P30→P17", countries, countries))
     for key, rows in sorted(groups.items()):
         if len(rows) < 3: continue
         selected = [it for _, it in rows]
         selected.sort(key=lambda x: (-int(x.get("sl", 0)), norm(x["l"]), x["qid"]))
         title = rows[0][0]
-        cards.append((title, selected[:10], len(selected), "P17", {key}))
+        cards.append((title, selected[:10], len(selected), "P17", {key}, {key}))
     lines = ["# Народы мира | Peoples of the world", "# @generated from Wikidata (CC0) — direct P31=Q41710; do not edit by hand"]
-    for title, selected, total, basis, preferred in cards:
-        answer, used = _answer(title, selected, total, preferred_countries=preferred)
+    for title, selected, total, basis, allowed, preferred in cards:
+        answer, used = _answer(title, selected, total, allowed_countries=allowed,
+                               preferred_countries=preferred)
         qids = [it["qid"] for it in used]
         lines.append("; ".join(_triggers(title)) + " || " + answer + " || " + _fields(title, qids, basis))
     return lines

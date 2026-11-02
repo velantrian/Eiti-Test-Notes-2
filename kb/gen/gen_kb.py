@@ -13,6 +13,13 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
     for name, p, kind in props:
         if kind == 'label':
             body.append('OPTIONAL { ?x %s ?%s_ . ?%s_ rdfs:label ?%s FILTER(LANG(?%s)="ru") }' % (p, name, name, name, name))
+        elif kind == 'country':
+            body.append(('OPTIONAL { ?x %s ?%s_ . ?%s_ wdt:P31/wdt:P279* wd:Q6256 . '
+                         'FILTER NOT EXISTS { ?%s_ wdt:P576 ?country_end } '
+                         'OPTIONAL { ?%s_ rdfs:label ?%s_ru FILTER(LANG(?%s_ru)="ru") } '
+                         'OPTIONAL { ?%s_ rdfs:label ?%s_en FILTER(LANG(?%s_en)="en") } '
+                         'BIND(COALESCE(?%s_ru, ?%s_en) AS ?%s) }') %
+                        (p, name, name, name, name, name, name, name, name, name, name, name, name))
         elif kind == 'year':
             body.append('OPTIONAL { ?x %s ?%s_ . BIND(YEAR(?%s_) AS ?%s) }' % (p, name, name, name))
         else:
@@ -20,9 +27,20 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
         sel.append('(GROUP_CONCAT(DISTINCT STR(?%s); SEPARATOR="|") AS ?%ss)' % (name, name))
     if ' ' in cls: cls_stmt = 'VALUES ?cls { %s } ?x %s ?cls .' % (cls, cls_path)
     else: cls_stmt = '?x %s %s .' % (cls_path, cls)
+    if en:
+        lang_cols = '?le ?de'
+        label_stmt = ('OPTIONAL { ?x rdfs:label ?lr FILTER(LANG(?lr)="ru") } '
+                      'OPTIONAL { ?x rdfs:label ?le FILTER(LANG(?le)="en") } '
+                      'BIND(COALESCE(?lr, ?le) AS ?l) FILTER(BOUND(?l)) ')
+        desc_stmt = ('OPTIONAL { ?x schema:description ?d FILTER(LANG(?d)="ru") } '
+                     'OPTIONAL { ?x schema:description ?de FILTER(LANG(?de)="en") } ')
+    else:
+        lang_cols = ''
+        label_stmt = '?x rdfs:label ?l FILTER(LANG(?l)="ru") '
+        desc_stmt = 'OPTIONAL { ?x schema:description ?d FILTER(LANG(?d)="ru") } '
     q = ('SELECT ?x ?l ?d ?sl %s WHERE { %s ?x wikibase:sitelinks ?sl . FILTER(?sl >= %d) '
-         + ('OPTIONAL { ?x rdfs:label ?lr FILTER(LANG(?lr)="ru") } OPTIONAL { ?x rdfs:label ?le FILTER(LANG(?le)="en") } BIND(COALESCE(?lr, ?le) AS ?l) FILTER(BOUND(?l)) ' if en else '?x rdfs:label ?l FILTER(LANG(?l)="ru") ') + 'OPTIONAL { ?x schema:description ?d FILTER(LANG(?d)="ru") } %s %s } '
-         'GROUP BY ?x ?l ?d ?sl ORDER BY DESC(?sl) LIMIT %d') % (' '.join(sel), cls_stmt, minsl, extra, ' '.join(body), limit)
+         + '%s%s%s %s } GROUP BY ?x ?l ?d ?sl %s ORDER BY DESC(?sl) LIMIT %d') % (
+             ' '.join(sel), cls_stmt, minsl, label_stmt, desc_stmt, extra, ' '.join(body), lang_cols, limit)
     if offset:
         q += ' OFFSET %d' % int(offset)
     rows = sparql(q, tag or ('it_' + __import__('hashlib').sha1(q.encode()).hexdigest()[:12]))
@@ -31,7 +49,8 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
         qid = r['x'].rsplit('/', 1)[1]
         if qid in seen: continue
         seen.add(qid)
-        it = {'qid': qid, 'l': clean(r['l']), 'd': clean(r.get('d', '')), 'sl': int(r['sl'])}
+        it = {'qid': qid, 'l': clean(r['l']), 'd': clean(r.get('d', '')), 'sl': int(r['sl']),
+              'en': clean(r.get('le', '')), 'den': clean(r.get('de', ''))}
         for name, _, _ in props:
             v = [clean(x) for x in (r.get(name + 's') or '').split('|') if x.strip()]
             it[name] = [x for x in v if x and not re.match(r'^Q\d+$', x) and not x.startswith('http')]

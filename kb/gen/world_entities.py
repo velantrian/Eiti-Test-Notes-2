@@ -6,7 +6,7 @@ with facts copied only from direct properties. This is a broad, non-exhaustive
 reference layer, not a legal or official register of every place or institution.
 """
 import re
-from collections import Counter
+from collections import Counter, defaultdict, deque
 
 from gen_kb import cap, clean, desc, lab, ok_label, q_items, sent, yr
 from gen_more import BADL, GENERIC, NOISE, SEEN, known, norm
@@ -37,7 +37,8 @@ def _linked_fact(prefix, values, limit=6):
 WORLD_GROUPS = (
     {
         'key': 'countries', 'classes': 'wd:Q6256', 'basis': 'Q6256',
-        'quota': 2000, 'kind': 'Страна или территория',
+        'quota': 2000, 'page_size': 20000, 'max_pages': 4, 'kind': 'Страна или территория',
+        'kind_en': 'country or territory',
         'minsl': 1, 'en': True,
         'short': 'Класс: страна или территория по Wikidata Q6256; независимость не предполагается.',
         'props': [('capital', 'wdt:P36', 'label'), ('continent', 'wdt:P30', 'label')],
@@ -48,7 +49,8 @@ WORLD_GROUPS = (
     },
     {
         'key': 'places', 'classes': 'wd:Q515 wd:Q486972', 'basis': 'Q515/Q486972',
-        'quota': 16000, 'page_size': 20000, 'max_pages': 2, 'kind': 'Город или населённое место',
+        'quota': 16000, 'page_size': 20000, 'max_pages': 4, 'kind': 'Город или населённое место',
+        'kind_en': 'city or populated place',
         'short': 'Класс: город или населённое место по Wikidata Q515/Q486972.',
         'props': [('country', 'wdt:P17', 'label'), ('parent', 'wdt:P131', 'label')],
         'facts': lambda it: [lab('Страна (P17): ', it['country'], 1),
@@ -58,7 +60,8 @@ WORLD_GROUPS = (
     },
     {
         'key': 'admin1', 'classes': 'wd:Q10864048', 'basis': 'Q10864048',
-        'quota': 8000, 'kind': 'Административная единица первого уровня (ADM1)',
+        'quota': 8000, 'page_size': 20000, 'max_pages': 4, 'kind': 'Административная единица первого уровня (ADM1)',
+        'kind_en': 'first-level administrative division',
         'minsl': 1, 'en': True,
         'short': 'Класс: административная единица первого уровня (ADM1), Wikidata Q10864048.',
         'props': [('country', 'wdt:P17', 'label'), ('parent', 'wdt:P131', 'label')],
@@ -69,8 +72,9 @@ WORLD_GROUPS = (
     },
     {
         'key': 'admin2', 'classes': 'wd:Q56061', 'basis': 'Q56061 с прямым P131 к Q10864048',
-        'quota': 9000, 'page_size': 16000, 'max_pages': 2,
+        'quota': 9000, 'page_size': 16000, 'max_pages': 4,
         'kind': 'Административная единица с прямым родителем ADM1; местный ранг следует проверить',
+        'kind_en': 'administrative division with an ADM1 parent',
         'short': 'Класс: административная единица с прямым родителем ADM1; точный национальный уровень не гарантирован.',
         'props': [('country', 'wdt:P17', 'label'), ('parent', 'wdt:P131', 'label')],
         'facts': lambda it: [lab('Страна (P17): ', it['country'], 1),
@@ -85,7 +89,8 @@ WORLD_GROUPS = (
     },
     {
         'key': 'municipalities', 'classes': 'wd:Q15284', 'basis': 'Q15284',
-        'quota': 12000, 'page_size': 16000, 'max_pages': 2, 'kind': 'Муниципалитет',
+        'quota': 12000, 'page_size': 16000, 'max_pages': 4, 'kind': 'Муниципалитет',
+        'kind_en': 'municipality',
         'short': 'Класс: муниципалитет по Wikidata Q15284; полномочия зависят от страны.',
         'props': [('country', 'wdt:P17', 'label'), ('parent', 'wdt:P131', 'label')],
         'facts': lambda it: [lab('Страна (P17): ', it['country'], 1),
@@ -95,8 +100,9 @@ WORLD_GROUPS = (
     },
     {
         'key': 'admin_units', 'classes': 'wd:Q56061', 'basis': 'Q56061',
-        'quota': 2500, 'page_size': 12000, 'max_pages': 2,
+        'quota': 2500, 'page_size': 12000, 'max_pages': 4,
         'kind': 'Административно-территориальная единица',
+        'kind_en': 'administrative division',
         'short': 'Класс: административная территория по Wikidata Q56061; уровень следует сверять по стране.',
         'props': [('country', 'wdt:P17', 'label'), ('parent', 'wdt:P131', 'label')],
         'facts': lambda it: [lab('Страна (P17): ', it['country'], 1),
@@ -106,22 +112,25 @@ WORLD_GROUPS = (
     },
     {
         'key': 'institutions',
-        'classes': 'wd:Q3914 wd:Q16917 wd:Q31855 wd:Q327333 wd:Q7075 wd:Q3918 wd:Q33506',
-        'basis': 'Q3914/Q16917/Q31855/Q327333/Q7075/Q3918/Q33506',
-        'quota': 12000, 'page_size': 20000, 'max_pages': 2,
-        'kind': 'Учреждение или институт конкретного типа',
+        'classes': ('wd:Q3914 wd:Q16917 wd:Q31855 wd:Q327333 wd:Q7075 wd:Q3918 wd:Q33506 '
+                    'wd:Q24354 wd:Q861951 wd:Q1195942 wd:Q1137809 wd:Q43501 wd:Q1254933 wd:Q167346 wd:Q35054 wd:Q1248784'),
+        'basis': 'школа/больница/исследовательский институт/госорган/библиотека/университет/музей/театр/полицейский участок/пожарная часть/здание суда/зоопарк/обсерватория/ботанический сад/почта/аэропорт',
+        'quota': 12000, 'page_size': 20000, 'max_pages': 4,
+        'kind': 'Учреждение или объект общественной инфраструктуры конкретного типа',
+        'kind_en': 'institution or public facility',
         'short': 'Класс: учреждение конкретного типа по Wikidata P31/P279.',
         'props': [('country', 'wdt:P17', 'label'), ('parent', 'wdt:P131', 'label'),
                   ('founded', 'wdt:P571', 'year')],
         'facts': lambda it: [lab('Страна (P17): ', it['country'], 1),
                              lab('Расположено в (P131): ', it['parent'], 1),
                              ('Основано: %s.' % yr(it['founded'])) if yr(it['founded']) else ''],
-        'fallback': 'учреждение, отнесённое Wikidata к одному из типов школы, больницы, исследовательского института, государственного органа, библиотеки, университета или музея',
-        'why': 'Выбор по цепочке P31/P279 от типа школы, больницы, исследовательского института, госоргана, библиотеки, университета или музея. Место и год указываются только по прямым P131/P571.',
+        'fallback': 'учреждение или общественный объект, отнесённый Wikidata к типу школы, больницы, исследовательского института, госоргана, библиотеки, университета, музея, театра, полицейского участка, пожарной части, здания суда, зоопарка, обсерватории, ботанического сада, почты или аэропорта',
+        'why': 'Выбор по P31/P279 от типа школы, больницы, исследовательского института, госоргана, библиотеки, университета, музея, театра, полицейского участка, пожарной части, здания суда, зоопарка, обсерватории, ботанического сада, почты или аэропорта. Место и год указываются только по прямым P131/P571.',
     },
     {
         'key': 'organizations', 'classes': 'wd:Q43229', 'basis': 'Q43229',
-        'quota': 7000, 'page_size': 20000, 'max_pages': 2, 'kind': 'Организация',
+        'quota': 7000, 'page_size': 20000, 'max_pages': 4, 'kind': 'Организация',
+        'kind_en': 'organization',
         'short': 'Класс: организация по Wikidata Q43229; запись не подтверждает текущую регистрацию.',
         'props': [('country', 'wdt:P17', 'label'), ('hq', 'wdt:P159', 'label'),
                   ('founded', 'wdt:P571', 'year')],
@@ -134,6 +143,7 @@ WORLD_GROUPS = (
     {
         'key': 'peoples', 'classes': 'wd:Q41710', 'basis': 'Q41710 (прямой P31)',
         'quota': 8000, 'page_size': 10000, 'max_pages': 1, 'kind': 'Народ или этническая группа',
+        'kind_en': 'people or ethnic group',
         'minsl': 1, 'en': True, 'cls_path': 'wdt:P31',
         'short': 'Класс: народ/этническая группа по прямому P31=Q41710.',
         'props': [('country', 'wdt:P17', 'label'), ('parent', 'wdt:P131', 'label')],
@@ -146,13 +156,17 @@ WORLD_GROUPS = (
 )
 
 
-def _field_text(group, qid):
+def _field_text(group, qid, label, source_description):
     page = 'https://www.wikidata.org/wiki/' + qid
     relation = group.get('verify_rule', 'P31/P279')
+    detail = ('описание Wikidata: «%s»' % source_description if source_description else
+              'русское описание Wikidata отсутствует; ответ ограничен классификацией и прямыми фактами')
+    why = 'Карточка «%s»: %s. Объект отобран по %s; %s.' % (
+        label, detail, relation, group['why'])
     return ('@short: %s | why: %s | origin: Открытые данные Wikidata, лицензия CC0; '
-            'идентификатор %s; страница %s. | verify: Сверить тип по %s к %s, '
-            'а факты и первоисточники — в карточке объекта; юридический статус проверить у официального органа.') % (
-                group['short'], group['why'], qid, page, relation, group['basis'])
+            'идентификатор %s; страница %s. | verify: Сверить название «%s», описание, тип по %s к %s, '
+            'прямые свойства и первоисточники; юридический статус проверить у официального органа.') % (
+                group['short'], why, qid, page, label, relation, group['basis'])
 
 
 def _answer(group, item, label, description):
@@ -161,13 +175,28 @@ def _answer(group, item, label, description):
                 'Тип сущности: %s.' % group['kind'])
 
 
+def _interleave_by_country(items):
+    """Round-robin candidate rows by recorded P17 label to reduce popular-country bias."""
+    buckets = defaultdict(deque)
+    for item in items:
+        countries = sorted({norm(clean(x)) for x in item.get('country', []) if clean(x)})
+        buckets[countries[0] if countries else '~unknown'].append(item)
+    keys = sorted(buckets, key=lambda key: (key == '~unknown', key))
+    out = []
+    while any(buckets[key] for key in keys):
+        for key in keys:
+            if buckets[key]:
+                out.append(buckets[key].popleft())
+    return out
+
+
 def _select_group(group, items, quota, seen_triggers, seen_answers, added_labels, hand_words):
     unique = {}
     for item in items:
         qid = item.get('qid', '')
         if qid and qid not in unique:
             unique[qid] = item
-    items = list(unique.values())
+    items = _interleave_by_country(list(unique.values()))
     ambiguous = Counter(norm(it.get('l', '')) for it in items)
     trial_triggers = dict(seen_triggers)
     trial_answers = set(seen_answers)
@@ -208,7 +237,15 @@ def _select_group(group, items, quota, seen_triggers, seen_answers, added_labels
         qid = item.get('qid', '')
         if not re.fullmatch(r'Q\d+', qid):
             continue
-        records.append((trigger, answer, _field_text(group, qid)))
+        english_label = clean(item.get('en', '')) or label
+        english_description = desc({'d': clean(item.get('den', ''))})
+        english_answer = ('%s — %s. Entity type: %s.' %
+                          (cap(english_label), english_description.rstrip('.'),
+                           group.get('kind_en', 'Wikidata-classified entity')) if english_description else
+                          '%s — Wikidata-classified %s.' %
+                          (cap(english_label), group.get('kind_en', 'entity')))
+        records.append((trigger, answer, english_answer,
+                        _field_text(group, qid, label, source_description)))
         trial_triggers[trigger_key] = 'world_%s:%d' % (group['key'], accepted + 1)
         trial_answers.add(answer_key)
         trial_labels.add(label_key)
@@ -221,7 +258,6 @@ def _select_group(group, items, quota, seen_triggers, seen_answers, added_labels
 def generate_world_entities(needed, seen_triggers, seen_answers, added_labels, hand_words, people_items=None):
     """Return priority tuples (trigger, answer, fields), updating shared dedupe sets."""
     records = []
-    page_service_failed = False
     for group in WORLD_GROUPS:
         quota = min(group['quota'], needed - len(records))
         if quota <= 0:
@@ -231,23 +267,26 @@ def generate_world_entities(needed, seen_triggers, seen_answers, added_labels, h
         print('Wikidata world group %s: requesting up to %d candidates per page' % (group['key'], limit), flush=True)
         query_args = (group['classes'], group.get('minsl', 5), group['props'])
         query_kw = dict(extra=group.get('extra', ''), limit=limit,
-                        cls_path=group.get('cls_path', CLASS_PATH), en=group.get('en', False))
+                        cls_path=group.get('cls_path', CLASS_PATH), en=group.get('en', True))
         if group['key'] == 'peoples' and people_items is not None:
             page_items = list(people_items)
         else:
-            page_items = q_items(*query_args, offset=0, **query_kw)
+            try:
+                page_items = q_items(*query_args, offset=0, **query_kw)
+            except SystemExit as exc:
+                print('Wikidata initial page unavailable for %s; skipping new candidates and keeping prior generated cards (%s)' %
+                      (group['key'], exc), flush=True)
+                continue
         all_items = list(page_items)
         group_records, trial_triggers, trial_answers, trial_labels, accepted = _select_group(
             group, all_items, quota, seen_triggers, seen_answers, added_labels, hand_words)
         page_no, offset = 1, len(page_items)
-        while (len(group_records) < quota and page_no < max_pages
-               and len(page_items) >= limit and not page_service_failed):
+        while len(group_records) < quota and page_no < max_pages and page_items:
             try:
                 page_items = q_items(*query_args, offset=offset, **query_kw)
             except SystemExit as exc:
                 print('Wikidata optional page unavailable for %s; keeping prior candidates (%s)' %
                       (group['key'], exc), flush=True)
-                page_service_failed = True
                 break
             if not page_items:
                 break

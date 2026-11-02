@@ -23,7 +23,7 @@ from related import related as related_of
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, 'src')
 PART = 400
-PART_MIN, PACK_GZ_SOFT = 100, 38000
+PACK_GZ_SOFT = 38000
 FIELDS = ('short', 'detail', 'ex', 'why', 'use', 'how', 'when', 'origin', 'count', 'who', 'verify')
 
 def parse_fields(seg):
@@ -39,6 +39,26 @@ def parse_fields(seg):
         if k in out: errs.append('repeated field %r' % k); continue
         out[k] = v
     return out, errs
+
+
+def generated_fields(filename, title, trigger, answer, header):
+    """Explain legacy generated entries without inventing a missing item QID."""
+    clean_trigger = re.sub(r'\s+', ' ', trigger).strip()
+    clean_answer = re.sub(r'\s+', ' ', answer).strip()
+    clean_title = re.sub(r'\s+', ' ', title).strip()
+    if 'Wikidata' in header and 'CC0' in header:
+        origin = 'Wikidata CC0; generated source %s; individual QID is not recorded in this legacy row.' % filename
+    else:
+        origin = 'Generated source %s; provenance header: %s; individual item ID is not recorded.' % (
+            filename, header.lstrip('# ').strip())
+    return {
+        'short': 'Справочная карточка раздела «%s»; ответ ограничен сохранённым текстом.' % clean_title,
+        'why': 'Карточка «%s» отвечает на конкретный запрос; сохранённое утверждение: «%s». Это содержание записи, а не отдельный вывод о полноте.' %
+               (clean_trigger, clean_answer),
+        'origin': origin,
+        'verify': 'Сверить название и факты «%s» с соответствующей записью Wikidata и первоисточниками; исходная строка %s не содержит QID.' %
+                  (clean_answer, filename),
+    }
 
 def norm(s):
     return re.sub(r'\s+', ' ', re.sub(r'[^a-zа-я0-9+#²³ ]+', ' ', s.lower().replace('ё', 'е'))).strip()
@@ -77,6 +97,7 @@ def build():
         lines = open(os.path.join(SRC, fn), encoding='utf-8').read().splitlines()
         title = lines[0].lstrip('# ').split('|')
         gen = len(lines) > 1 and lines[1].startswith('# @generated')
+        source_header = lines[1] if len(lines) > 1 else ''
         if gen and dom.startswith('w_'): dom = dom[2:]
         recs = []
         for ln, line in enumerate(lines[1:], 2):
@@ -109,6 +130,10 @@ def build():
             eid = 'kbl_%s_%s' % (dom, h[:n]); seen_id.add(eid)
             rec = {'q': uniq, 'a': parts[1]}
             if len(parts) > 2 and parts[2]: rec['en'] = parts[2]
+            if gen:
+                fields = fields or {}
+                for key, value in generated_fields(fn, title[0], uniq[0], parts[1], source_header).items():
+                    fields.setdefault(key, value)
             if fields: rec['f'] = fields
             recs.append((eid, h[:n], rec))
         if not recs: continue
@@ -134,8 +159,12 @@ def build():
             nparts = (len(recs) + part - 1) // part
             chunks = [recs[pi * part:(pi + 1) * part] for pi in range(nparts)]
             payloads = [json.dumps({'v': 2, 'domain': dom, 'part': pi, 'entries': {e: r for e, _, r in c}}, ensure_ascii=False, separators=(',', ':')) for pi, c in enumerate(chunks)]
-            if part <= (40 if dom.startswith('kn_') else PART_MIN) or max(len(gzip.compress(p.encode(), 9)) for p in payloads) <= PACK_GZ_SOFT: break
-            part -= 50
+            max_gz = max(len(gzip.compress(p.encode(), 9)) for p in payloads)
+            if max_gz <= PACK_GZ_SOFT: break
+            if part <= 1:
+                errors.append('%s: pack gzip %d exceeds soft limit %d' % (dom, max_gz, PACK_GZ_SOFT))
+                break
+            part = max(1, part - 50)
         pfiles, pgz, pbytes, shard, px = [], [], 0, [], {}
         for pi in range(nparts):
             chunk = chunks[pi]

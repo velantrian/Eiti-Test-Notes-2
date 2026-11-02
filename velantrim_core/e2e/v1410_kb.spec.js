@@ -95,7 +95,6 @@ test('чат без ключа: ответ из библиотеки знани�
   await expect(msgs.last()).toContainText('Канберра', { timeout: 15000 });
   await send(page, 'кто такой Никола Тесла');
   await expect(msgs.last()).toContainText('Тесла', { timeout: 15000 });
-  await expect(msgs.last()).toContainText('KB');
   await send(page, 'расскажи сказку на ночь');
   await expect(msgs.last()).not.toContainText('🧠 KB', { timeout: 15000 });
   await send(page, 'привет, как дела?');

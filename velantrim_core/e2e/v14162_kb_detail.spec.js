@@ -98,7 +98,8 @@ test('lazy Wikidata longtail remains lazy and its reasoning opens with no networ
   await expect(reasoning).toContainText('Суть', { timeout: 20000 });
   await expect(reasoning).toContainText('Подробнее');
   await expect(reasoning).toContainText('Wikidata (CC0)');
-  await expect(reasoning).toContainText('дополнительные факты не придумываются');
+  await expect(reasoning).toContainText('новых фактов не добавлено');
+  await expect(reasoning).toContainText('Wikidata QID в исходной карточке не указан');
   expect(requests).toEqual([]);
   await context.setOffline(false);
 });
