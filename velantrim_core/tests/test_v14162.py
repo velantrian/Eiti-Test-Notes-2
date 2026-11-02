@@ -1,5 +1,6 @@
 """v14.16.2: подробные офлайн-ответы KB — синхронизация версии и кеша SW."""
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -8,17 +9,24 @@ SW = (ROOT / "sw.js").read_text(encoding="utf-8")
 
 
 def test_version_sync():
-    assert 'var EITI_VERSION = "14.16.5"' in HTML
-    assert "var CACHE = 'eiti-v14.16.5'" in SW
-    assert "var OFFLINE_CACHE = 'eiti-offline-v14.16.5'" in SW
-    assert "version: '14.16.5'" in SW
-    assert "// VELANTRIM EITI — Service Worker v14.16.5" in SW
-    assert "EITI_VERSION 14.16.5" in SW
-    assert "v14.16.5" in json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))["description"]
+    # v14.16.2 functionality must keep working as the runtime version advances.
+    match = re.search(r'var EITI_VERSION = "(\\d+\\.\\d+\\.\\d+)"', HTML)
+    assert match, "missing runtime version"
+    version = match.group(1)
+    assert tuple(map(int, version.split("."))) >= (14, 16, 2), "version regressed before v14.16.2"
+    assert f"var CACHE = 'eiti-v{version}'" in SW
+    assert f"var OFFLINE_CACHE = 'eiti-offline-v{version}'" in SW
+    assert f"version: '{version}'" in SW
+    assert f"// VELANTRIM EITI — Service Worker v{version}" in SW
+    assert f"EITI_VERSION {version}" in SW
+    assert f"v{version}" in json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))["description"]
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "version-14.16.5" in readme
+    assert f"version-{version}-gold" in readme
+    assert f"Что нового в v{version}" in readme
     assert readme.index("Что нового в v14.16.2") < readme.index("Что нового в v14.16.0") < readme.index("Что нового в v14.15.2")
-    assert "v14.16.2" in (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    assert f"v{version}" in agents
+    assert "v14.16.2" in agents
 
 
 def test_new_modules_precached():

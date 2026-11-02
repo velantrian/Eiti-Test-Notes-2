@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.5-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.12-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -16,7 +16,7 @@ _Клиентское PWA без backend и build step. Основной инт�
 
 <div align="center">
 
-**[🚀 Установить](#-установить-приложение) · [🆕 Что нового](#-что-нового-в-v14162) · [🏗️ Как устроен проект](#️-как-устроен-проект) · [📐 Архитектура подробно](docs/ARCHITECTURE.md) · [⚠️ Ограничения PWA](docs/PWA_LIMITS.md) · [🤖 AGENTS.md](AGENTS.md)**
+**[🚀 Установить](#-установить-приложение) · [🆕 Что нового](#-что-нового-в-v141612) · [🏗️ Как устроен проект](#️-как-устроен-проект) · [📐 Архитектура подробно](docs/ARCHITECTURE.md) · [⚠️ Ограничения PWA](docs/PWA_LIMITS.md) · [🤖 AGENTS.md](AGENTS.md)**
 
 </div>
 
@@ -65,6 +65,11 @@ python3 -m http.server 8080
 📐 Полная архитектура (для переноса в нативное приложение): **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ---
+
+## 🆕 Что нового в v14.16.12
+
+- 🔄 **Версия тестовой ветки:** приложение, Service Worker и PWA-манифест синхронизированы с `main` на v14.16.12. Изменения интерфейса получены из `main`; PR #2 изменяет только данные KB, документацию и тесты.
+- 🌍 **Мировые записи KB:** 71 386 типизированных карточек, с сохранением ровно 150 000 записей, 24 ленивых longtail-шардов и происхождения Wikidata CC0.
 
 ## 🆕 Что нового в v14.16.2
 
