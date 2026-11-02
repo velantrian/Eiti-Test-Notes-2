@@ -48,14 +48,30 @@ test('kbDetailCard renders grounded, self-contained detail for every packed reco
 
 test('Wikidata longtail reasoning stays attributable and self-contained offline', () => {
   const index = readIndex();
-  const domain = Object.keys(index.domains).find((d) => /^longtail_\d{2}$/.test(d));
-  assert.ok(domain, 'lazy Wikidata domain exists');
-  const entry = Object.values(loadDomain(index, domain))[0];
-  assert.ok(entry && entry.gen, 'longtail sample is marked generated');
+  const domains = Object.keys(index.domains).filter((d) => /^longtail_\d{2}$/.test(d)).reverse();
+  let entry = null;
+  for (const domain of domains) {
+    entry = Object.values(loadDomain(index, domain)).find((candidate) => candidate.gen && (!candidate.f || !candidate.f.why));
+    if (entry) break;
+  }
+  assert.ok(entry && entry.gen, 'a generated sparse Wikidata longtail record exists');
   const detail = R.kbDetailCard(entry, entry.rd || [], 'ru');
   assert.ok(detail.includes('Wikidata (CC0)'), 'longtail source is attributed');
   assert.ok(detail.indexOf('**Суть**') < detail.indexOf('**Подробнее**'));
   assert.ok(detail.includes('дополнительные факты не придумываются'), 'sparse longtail records do not invent extra facts');
+});
+
+test('world-entity reasoning fields are visible in the offline detail card', () => {
+  const index = readIndex();
+  const domain = Object.keys(index.domains).find((d) => /^longtail_\d{2}$/.test(d));
+  assert.ok(domain, 'lazy Wikidata domain exists');
+  const entry = Object.values(loadDomain(index, domain)).find((candidate) =>
+    candidate.gen && candidate.f && candidate.f.short && candidate.f.short.startsWith('Класс:'));
+  assert.ok(entry, 'typed world-entity record exists in the lazy longtail');
+  for (const key of ['short', 'why', 'origin', 'verify']) assert.ok(entry.f[key], `world entity lacks ${key}`);
+  const detail = R.kbDetailCard(entry, entry.rd || [], 'ru');
+  assert.ok(detail.includes('Wikidata (CC0)'), 'world-entity source is attributed');
+  for (const key of ['short', 'why', 'origin', 'verify']) assert.ok(detail.includes(entry.f[key]), `detail card omits world-entity ${key}`);
 });
 
 test('Moon phases detail is attached to existing records and retains verified sources', () => {

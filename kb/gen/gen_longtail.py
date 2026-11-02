@@ -27,6 +27,7 @@ sys.path.insert(0, HERE)
 from gen_kb import cap, clean, desc, ok_label, sent  # noqa: E402
 from gen_more import BADL, GENERIC, HAND, NOISE, SEEN, known, load_seen, norm  # noqa: E402
 from wd import sparql  # noqa: E402
+from world_entities import generate_world_entities  # noqa: E402
 
 MEDICAL = re.compile(
     r'болезн|заболеван|синдром|лекарств|препарат|лечени|медицин|диагност|'
@@ -105,8 +106,11 @@ def write_sources(records, old_files):
             with open(path, 'w', encoding='utf-8') as out:
                 out.write('# Энциклопедические темы | Encyclopedia topics\n')
                 out.write('# @generated from Wikidata (CC0) by kb/gen/gen_longtail.py — do not edit by hand\n')
-                for trigger, answer in batch:
-                    out.write('%s || %s\n' % (trigger, answer))
+                for record in batch:
+                    trigger, answer = record[:2]
+                    fields = record[2] if len(record) > 2 else ''
+                    suffix = (' || ' + fields) if fields else ''
+                    out.write('%s || %s%s\n' % (trigger, answer, suffix))
         actual, _, _ = source_state()
         if actual != TARGET_COUNT:
             raise RuntimeError('source count mismatch: expected %d, got %d' % (TARGET_COUNT, actual))
@@ -133,6 +137,8 @@ def main():
     hand_words = {word for phrase in HAND for word in phrase.strip().split()}
     added_labels = set()
     records = []
+    records.extend(generate_world_entities(needed, seen_triggers, seen_answers, added_labels, hand_words))
+    print('prioritized world entities', len(records), flush=True)
     offset = 0
     while len(records) < needed and offset < MAX_OFFSET:
         rows = query_page(offset)
@@ -163,7 +169,7 @@ def main():
                 continue
             if answer_key in seen_answers or trigger_key in seen_triggers:
                 continue
-            records.append((trigger, answer))
+            records.append((trigger, answer, ''))
             seen_triggers[trigger_key] = 'w_longtail:%d' % len(records)
             seen_answers.add(answer_key)
             added_labels.add(label_key)
