@@ -41,24 +41,142 @@ def parse_fields(seg):
     return out, errs
 
 
+_FACT_RE = re.compile(
+    r'(?:^|(?<=[.!?] ))([A-ZА-ЯЁÄÖÜ][^.:!?]{1,40}): ([^.!?]{1,160})(?=\.(?:\s|$))'
+)
+
+def _answer_facts(answer):
+    """«Метка: значение.» → [(label, value), ...] — same shape as offline parseFacts."""
+    facts, first = [], -1
+    for m in _FACT_RE.finditer(answer or ''):
+        if first < 0: first = m.start()
+        facts.append((m.group(1).strip(), m.group(2).strip()))
+    lead = (answer or '').strip() if first < 0 else (answer or '')[:first].strip()
+    return lead, facts
+
+
 def generated_fields(filename, title, trigger, answer, header):
-    """Explain legacy generated entries without inventing a missing item QID."""
+    """Grounded short/detail/why from the saved answer — no invented QIDs or extra facts."""
     clean_trigger = re.sub(r'\s+', ' ', trigger).strip()
     clean_answer = re.sub(r'\s+', ' ', answer).strip()
     clean_title = re.sub(r'\s+', ' ', title).strip()
+    lead, facts = _answer_facts(clean_answer)
     if 'Wikidata' in header and 'CC0' in header:
         origin = 'Wikidata CC0; generated source %s; individual QID is not recorded in this legacy row.' % filename
     else:
         origin = 'Generated source %s; provenance header: %s; individual item ID is not recorded.' % (
             filename, header.lstrip('# ').strip())
+    # short: lead + up to 3 fact labels (what the card actually contains).
+    # Не пишем «detail» на каждую из 150k записей — раздувает packs/index.gz; kbDetailCard
+    # собирает подробности из ответа. detail добавляет только enrich_geo_fields для гео.
+    if lead:
+        short = lead if len(lead) <= 220 else lead[:217].rstrip() + '…'
+        if facts:
+            bits = '; '.join('%s — %s' % (k, v) for k, v in facts[:3])
+            if bits and bits not in short:
+                cand = (short.rstrip('.') + '. ' + bits + '.').strip()
+                if len(cand) <= 360: short = cand
+    else:
+        short = 'Карточка «%s» из раздела «%s».' % (clean_trigger, clean_title)
+    why = ('Карточка «%s» собрана из сохранённого ответа в разделе «%s»%s. '
+           'Это содержание записи, а не отдельный вывод о полноте темы.') % (
+               clean_trigger, clean_title,
+               (('; поля: ' + ', '.join(k for k, _ in facts[:6])) if facts else ''))
     return {
-        'short': 'Справочная карточка раздела «%s»; ответ ограничен сохранённым текстом.' % clean_title,
-        'why': 'Карточка «%s» отвечает на конкретный запрос; сохранённое утверждение: «%s». Это содержание записи, а не отдельный вывод о полноте.' %
-               (clean_trigger, clean_answer),
+        'short': short[:360],
+        'why': why[:360],
         'origin': origin,
         'verify': 'Сверить название и факты «%s» с соответствующей записью Wikidata и первоисточниками; исходная строка %s не содержит QID.' %
-                  (clean_answer, filename),
+                  (clean_answer[:200], filename),
     }
+
+
+# Ожидаемые поля по гео-разделам — только для пометки «чего нет в записи» (без выдумывания значений).
+GEO_EXPECTED = {
+    'countries': ('Столица', 'Часть света', 'Официальный язык', 'Валюта', 'Код ISO', 'Площадь', 'Соседние страны'),
+    'cities': ('Страна', 'Административно', 'Основан'),
+    'admin_regions': ('Страна', 'Административный центр'),
+    'states': ('Столица', 'Официальный язык', 'Основано'),
+}
+
+
+def enrich_geo_fields(domains_recs):
+    """Cross-link countries ↔ cities ↔ admin_regions into f.detail / f.count for richer offline reasoning.
+
+    domains_recs: {domain: [(eid, hash, rec), ...]} — mutates rec['f'] in place. Never invents facts:
+    only lists titles already present in other domains that share an explicit «Страна: X» / lead name.
+    """
+    by_country = {'cities': {}, 'admin_regions': {}}
+    country_names = set()
+    for _, _, r in domains_recs.get('countries') or []:
+        name = (r.get('q') or [''])[0]
+        if name: country_names.add(name)
+    for dom in ('cities', 'admin_regions'):
+        for _, _, r in domains_recs.get(dom) or []:
+            lead, facts = _answer_facts(r.get('a') or '')
+            country = ''
+            for k, v in facts:
+                if k.lower().replace('ё', 'е') == 'страна':
+                    country = v.split(',')[0].strip(); break
+            if not country: continue
+            by_country[dom].setdefault(country, []).append((r.get('q') or ['?'])[0])
+    for _, _, r in domains_recs.get('countries') or []:
+        name = (r.get('q') or [''])[0]
+        if not name: continue
+        f = r.setdefault('f', {})
+        cities = by_country['cities'].get(name) or []
+        regs = by_country['admin_regions'].get(name) or []
+        bits = []
+        if cities:
+            bits.append('В этой офлайн-базе города этой страны (выборка): ' + ', '.join(cities[:12])
+                        + ('…' if len(cities) > 12 else '') + ' (всего %d).' % len(cities))
+        if regs:
+            bits.append('Регионы/области в базе: ' + ', '.join(regs[:10])
+                        + ('…' if len(regs) > 10 else '') + ' (всего %d).' % len(regs))
+        if bits:
+            extra = ' '.join(bits)
+            # компактный detail только для гео (список городов/регионов) — не дублируем lead
+            base = (f.get('detail') or '').strip()
+            f['detail'] = ((base + ' ' if base else '') + extra).strip()[:900]
+            f['count'] = ('В офлайн-базе: городов %d, регионов/областей %d по явной метке «Страна: %s».'
+                          % (len(cities), len(regs), name))[:360]
+        # отметить отсутствующие ожидаемые поля (Столица часто как «Столица — X.»)
+        _, facts = _answer_facts(r.get('a') or '')
+        have = {k.lower().replace('ё', 'е') for k, _ in facts}
+        a_low = (r.get('a') or '').lower().replace('ё', 'е')
+        miss = [lab for lab in GEO_EXPECTED['countries']
+                if lab.lower().replace('ё', 'е') not in have
+                and not (lab == 'Столица' and 'столица —' in a_low)
+                and not (lab == 'Площадь' and 'площадь:' in a_low)
+                and not (lab == 'Код ISO' and 'код iso:' in a_low)
+                and not (lab == 'Соседние страны' and 'соседние страны:' in a_low)]
+        if miss:
+            f['how'] = ('В этой записи нет сохранённых полей: %s. Не заполняйте их из догадок.'
+                        % ', '.join(miss))[:360]
+    for dom, expected in (('cities', GEO_EXPECTED['cities']), ('admin_regions', GEO_EXPECTED['admin_regions'])):
+        for _, _, r in domains_recs.get(dom) or []:
+            f = r.setdefault('f', {})
+            a_low = (r.get('a') or '').lower().replace('ё', 'е')
+            _, facts = _answer_facts(r.get('a') or '')
+            have = {k.lower().replace('ё', 'е') for k, _ in facts}
+            miss = []
+            for lab in expected:
+                key = lab.lower().replace('ё', 'е')
+                if key in have: continue
+                if lab == 'Административный центр' and 'административный центр:' in a_low: continue
+                if lab == 'Основан' and 'основан:' in a_low: continue
+                miss.append(lab)
+            if miss:
+                f['how'] = ('В этой записи нет сохранённых полей: %s. Не заполняйте их из догадок.'
+                            % ', '.join(miss))[:360]
+            # city → hint country card exists
+            country = ''
+            for k, v in facts:
+                if k.lower().replace('ё', 'е') == 'страна':
+                    country = v.split(',')[0].strip(); break
+            if country and country in country_names:
+                tip = 'Связанная карточка страны в базе: «%s» (раздел «Страны мира»).' % country
+                f['detail'] = ((f.get('detail') or '').rstrip() + ' ' + tip).strip()[:500]
 
 def norm(s):
     return re.sub(r'\s+', ' ', re.sub(r'[^a-zа-я0-9+#²³ ]+', ' ', s.lower().replace('ё', 'е'))).strip()
@@ -86,10 +204,62 @@ def dump(path, obj):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     open(path, 'wb').write(b); return b
 
+def _write_domain(dom, title, gen, recs, domains, errors):
+    """Attach related snapshots, shard+pack the domain, update domains[dom]."""
+    # Population/region list cards are query aids; comparing entire lists as
+    # "related records" is noisy and needlessly inflates their offline packs.
+    rel = {} if dom == 'peoples_regions' else related_of(recs)
+    rec_by_hash = {hh: r for _, hh, r in recs}
+    # Geo domains keep more neighbours for offline «Рассуждение» (still same-domain only).
+    rd_n = 5 if dom in ('countries', 'cities', 'admin_regions', 'states') else 3
+    for _, hh, r in recs:
+        if hh in rel:
+            r['r'] = rel[hh]
+            snapshots = []
+            for rh in rel[hh][:rd_n]:
+                other = rec_by_hash.get(rh)
+                if not other: continue
+                snap = {'q': other['q'][:1], 'a': other['a']}
+                if other.get('en'): snap['en'] = other['en']
+                snapshots.append(snap)
+            if snapshots: r['rd'] = snapshots
+    part = PART
+    while True:   # adaptive part size: packs carry «r» (related) and must stay under the 40 KB gzip cap
+        nparts = (len(recs) + part - 1) // part
+        chunks = [recs[pi * part:(pi + 1) * part] for pi in range(nparts)]
+        payloads = [json.dumps({'v': 2, 'domain': dom, 'part': pi, 'entries': {e: r for e, _, r in c}}, ensure_ascii=False, separators=(',', ':')) for pi, c in enumerate(chunks)]
+        max_gz = max(len(gzip.compress(p.encode(), 9)) for p in payloads)
+        if max_gz <= PACK_GZ_SOFT: break
+        if part <= 1:
+            errors.append('%s: pack gzip %d exceeds soft limit %d' % (dom, max_gz, PACK_GZ_SOFT))
+            break
+        part = max(1, part - 50)
+    pfiles, pgz, pbytes, shard, px = [], [], 0, [], {}
+    for pi in range(nparts):
+        chunk = chunks[pi]
+        f = 'packs/kb_%s.json' % dom if nparts == 1 else 'packs/kb_%s_%d.json' % (dom, pi)
+        b = dump(os.path.join(HERE, f), {'v': 2, 'domain': dom, 'part': pi, 'entries': {e: r for e, _, r in chunk}})
+        pfiles.append(f); pgz.append(gz(b)); pbytes += len(b)
+        kn = 40 if gen else 60 if dom.startswith('kn_') else 110
+        for _, hh, r in chunk:
+            if gen: shard.append(compact_row(hh, r, keys(r['a'], kn), px))
+            else: shard.append([hh, '|'.join(r['q']), keys(r['a'], kn), pi])
+    sf = 'idx/%s.json' % dom
+    if gen:
+        sb = dump(os.path.join(HERE, sf), {'v': 3, 'd': dom, 'g': 1, 'pp': part, 'px': [k for k, _ in sorted(px.items(), key=lambda x: x[1])], 'e': shard})
+    else:
+        sb = dump(os.path.join(HERE, sf), {'v': 2, 'd': dom, 'e': shard})
+    domains[dom] = {'title': title[0].strip(), 'title_en': (title[1].strip() if len(title) > 1 else dom), 'gen': gen,
+                    **({'lazy': 1} if dom.startswith('kn_') or dom.startswith('longtail_') else {}),
+                    'count': len(recs), 'shard': sf, 'shard_gz': gz(sb), 'shard_bytes': len(sb),
+                    'packs': pfiles, 'pack_gz_max': max(pgz), 'pack_bytes': pbytes}
+
+
 def build():
     for d in ('packs', 'idx'):
         for f in glob.glob(os.path.join(HERE, d, '*.json')): os.remove(f)
     domains, seen_t, seen_a, seen_id, errors, dropped, total = {}, {}, {}, set(), [], 0, 0
+    pending = []  # [(dom, title, gen, recs)]
     files = sorted(os.listdir(SRC), key=lambda f: (f.startswith('w_'), f))   # hand-written first
     for fn in files:
         if not fn.endswith('.txt'): continue
@@ -137,53 +307,11 @@ def build():
             if fields: rec['f'] = fields
             recs.append((eid, h[:n], rec))
         if not recs: continue
-        # Population/region list cards are query aids; comparing entire lists as
-        # "related records" is noisy and needlessly inflates their offline packs.
-        rel = {} if dom == 'peoples_regions' else related_of(recs)
-        rec_by_hash = {hh: r for _, hh, r in recs}
-        for _, hh, r in recs:
-            if hh in rel:
-                r['r'] = rel[hh]
-                # Embed a few compact source records in this pack so detail cards work offline even
-                # when a related entry's own pack has never been cached on the device.
-                snapshots = []
-                for rh in rel[hh][:3]:
-                    other = rec_by_hash.get(rh)
-                    if not other: continue
-                    snap = {'q': other['q'][:1], 'a': other['a']}
-                    if other.get('en'): snap['en'] = other['en']
-                    snapshots.append(snap)
-                if snapshots: r['rd'] = snapshots
-        part = PART
-        while True:   # adaptive part size: packs carry «r» (related) and must stay under the 40 KB gzip cap
-            nparts = (len(recs) + part - 1) // part
-            chunks = [recs[pi * part:(pi + 1) * part] for pi in range(nparts)]
-            payloads = [json.dumps({'v': 2, 'domain': dom, 'part': pi, 'entries': {e: r for e, _, r in c}}, ensure_ascii=False, separators=(',', ':')) for pi, c in enumerate(chunks)]
-            max_gz = max(len(gzip.compress(p.encode(), 9)) for p in payloads)
-            if max_gz <= PACK_GZ_SOFT: break
-            if part <= 1:
-                errors.append('%s: pack gzip %d exceeds soft limit %d' % (dom, max_gz, PACK_GZ_SOFT))
-                break
-            part = max(1, part - 50)
-        pfiles, pgz, pbytes, shard, px = [], [], 0, [], {}
-        for pi in range(nparts):
-            chunk = chunks[pi]
-            f = 'packs/kb_%s.json' % dom if nparts == 1 else 'packs/kb_%s_%d.json' % (dom, pi)
-            b = dump(os.path.join(HERE, f), {'v': 2, 'domain': dom, 'part': pi, 'entries': {e: r for e, _, r in chunk}})
-            pfiles.append(f); pgz.append(gz(b)); pbytes += len(b)
-            kn = 40 if gen else 60 if dom.startswith('kn_') else 110   # v14.14.0: карточки понятий ищутся по триггерам — ключи короче
-            for _, hh, r in chunk:
-                if gen: shard.append(compact_row(hh, r, keys(r['a'], kn), px))
-                else: shard.append([hh, '|'.join(r['q']), keys(r['a'], kn), pi])
-        sf = 'idx/%s.json' % dom
-        if gen:   # v3 compact: prefix table «кто такой », part implied by position (PART), keys without trigger words
-            sb = dump(os.path.join(HERE, sf), {'v': 3, 'd': dom, 'g': 1, 'pp': part, 'px': [k for k, _ in sorted(px.items(), key=lambda x: x[1])], 'e': shard})
-        else:
-            sb = dump(os.path.join(HERE, sf), {'v': 2, 'd': dom, 'e': shard})
-        domains[dom] = {'title': title[0].strip(), 'title_en': (title[1].strip() if len(title) > 1 else dom), 'gen': gen,
-                        **({'lazy': 1} if dom.startswith('kn_') or dom.startswith('longtail_') else {}),
-                        'count': len(recs), 'shard': sf, 'shard_gz': gz(sb), 'shard_bytes': len(sb),
-                        'packs': pfiles, 'pack_gz_max': max(pgz), 'pack_bytes': pbytes}
+        pending.append((dom, title, gen, recs))
+    # v14.16.17: страны ↔ города ↔ области — контекст в f для офлайн-рассуждения (без выдуманных фактов)
+    enrich_geo_fields({dom: recs for dom, _, _, recs in pending})
+    for dom, title, gen, recs in pending:
+        _write_domain(dom, title, gen, recs, domains, errors)
         total += len(recs)
     # hand-written shards load first; v14.14.0: карточки понятий (kn_*) — «ленивые»: не в order, грузятся при первом вопросе о понятии
     order = sorted((d for d in domains if not domains[d].get('lazy')), key=lambda d: (domains[d]['gen'], d))

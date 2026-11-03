@@ -80,6 +80,7 @@
     detailSimilarity: { ru: 'Похожие записи выбраны по общим словам и данным в этом разделе. Это контекст для сравнения, а не подтверждение прямой или причинной связи.', en: 'Similar entries are selected by shared wording and data in this section. They provide comparison context, not proof of a direct or causal relationship.', de: 'Ähnliche Einträge werden anhand gemeinsamer Wörter und Daten in diesem Bereich ausgewählt. Sie dienen zum Vergleich und belegen keine direkte oder kausale Beziehung.' },
     detailNoRelated: { ru: 'В базе не нашлось связанных карточек для контекста; дополнительная информация ограничена данными этой записи.', en: 'No linked entries were available for context; further information is limited to this record.', de: 'Es wurden keine verknüpften Einträge als Kontext gefunden; weitere Informationen sind auf diesen Datensatz beschränkt.' },
     detailFields: { ru: 'Поля карточки', en: 'Record fields', de: 'Felder des Eintrags' },
+    detailMissing: { ru: 'Чего нет в записи', en: 'Not in this record', de: 'Fehlt im Eintrag' },
     detailRelatedUnavailable: { ru: 'Для этой записи есть связи, но в установленном офлайн-пакете нет их снимков. Показаны только данные самой записи.', en: 'This record has links, but their snapshots are not present in the installed offline pack. Only this record’s data is shown.', de: 'Für diesen Eintrag gibt es Verknüpfungen, aber ihre Momentaufnahmen fehlen im installierten Offline-Paket. Angezeigt werden nur die Daten dieses Eintrags.' },
     detailNoContext: { ru: 'Сейчас нет свежей карточки знаний для уточнения. Сначала задай вопрос по теме, а затем попроси объяснить подробнее.', en: 'There is no recent knowledge card to expand. Ask about a topic first, then ask for more detail.', de: 'Es gibt keine aktuelle Wissenskarte zum Vertiefen. Stelle zuerst eine Frage zum Thema und bitte dann um mehr Details.' },
     copied:    { ru: '📋 Скопировано', en: '📋 Copied', de: '📋 Kopiert' },
@@ -94,9 +95,13 @@
     use: { ru: 'Применение', en: 'Use', de: 'Anwendung' }, how: { ru: 'Как устроено', en: 'How it works', de: 'Funktionsweise' },
     when: { ru: 'Когда', en: 'When', de: 'Wann' }, origin: { ru: 'Происхождение', en: 'Origin', de: 'Ursprung' },
     count: { ru: 'Количество / масштаб', en: 'Count / scale', de: 'Anzahl / Umfang' }, who: { ru: 'Кто', en: 'Who', de: 'Wer' },
-    verify: { ru: 'Как проверить', en: 'How to verify', de: 'Prüfung' }
+    verify: { ru: 'Как проверить', en: 'How to verify', de: 'Prüfung' },
+    detail: { ru: 'Подробный текст', en: 'Detailed text', de: 'Ausführlicher Text' }
   };
-  function detailFieldLabel(k, lang) { var labels = DETAIL_FIELD_LABELS[k]; return labels ? labels[L(lang)] : k; }
+  function detailFieldLabel(k, lang, value) {
+    if (k === 'how' && /^В этой записи нет/i.test(String(value || ''))) return S('detailMissing', lang);
+    var labels = DETAIL_FIELD_LABELS[k]; return labels ? labels[L(lang)] : k;
+  }
 
   // ── токены для TF-IDF: нижний регистр, ё→е, стем = первые 6 букв, без коротких и служебных слов ──
   var STOP = {};
@@ -198,7 +203,18 @@
     }
     if (fields.length) {
       lines.push('', '**' + S('detailFields', lang) + '**');
-      fields.forEach(function(k) { lines.push('- **' + esc(detailFieldLabel(k, lang)) + ':** ' + esc(e.f[k])); });
+      // count / «чего нет» / verify — ближе к концу, чтобы суть шла раньше
+      var fieldOrder = fields.slice().sort(function(a, b) {
+        function rank(k) {
+          if (k === 'verify') return 95;
+          if (k === 'how' && /^В этой записи нет/i.test(e.f[k] || '')) return 90;
+          if (k === 'count') return 80;
+          if (k === 'origin') return 70;
+          return 10;
+        }
+        return rank(a) - rank(b) || (a < b ? -1 : 1);
+      })
+      fieldOrder.forEach(function(k) { lines.push('- **' + esc(detailFieldLabel(k, lang, e.f[k])) + ':** ' + esc(e.f[k])); });
     }
     var rows = e.rd && e.rd.length ? e.rd : (related || []);
     var exact = [], similar = [];
@@ -210,19 +226,19 @@
     });
     if (exact.length) {
       lines.push('', '**' + S('detailShared', lang) + '**');
-      exact.slice(0, 3).forEach(function(r) {
+      exact.slice(0, 5).forEach(function(r) {
         var title = (r.entry.q && r.entry.q[0]) || r.parsed.lead.split(' — ')[0] || r.entry.id;
         var lead = r.parsed.lead || r.text;
-        lines.push('- **' + esc(title) + '** — ' + esc(lead.length > 260 ? lead.slice(0, 257) + '…' : lead));
+        lines.push('- **' + esc(title) + '** — ' + esc(lead.length > 320 ? lead.slice(0, 317) + '…' : lead));
         lines.push('  ' + esc(r.shared.map(function(f) { return f[0] + ': ' + f[1]; }).join('; ')));
       });
       lines.push('', S('detailSimilarity', lang));
     } else if (similar.length) {
       lines.push('', '**' + S('detailSimilar', lang) + '**');
-      similar.slice(0, 2).forEach(function(r) {
+      similar.slice(0, 4).forEach(function(r) {
         var title = (r.entry.q && r.entry.q[0]) || r.parsed.lead.split(' — ')[0] || r.entry.id;
         var lead = r.parsed.lead || r.text;
-        lines.push('- **' + esc(title) + '** — ' + esc(lead.length > 260 ? lead.slice(0, 257) + '…' : lead));
+        lines.push('- **' + esc(title) + '** — ' + esc(lead.length > 320 ? lead.slice(0, 317) + '…' : lead));
       });
       lines.push('', S('detailSimilarity', lang));
     } else lines.push('', S((e.r && e.r.length) ? 'detailRelatedUnavailable' : 'detailNoRelated', lang));
