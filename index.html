@@ -39319,7 +39319,14 @@ window.eitiLLMClearAll = async function() {
             // ✅ FIX: клавиатура только для новых пустых заметок, не при открытии существующих
             // При открытии существующей заметки — фокуса нет, клавиатура не всплывает
             if (!note) {
-                setTimeout(function(){ if(bodyEl) bodyEl.focus(); }, 100);
+                // fix: не крадём фокус, если за эти 100 мс пользователь уже перешёл в заголовок/теги
+                // (иначе текст заголовка дописывался в тело заметки).
+                setTimeout(function(){
+                    if (!bodyEl) return;
+                    var ae = document.activeElement;
+                    if (ae && ae !== bodyEl && ae !== document.body && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return;
+                    bodyEl.focus();
+                }, 100);
             }
             // v9.7p2: теги + scroll-reset смержены из monkey-patch
             var tagsEl = document.getElementById('noteEditorTags');
