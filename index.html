@@ -15506,14 +15506,14 @@
             if (!_eitiPsHas(id)) id = 'auto';
             _eitiPsHintGen++;
             try { if (id === 'auto') localStorage.removeItem('eiti_phone_screen'); else localStorage.setItem('eiti_phone_screen', id); } catch (e) {}
-            // сначала CSS-переменные (один reflow), UI — в rAF, чтобы не дёргать layout синхронно с кликом
+            // CSS + radio/превью/hint синхронно (список уже не пересобирается) — иначе гонка с getHighEntropyValues
             if (typeof window.eitiPhoneScreenApply === 'function') window.eitiPhoneScreenApply(id);
-            var label = _eitiPsL(EITI_PS_LABELS[id][0]);
-            var paint = function () {
-                eitiRenderPhoneScreen();
-                if (typeof showToast === 'function') showToast(_eitiPsL('📱 Экран:') + ' ' + label);
-            };
-            if (typeof requestAnimationFrame === 'function') requestAnimationFrame(paint); else paint();
+            eitiRenderPhoneScreen();
+            var label = _eitiPsL('📱 Экран:') + ' ' + _eitiPsL(EITI_PS_LABELS[id][0]);
+            if (typeof showToast === 'function') {
+                if (typeof requestAnimationFrame === 'function') requestAnimationFrame(function () { showToast(label); });
+                else showToast(label);
+            }
         }
         function openPhoneScreenMode() { _eitiOpenSubview('phone-screen', eitiRenderPhoneScreen); }
         window.openPhoneScreenMode = openPhoneScreenMode;
