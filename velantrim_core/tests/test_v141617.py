@@ -12,6 +12,7 @@ GEN = (ROOT / "kb" / "gen" / "gen_kb.py").read_text(encoding="utf-8")
 REL = (ROOT / "local" / "eiti_related.js").read_text(encoding="utf-8")
 
 
+<<<<<<< HEAD
 def test_version_sync():
     # geo enrich remains; runtime version may advance past 14.16.17
     m = re.search(r'var EITI_VERSION = "(\d+\.\d+\.\d+)"', HTML)
@@ -22,6 +23,8 @@ def test_version_sync():
     assert f"version: '{version}'" in SW
 
 
+=======
+>>>>>>> 28dfa6a (feat(kb): обогатить разделы RU+EN и офлайн-рассуждения v14.16.18)
 def test_kb_still_exactly_150k():
     assert IDX["count"] == 150_000
     assert IDX["domains"]["countries"]["count"] == 197

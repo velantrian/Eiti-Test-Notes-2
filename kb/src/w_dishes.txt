@@ -1,70 +1,71 @@
 # Блюда и кухня | Dishes
 # @generated from Wikidata (CC0) by kb/gen/gen_kb.py — do not edit by hand
-хлеб; блюдо хлеб || хлеб — пищевой продукт.
-овощи; блюдо овощи || овощи — съедобная часть некоторых растений.
-сыр; блюдо сыр || сыр — пищевой продукт, получаемый из молока.
+хлеб; блюдо хлеб; bread; dish bread || хлеб — пищевой продукт. Ингредиенты: дрожжи, поваренная соль, вода, мука. || bread — baked food made of flour, water and other ingredients. Ingredients: baker's yeast, table salt, water, flour.
+овощи; блюдо овощи; vegetable; dish vegetable || овощи — съедобная часть некоторых растений. Ингредиенты: вода. || vegetable — edible plant or part of a plant. Ingredients: water.
+сыр; блюдо сыр; cheese; dish cheese || сыр — пищевой продукт, получаемый из молока. || cheese — yellow or white, creamy or solid food made from the pressed curds of milk.
 пицца; блюдо пицца || пицца — итальянское национальное блюдо. Происхождение: Италия.
-напиток; блюдо напиток || напиток — жидкость, предназначенная для питья (обычно человеком).
-суп; блюдо суп || суп — жидкое первое блюдо.
-суши; блюдо суши || суши — блюдо традиционной японской кухни. Происхождение: Япония.
-гамбургер; блюдо гамбургер || гамбургер — сэндвич с рубленой котлетой. Происхождение: Германия, США.
-сэндвич; блюдо сэндвич || сэндвич — закуска из двух ломтей хлеба с начинкой между ними. Происхождение: Англия.
-фрукт; блюдо фрукт || фрукт — плод, съедобный в сыром виде, обычно сладкий или кислый.
-салат; блюдо салат || салат — блюдо из измельчённых продуктов. Происхождение: международное.
-быстрое питание; блюдо быстрое питание || быстрое питание — питание и пища с уменьшенным временем употребления и приготовления.
-десерт; блюдо десерт || десерт — блюда, пища.
-самоса; блюдо самоса || самоса — жареное или печёное тесто с начинкой. Происхождение: Средний Восток.
-плов; блюдо плов || плов — составное блюдо в основном из риса и мяса.
-пахлава; блюдо пахлава || пахлава — восточная сладость. Происхождение: Османская империя.
-фалафель; блюдо фалафель || фалафель — блюдо, представляющее собой жареные во фритюре шарики из измельчённых бобовых (обычно нута), c пряностями. Происхождение: израильская кухня.
-каша; блюдо каша || каша — блюдо из разваренных злаков или другого крупоподобного. Происхождение: Европа, Африка.
-лазанья; блюдо лазанья || лазанья — блюдо итальянской кухни. Происхождение: Италия.
-хумус; блюдо хумус || хумус — закуска из нутового пюре. Происхождение: Ближний Восток.
-гуляш; блюдо гуляш || гуляш — венгерское национальное блюдо. Происхождение: Королевство Венгрия.
-тако; блюдо тако || тако — блюдо мексиканской кухни. Происхождение: Мексика.
-вафля; блюдо вафля || вафля — разновидность тонкого сухого печенья с оттиском на поверхности. Происхождение: Франция.
-панкейк; блюдо панкейк || панкейк — кулинарное изделие из теста. Происхождение: США.
-брецель; блюдо брецель || брецель — немецкая выпечка. Происхождение: Южная Германия, Германия.
-морепродукты; блюдо морепродукты || морепродукты — пища из моря: креветки, рыба, крабы, устрицы, водоросли и т.п..
-салями; блюдо салями || салями — разновидность сырокопчёной колбасы. Происхождение: Италия.
-оливье; блюдо оливье || оливье — закусочный салат в русской кухне. Происхождение: Российская империя, Россия.
-айран; блюдо айран || айран — кисломолочный напиток. Происхождение: Иран, Турция.
-бульон; блюдо бульон || бульон — жидкий кулинарный продукт, навар из мяса и костей, ингредиент для готовки, кулинарный полуфабрикат.
-Лукум; блюдо Лукум || Лукум — кондитерское изделие. Происхождение: Османская империя.
-зерно; блюдо зерно || зерно — ядро (плод, семя) любой зерновой культуры, обычно хлебной зерновой культуры.
-буррито; блюдо буррито || буррито — мексиканское блюдо. Происхождение: Мексика.
-рагу; блюдо рагу || рагу — густое блюдо из тушёных вместе ингредиентов, как правило, овощей и мяса. Происхождение: Франция.
-Карбонара; блюдо Карбонара || Карбонара — Итальянское блюдо. Происхождение: США, Италия.
-долма; блюдо долма || долма — блюдо народов Ближнего Востока. Происхождение: Османская империя, Армения.
-пибимпап; блюдо пибимпап || пибимпап — блюдо корейской кухни. Происхождение: Корея.
-мюсли; блюдо мюсли || мюсли — еда, приготовленная из сырых или запечённых злаков, сухофруктов, орехов, отрубей, ростков пшеницы, мёда и специй. Происхождение: Швейцария.
-бигос; блюдо бигос || бигос — блюдо из квашенной капусты и мяса. Происхождение: Польша.
-маринованный огурец; блюдо маринованный огурец || маринованный огурец — овощные консервы.
-основные продукты питания; блюдо основные продукты питания || основные продукты питания — пища, представляющая собой доминирующую часть питания популяции.
-донер кебаб; блюдо донер кебаб || донер кебаб — турецкое блюдо. Происхождение: Османская империя.
-картофельные оладьи; блюдо картофельные оладьи || картофельные оладьи — блюдо из картофеля.
-жареный рис; блюдо жареный рис || жареный рис — составляющая блюд азиатской кухни. Происхождение: Китай.
-чили кон карне; блюдо чили кон карне || чили кон карне — мясное блюдо американской кухни. Происхождение: Мексика.
-чизбургер; блюдо чизбургер || чизбургер — гамбургер с сыром. Происхождение: США.
-стейк; блюдо стейк || стейк — Блюдо из мяса.
-кимбап; блюдо кимбап || кимбап — корейский рисовый рулет. Происхождение: Корея.
-шоколадный пирог; блюдо шоколадный пирог || шоколадный пирог — пирог с добавлением какао.
-эмпанада; блюдо эмпанада || эмпанада — пирог с начинкой, блюдо испанской кухни.
-манты; блюдо манты || манты — блюдо. Происхождение: Синьцзян-Уйгурский автономный район.
-тамале; блюдо тамале || тамале — мезоамериканское блюдо, лепёшка из кукурузной муки, обёрнутая кукурузными листьями. Происхождение: Мезоамерика.
-лапша быстрого приготовления; блюдо лапша быстрого приготовления || лапша быстрого приготовления — макаронные изделия быстрого приготовления. Происхождение: Япония.
-Такояки; блюдо Такояки || Такояки — японское блюдо. Происхождение: Япония.
-кесадилья; блюдо кесадилья || кесадилья — блюдо мексиканской кухни, состоящее из лепёшки, наполненной сыром. Происхождение: Мексика.
-булочка; блюдо булочка || булочка — булочное изделие продолговато-овальной формы.
-фруктовый салат; блюдо фруктовый салат || фруктовый салат — салат из фруктов.
-энчилада; блюдо энчилада || энчилада — традиционное блюдо мексиканской кухни. Происхождение: Мексика.
-буйабес; блюдо буйабес || буйабес — традиционный марсельский рыбный суп. Происхождение: Франция.
-Ренданг; блюдо Ренданг || Ренданг — индонезийское блюдо. Происхождение: Индонезия.
-тысяча слоёв; блюдо тысяча слоёв || тысяча слоёв — слоёный торт или пирожное с кремом. Происхождение: Франция.
-Натто; блюдо Натто || Натто — традиционная японская еда со сброженными соевыми бобами. Происхождение: Япония.
-суджук; блюдо суджук || суджук — тюркское блюдо. Происхождение: Турция.
-Лангош; блюдо Лангош || Лангош — блюдо венгерской кухни. Происхождение: Венгрия.
-Лахмаджун; блюдо Лахмаджун || Лахмаджун — популярное ближневосточное блюдо, арабского происхождения.
-гадо-гадо; блюдо гадо-гадо || гадо-гадо — индонезийский салат. Происхождение: Индонезия.
-Баоцзы; блюдо Баоцзы || Баоцзы — китайское блюдо, представляющее собой приготовленный на пару пирожок. Происхождение: Китай.
-натуральная котлета; блюдо натуральная котлета || натуральная котлета — мясное блюдо.
+напиток; блюдо напиток; drink; dish drink || напиток — жидкость, предназначенная для питья (обычно человеком). Ингредиенты: питьевая вода. || drink — kind of liquid which is specifically prepared for human consumption. Ingredients: drinking water.
+суп; блюдо суп; soup; dish soup || суп — жидкое первое блюдо. || soup — primarily liquid food.
+суши; блюдо суши; sushi; dish sushi || суши — блюдо традиционной японской кухни. Происхождение: Япония. || sushi — portioned prepared vinegared rice topped or rolled with other ingredients. Origin: Japan.
+гамбургер; блюдо гамбургер; hamburger; dish hamburger || гамбургер — сэндвич с рубленой котлетой. Происхождение: США, Германия. || hamburger — American sandwich of ground beef patty. Origin: United States, Germany.
+фрукт; блюдо фрукт; fruit; dish fruit || фрукт — плод, съедобный в сыром виде, обычно сладкий или кислый. Ингредиенты: вода. || fruit — typically sweet and/or sour, edible part/s of a plant that resembles seed-bearing fruit. Ingredients: water.
+сэндвич; блюдо сэндвич; sandwich; dish sandwich || сэндвич — закуска из двух ломтей хлеба с начинкой между ними. Происхождение: Англия. || sandwich — food made with bread and other ingredients. Origin: England.
+салат; блюдо салат; salad; dish salad || салат — блюдо из измельчённых продуктов. Происхождение: международное. || salad — dish consisting of a mixture of small pieces of food, usually vegetables or fruit. Origin: internationality.
+быстрое питание; блюдо быстрое питание; fast food; dish fast food || быстрое питание — питание и пища с уменьшенным временем употребления и приготовления. || fast food — food prepared and served quickly.
+плов; блюдо плов; pilaf; dish pilaf || плов — составное блюдо в основном из риса и мяса. Происхождение: Узбекистан, Таджикистан. Ингредиенты: баранина, говядина, смалец, морковь. || pilaf — rice dish. Origin: Uzbekistan, Tajikistan. Ingredients: mutton, beef, lard, carrot.
+самоса; блюдо самоса; samosa; dish samosa || самоса — жареное или печёное тесто с начинкой. Происхождение: Средний Восток. Ингредиенты: мясо, горох, картофель, пшеничная мука. || samosa — baked dish common to South Asia and the Middle East. Origin: Middle East. Ingredients: meat, Pisum sativum, potato, wheat flour.
+десерт; блюдо десерт; dessert; dish dessert || десерт — блюда, пища. || dessert — course that concludes a meal, usually sweet.
+пахлава; блюдо пахлава; baklava; dish baklava || пахлава — восточная сладость. Происхождение: Османская империя. || baklava — layered pastry from the Middle East. Origin: Ottoman Empire.
+фалафель; блюдо фалафель; falafel; dish falafel || фалафель — блюдо, представляющее собой жареные во фритюре шарики из измельчённых бобовых (обычно нута), c пряностями. Происхождение: Middle Eastern empires, израильская кухня. Ингредиенты: конские бобы, тмин, нут, кориандр. || falafel — Middle Eastern fried bean dish. Origin: Middle Eastern empires, Israeli cuisine. Ingredients: broad bean, cumin seed, chickpea, coriander seed.
+каша; блюдо каша; porridge; dish porridge || каша — блюдо из разваренных злаков или другого крупоподобного. Происхождение: Европа, Африка. || porridge — food commonly eaten as a breakfast cereal dish, made by boiling ground, crushed or chopped starchy plants, typically grain, in water or milk. Origin: Europe, Africa.
+лазанья; блюдо лазанья; lasagna; dish lasagna || лазанья — блюдо итальянской кухни. Происхождение: Италия. || lasagna — layered pasta dish. Origin: Italy.
+хумус; блюдо хумус; hummus; dish hummus || хумус — закуска из нутового пюре. Происхождение: Ближний Восток. || hummus — Levantine and Middle Eastern chickpea puree. Origin: Near East.
+гуляш; блюдо гуляш; goulash; dish goulash || гуляш — венгерское национальное блюдо. Происхождение: Королевство Венгрия. || goulash — Hungarian dish. Origin: Kingdom of Hungary.
+тако; блюдо тако; taco; dish taco || тако — блюдо мексиканской кухни. Происхождение: Мексика. Ингредиенты: кукурузная тортилья, пшеничная тортилья. || taco — Mexican dish consisting of a corn or wheat tortilla folded or rolled around a filling, salsa and vegetabes. Origin: Mexico. Ingredients: corn tortilla, wheat tortilla.
+вафля; блюдо вафля; waffle; dish waffle || вафля — разновидность тонкого сухого печенья с оттиском на поверхности. Происхождение: Франция. || waffle — batter- or dough-based food cooked between two patterned, shaped plates. Origin: France.
+салями; блюдо салями; salami; dish salami || салями — разновидность сырокопчёной колбасы. Происхождение: Италия. Ингредиенты: свинина. || salami — cured sausage, fermented and air-dried meat. Origin: Italy. Ingredients: pork.
+морепродукты; блюдо морепродукты; seafood; dish seafood || морепродукты — пища из моря: креветки, рыба, крабы, устрицы, водоросли и т.п.. || seafood — food from the sea, e.g. fish, shrimp, crab, mussel, seaweed.
+брецель; блюдо брецель; pretzel; dish pretzel || брецель — немецкая выпечка. Происхождение: Германия, Южная Германия. || pretzel — German baked pastry shaped into a knot. Origin: Germany, Southern Germany.
+панкейк; блюдо панкейк; pancake; dish pancake || панкейк — кулинарное изделие из теста. Происхождение: США. || pancake — a brown thin, round cake made of eggs, milk and flour. Origin: United States.
+оливье; блюдо оливье; Olivier salad; dish Olivier salad || оливье — закусочный салат в русской кухне. Происхождение: Россия, Российская империя. || Olivier salad — salad dish. Origin: Russia, Russian Empire.
+айран; блюдо айран; ayran; dish ayran || айран — кисломолочный напиток. Происхождение: Иран, Турция. Ингредиенты: молоко, йогурт, питьевая вода, поваренная соль. || ayran — drink made from yoghurt with soda water and salt, and sometimes also vodka. Origin: Iran, Turkey. Ingredients: milk, yogurt, drinking water, table salt.
+бульон; блюдо бульон; broth; dish broth || бульон — жидкий кулинарный продукт, навар из мяса и костей, ингредиент для готовки, кулинарный полуфабрикат. || broth — flavored liquid that can be served as a drink or used in cooking.
+Лукум; блюдо Лукум; Turkish delight; dish Turkish delight || Лукум — кондитерское изделие. Происхождение: Османская империя. || Turkish delight — Turkish gelatinous candy. Origin: Ottoman Empire.
+зерно; блюдо зерно; grain; dish grain || зерно — ядро (плод, семя) любой зерновой культуры, обычно хлебной зерновой культуры. || grain — small, hard, dry seed used as food, may be ground into flour.
+буррито; блюдо буррито; burrito; dish burrito || буррито — мексиканское блюдо. Происхождение: Мексика. || burrito — Mexican dish consisting of a wheat flour tortilla wrapped or folded into a cylindrical shape to completely enclose the filling. Origin: Mexico.
+долма; блюдо долма; dolma; dish dolma || долма — блюдо народов Ближнего Востока. Происхождение: Армения, Османская империя. || dolma — category of dishes of stuffed vegetables, fruits, seafood and flowers. Origin: Armenia, Ottoman Empire.
+рагу; блюдо рагу; stew; dish stew || рагу — густое блюдо из тушёных вместе ингредиентов, как правило, овощей и мяса. Происхождение: Франция. || stew — combination of solid food ingredients that have been cooked in liquid and served in the resultant gravy. Origin: France.
+Карбонара; блюдо Карбонара; carbonara; dish carbonara || Карбонара — Итальянское блюдо. Происхождение: Италия, США. || carbonara — pasta dish. Origin: Italy, United States.
+пибимпап; блюдо пибимпап; bibimbap; dish bibimbap || пибимпап — блюдо корейской кухни. Происхождение: Корея. || bibimbap — Korean rice bowl dish. Origin: Korea.
+мюсли; блюдо мюсли; muesli; dish muesli || мюсли — еда, приготовленная из сырых или запечённых злаков, сухофруктов, орехов, отрубей, ростков пшеницы, мёда и специй. Происхождение: Швейцария. || muesli — breakfast dish based on unboiled rolled oats and other ingredients. Origin: Switzerland.
+бигос; блюдо бигос; bigos; dish bigos || бигос — блюдо из квашенной капусты и мяса. Происхождение: Польша. || bigos — meat and cabbage stew from Poland. Origin: Poland.
+маринованный огурец; блюдо маринованный огурец; pickled cucumber; dish pickled cucumber || маринованный огурец — овощные консервы. || pickled cucumber — cucumber preserved in vinegar.
+основные продукты питания; блюдо основные продукты питания; staple food; dish staple food || основные продукты питания — пища, представляющая собой доминирующую часть питания популяции. || staple food — food that is eaten routinely, and considered a dominant portion of a standard diet.
+донер кебаб; блюдо донер кебаб; doner kebab; dish doner kebab || донер кебаб — турецкое блюдо. Происхождение: Османская империя. || doner kebab — Turkish dish. Origin: Ottoman Empire.
+жареный рис; блюдо жареный рис; fried rice; dish fried rice || жареный рис — составляющая блюд азиатской кухни. Происхождение: Китай. || fried rice — cooked rice stir-fried with eggs and other ingredients. Origin: People's Republic of China.
+чили кон карне; блюдо чили кон карне; chili; dish chili || чили кон карне — мясное блюдо американской кухни. Происхождение: Мексика. || chili — American stew. Origin: Mexico.
+картофельные оладьи; блюдо картофельные оладьи; potato pancake; dish potato pancake || картофельные оладьи — блюдо из картофеля. || potato pancake — fried pancakes of grated or ground potato.
+чизбургер; блюдо чизбургер; cheeseburger; dish cheeseburger || чизбургер — гамбургер с сыром. Происхождение: США. || cheeseburger — hamburger topped with cheese. Origin: United States.
+кимбап; блюдо кимбап; gimbap; dish gimbap || кимбап — корейский рисовый рулет. Происхождение: Корея. Ингредиенты: водоросли, овощи, рис, морепродукты. || gimbap — Korean seaweed roll. Origin: Korea. Ingredients: algae, vegetable, rice, seafood.
+крокеты; блюдо крокеты; croquette; dish croquette || крокеты — блюдо. Ингредиенты: бешамель, яйцо. || croquette — deep-fried roll dish. Ingredients: béchamel, egg as food.
+стейк; блюдо стейк; steak; dish steak || стейк — Блюдо из мяса. || steak — flat cut of meat.
+шоколадный пирог; блюдо шоколадный пирог; chocolate cake; dish chocolate cake || шоколадный пирог — пирог с добавлением какао. || chocolate cake — cake flavored with chocolate.
+эмпанада; блюдо эмпанада; empanada; dish empanada || эмпанада — пирог с начинкой, блюдо испанской кухни. || empanada — baked or fried turnover consisting of pastry and filling.
+манты; блюдо манты; manti; dish manti || манты — блюдо. Происхождение: Синьцзян-Уйгурский автономный район. || manti — dish. Origin: Xinjiang.
+лапша быстрого приготовления; блюдо лапша быстрого приготовления; instant noodles; dish instant noodles || лапша быстрого приготовления — макаронные изделия быстрого приготовления. Происхождение: Япония. || instant noodles — noodles sold in a precooked and dried block with flavoring. Origin: Japan.
+тамале; блюдо тамале; tamale; dish tamale || тамале — мезоамериканское блюдо, лепёшка из кукурузной муки, обёрнутая кукурузными листьями. Происхождение: Мезоамерика. || tamale — corn-based food from Mesoamerica, traditionally wrapped in corn husks or banana leaves. Origin: Mesoamerica.
+Такояки; блюдо Такояки; takoyaki; dish takoyaki || Такояки — японское блюдо. Происхождение: Япония. || takoyaki — ball-shaped Japanese snack with octopus. Origin: Japan.
+кесадилья; блюдо кесадилья; quesadilla; dish quesadilla || кесадилья — блюдо мексиканской кухни, состоящее из лепёшки, наполненной сыром. Происхождение: Мексика. Ингредиенты: пшеничная тортилья, сыр. || quesadilla — Mexican dish consisting of a tortilla filled with cheese and then grilled. Origin: Mexico. Ingredients: wheat tortilla, cheese.
+булочка; блюдо булочка; bread roll; dish bread roll || булочка — булочное изделие продолговато-овальной формы. Происхождение: Россия, Австрия. || bread roll — small, usually round or oblong individual loaf of bread served as a meal accompaniment. Origin: Russia, Austria.
+фруктовый салат; блюдо фруктовый салат; fruit salad; dish fruit salad || фруктовый салат — салат из фруктов. || fruit salad — dish consisting of various kinds of fruit, sometimes served in a liquid, either in their own juices or a syrup.
+энчилада; блюдо энчилада; enchilada; dish enchilada || энчилада — традиционное блюдо мексиканской кухни. Происхождение: Мексика. Ингредиенты: мясо, острый соус, кукурузная тортилья. || enchilada — corn tortilla rolled around a filling and covered with a chili pepper sauce. Origin: Mexico. Ingredients: meat, hot sauce, corn tortilla.
+буйабес; блюдо буйабес; bouillabaisse; dish bouillabaisse || буйабес — традиционный марсельский рыбный суп. Происхождение: Франция. || bouillabaisse — traditional Provençal fish stew. Origin: France.
+Лангош; блюдо Лангош; lángos; dish lángos || Лангош — блюдо венгерской кухни. Происхождение: Венгрия. || lángos — Hungarian snack. Origin: Hungary.
+тысяча слоёв; блюдо тысяча слоёв; mille-feuille; dish mille-feuille || тысяча слоёв — слоёный торт или пирожное с кремом. Происхождение: Франция. || mille-feuille — French pastry. Origin: France.
+Натто; блюдо Натто; nattō; dish nattō || Натто — традиционная японская еда со сброженными соевыми бобами. Происхождение: Япония. || nattō — traditional Japanese food made from fermented soybeans. Origin: Japan.
+Ренданг; блюдо Ренданг; rendang; dish rendang || Ренданг — индонезийское блюдо. Происхождение: Индонезия. || rendang — spicy meat dish. Origin: Indonesia.
+суджук; блюдо суджук; sujuk; dish sujuk || суджук — тюркское блюдо. Происхождение: Турция. Ингредиенты: субпродукты, специи, фарш. || sujuk — dry, spicy, fermented sausage of several Anatolian, Balkan, Middle Eastern and Central Asian cuisines. Origin: Turkey. Ingredients: offal, spice, minced meat.
+Лахмаджун; блюдо Лахмаджун; Lahmacun; dish Lahmacun || Лахмаджун — популярное ближневосточное блюдо, арабского происхождения. || Lahmacun — Middle Eastern food.
+натуральная котлета; блюдо натуральная котлета; cutlet; dish cutlet || натуральная котлета — мясное блюдо.
+Баоцзы; блюдо Баоцзы; baozi; dish baozi || Баоцзы — китайское блюдо, представляющее собой приготовленный на пару пирожок. Происхождение: Китай. || baozi — filled bun. Origin: China.
+гадо-гадо; блюдо гадо-гадо; gado-gado; dish gado-gado || гадо-гадо — индонезийский салат. Происхождение: Индонезия. || gado-gado — Indonesian salad dish originating from Java island. Origin: Indonesia.

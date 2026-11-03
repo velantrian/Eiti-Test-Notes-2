@@ -12,7 +12,16 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
     sel, body = [], []
     for name, p, kind in props:
         if kind == 'label':
-            body.append('OPTIONAL { ?x %s ?%s_ . ?%s_ rdfs:label ?%s FILTER(LANG(?%s)="ru") }' % (p, name, name, name, name))
+            if en:
+                # RU + EN labels of linked items; COALESCE prefers RU for `name`, EN kept in nameEn.
+                body.append(('OPTIONAL { ?x %s ?%s_ . '
+                             'OPTIONAL { ?%s_ rdfs:label ?%sRu FILTER(LANG(?%sRu)="ru") } '
+                             'OPTIONAL { ?%s_ rdfs:label ?%s_en FILTER(LANG(?%s_en)="en") } '
+                             'BIND(COALESCE(?%sRu, ?%s_en) AS ?%s) }') %
+                            (p, name, name, name, name, name, name, name, name, name, name))
+                sel.append('(GROUP_CONCAT(DISTINCT STR(?%s_en); SEPARATOR="|") AS ?%sEns)' % (name, name))
+            else:
+                body.append('OPTIONAL { ?x %s ?%s_ . ?%s_ rdfs:label ?%s FILTER(LANG(?%s)="ru") }' % (p, name, name, name, name))
         elif kind == 'country':
             body.append(('OPTIONAL { ?x %s ?%s_ . ?%s_ wdt:P31/wdt:P279* wd:Q6256 . '
                          'FILTER NOT EXISTS { ?%s_ wdt:P576 ?country_end } '
@@ -20,6 +29,8 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
                          'OPTIONAL { ?%s_ rdfs:label ?%s_en FILTER(LANG(?%s_en)="en") } '
                          'BIND(COALESCE(?%s_ru, ?%s_en) AS ?%s) }') %
                         (p, name, name, name, name, name, name, name, name, name, name, name, name))
+            if en:
+                sel.append('(GROUP_CONCAT(DISTINCT STR(?%s_en); SEPARATOR="|") AS ?%sEns)' % (name, name))
         elif kind == 'year':
             body.append('OPTIONAL { ?x %s ?%s_ . BIND(YEAR(?%s_) AS ?%s) }' % (p, name, name, name))
         else:
@@ -38,9 +49,10 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
         lang_cols = ''
         label_stmt = '?x rdfs:label ?l FILTER(LANG(?l)="ru") '
         desc_stmt = 'OPTIONAL { ?x schema:description ?d FILTER(LANG(?d)="ru") } '
-    q = ('SELECT ?x ?l ?d ?sl %s WHERE { %s ?x wikibase:sitelinks ?sl . FILTER(?sl >= %d) '
+    # ?le/?de must be in SELECT (not only GROUP BY) or EN label/description never reach the row dict.
+    q = ('SELECT ?x ?l ?d ?sl %s %s WHERE { %s ?x wikibase:sitelinks ?sl . FILTER(?sl >= %d) '
          + '%s%s%s %s } GROUP BY ?x ?l ?d ?sl %s ORDER BY DESC(?sl) LIMIT %d') % (
-             ' '.join(sel), cls_stmt, minsl, label_stmt, desc_stmt, extra, ' '.join(body), lang_cols, limit)
+             ' '.join(sel), lang_cols, cls_stmt, minsl, label_stmt, desc_stmt, extra, ' '.join(body), lang_cols, limit)
     if offset:
         q += ' OFFSET %d' % int(offset)
     rows = sparql(q, tag or ('it_' + __import__('hashlib').sha1(q.encode()).hexdigest()[:12]))
@@ -51,9 +63,12 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
         seen.add(qid)
         it = {'qid': qid, 'l': clean(r['l']), 'd': clean(r.get('d', '')), 'sl': int(r['sl']),
               'en': clean(r.get('le', '')), 'den': clean(r.get('de', ''))}
-        for name, _, _ in props:
+        for name, _, kind in props:
             v = [clean(x) for x in (r.get(name + 's') or '').split('|') if x.strip()]
             it[name] = [x for x in v if x and not re.match(r'^Q\d+$', x) and not x.startswith('http')]
+            if en and kind in ('label', 'country'):
+                ve = [clean(x) for x in (r.get(name + 'Ens') or '').split('|') if x.strip()]
+                it[name + 'En'] = [x for x in ve if x and not re.match(r'^Q\d+$', x) and not x.startswith('http')]
         out.append(it)
     return out
 
@@ -79,7 +94,9 @@ def one(v):
     return v[0] if len(v) == 1 else ''
 
 def few(v, n=3):
-    return ', '.join(v[:n]) if 0 < len(v) <= n else ''
+    """Join up to n values; if more exist, still show the first n (sample, not require exact size)."""
+    if not v: return ''
+    return ', '.join(v[:n])
 
 def yr(v):
     """single unambiguous year (all values agree)."""
@@ -113,6 +130,13 @@ class Out:
             t = clean(t).strip(' ,.')
             k = t.lower().replace('ё', 'е')
             if t and k not in self.trig and len(t) <= 80: self.trig.add(k); tt.append(t)
+        if isinstance(answer, tuple):
+            ru, en = (answer[0] or ''), (answer[1] if len(answer) > 1 else '') or ''
+            if not tt or len(ru) < 20: return
+            line = '%s || %s' % ('; '.join(tt), ru[:600])
+            if en and len(en) >= 20: line += ' || %s' % en[:600]
+            self.lines.append(line)
+            return
         if not tt or len(answer) < 20: return
         self.lines.append('%s || %s' % ('; '.join(tt), answer[:600]))
     def write(self):
@@ -122,9 +146,29 @@ class Out:
             f.write('\n'.join(self.lines) + '\n')
         print(self.dom, len(self.lines))
 
+def lab_en(prefix, v, n=3):
+    s = few(v, n)
+    return (prefix + s + '.') if s else ''
+
+def en_vals(it, name):
+    """Prefer English linked labels; fall back to RU so EN answers still keep grounded facts."""
+    return it.get(name + 'En') or it.get(name) or []
+
+def maybe_pair(ru, en):
+    return (ru, en) if en and len(en) >= 20 else ru
+
+def yr_en(v):
+    """English year string from the same unambiguous year helper."""
+    ys = set(x for x in v if re.match(r'^-?\d{1,4}$', x))
+    if len(ys) != 1: return ''
+    y = int(ys.pop())
+    return ('%d BC' % (-y + 1)) if y <= 0 else str(y)
+
 def gen_people():
     o = Out('people', 'Личности', 'People')
-    its = q_items('wd:Q5', 62, [('b', 'wdt:P569', 'year'), ('e', 'wdt:P570', 'year'), ('c', 'wdt:P27', 'label')], limit=6000)
+    # v14.16.18: + род занятий (P106); EN label/desc + citizenship/occupation EN labels
+    its = q_items('wd:Q5', 62, [('b', 'wdt:P569', 'year'), ('e', 'wdt:P570', 'year'),
+                                ('c', 'wdt:P27', 'label'), ('occ', 'wdt:P106', 'label')], limit=6000, en=True)
     last = {}
     for it in its:
         w = it['l'].split()
@@ -140,8 +184,22 @@ def gen_people():
         if not b.isdigit() or int(b) < 1500:   # древние даты приблизительны — не указываем
             b = e = ''
         life = ('(%s–%s)' % (b, e) if e else '(род. %s)' % b) if b else ''
-        a = sent('%s — %s.' % (sent(l, life), d), ('Гражданство: %s.' % few(it['c'], 2)) if b and few(it['c'], 2) else '')
-        o.add(([l, 'кто такой ' + l] if ' ' in l else [l]) + (['кто такой ' + it['alias']] if it.get('alias') else []), a)
+        be, ee = yr_en(it['b']), yr_en(it['e'])
+        if not b: be = ee = ''
+        life_en = ('(%s–%s)' % (be, ee) if ee else '(b. %s)' % be) if be else ''
+        ru = sent('%s — %s.' % (sent(l, life), d),
+                  ('Гражданство: %s.' % few(it['c'], 2)) if b and few(it['c'], 2) else '',
+                  lab('Род занятий: ', it.get('occ') or [], 3))
+        le, de = it.get('en') or '', it.get('den') or ''
+        en = ''
+        if le and de and not re.search(r'wikimedia|disambiguation', de, re.I):
+            en = sent('%s — %s.' % (sent(le, life_en), de),
+                      lab_en('Citizenship: ', en_vals(it, 'c'), 2) if b else '',
+                      lab_en('Occupation: ', en_vals(it, 'occ'), 3))
+        o.add(([l, 'кто такой ' + l] if ' ' in l else [l])
+              + (['кто такой ' + it['alias']] if it.get('alias') else [])
+              + ([le, 'who is ' + le] if le and le.lower() != l.lower() and ' ' in le else []),
+              maybe_pair(ru, en))
     o.write()
 
 def gen_simple(dom, title, title_en, cls, minsl, props, fmt, trig=None, limit=6000, extra='', cls_path='wdt:P31', need_desc=True, en=False):
@@ -150,11 +208,21 @@ def gen_simple(dom, title, title_en, cls, minsl, props, fmt, trig=None, limit=60
         l, d = it['l'], desc(it)
         if dom in ('events', 'wars') and (re.search(r'20[2-9]\d', l + d) or any(x.isdigit() and int(x) >= 2020 for k in ('y', 's', 'e') for x in it.get(k, []))):
             continue   # недавние/текущие события — нестабильные факты, пропускаем
+        # Recent films are unstable and bare titles collide with people («Наполеон» 2023).
+        if dom == 'films' and any(x.isdigit() and int(x) >= 2021 for x in it.get('y', [])):
+            continue
         if not ok_label(l) or (need_desc and not d): continue
         a = fmt(it, l, d)
-        if not a: continue
+        if not a or (isinstance(a, tuple) and not a[0]): continue
         tt = trig(it, l) if trig else [l]
         if dom in WORKS and plain_title(l) and len(tt) > 1: tt = tt[1:]   # «Собака», «Доброе утро» — только «картина/фильм/кто написал …»
+        # Bare EN titles for works steal person/place hits («napoleon» → film). Keep prefixed EN only.
+        if dom in WORKS and it.get('en'):
+            le = it['en']
+            pref = {'films': 'film ', 'books': 'who wrote ', 'paintings': 'painting ',
+                    'music': 'piece ', 'games': 'game ', 'stage': 'stage '}.get(dom, '')
+            tt = [t for t in tt if t.lower() != le.lower()]
+            if pref and le and (pref + le) not in tt: tt.append(pref + le)
         o.add(tt, a)
     o.write()
 
@@ -211,19 +279,29 @@ def main():
     if want('people'): gen_people()
     if want('concepts'): gen_concepts()
     if want('countries'):
-        # v14.16.17: + ISO (P297), площадь (P2046), соседи (P47) — стабильные справочные поля для офлайн-рассуждения
+        # v14.16.17: + ISO/площадь/соседи; v14.16.18: EN-ответы
         def fmt_country(it, l, d):
-            area = ''
+            area = area_en = ''
             if one(it.get('area')):
                 try:
                     km2 = round(float(one(it['area'])))
-                    if 1 <= km2 <= 20000000: area = 'Площадь: около %s км².' % f'{km2:,}'.replace(',', ' ')
+                    if 1 <= km2 <= 20000000:
+                        area = 'Площадь: около %s км².' % f'{km2:,}'.replace(',', ' ')
+                        area_en = 'Area: about %s km².' % f'{km2:,}'
                 except (TypeError, ValueError): pass
-            return sent('%s — %s.' % (l, d or 'государство'),
-                        lab('Столица — ', it['cap'], 1), lab('Часть света: ', it['cont'], 2),
-                        lab('Официальный язык: ', it['lang'], 3), lab('Валюта: ', it['cur'], 2),
-                        ('Код ISO: %s.' % one(it['iso']).upper()) if one(it.get('iso')) else '',
-                        area, lab('Соседние страны: ', it.get('nb') or [], 5))
+            iso = one(it.get('iso')).upper() if one(it.get('iso')) else ''
+            ru = sent('%s — %s.' % (l, d or 'государство'),
+                      lab('Столица — ', it['cap'], 1), lab('Часть света: ', it['cont'], 2),
+                      lab('Официальный язык: ', it['lang'], 3), lab('Валюта: ', it['cur'], 2),
+                      ('Код ISO: %s.' % iso) if iso else '', area, lab('Соседние страны: ', it.get('nb') or [], 5))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = ''
+            if le:
+                en = sent('%s — %s.' % (le, de or 'sovereign state'),
+                          lab_en('Capital: ', en_vals(it, 'cap'), 1), lab_en('Continent: ', en_vals(it, 'cont'), 2),
+                          lab_en('Official language: ', en_vals(it, 'lang'), 3), lab_en('Currency: ', en_vals(it, 'cur'), 2),
+                          ('ISO code: %s.' % iso) if iso else '', area_en, lab_en('Neighboring countries: ', en_vals(it, 'nb'), 5))
+            return maybe_pair(ru, en)
         gen_simple('countries', 'Страны мира', 'Countries', 'wd:Q3624078', 1,
                    [('cap', 'wdt:P36', 'label'), ('cont', 'wdt:P30', 'label'), ('lang', 'wdt:P37', 'label'),
                     ('cur', 'wdt:P38', 'label'), ('iso', 'wdt:P297', 'v'), ('area', 'wdt:P2046', 'v'),
@@ -232,82 +310,291 @@ def main():
                    trig=lambda it, l: [l, 'столица ' + l, 'страна ' + l]
                    + (['валюта ' + l] if it['cur'] else [])
                    + (['язык ' + l, 'официальный язык ' + l] if it['lang'] else [])
-                   + (['код ' + one(it['iso']).upper(), 'ISO ' + one(it['iso']).upper()] if one(it.get('iso')) else []),
-                   extra='FILTER NOT EXISTS { ?x wdt:P576 ?end }', need_desc=False)
+                   + (['код ' + one(it['iso']).upper(), 'ISO ' + one(it['iso']).upper()] if one(it.get('iso')) else [])
+                   + ([it['en'], 'country ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   extra='FILTER NOT EXISTS { ?x wdt:P576 ?end }', need_desc=False, en=True)
     if want('cities'):
-        # v14.16.17: + адм. единица (P131), год основания (P571, только устойчивые н. э. ≥500);
-        # порог sitelinks 36 → больше городов в ядре
         def fmt_city(it, l, d):
-            founded = ''
+            founded = founded_en = ''
             y = yr(it.get('fd') or [])
             if y.isdigit() and 500 <= int(y) <= 2020:
                 founded = 'Основан: %s.' % y
-            return sent('%s — %s.' % (l, d),
-                        lab('Страна: ', it['c'], 1),
-                        lab('Административно: ', it.get('adm') or [], 2),
-                        founded)
+                founded_en = 'Founded: %s.' % y
+            ru = sent('%s — %s.' % (l, d), lab('Страна: ', it['c'], 1),
+                      lab('Административно: ', it.get('adm') or [], 2), founded)
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = ''
+            if le and de:
+                en = sent('%s — %s.' % (le, de), lab_en('Country: ', en_vals(it, 'c'), 1),
+                          lab_en('Admin area: ', en_vals(it, 'adm'), 2), founded_en)
+            return maybe_pair(ru, en)
         gen_simple('cities', 'Города мира', 'Cities', 'wd:Q515', 36,
                    [('c', 'wdt:P17', 'label'), ('adm', 'wdt:P131', 'label'), ('fd', 'wdt:P571', 'year')],
                    fmt_city,
-                   trig=lambda it, l: [l, 'город ' + l], cls_path='wdt:P31/wdt:P279*')
+                   trig=lambda it, l: [l, 'город ' + l]
+                   + ([it['en'], 'city ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   cls_path='wdt:P31/wdt:P279*', en=True)
     if want('elements'):
-        gen_simple('elements', 'Химические элементы', 'Chemical elements', 'wd:Q11344', 1, [('sym', 'wdt:P246', 'v'), ('n', 'wdt:P1086', 'v')],
-                   lambda it, l, d: sent('%s — химический элемент.' % l, ('Символ — %s, атомный номер %s.' % (one(it['sym']), one(it['n']))) if one(it['sym']) and one(it['n']) else '', cap(d) + '.' if d and 'элемент' not in d else ''),
-                   trig=lambda it, l: [l, 'элемент ' + l, 'атомный номер ' + l] + (['символ ' + one(it['sym'])] if one(it['sym']) else []), need_desc=False,
+        def fmt_el(it, l, d):
+            sym, n = one(it['sym']), one(it['n'])
+            ru = sent('%s — химический элемент.' % l,
+                      ('Символ — %s, атомный номер %s.' % (sym, n)) if sym and n else '',
+                      lab('Группа/класс: ', it.get('grp') or [], 2),
+                      cap(d) + '.' if d and 'элемент' not in d else '')
+            le, de = it.get('en') or l, it.get('den') or ''
+            en = sent('%s — chemical element.' % (le or l),
+                      ('Symbol — %s, atomic number %s.' % (sym, n)) if sym and n else '',
+                      lab_en('Group/class: ', en_vals(it, 'grp'), 2),
+                      (cap(de) + '.' if de and 'element' not in de.lower() else ''))
+            return maybe_pair(ru, en)
+        gen_simple('elements', 'Химические элементы', 'Chemical elements', 'wd:Q11344', 1,
+                   [('sym', 'wdt:P246', 'v'), ('n', 'wdt:P1086', 'v'), ('grp', 'wdt:P279', 'label')],
+                   fmt_el,
+                   trig=lambda it, l: [l, 'элемент ' + l, 'атомный номер ' + l]
+                   + (['символ ' + one(it['sym'])] if one(it['sym']) else [])
+                   + ([it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   need_desc=False, en=True,
                    extra='?x wdt:P1086 ?an . FILTER(xsd:integer(?an) >= 1 && xsd:integer(?an) <= 118)')
     if want('rivers'):
-        gen_simple('rivers', 'Реки', 'Rivers', 'wd:Q4022', 22, [('c', 'wdt:P17', 'label'), ('m', 'wdt:P403', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), lab('Протекает по странам: ', it['c'], 4), lab('Впадает в: ', it['m'], 1)),
-                   trig=lambda it, l: ['река ' + l, l])
+        def fmt_river(it, l, d):
+            length = length_en = ''
+            if one(it.get('len')):
+                try:
+                    km = round(float(one(it['len'])))
+                    if 10 <= km <= 10000:
+                        length = 'Длина: около %s км.' % f'{km:,}'.replace(',', ' ')
+                        length_en = 'Length: about %s km.' % f'{km:,}'
+                except (TypeError, ValueError): pass
+            ru = sent('%s — %s.' % (l, d), lab('Протекает по странам: ', it['c'], 4),
+                      lab('Впадает в: ', it['m'], 1), length)
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (le, de), lab_en('Flows through: ', en_vals(it, 'c'), 4),
+                      lab_en('Mouth: ', en_vals(it, 'm'), 1), length_en) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('rivers', 'Реки', 'Rivers', 'wd:Q4022', 22,
+                   [('c', 'wdt:P17', 'label'), ('m', 'wdt:P403', 'label'), ('len', 'wdt:P2043', 'v')],
+                   fmt_river, trig=lambda it, l: ['река ' + l, l]
+                   + ([it['en'], 'river ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('mountains'):
-        gen_simple('mountains', 'Горы и вершины', 'Mountains', 'wd:Q8502', 22, [('c', 'wdt:P17', 'label'), ('h', 'wdt:P2044', 'v')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), ('Высота — около %d м.' % round(float(one(it['h'])))) if one(it['h']) else '', lab('Страна: ', it['c'], 3)),
-                   trig=lambda it, l: ['гора ' + l, l], cls_path='wdt:P31/wdt:P279*')
+        def fmt_mt(it, l, d):
+            h = h_en = ''
+            if one(it['h']):
+                try:
+                    m = round(float(one(it['h'])))
+                    h = 'Высота — около %d м.' % m
+                    h_en = 'Elevation — about %d m.' % m
+                except (TypeError, ValueError): pass
+            ru = sent('%s — %s.' % (l, d), h, lab('Страна: ', it['c'], 3), lab('Горный хребет: ', it.get('rng') or [], 1))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (le, de), h_en, lab_en('Country: ', en_vals(it, 'c'), 3),
+                      lab_en('Mountain range: ', en_vals(it, 'rng'), 1)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('mountains', 'Горы и вершины', 'Mountains', 'wd:Q8502', 22,
+                   [('c', 'wdt:P17', 'label'), ('h', 'wdt:P2044', 'v'), ('rng', 'wdt:P4552', 'label')],
+                   fmt_mt, trig=lambda it, l: ['гора ' + l, l]
+                   + (['вулкан ' + l] if re.search(r'вулкан|volcano', (it.get('d') or '') + (it.get('den') or ''), re.I) else [])
+                   + (['mountain ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   cls_path='wdt:P31/wdt:P279*', en=True)
     if want('lakes'):
-        gen_simple('lakes', 'Озёра, моря и острова', 'Lakes, seas, islands', 'wd:Q23397', 25, [('c', 'wdt:P17', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), lab('Страна: ', it['c'], 4)), trig=lambda it, l: ['озеро ' + l, l])
+        def fmt_lake(it, l, d):
+            area = area_en = ''
+            if one(it.get('area')):
+                try:
+                    km2 = round(float(one(it['area'])))
+                    if 1 <= km2 <= 400000:
+                        area = 'Площадь: около %s км².' % f'{km2:,}'.replace(',', ' ')
+                        area_en = 'Area: about %s km².' % f'{km2:,}'
+                except (TypeError, ValueError): pass
+            ru = sent('%s — %s.' % (l, d), lab('Страна: ', it['c'], 4), area)
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (le, de), lab_en('Country: ', en_vals(it, 'c'), 4), area_en) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('lakes', 'Озёра, моря и острова', 'Lakes, seas, islands', 'wd:Q23397', 25,
+                   [('c', 'wdt:P17', 'label'), ('area', 'wdt:P2046', 'v')],
+                   fmt_lake, trig=lambda it, l: ['озеро ' + l, l]
+                   + ([it['en'], 'lake ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('islands'):
-        gen_simple('islands', 'Острова', 'Islands', 'wd:Q23442', 28, [('c', 'wdt:P17', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), lab('Государство: ', it['c'], 2)), trig=lambda it, l: ['остров ' + l, l])
+        def fmt_isl(it, l, d):
+            ru = sent('%s — %s.' % (l, d), lab('Государство: ', it['c'], 2), lab('Архипелаг: ', it.get('arch') or [], 1))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (le, de), lab_en('Country: ', en_vals(it, 'c'), 2),
+                      lab_en('Archipelago: ', en_vals(it, 'arch'), 1)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('islands', 'Острова', 'Islands', 'wd:Q23442', 28,
+                   [('c', 'wdt:P17', 'label'), ('arch', 'wdt:P361', 'label')],
+                   fmt_isl, trig=lambda it, l: ['остров ' + l, l]
+                   + ([it['en'], 'island ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('species'):
-        gen_simple('species', 'Животные и растения', 'Animals and plants', 'wd:Q16521', 42, [('lat', 'wdt:P225', 'v'), ('par', 'wdt:P171', 'label')],
-                   lambda it, l, d: sent('%s%s — %s.' % (l, (' (лат. %s)' % one(it['lat'])) if one(it['lat']) and one(it['lat']).lower() != l.lower() else '', d),
-                                         lab('Входит в таксон: ', it['par'], 1)),
-                   trig=lambda it, l: [l] + ([one(it['lat'])] if one(it['lat']) else []))
+        def fmt_sp(it, l, d):
+            lat = one(it['lat'])
+            ru = sent('%s%s — %s.' % (l, (' (лат. %s)' % lat) if lat and lat.lower() != l.lower() else '', d),
+                      lab('Входит в таксон: ', it['par'], 1), lab('Ранг: ', it.get('rank') or [], 1))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s%s — %s.' % (le, (' (lat. %s)' % lat) if lat and lat.lower() != (le or '').lower() else '', de),
+                      lab_en('Parent taxon: ', en_vals(it, 'par'), 1),
+                      lab_en('Rank: ', en_vals(it, 'rank'), 1)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('species', 'Животные и растения', 'Animals and plants', 'wd:Q16521', 42,
+                   [('lat', 'wdt:P225', 'v'), ('par', 'wdt:P171', 'label'), ('rank', 'wdt:P105', 'label')],
+                   fmt_sp, trig=lambda it, l: [l] + ([one(it['lat'])] if one(it['lat']) else [])
+                   + ([it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('books'):
-        gen_simple('books', 'Литература', 'Literature', 'wd:Q7725634 wd:Q47461344 wd:Q25379 wd:Q8261 wd:Q5185279', 22, [('a', 'wdt:P50', 'label'), ('y', 'wdt:P577', 'year')],
-                   lambda it, l, d: sent('«%s» — %s.' % (l, d), lab('Автор: ', it['a'], 2), ('Опубликовано: %s.' % yr(it['y'])) if yr(it['y']) else ''),
-                   trig=lambda it, l: [l, 'кто написал ' + l])
+        def fmt_book(it, l, d):
+            ru = sent('«%s» — %s.' % (l, d), lab('Автор: ', it['a'], 2),
+                      ('Опубликовано: %s.' % yr(it['y'])) if yr(it['y']) else '',
+                      lab('Жанр: ', it.get('g') or [], 2), lab('Язык: ', it.get('lang') or [], 2),
+                      lab('Страна: ', it.get('c') or [], 1))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('"%s" — %s.' % (le, de), lab_en('Author: ', en_vals(it, 'a'), 2),
+                      ('Published: %s.' % yr_en(it['y'])) if yr_en(it['y']) else '',
+                      lab_en('Genre: ', en_vals(it, 'g'), 2), lab_en('Language: ', en_vals(it, 'lang'), 2),
+                      lab_en('Country: ', en_vals(it, 'c'), 1)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('books', 'Литература', 'Literature', 'wd:Q7725634 wd:Q47461344 wd:Q25379 wd:Q8261 wd:Q5185279', 22,
+                   [('a', 'wdt:P50', 'label'), ('y', 'wdt:P577', 'year'), ('g', 'wdt:P136', 'label'),
+                    ('lang', 'wdt:P407', 'label'), ('c', 'wdt:P495', 'label')],
+                   fmt_book, trig=lambda it, l: [l, 'кто написал ' + l]
+                   + ([it['en'], 'who wrote ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('paintings'):
-        gen_simple('paintings', 'Живопись', 'Paintings', 'wd:Q3305213', 14, [('a', 'wdt:P170', 'label'), ('y', 'wdt:P571', 'year'), ('m', 'wdt:P195', 'label')],
-                   lambda it, l, d: sent('«%s» — %s.' % (l, d), lab('Автор: ', it['a'], 1), ('Создана: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Собрание: ', it['m'], 1)),
-                   trig=lambda it, l: [l, 'картина ' + l])
+        def fmt_paint(it, l, d):
+            ru = sent('«%s» — %s.' % (l, d), lab('Автор: ', it['a'], 1),
+                      ('Создана: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Собрание: ', it['m'], 1),
+                      lab('Страна: ', it.get('c') or [], 1))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('"%s" — %s.' % (le, de), lab_en('Artist: ', en_vals(it, 'a'), 1),
+                      ('Created: %s.' % yr_en(it['y'])) if yr_en(it['y']) else '',
+                      lab_en('Collection: ', en_vals(it, 'm'), 1),
+                      lab_en('Country: ', en_vals(it, 'c'), 1)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('paintings', 'Живопись', 'Paintings', 'wd:Q3305213', 14,
+                   [('a', 'wdt:P170', 'label'), ('y', 'wdt:P571', 'year'), ('m', 'wdt:P195', 'label'),
+                    ('c', 'wdt:P495', 'label')],
+                   fmt_paint, trig=lambda it, l: [l, 'картина ' + l]
+                   + ([it['en'], 'painting ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('music'):
-        gen_simple('music', 'Музыкальные произведения', 'Music', 'wd:Q105543609', 30, [('a', 'wdt:P86', 'label'), ('p', 'wdt:P175', 'label'), ('y', 'wdt:P577', 'year')],
-                   lambda it, l, d: sent('«%s» — %s.' % (l, d), lab('Композитор: ', it['a'], 2), lab('Исполнитель: ', it['p'], 2), ('Год: %s.' % yr(it['y'])) if yr(it['y']) else ''),
-                   trig=lambda it, l: [l, 'произведение ' + l])
+        def fmt_music(it, l, d):
+            ru = sent('«%s» — %s.' % (l, d), lab('Композитор: ', it['a'], 2), lab('Исполнитель: ', it['p'], 2),
+                      ('Год: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Жанр: ', it.get('g') or [], 2))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('"%s" — %s.' % (le, de), lab_en('Composer: ', en_vals(it, 'a'), 2),
+                      lab_en('Performer: ', en_vals(it, 'p'), 2),
+                      ('Year: %s.' % yr_en(it['y'])) if yr_en(it['y']) else '',
+                      lab_en('Genre: ', en_vals(it, 'g'), 2)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('music', 'Музыкальные произведения', 'Music', 'wd:Q105543609', 30,
+                   [('a', 'wdt:P86', 'label'), ('p', 'wdt:P175', 'label'), ('y', 'wdt:P577', 'year'),
+                    ('g', 'wdt:P136', 'label')],
+                   fmt_music, trig=lambda it, l: [l, 'произведение ' + l]
+                   + ([it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('films'):
-        gen_simple('films', 'Кино', 'Films', 'wd:Q11424', 42, [('a', 'wdt:P57', 'label'), ('y', 'wdt:P577', 'year')],
-                   lambda it, l, d: sent('«%s» — %s.' % (l, d), lab('Режиссёр: ', it['a'], 2), ('Год выхода: %s.' % yr(it['y'])) if yr(it['y']) else ''),
-                   trig=lambda it, l: [l, 'фильм ' + l])
+        def fmt_film(it, l, d):
+            dur = dur_en = ''
+            if one(it.get('dur')):
+                try:
+                    mins = round(float(one(it['dur'])))
+                    if 20 <= mins <= 400:
+                        dur = 'Длительность: около %d мин.' % mins
+                        dur_en = 'Runtime: about %d min.' % mins
+                except (TypeError, ValueError): pass
+            ru = sent('«%s» — %s.' % (l, d), lab('Режиссёр: ', it['a'], 2),
+                      ('Год выхода: %s.' % yr(it['y'])) if yr(it['y']) else '',
+                      lab('Жанр: ', it.get('g') or [], 3), lab('Страна: ', it.get('c') or [], 2), dur)
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('"%s" — %s.' % (le, de), lab_en('Director: ', en_vals(it, 'a'), 2),
+                      ('Release year: %s.' % yr_en(it['y'])) if yr_en(it['y']) else '',
+                      lab_en('Genre: ', en_vals(it, 'g'), 3), lab_en('Country: ', en_vals(it, 'c'), 2),
+                      dur_en) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('films', 'Кино', 'Films', 'wd:Q11424', 42,
+                   [('a', 'wdt:P57', 'label'), ('y', 'wdt:P577', 'year'), ('g', 'wdt:P136', 'label'),
+                    ('c', 'wdt:P495', 'label'), ('dur', 'wdt:P2047', 'v')],
+                   fmt_film, trig=lambda it, l: [l, 'фильм ' + l]
+                   + ([it['en'], 'film ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('battles'):
-        gen_simple('events', 'Войны и сражения', 'Wars and battles', 'wd:Q178561', 30, [('y', 'wdt:P585', 'year'), ('s', 'wdt:P580', 'year'), ('e', 'wdt:P582', 'year'), ('pt', 'wdt:P361', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), ('Год: %s.' % (yr(it['y']) or yr(it['s']))) if (yr(it['y']) or yr(it['s'])) else '', lab('Часть: ', it['pt'], 1)),
-                   trig=lambda it, l: [l])
+        def fmt_ev(it, l, d):
+            y = yr(it['y']) or yr(it['s'])
+            ru = sent('%s — %s.' % (l, d), ('Год: %s.' % y) if y else '', lab('Часть: ', it['pt'], 1),
+                      lab('Место: ', it.get('loc') or [], 1), lab('Участники: ', it.get('par') or [], 3))
+            le, de = it.get('en') or '', it.get('den') or ''
+            ye = yr_en(it['y']) or yr_en(it['s'])
+            en = sent('%s — %s.' % (le, de), ('Year: %s.' % ye) if ye else '',
+                      lab_en('Part of: ', en_vals(it, 'pt'), 1), lab_en('Location: ', en_vals(it, 'loc'), 1),
+                      lab_en('Participants: ', en_vals(it, 'par'), 3)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('events', 'Войны и сражения', 'Wars and battles', 'wd:Q178561', 30,
+                   [('y', 'wdt:P585', 'year'), ('s', 'wdt:P580', 'year'), ('e', 'wdt:P582', 'year'),
+                    ('pt', 'wdt:P361', 'label'), ('loc', 'wdt:P276', 'label'), ('par', 'wdt:P710', 'label')],
+                   fmt_ev, trig=lambda it, l: [l]
+                   + ([it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('wars'):
-        gen_simple('wars', 'Войны', 'Wars', 'wd:Q198 wd:Q103495', 30, [('s', 'wdt:P580', 'year'), ('e', 'wdt:P582', 'year')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), ('Годы: %s–%s.' % (yr(it['s']), yr(it['e']))) if yr(it['s']) and yr(it['e']) else ''),
-                   trig=lambda it, l: [l])
+        def fmt_war(it, l, d):
+            ru = sent('%s — %s.' % (l, d),
+                      ('Годы: %s–%s.' % (yr(it['s']), yr(it['e']))) if yr(it['s']) and yr(it['e']) else '',
+                      lab('Участники: ', it.get('par') or [], 4), lab('Место: ', it.get('loc') or [], 2))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (le, de),
+                      ('Years: %s–%s.' % (yr_en(it['s']), yr_en(it['e']))) if yr_en(it['s']) and yr_en(it['e']) else '',
+                      lab_en('Participants: ', en_vals(it, 'par'), 4),
+                      lab_en('Location: ', en_vals(it, 'loc'), 2)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('wars', 'Войны', 'Wars', 'wd:Q198 wd:Q103495', 30,
+                   [('s', 'wdt:P580', 'year'), ('e', 'wdt:P582', 'year'),
+                    ('par', 'wdt:P710', 'label'), ('loc', 'wdt:P276', 'label')],
+                   fmt_war, trig=lambda it, l: [l]
+                   + ([it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('dishes'):
-        gen_simple('dishes', 'Блюда и кухня', 'Dishes', 'wd:Q746549 wd:Q19861951', 40, [('c', 'wdt:P495', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), lab('Происхождение: ', it['c'], 2)), trig=lambda it, l: [l, 'блюдо ' + l])
+        def fmt_dish(it, l, d):
+            ru = sent('%s — %s.' % (l, d), lab('Происхождение: ', it['c'], 2),
+                      lab('Ингредиенты: ', it.get('ing') or [], 4))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (le, de), lab_en('Origin: ', en_vals(it, 'c'), 2),
+                      lab_en('Ingredients: ', en_vals(it, 'ing'), 4)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('dishes', 'Блюда и кухня', 'Dishes', 'wd:Q746549 wd:Q19861951', 40,
+                   [('c', 'wdt:P495', 'label'), ('ing', 'wdt:P527', 'label')],
+                   fmt_dish, trig=lambda it, l: [l, 'блюдо ' + l]
+                   + ([it['en'], 'dish ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('languages'):
-        gen_simple('languages', 'Языки мира', 'Languages', 'wd:Q34770', 40, [('f', 'wdt:P279', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (cap(l), d)), trig=lambda it, l: [l])
+        def fmt_lang(it, l, d):
+            ru = sent('%s — %s.' % (cap(l), d), lab('Семья/группа: ', it.get('f') or [], 2),
+                      lab('Страны: ', it.get('c') or [], 3), lab('Письменность: ', it.get('w') or [], 2))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (cap(le), de), lab_en('Family/group: ', en_vals(it, 'f'), 2),
+                      lab_en('Countries: ', en_vals(it, 'c'), 3),
+                      lab_en('Writing system: ', en_vals(it, 'w'), 2)) if le and de else ''
+            return maybe_pair(ru, en)
+        gen_simple('languages', 'Языки мира', 'Languages', 'wd:Q34770', 40,
+                   [('f', 'wdt:P279', 'label'), ('c', 'wdt:P17', 'label'), ('w', 'wdt:P282', 'label')],
+                   fmt_lang, trig=lambda it, l: [l]
+                   + ([it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   en=True)
     if want('proglang'):
-        gen_simple('proglang', 'Языки программирования', 'Programming languages', 'wd:Q9143', 12, [('y', 'wdt:P571', 'year'), ('a', 'wdt:P287', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d or 'язык программирования'), ('Появился: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Автор: ', it['a'], 3)),
-                   trig=lambda it, l: [l, 'язык программирования ' + l], cls_path='wdt:P31/wdt:P279*', need_desc=False, en=True)
+        def fmt_pl(it, l, d):
+            ru = sent('%s — %s.' % (l, d or 'язык программирования'),
+                      ('Появился: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Автор: ', it['a'], 3),
+                      lab('Под влиянием: ', it.get('inf') or [], 3))
+            le, de = it.get('en') or l, it.get('den') or ''
+            en = sent('%s — %s.' % (le, de or 'programming language'),
+                      ('Introduced: %s.' % yr_en(it['y'])) if yr_en(it['y']) else '',
+                      lab_en('Designer: ', en_vals(it, 'a'), 3),
+                      lab_en('Influenced by: ', en_vals(it, 'inf'), 3))
+            return maybe_pair(ru, en)
+        gen_simple('proglang', 'Языки программирования', 'Programming languages', 'wd:Q9143', 12,
+                   [('y', 'wdt:P571', 'year'), ('a', 'wdt:P287', 'label'), ('inf', 'wdt:P737', 'label')],
+                   fmt_pl, trig=lambda it, l: [l, 'язык программирования ' + l]
+                   + ([it['en'], 'programming language ' + it['en']] if it.get('en') and it['en'].lower() != l.lower() else []),
+                   cls_path='wdt:P31/wdt:P279*', need_desc=False, en=True)
 
 def gen_concepts():
     o = Out('concepts', 'Понятия: единицы, спорт, математика, инструменты', 'Concepts')

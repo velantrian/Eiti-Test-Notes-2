@@ -120,7 +120,7 @@ def test_world_entities_have_entity_specific_reasoning_and_category_floors():
 
 def test_all_longtail_rows_have_explanations_and_english_answer():
     cards = _all_tail_cards()
-    assert len(cards) == 117_291   # v14.16.17: −800 строк хвоста под +800 городов в ядре
+    assert len(cards) == 117_087   # v14.16.18: хвост урезан под рост ядра (EN/факты)
     for filename, line_no, record in cards:
         location = f"{filename}:{line_no}"
         assert record["english"], location

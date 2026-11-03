@@ -23,7 +23,9 @@ from related import related as related_of
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, 'src')
 PART = 400
-PACK_GZ_SOFT = 38000
+# v14.16.18: EN answers + richer facts enlarge entries; keep soft cap high enough that
+# adaptive sharding does not explode pack-file counts (manifest must stay ≤10 KiB gzip).
+PACK_GZ_SOFT = 52000
 FIELDS = ('short', 'detail', 'ex', 'why', 'use', 'how', 'when', 'origin', 'count', 'who', 'verify')
 
 def parse_fields(seg):
@@ -91,17 +93,86 @@ def generated_fields(filename, title, trigger, answer, header):
     }
 
 
-# Ожидаемые поля по гео-разделам — только для пометки «чего нет в записи» (без выдумывания значений).
+# Ожидаемые поля — только для пометки «чего нет в записи» (без выдумывания значений).
+# (ru_label, en_label) — en для двуязычного how, когда у записи есть en-ответ.
 GEO_EXPECTED = {
     'countries': ('Столица', 'Часть света', 'Официальный язык', 'Валюта', 'Код ISO', 'Площадь', 'Соседние страны'),
     'cities': ('Страна', 'Административно', 'Основан'),
     'admin_regions': ('Страна', 'Административный центр'),
     'states': ('Столица', 'Официальный язык', 'Основано'),
 }
+DOMAIN_EXPECTED = {
+    'countries': [('Столица', 'Capital'), ('Часть света', 'Continent'), ('Официальный язык', 'Official language'),
+                  ('Валюта', 'Currency'), ('Код ISO', 'ISO code'), ('Площадь', 'Area'), ('Соседние страны', 'Neighboring countries')],
+    'cities': [('Страна', 'Country'), ('Административно', 'Admin area'), ('Основан', 'Founded')],
+    'admin_regions': [('Страна', 'Country'), ('Административный центр', 'Admin centre')],
+    'states': [('Столица', 'Capital'), ('Официальный язык', 'Official language'), ('Основано', 'Founded')],
+    'films': [('Режиссёр', 'Director'), ('Год выхода', 'Release year'), ('Жанр', 'Genre'), ('Страна', 'Country')],
+    'books': [('Автор', 'Author'), ('Опубликовано', 'Published'), ('Жанр', 'Genre'), ('Язык', 'Language')],
+    'elements': [('Символ', 'Symbol'), ('атомный номер', 'atomic number')],
+    'rivers': [('Протекает по странам', 'Flows through'), ('Впадает в', 'Mouth'), ('Длина', 'Length')],
+    'mountains': [('Высота', 'Elevation'), ('Страна', 'Country')],
+    'lakes': [('Страна', 'Country'), ('Площадь', 'Area')],
+    'islands': [('Государство', 'Country')],
+    'languages': [('Семья/группа', 'Family/group'), ('Страны', 'Countries')],
+    'people': [('Гражданство', 'Citizenship'), ('Род занятий', 'Occupation')],
+    'companies': [('Страна', 'Country'), ('Основана', 'Founded')],
+    'airports': [('Код IATA', 'IATA code'), ('Страна', 'Country'), ('Обслуживает', 'Serves')],
+    'species': [('Входит в таксон', 'Parent taxon')],
+    'dishes': [('Происхождение', 'Origin')],
+    'games': [('Год выхода', 'Release year'), ('Разработчик', 'Developer')],
+    'proglang': [('Появился', 'Introduced'), ('Автор', 'Designer')],
+    'events': [('Год', 'Year'), ('Часть', 'Part of')],
+    'wars': [('Годы', 'Years'), ('Участники', 'Participants')],
+}
+
+# Домены с более широким контекстом «Рассуждение» (до 5 соседних снимков).
+RD_RICH = frozenset({
+    'countries', 'cities', 'admin_regions', 'states',
+    'films', 'books', 'people', 'elements', 'rivers', 'languages',
+    'companies', 'airports', 'species', 'dinosaurs', 'mountains', 'lakes',
+})
+
+
+def _miss_how(miss_pairs, has_en):
+    ru = ', '.join(r for r, _ in miss_pairs)
+    en = ', '.join(e for _, e in miss_pairs)
+    if has_en:
+        return ('Not in this record / В этой записи нет: %s / %s. Do not invent missing fields.'
+                % (en, ru))[:360]
+    return ('В этой записи нет сохранённых полей: %s. Не заполняйте их из догадок.' % ru)[:360]
+
+
+def _fact_keys(answer):
+    _, facts = _answer_facts(answer or '')
+    return {k.lower().replace('ё', 'е') for k, _ in facts}, (answer or '').lower().replace('ё', 'е')
+
+
+def _mark_missing(r, expected_pairs):
+    if not expected_pairs: return
+    f = r.setdefault('f', {})
+    have, a_low = _fact_keys(r.get('a') or '')
+    # EN answer labels also count as present
+    have_en, a_en = _fact_keys(r.get('en') or '')
+    miss = []
+    for ru, en in expected_pairs:
+        rk = ru.lower().replace('ё', 'е')
+        ek = en.lower()
+        if rk in have or ek in have_en: continue
+        # lead-style «Столица — X.» / «Symbol — Au»
+        if rk in a_low or ('%s —' % rk) in a_low or ('%s:' % rk) in a_low: continue
+        if ek in a_en or ('%s —' % ek) in a_en or ('%s:' % ek) in a_en: continue
+        if ru == 'атомный номер' and 'атомный номер' in a_low: continue
+        if ru == 'Символ' and 'символ —' in a_low: continue
+        if ru == 'Высота' and 'высота' in a_low: continue
+        if ru == 'Годы' and 'годы:' in a_low: continue
+        miss.append((ru, en))
+    if miss:
+        f['how'] = _miss_how(miss, bool(r.get('en')))
 
 
 def enrich_geo_fields(domains_recs):
-    """Cross-link countries ↔ cities ↔ admin_regions into f.detail / f.count for richer offline reasoning.
+    """Cross-link + missing-field marks for geo and other enriched domains.
 
     domains_recs: {domain: [(eid, hash, rec), ...]} — mutates rec['f'] in place. Never invents facts:
     only lists titles already present in other domains that share an explicit «Страна: X» / lead name.
@@ -140,35 +211,12 @@ def enrich_geo_fields(domains_recs):
             f['detail'] = ((base + ' ' if base else '') + extra).strip()[:900]
             f['count'] = ('В офлайн-базе: городов %d, регионов/областей %d по явной метке «Страна: %s».'
                           % (len(cities), len(regs), name))[:360]
-        # отметить отсутствующие ожидаемые поля (Столица часто как «Столица — X.»)
-        _, facts = _answer_facts(r.get('a') or '')
-        have = {k.lower().replace('ё', 'е') for k, _ in facts}
-        a_low = (r.get('a') or '').lower().replace('ё', 'е')
-        miss = [lab for lab in GEO_EXPECTED['countries']
-                if lab.lower().replace('ё', 'е') not in have
-                and not (lab == 'Столица' and 'столица —' in a_low)
-                and not (lab == 'Площадь' and 'площадь:' in a_low)
-                and not (lab == 'Код ISO' and 'код iso:' in a_low)
-                and not (lab == 'Соседние страны' and 'соседние страны:' in a_low)]
-        if miss:
-            f['how'] = ('В этой записи нет сохранённых полей: %s. Не заполняйте их из догадок.'
-                        % ', '.join(miss))[:360]
-    for dom, expected in (('cities', GEO_EXPECTED['cities']), ('admin_regions', GEO_EXPECTED['admin_regions'])):
+        _mark_missing(r, DOMAIN_EXPECTED.get('countries') or [])
+    for dom in ('cities', 'admin_regions'):
         for _, _, r in domains_recs.get(dom) or []:
             f = r.setdefault('f', {})
-            a_low = (r.get('a') or '').lower().replace('ё', 'е')
             _, facts = _answer_facts(r.get('a') or '')
-            have = {k.lower().replace('ё', 'е') for k, _ in facts}
-            miss = []
-            for lab in expected:
-                key = lab.lower().replace('ё', 'е')
-                if key in have: continue
-                if lab == 'Административный центр' and 'административный центр:' in a_low: continue
-                if lab == 'Основан' and 'основан:' in a_low: continue
-                miss.append(lab)
-            if miss:
-                f['how'] = ('В этой записи нет сохранённых полей: %s. Не заполняйте их из догадок.'
-                            % ', '.join(miss))[:360]
+            _mark_missing(r, DOMAIN_EXPECTED.get(dom) or [])
             # city → hint country card exists
             country = ''
             for k, v in facts:
@@ -177,6 +225,11 @@ def enrich_geo_fields(domains_recs):
             if country and country in country_names:
                 tip = 'Связанная карточка страны в базе: «%s» (раздел «Страны мира»).' % country
                 f['detail'] = ((f.get('detail') or '').rstrip() + ' ' + tip).strip()[:500]
+    # v14.16.18: missing-field marks for other enriched domains (no invented values)
+    for dom, expected in DOMAIN_EXPECTED.items():
+        if dom in ('countries', 'cities', 'admin_regions'): continue
+        for _, _, r in domains_recs.get(dom) or []:
+            _mark_missing(r, expected)
 
 def norm(s):
     return re.sub(r'\s+', ' ', re.sub(r'[^a-zа-я0-9+#²³ ]+', ' ', s.lower().replace('ё', 'е'))).strip()
@@ -210,8 +263,8 @@ def _write_domain(dom, title, gen, recs, domains, errors):
     # "related records" is noisy and needlessly inflates their offline packs.
     rel = {} if dom == 'peoples_regions' else related_of(recs)
     rec_by_hash = {hh: r for _, hh, r in recs}
-    # Geo domains keep more neighbours for offline «Рассуждение» (still same-domain only).
-    rd_n = 5 if dom in ('countries', 'cities', 'admin_regions', 'states') else 3
+    # Rich domains keep more neighbours for offline «Рассуждение» (still same-domain only).
+    rd_n = 5 if dom in RD_RICH else 3
     for _, hh, r in recs:
         if hh in rel:
             r['r'] = rel[hh]

@@ -104,14 +104,39 @@ P = 'wdt:P31/wdt:P279*'
 PS = '(wdt:P31|wdt:P279)/wdt:P279*'   # и экземпляры, и подклассы (болезни и органы в Wikidata часто подклассы)
 
 def person_fmt(it, l, d):
+    """RU (+ EN when enrich() filled le/de / F). Occupation from first-pass or F."""
+    from gen_kb import yr_en
     b, e = yr(it['b']), yr(it['e'])
     if b.isdigit() and int(b) >= 2005: return ''   # дети/подростки — не публикуем
     if not b or not b.isdigit() or int(b) < 1500: b = e = ''
     life = ('(%s–%s)' % (b, e) if e else '(род. %s)' % b) if b else ''
-    return sent('%s — %s.' % (sent(l, life), d), ('Гражданство: %s.' % few(it['c'], 2)) if b and few(it['c'], 2) else '')
-PP = [('b', 'wdt:P569', 'year'), ('e', 'wdt:P570', 'year'), ('c', 'wdt:P27', 'label')]
+    occ_ru = few(it.get('occ') or [], 3)
+    if not occ_ru and it.get('F', {}).get('occ'):
+        occ_ru = ', '.join(v[0] for v in it['F']['occ'][:3] if v[0])
+    ru = sent('%s — %s.' % (sent(l, life), d),
+              ('Гражданство: %s.' % few(it['c'], 2)) if b and few(it['c'], 2) else '',
+              ('Род занятий: %s.' % occ_ru) if occ_ru else '')
+    le, de = it.get('le', ''), it.get('de', '')
+    en = ''
+    if le and de and not re.search(r'wikimedia|disambiguation', de, re.I):
+        be, ee = (yr_en(it['b']), yr_en(it['e'])) if b else ('', '')
+        life_en = ('(%s–%s)' % (be, ee) if ee else '(b. %s)' % be) if be else ''
+        cit = [v[1] for v in it.get('F', {}).get('c', [])[:2] if v[1]] or list(it.get('c') or [])[:2]
+        occ_en = [v[1] for v in it.get('F', {}).get('occ', [])[:3] if v[1]]
+        en = sent('%s — %s.' % (sent(le, life_en), de),
+                  ('Citizenship: %s.' % ', '.join(cit)) if b and cit else '',
+                  ('Occupation: %s.' % ', '.join(occ_en)) if occ_en else '')
+    return (ru, en) if en else ru
+PP = [('b', 'wdt:P569', 'year'), ('e', 'wdt:P570', 'year'), ('c', 'wdt:P27', 'label'), ('occ', 'wdt:P106', 'label')]
+PERSON_FACTS = [('c', 'P27', 'item', 'Гражданство', 'Citizenship', 2),
+                ('occ', 'P106', 'item', 'Род занятий', 'Occupation', 3)]
 def occ(q): return '?x wdt:P106 ?oc . ?oc wdt:P279* %s .' % q
-def ptrig(it, l): return [l, 'кто такой ' + l] if ' ' in l else [l]
+def ptrig(it, l):
+    tt = [l, 'кто такой ' + l] if ' ' in l else [l]
+    le = it.get('le', '')
+    if le and re.search(r'[A-Za-z]', le) and norm(le) != norm(l) and len(le) <= 60:
+        tt += [le, 'who is ' + le] if ' ' in le else [le]
+    return tt
 
 SECTIONS = {}
 def sec(name):
@@ -120,146 +145,202 @@ def sec(name):
 
 @sec('space')
 def _():
-    f, _ = basic()
+    fx_orb = [('p', 'P397', 'item', 'Обращается вокруг', 'Orbits', 1)]
+    fx_star = [('cn', 'P59', 'item', 'Созвездие', 'Constellation', 1)]
+    fx_sc = [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2)]
     run('space', 'Космос: планеты, спутники, звёзды, созвездия', 'Space objects', [
-        S('wd:Q634 wd:Q3504248 wd:Q2537 wd:Q1022867 wd:Q121750 wd:Q3504248', 8, [('p', 'wdt:P397', 'label')], lambda it, l, d: sent('%s — %s.' % (cap(l), d), lab('Обращается вокруг: ', it['p'], 1)), lambda it, l: [l, 'планета ' + l if 'планет' in it['d'] else 'спутник ' + l], dre=r'планет|спутник', dno=r'астероид|^объект|экзопланет', path=P),
-        S('wd:Q8928', 1, [], f, lambda it, l: [l, 'созвездие ' + l], dre='созвезди'),
-        S('wd:Q523', 25, [('cn', 'wdt:P59', 'label')], lambda it, l, d: sent('%s — %s.' % (cap(l), d), lab('Созвездие: ', it['cn'], 1)), lambda it, l: [l, 'звезда ' + l], path=P, dre=r'звезд', dno=r'астероид|галактик'),
-        S('wd:Q318 wd:Q3863 wd:Q1931185 wd:Q204107', 25, [], f, lambda it, l: [l], path=P, dre=r'галактик|туманност|скоплени|комет'),
+        RS('wd:Q634 wd:Q3504248 wd:Q2537 wd:Q1022867 wd:Q121750 wd:Q3504248', 8, fx_orb, rtrig(),
+           props=[('p', 'wdt:P397', 'label')], dre=r'планет|спутник', dno=r'астероид|^объект|экзопланет', path=P),
+        RS('wd:Q8928', 1, fx_sc, rtrig('созвездие %s'), dre='созвезди'),
+        RS('wd:Q523', 25, fx_star, rtrig('звезда %s'), props=[('cn', 'wdt:P59', 'label')], path=P, dre=r'звезд', dno=r'астероид|галактик'),
+        RS('wd:Q318 wd:Q3863 wd:Q1931185 wd:Q204107', 25, fx_sc, rtrig(), path=P, dre=r'галактик|туманност|скоплени|комет'),
     ])
 
 @sec('missions')
 def _():
+    fx = [('y', 'P619', 'year', 'Запуск', 'Launch', 1), ('op', 'P137', 'item', 'Оператор', 'Operator', 2)]
     run('missions', 'Космические миссии', 'Space missions', [
-        S('wd:Q2133344 wd:Q40218 wd:Q5916 wd:Q752783', 20, [('y', 'wdt:P619', 'year'), ('op', 'wdt:P137', 'label')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), ('Запуск: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Оператор: ', it['op'], 2)),
-          lambda it, l: [l, 'миссия ' + l], path=P, maxyear=2019, dre=r'косми|спутник|станци|зонд|корабл|аппарат|миссия|ракет|телескоп|программ|полёт|ровер|луноход|марсоход'),
+        RS('wd:Q2133344 wd:Q40218 wd:Q5916 wd:Q752783', 20, fx, rtrig('миссия %s'),
+           props=[('y', 'wdt:P619', 'year'), ('op', 'wdt:P137', 'label')],
+           path=P, maxyear=2019, dre=r'косми|спутник|станци|зонд|корабл|аппарат|миссия|ракет|телескоп|программ|полёт|ровер|луноход|марсоход'),
     ])
 
 @sec('minerals')
 def _():
+    fx = [('f', 'P274', 'str', 'Формула', 'Formula', 1), ('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2)]
     run('minerals', 'Минералы и горные породы', 'Minerals and rocks', [
-        S('wd:Q12089225 wd:Q7946', 15, [('f', 'wdt:P274', 'v')], lambda it, l, d: sent('%s — %s.' % (cap(l), d), ('Формула: %s.' % one(it['f'])) if one(it['f']) else ''), lambda it, l: [l, 'минерал ' + l], dre=r'минерал|камень|самоцвет'),
-        S('wd:Q8063', 20, [], basic()[0], lambda it, l: [l, 'горная порода ' + l], path=P, dre=r'пород|камень|минерал'),
+        RS('wd:Q12089225 wd:Q7946', 15, fx, rtrig('минерал %s'), props=[('f', 'wdt:P274', 'v')], dre=r'минерал|камень|самоцвет'),
+        RS('wd:Q8063', 20, [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2)], rtrig('горная порода %s'), path=P, dre=r'пород|камень|минерал'),
     ])
 
 DINO = r'^(род|вид|семейство|клада|отряд|подотряд|инфраотряд|надсемейство|группа|класс|триба)\b|динозавр|ящер|вымерш'
 @sec('dinosaurs')
 def _():
+    fx = [('lat', 'P225', 'str', 'Латинское название', 'Latin name', 1),
+          ('par', 'P171', 'item', 'Входит в таксон', 'Parent taxon', 1)]
     run('dinosaurs', 'Динозавры и древние животные', 'Dinosaurs and prehistoric animals', [
-        S('wd:Q16521 wd:Q23038290', 7, [('lat', 'wdt:P225', 'v')], lambda it, l, d: sent('%s%s — %s.' % (cap(l), (' (лат. %s)' % one(it['lat'])) if one(it['lat']) and one(it['lat']).lower() != l.lower() else '', d)),
-          lambda it, l: [l] + ([one(it['lat'])] if one(it['lat']) else []), extra='?x wdt:P171+ wd:Q430 . FILTER NOT EXISTS { ?x wdt:P171+ wd:Q5113 }', dre=DINO),
-        S('wd:Q16521 wd:Q23038290', 12, [('lat', 'wdt:P225', 'v')], lambda it, l, d: sent('%s — %s.' % (cap(l), d)), lambda it, l: [l] + ([one(it['lat'])] if one(it['lat']) else []),
-          extra='{ ?x wdt:P171+ wd:Q3238275 } UNION { ?x wdt:P171+ wd:Q216590 } UNION { ?x wdt:P171+ wd:Q19362 }', dre=DINO),
+        RS('wd:Q16521 wd:Q23038290', 7, fx, rtrig(), props=[('lat', 'wdt:P225', 'v')],
+           extra='?x wdt:P171+ wd:Q430 . FILTER NOT EXISTS { ?x wdt:P171+ wd:Q5113 }', dre=DINO),
+        RS('wd:Q16521 wd:Q23038290', 12, fx, rtrig(), props=[('lat', 'wdt:P225', 'v')],
+           extra='{ ?x wdt:P171+ wd:Q3238275 } UNION { ?x wdt:P171+ wd:Q216590 } UNION { ?x wdt:P171+ wd:Q19362 }', dre=DINO),
     ])
 
 @sec('diseases')
 def _():
-    def f(it, l, d): return sent('%s — %s.' % (cap(l), d), 'Справочная информация, не заменяет консультацию врача.')
+    fx = [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2), ('sym', 'P780', 'item', 'Симптомы', 'Symptoms', 3)]
+    f = rich(fx)
+    def g(it, l, d):
+        ru, en = f(it, l, d)
+        return (sent(ru, 'Справочная информация, не заменяет консультацию врача.') if ru else '',
+                sent(en, 'Reference only, not medical advice.') if en else '')
     run('diseases', 'Болезни (справочно)', 'Diseases (reference only)', [
-        S('wd:Q12136 wd:Q18123741 wd:Q929833', 35, [], f, lambda it, l: [l, 'болезнь ' + l, 'что такое ' + l], path=PS, limit=2500, dre=r'болезн|заболеван|инфекц|синдром|расстройств|воспален|опухол|рак|недостаточност|патолог|диабет|грипп', dno=r'фильм|песн|альбом|групп'),
+        S('wd:Q12136 wd:Q18123741 wd:Q929833', 35, [], g, rtrig('болезнь %s'), facts=fx, path=PS, limit=2500,
+          dre=r'болезн|заболеван|инфекц|синдром|расстройств|воспален|опухол|рак|недостаточност|патолог|диабет|грипп', dno=r'фильм|песн|альбом|групп'),
     ])
 
 @sec('anatomy')
 def _():
-    f, _ = basic()
+    fx = [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2), ('pt', 'P361', 'item', 'Часть', 'Part of', 2)]
     run('anatomy', 'Анатомия человека', 'Human anatomy', [
-        S('wd:Q712378 wd:Q265868 wd:Q4936952 wd:Q7884789 wd:Q103637', 30, [], f, lambda it, l: [l, 'орган ' + l, 'что такое ' + l], path=PS,
-          extra='FILTER NOT EXISTS { ?x wdt:P31 wd:Q16521 }', limit=1500, dre=r'орган|кост|мышц|желез|часть|отдел|ткан|сосуд|артери|вен[аы]|нерв|систем|полост|сустав|клетк|мозг', dno=r'фильм|песн|альбом|групп|птиц|животн|насеком|растени|рыб|рак |опухол|болезн|заболеван|синдром|воспален'),
+        RS('wd:Q712378 wd:Q265868 wd:Q4936952 wd:Q7884789 wd:Q103637', 30, fx, rtrig('орган %s'), path=PS,
+          extra='FILTER NOT EXISTS { ?x wdt:P31 wd:Q16521 }', limit=1500,
+          dre=r'орган|кост|мышц|желез|часть|отдел|ткан|сосуд|артери|вен[аы]|нерв|систем|полост|сустав|клетк|мозг',
+          dno=r'фильм|песн|альбом|групп|птиц|животн|насеком|растени|рыб|рак |опухол|болезн|заболеван|синдром|воспален'),
     ])
 
 @sec('companies')
 def _():
+    fx = [('y', 'P571', 'year', 'Основана', 'Founded', 1), ('c', 'P17', 'item', 'Страна', 'Country', 1),
+          ('fo', 'P112', 'item', 'Основатели', 'Founders', 3), ('ind', 'P452', 'item', 'Отрасль', 'Industry', 2)]
     run('companies', 'Компании и бренды', 'Companies and brands', [
-        S('wd:Q783794 wd:Q4830453 wd:Q891723 wd:Q6881511 wd:Q167037 wd:Q270791 wd:Q46970 wd:Q22687 wd:Q210167', 35, [('y', 'wdt:P571', 'year'), ('c', 'wdt:P17', 'label'), ('fo', 'wdt:P112', 'label')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), ('Основана: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Основатели: ', it['fo'], 3), lab('Страна: ', it['c'], 1)),
-          lambda it, l: [l, 'компания ' + l], limit=2500, extra='FILTER NOT EXISTS { ?x wdt:P576 ?end }', dre=r'компани|корпораци|производител|концерн|предприяти|бренд|банк|авиакомпани|ритейл|разработчик|холдинг|автопроизводител|издател|торгов|сеть', dno=r'город|коммун|департамент|штат|организаци объединённых|деревн'),
+        RS('wd:Q783794 wd:Q4830453 wd:Q891723 wd:Q6881511 wd:Q167037 wd:Q270791 wd:Q46970 wd:Q22687 wd:Q210167', 35, fx,
+           rtrig('компания %s'),
+           props=[('y', 'wdt:P571', 'year'), ('c', 'wdt:P17', 'label'), ('fo', 'wdt:P112', 'label')],
+           limit=2500, extra='FILTER NOT EXISTS { ?x wdt:P576 ?end }',
+           dre=r'компани|корпораци|производител|концерн|предприяти|бренд|банк|авиакомпани|ритейл|разработчик|холдинг|автопроизводител|издател|торгов|сеть',
+           dno=r'город|коммун|департамент|штат|организаци объединённых|деревн'),
     ])
 
 @sec('science')
 def _():
-    f, _ = basic()
+    fx = [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2), ('nm', 'P138', 'item', 'Названо в честь', 'Named after', 2)]
+    fx_inv = [('inv', 'P61', 'item', 'Изобретатель', 'Inventor', 2), ('y', 'P571', 'year', 'Год', 'Year', 1)]
     run('science', 'Научные законы, теории и изобретения', 'Scientific laws, theories, inventions', [
-        S('wd:Q408891 wd:Q7949 wd:Q17737 wd:Q65943 wd:Q1503859', 18, [], f, lambda it, l: [l, 'что такое ' + l], path=P, limit=1500, dre=r'закон|теори|принцип|уравнени|эффект|постулат|правил|гипотез|теорем|парадокс|модель', dno=r'идеолог|политич|орден|фильм|альбом|песн|заговор|конспиролог|антисемит|международных отношений|пропаганд'),
-        S('wd:Q15401930 wd:Q39546 wd:Q11019', 45, [('inv', 'wdt:P61', 'label')], lambda it, l, d: sent('%s — %s.' % (cap(l), d), lab('Изобретатель: ', it['inv'], 2)),
-          lambda it, l: [l, 'кто изобрел ' + l] if it['inv'] else [l], path=P, limit=1500, dre=r'изобрет|устройств|прибор|механизм|машин|двигател|аппарат|инструмент|оборудован|техник', dno=r'фильм|альбом|песн|древнее'),
+        RS('wd:Q408891 wd:Q7949 wd:Q17737 wd:Q65943 wd:Q1503859', 18, fx, rtrig('что такое %s'), path=P, limit=1500,
+           dre=r'закон|теори|принцип|уравнени|эффект|постулат|правил|гипотез|теорем|парадокс|модель',
+           dno=r'идеолог|политич|орден|фильм|альбом|песн|заговор|конспиролог|антисемит|международных отношений|пропаганд'),
+        RS('wd:Q15401930 wd:Q39546 wd:Q11019', 45, fx_inv, rtrig('кто изобрел %s'),
+           props=[('inv', 'wdt:P61', 'label')], path=P, limit=1500,
+           dre=r'изобрет|устройств|прибор|механизм|машин|двигател|аппарат|инструмент|оборудован|техник', dno=r'фильм|альбом|песн|древнее'),
     ])
 
 @sec('holidays')
 def _():
-    f, _ = basic()
+    fx = [('c', 'P17', 'item', 'Страна', 'Country', 2), ('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2)]
     run('holidays', 'Праздники и фестивали', 'Holidays and festivals', [
-        S('wd:Q1445650 wd:Q132241 wd:Q2633344 wd:Q15275719', 25, [], f, lambda it, l: [l, 'праздник ' + l], path=P, maxyear=2019, limit=1500,
-          extra='FILTER NOT EXISTS { ?x wdt:P585 ?pt }', dre=r'праздник|фестивал|торжеств|карнавал|памятн(ый|ая) дата|день |годовщин|обряд|традиц', dno=r'Олимпийск|кубок|чемпионат|регат|вики|спортивн|високосн'),
+        RS('wd:Q1445650 wd:Q132241 wd:Q2633344 wd:Q15275719', 25, fx, rtrig('праздник %s'), path=P, maxyear=2019, limit=1500,
+          extra='FILTER NOT EXISTS { ?x wdt:P585 ?pt }',
+          dre=r'праздник|фестивал|торжеств|карнавал|памятн(ый|ая) дата|день |годовщин|обряд|традиц',
+          dno=r'Олимпийск|кубок|чемпионат|регат|вики|спортивн|високосн'),
     ])
 
 @sec('landmarks')
 def _():
+    fx = [('loc', 'P131', 'item', 'Где', 'Location', 1), ('c', 'P17', 'item', 'Страна', 'Country', 1),
+          ('y', 'P571', 'year', 'Основан/построен', 'Built', 1)]
     run('landmarks', 'Памятники, здания и достопримечательности', 'Monuments and buildings', [
-        S('wd:Q4989906 wd:Q16560 wd:Q12518 wd:Q2977 wd:Q23413 wd:Q44539 wd:Q11303 wd:Q12280 wd:Q57821 wd:Q1081138 wd:Q570116 wd:Q839954', 50,
-          [('c', 'wdt:P17', 'label'), ('loc', 'wdt:P131', 'label'), ('y', 'wdt:P571', 'year')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), lab('Где: ', it['loc'], 1), lab('Страна: ', it['c'], 1)),
-          lambda it, l: [l, 'где находится ' + l], path=P, limit=2500, dre=r'памятник|дворец|башн|собор|замок|храм|мечеть|мост|монумент|крепост|здани|небоскрёб|пирамид|статуя|церковь|монастыр|ворота|стадион|театр|достопримечат|сооружен|архитектур|кремль|арка'),
+        RS('wd:Q4989906 wd:Q16560 wd:Q12518 wd:Q2977 wd:Q23413 wd:Q44539 wd:Q11303 wd:Q12280 wd:Q57821 wd:Q1081138 wd:Q570116 wd:Q839954', 50, fx,
+           rtrig('где находится %s'),
+           props=[('c', 'wdt:P17', 'label'), ('loc', 'wdt:P131', 'label'), ('y', 'wdt:P571', 'year')],
+           path=P, limit=2500,
+           dre=r'памятник|дворец|башн|собор|замок|храм|мечеть|мост|монумент|крепост|здани|небоскрёб|пирамид|статуя|церковь|монастыр|ворота|стадион|театр|достопримечат|сооружен|архитектур|кремль|арка'),
     ])
 
 @sec('museums')
 def _():
+    fx = [('loc', 'P131', 'item', 'Где', 'Location', 1), ('c', 'P17', 'item', 'Страна', 'Country', 1),
+          ('y', 'P571', 'year', 'Основан', 'Founded', 1)]
     run('museums', 'Музеи', 'Museums', [
-        S('wd:Q33506', 30, [('loc', 'wdt:P131', 'label'), ('c', 'wdt:P17', 'label')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), lab('Где: ', it['loc'], 1), lab('Страна: ', it['c'], 1)), lambda it, l: [l, 'музей ' + l], path=P, limit=1500, dre=r'музе|галере|выставоч|собрани|коллекци'),
+        RS('wd:Q33506', 30, fx, rtrig('музей %s'),
+           props=[('loc', 'wdt:P131', 'label'), ('c', 'wdt:P17', 'label')], path=P, limit=1500,
+           dre=r'музе|галере|выставоч|собрани|коллекци'),
     ])
 
 @sec('universities')
 def _():
+    fx = [('loc', 'P131', 'item', 'Где', 'Location', 1), ('c', 'P17', 'item', 'Страна', 'Country', 1),
+          ('y', 'P571', 'year', 'Основан', 'Founded', 1)]
     run('universities', 'Университеты', 'Universities', [
-        S('wd:Q3918 wd:Q875538 wd:Q38723 wd:Q902104', 28, [('loc', 'wdt:P131', 'label'), ('c', 'wdt:P17', 'label'), ('y', 'wdt:P571', 'year')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), ('Основан: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Где: ', it['loc'], 1), lab('Страна: ', it['c'], 1)),
-          lambda it, l: [l, 'университет ' + l], path=P, limit=1500, dre=r'университет|институт|колледж|академи|высш|учебн|школ'),
+        RS('wd:Q3918 wd:Q875538 wd:Q38723 wd:Q902104', 28, fx, rtrig('университет %s'),
+           props=[('loc', 'wdt:P131', 'label'), ('c', 'wdt:P17', 'label'), ('y', 'wdt:P571', 'year')],
+           path=P, limit=1500, dre=r'университет|институт|колледж|академи|высш|учебн|школ'),
     ])
 
 @sec('waters')
 def _():
-    f, _ = basic()
+    fx = [('c', 'P17', 'item', 'Страна', 'Country', 3), ('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2)]
     run('waters', 'Моря, океаны, заливы и проливы', 'Seas, oceans, gulfs, straits', [
-        S('wd:Q165 wd:Q9430 wd:Q1322134 wd:Q37901 wd:Q39594', 20, [], f, lambda it, l: [l], path=P, limit=1500, dre=r'мор[ея]|океан|залив|пролив|бухт|лагун'),
+        RS('wd:Q165 wd:Q9430 wd:Q1322134 wd:Q37901 wd:Q39594', 20, fx, rtrig(), path=P, limit=1500,
+           dre=r'мор[ея]|океан|залив|пролив|бухт|лагун'),
     ])
 
 @sec('deserts')
 def _():
+    fx = [('c', 'P17', 'item', 'Страна', 'Country', 3), ('h', 'P2044', 'qty', 'Высота', 'Elevation', 1)]
+    # height as plain v via first-pass; qty needs unit map — keep country via rich + height from props in custom? use str via first-pass only in rich year/str.
+    # Use item/str facts only; elevation stays best-effort via custom wrapper.
+    fx2 = [('c', 'P17', 'item', 'Страна', 'Country', 3)]
+    f = rich(fx2)
+    def g(it, l, d):
+        ru, en = f(it, l, d)
+        h = ''
+        if one(it.get('h')) and 'вулкан' in (d or ''):
+            try:
+                m = round(float(one(it['h'])))
+                ru = sent(ru, 'Высота — около %d м.' % m)
+                if en: en = sent(en, 'Elevation — about %d m.' % m)
+            except (TypeError, ValueError): pass
+        return ru, en
     run('deserts', 'Пустыни, вулканы и природные объекты', 'Deserts, volcanoes, landforms', [
-        S('wd:Q8514 wd:Q8072 wd:Q34038 wd:Q35666 wd:Q150784 wd:Q35509', 20, [('c', 'wdt:P17', 'label'), ('h', 'wdt:P2044', 'v')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), ('Высота — около %d м.' % round(float(one(it['h'])))) if one(it['h']) and 'вулкан' in d else '', lab('Страна: ', it['c'], 3)),
-          lambda it, l: [l] + (['вулкан ' + l] if 'вулкан' in it['d'] else ['пустыня ' + l] if 'пустын' in it['d'] else []), path=P, limit=1500, dre=r'пустын|вулкан|каньон|ледник|пещер|водопад|ущель|плато|кратер|гейзер|долин|равнин|нагорь'),
+        S('wd:Q8514 wd:Q8072 wd:Q34038 wd:Q35666 wd:Q150784 wd:Q35509', 20,
+          [('c', 'wdt:P17', 'label'), ('h', 'wdt:P2044', 'v')], g, rtrig(),
+          facts=fx2, path=P, limit=1500, dre=r'пустын|вулкан|каньон|ледник|пещер|водопад|ущель|плато|кратер|гейзер|долин|равнин|нагорь'),
     ])
 
 @sec('games')
 def _():
+    fx = [('y', 'P577', 'year', 'Год выхода', 'Release year', 1), ('dev', 'P178', 'item', 'Разработчик', 'Developer', 2),
+          ('g', 'P136', 'item', 'Жанр', 'Genre', 2), ('plat', 'P400', 'item', 'Платформа', 'Platform', 3)]
     run('games', 'Видеоигры', 'Video games', [
-        S('wd:Q7889', 35, [('y', 'wdt:P577', 'year'), ('dev', 'wdt:P178', 'label')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), ('Год выхода: %s.' % yr(it['y'])) if yr(it['y']) else '', lab('Разработчик: ', it['dev'], 2)),
-          lambda it, l: [l, 'игра ' + l], maxyear=2020, limit=1500, dre=r'игр'),
+        RS('wd:Q7889', 35, fx, rtrig('игра %s'),
+           props=[('y', 'wdt:P577', 'year'), ('dev', 'wdt:P178', 'label')], maxyear=2020, limit=1500, dre=r'игр'),
     ])
 
 @sec('stage')
 def _():
+    fx = [('a', 'P86', 'item', 'Композитор', 'Composer', 2), ('y', 'P577', 'year', 'Год', 'Year', 1),
+          ('lang', 'P407', 'item', 'Язык', 'Language', 1)]
     run('stage', 'Оперы, балеты и мюзиклы', 'Operas, ballets, musicals', [
-        S('wd:Q58483083 wd:Q15079786 wd:Q785522 wd:Q1344 wd:Q2743', 10, [('a', 'wdt:P86', 'label')],
-          lambda it, l, d: sent('«%s» — %s.' % (l, d), lab('Композитор: ', it['a'], 2), ''),
-          lambda it, l: [l, 'опера ' + l if 'опер' in it['d'].lower() else 'балет ' + l if 'балет' in it['d'].lower() else 'мюзикл ' + l, 'кто написал ' + l], limit=1500, dre=r'опер|балет|мюзикл'),
+        RS('wd:Q58483083 wd:Q15079786 wd:Q785522 wd:Q1344 wd:Q2743', 10, fx, rtrig(),
+           props=[('a', 'wdt:P86', 'label')], limit=1500, dre=r'опер|балет|мюзикл'),
     ])
 
 @sec('myths')
 def _():
-    f, _ = basic()
+    fx = [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2), ('from', 'P361', 'item', 'Часть', 'Part of', 2),
+          ('myth', 'P2596', 'item', 'Культура', 'Culture', 2)]
     run('myths', 'Мифология и легендарные персонажи', 'Mythology', [
-        S('wd:Q178885 wd:Q4271324 wd:Q22989102 wd:Q15410431 wd:Q24334685', 25, [], f, lambda it, l: [l, 'кто такой ' + l], path=P, limit=2000, dre=r'миф|бог|богин|божеств|легенд|персонаж|демон|герой|титан|нимф|дух|чудовищ|существо|сказ|эпос|ангел|архангел', dno=r'поэт|писател|фильм|альбом|песн|компьютерн|комикс|игр'),
+        RS('wd:Q178885 wd:Q4271324 wd:Q22989102 wd:Q15410431 wd:Q24334685', 25, fx, rtrig('кто такой %s'), path=P, limit=2000,
+           dre=r'миф|бог|богин|божеств|легенд|персонаж|демон|герой|титан|нимф|дух|чудовищ|существо|сказ|эпос|ангел|архангел',
+           dno=r'поэт|писател|фильм|альбом|песн|компьютерн|комикс|игр'),
     ])
 
 @sec('religions')
 def _():
-    f, _ = basic()
+    fx = [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2), ('found', 'P112', 'item', 'Основатель', 'Founder', 2)]
     run('religions', 'Религии и учения', 'Religions and belief systems', [
-        S('wd:Q9174 wd:Q879146 wd:Q13414953 wd:Q12909644', 35, [], f, lambda it, l: [l, 'что такое ' + l], path=P, limit=1000, dre=r'религи|учени|вероучени|конфесси|течени|верован|культ|церк|деноминаци|ветвь'),
+        RS('wd:Q9174 wd:Q879146 wd:Q13414953 wd:Q12909644', 35, fx, rtrig('что такое %s'), path=P, limit=1000,
+           dre=r'религи|учени|вероучени|конфесси|течени|верован|культ|церк|деноминаци|ветвь'),
     ])
 
 for key, title, title_en, q, sl, dre in (
@@ -271,30 +352,45 @@ for key, title, title_en, q, sl, dre in (
         ('athletes', 'Спортсмены', 'Athletes', 'wd:Q2066131', 50, r'спортсмен|футболист|хоккеист|теннисист|шахматист|боксёр|баскетболист|гонщик|пловец|пловчих|лыжник|бегун|легкоатлет|гимнаст|борец|фигурист|велогонщик|волейболист|биатлонист|конькобеж|тренер|игрок|атлет|прыгун|тяжелоатлет|фехтовальщ|бейсболист|регбист|гольфист|боец|дзюдоист|каратист|альпинист|игрок в')):
     def mk(key=key, title=title, title_en=title_en, q=q, sl=sl, dre=dre):
         ex = '?x wdt:P106 ?oc . VALUES ?t { %s } ?oc wdt:P279* ?t .' % q
-        run(key, title, title_en, [S('wd:Q5', sl, PP, person_fmt, ptrig, extra=ex, limit=2500, dre=dre)])
+        run(key, title, title_en, [S('wd:Q5', sl, PP, person_fmt, ptrig, extra=ex, limit=2500, dre=dre, facts=PERSON_FACTS)])
     SECTIONS[key] = mk
 
 @sec('nobel')
 def _():
-    def f(it, l, d): return sent(person_fmt(it, l, d), 'Лауреат Нобелевской премии.')
+    def f(it, l, d):
+        a = person_fmt(it, l, d)
+        if not a: return ''
+        if isinstance(a, tuple):
+            ru, en = a
+            return (sent(ru, 'Лауреат Нобелевской премии.'),
+                    sent(en, 'Nobel Prize laureate.') if en else '')
+        return sent(a, 'Лауреат Нобелевской премии.')
     run('nobel', 'Нобелевские лауреаты', 'Nobel laureates', [
-        S('wd:Q5', 20, PP, f, ptrig, extra='?x wdt:P166 ?pr . ?pr (wdt:P31|wdt:P279)* wd:Q7191 .', limit=2000),
+        S('wd:Q5', 20, PP, f, ptrig, extra='?x wdt:P166 ?pr . ?pr (wdt:P31|wdt:P279)* wd:Q7191 .', limit=2000, facts=PERSON_FACTS),
     ])
 
 @sec('airports')
 def _():
+    fx = [('iata', 'P238', 'str', 'Код IATA', 'IATA code', 1), ('city', 'P931', 'item', 'Обслуживает', 'Serves', 2),
+          ('c', 'P17', 'item', 'Страна', 'Country', 1)]
     run('airports', 'Аэропорты', 'Airports', [
-        S('wd:Q1248784 wd:Q644371', 30, [('city', 'wdt:P931', 'label'), ('iata', 'wdt:P238', 'v'), ('c', 'wdt:P17', 'label')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), ('Код IATA: %s.' % one(it['iata'])) if one(it['iata']) else '', lab('Обслуживает: ', it['city'], 2), lab('Страна: ', it['c'], 1)),
-          lambda it, l: [l, 'аэропорт ' + l] + (['аэропорт ' + one(it['iata'])] if one(it['iata']) else []), path=P, limit=1500, dre=r'аэропорт|аэродром'),
+        RS('wd:Q1248784 wd:Q644371', 30, fx, rtrig('аэропорт %s'),
+           props=[('city', 'wdt:P931', 'label'), ('iata', 'wdt:P238', 'v'), ('c', 'wdt:P17', 'label')],
+           path=P, limit=1500, dre=r'аэропорт|аэродром'),
     ])
 
 @sec('sports')
 def _():
+    fx = [('loc', 'P131', 'item', 'Город', 'City', 1), ('c', 'P17', 'item', 'Страна', 'Country', 1),
+          ('y', 'P571', 'year', 'Основан', 'Founded', 1)]
     run('sports', 'Спортивные клубы и соревнования', 'Sports clubs and competitions', [
-        S('wd:Q476028 wd:Q847017 wd:Q13393265', 45, [('loc', 'wdt:P131', 'label'), ('c', 'wdt:P17', 'label'), ('y', 'wdt:P571', 'year')],
-          lambda it, l, d: sent('%s — %s.' % (cap(l), d), lab('Город: ', it['loc'], 1)), lambda it, l: [l, 'клуб ' + l], path=P, limit=1200, dre=r'клуб|команд'),
-        S('wd:Q15991303 wd:Q500834 wd:Q1079023', 40, [], basic()[0], lambda it, l: [l], path=P, limit=600, extra='FILTER NOT EXISTS { ?x wdt:P585 ?pt } FILTER NOT EXISTS { ?x wdt:P580 ?st . FILTER(YEAR(?st) > 2019) }', dre=r'турнир|соревновани|чемпионат|кубок|лига|игры|гонк|марафон', dno=r'20[0-2]\d|19\d\d'),
+        RS('wd:Q476028 wd:Q847017 wd:Q13393265', 45, fx, rtrig('клуб %s'),
+           props=[('loc', 'wdt:P131', 'label'), ('c', 'wdt:P17', 'label'), ('y', 'wdt:P571', 'year')],
+           path=P, limit=1200, dre=r'клуб|команд'),
+        RS('wd:Q15991303 wd:Q500834 wd:Q1079023', 40, [('sc', 'P279', 'item', 'Подкласс', 'Subclass of', 2)],
+           rtrig(), path=P, limit=600,
+           extra='FILTER NOT EXISTS { ?x wdt:P585 ?pt } FILTER NOT EXISTS { ?x wdt:P580 ?st . FILTER(YEAR(?st) > 2019) }',
+           dre=r'турнир|соревновани|чемпионат|кубок|лига|игры|гонк|марафон', dno=r'20[0-2]\d|19\d\d'),
     ])
 
 ORDER = ['space', 'missions', 'minerals', 'dinosaurs', 'diseases', 'anatomy', 'companies', 'science', 'holidays', 'landmarks', 'museums',
@@ -337,18 +433,25 @@ def enrich(its, facts):
             rows = sparql(q, 'f_%s_' % prop + __import__('hashlib').sha1(q.encode()).hexdigest()[:12])
             for r in rows:
                 x = r['x'].rsplit('/', 1)[1]; d = F.setdefault(x, {}).setdefault(key, [])
-                if kind == 'item':
-                    v = (clean(r.get('vr', '')), clean(r.get('ve', '')), r['v'])
-                elif kind == 'qty':
-                    u = UNITS.get(r['u'].rsplit('/', 1)[1])
-                    if not u: v = ('?', '?', 'bad')
+                try:
+                    if kind == 'item':
+                        if 'v' not in r: continue
+                        v = (clean(r.get('vr', '')), clean(r.get('ve', '')), r['v'])
+                    elif kind == 'qty':
+                        if 'a' not in r or 'u' not in r: continue
+                        u = UNITS.get(r['u'].rsplit('/', 1)[1])
+                        if not u: v = ('?', '?', 'bad')
+                        else:
+                            a = float(r['a']); t = ('%.3f' % a).rstrip('0').rstrip('.')
+                            v = (t.replace('.', ',') + ' ' + u[0], t + ' ' + u[1], t + u[1])
+                    elif kind == 'year':
+                        if 'y' not in r or r['y'] in ('', None): continue
+                        y = int(float(r['y'])); v = (yr([str(y)]), ('%d BC' % (-y + 1)) if y <= 0 else str(y), str(y))
                     else:
-                        a = float(r['a']); t = ('%.3f' % a).rstrip('0').rstrip('.')
-                        v = (t.replace('.', ',') + ' ' + u[0], t + ' ' + u[1], t + u[1])
-                elif kind == 'year':
-                    y = int(float(r['y'])); v = (yr([str(y)]), ('%d BC' % (-y + 1)) if y <= 0 else str(y), str(y))
-                else:
-                    v = (clean(r['v']), clean(r['v']), r['v'])
+                        if 'v' not in r: continue
+                        v = (clean(r['v']), clean(r['v']), r['v'])
+                except (TypeError, ValueError, KeyError):
+                    continue
                 if v not in d: d.append(v)
     for it in its:
         it.update(E.get(it['qid'], {})); it['F'] = F.get(it['qid'], {})
@@ -377,11 +480,14 @@ def rich(facts):
             return out if len(out) <= 600 else ''
         return fit(ru), (fit(en) if en else '')
     return f
-def rtrig(extra_ru=None):
+def rtrig(extra_ru=None, en_prefix=None):
+    """RU triggers + optional EN. If en_prefix set (e.g. 'film '), only prefixed EN is added — bare EN titles steal person/place hits."""
     def t(it, l):
         tt = [l] + ([extra_ru % l] if extra_ru else [])
         le = it.get('le', '')
-        if le and re.search(r'[A-Za-z]', le) and norm(le) != norm(l) and len(le) <= 60 and not re.search(r'[;|]', le): tt.append(le)
+        if le and re.search(r'[A-Za-z]', le) and norm(le) != norm(l) and len(le) <= 60 and not re.search(r'[;|]', le):
+            if en_prefix: tt.append(en_prefix + le)
+            else: tt.append(le)
         return tt
     return t
 

@@ -99,7 +99,7 @@
     detail: { ru: 'Подробный текст', en: 'Detailed text', de: 'Ausführlicher Text' }
   };
   function detailFieldLabel(k, lang, value) {
-    if (k === 'how' && /^В этой записи нет/i.test(String(value || ''))) return S('detailMissing', lang);
+    if (k === 'how' && /^(?:В этой записи нет|Not in this record)/i.test(String(value || ''))) return S('detailMissing', lang);
     var labels = DETAIL_FIELD_LABELS[k]; return labels ? labels[L(lang)] : k;
   }
 
@@ -184,7 +184,8 @@
     var authored = e.f && typeof e.f.detail === 'string' ? e.f.detail.trim() : '';
     var fields = e.f && typeof e.f === 'object' ? Object.keys(e.f).filter(function(k) { return k !== 'detail' && typeof e.f[k] === 'string' && e.f[k].trim(); }) : [];
     var title = (e.q && e.q[0]) || (p.lead.split(' — ')[0]) || e.title || e.title_en || '';
-    var short = e.f && typeof e.f.short === 'string' ? e.f.short.trim() : '';
+    // f.short is built from the RU answer; for EN/DE UI prefer the language answer lead instead.
+    var short = (!useEn && e.f && typeof e.f.short === 'string') ? e.f.short.trim() : '';
     var lines = [header || ('### 🧠 ' + esc(title)), '', '**' + S('essence', lang) + '**'];
     if (short) lines.push(esc(short));
     if (p.lead && (!short || p.lead.toLowerCase().replace(/\s+/g, ' ').trim() !== short.toLowerCase().replace(/\s+/g, ' ').trim())) {
@@ -207,7 +208,7 @@
       var fieldOrder = fields.slice().sort(function(a, b) {
         function rank(k) {
           if (k === 'verify') return 95;
-          if (k === 'how' && /^В этой записи нет/i.test(e.f[k] || '')) return 90;
+          if (k === 'how' && /^(?:В этой записи нет|Not in this record)/i.test(e.f[k] || '')) return 90;
           if (k === 'count') return 80;
           if (k === 'origin') return 70;
           return 10;
