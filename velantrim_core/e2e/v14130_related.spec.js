@@ -40,7 +40,7 @@ test('KB-ответ: кнопки, похожие из пакета, офлай�
   const chips = bar.locator('.eiti-rel-panel').first().locator('.eiti-rel-chip');
   await expect(chips.first()).toBeVisible();
   expect(await chips.count()).toBeGreaterThanOrEqual(3);
-  await expect(bar.locator('.eiti-rel-panel')).toContainText('Даная'); // same author (Wikidata fact «Автор»)
+  await expect(bar.locator('.eiti-rel-panel')).toContainText('Еврейская невеста'); // same author (Wikidata fact «Автор»)
   await chips.first().click(); // opens the related item in the panel (card + its own buttons)
   const top = bar.locator('.eiti-rel-panel').first();
   await expect(top).toContainText('Раздел');

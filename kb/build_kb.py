@@ -277,7 +277,7 @@ def _write_domain(dom, title, gen, recs, domains, errors):
                 snapshots.append(snap)
             if snapshots: r['rd'] = snapshots
     part = PART
-    while True:   # adaptive part size: packs carry «r» (related) and must stay under the 40 KB gzip cap
+    while True:   # adaptive part size: packs carry «r» (related) and must stay under PACK_GZ_SOFT
         nparts = (len(recs) + part - 1) // part
         chunks = [recs[pi * part:(pi + 1) * part] for pi in range(nparts)]
         payloads = [json.dumps({'v': 2, 'domain': dom, 'part': pi, 'entries': {e: r for e, _, r in c}}, ensure_ascii=False, separators=(',', ':')) for pi, c in enumerate(chunks)]
