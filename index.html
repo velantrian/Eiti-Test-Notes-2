@@ -49201,7 +49201,7 @@ function _apply(m) {
     var S = window.EitiDriveSync, jobs = [], changed = 0;
     Object.keys(m.apply.stores).forEach(function(name) {
         var a = m.apply.stores[name];
-        // Заметки: удаление в приложении убирает их только из кэша — дочищаем IDB по меткам удаления.
+        // Заметки: notesSave уже делает put+delete; здесь добиваем remote tombstones в IDB.
         var dels = a.dels.slice();
         if (name === 'notes') {
             var merged = m.sync.stores.notes || {};
