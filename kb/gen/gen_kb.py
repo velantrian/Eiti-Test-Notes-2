@@ -598,12 +598,24 @@ def main():
 
 def gen_concepts():
     o = Out('concepts', 'Понятия: единицы, спорт, математика, инструменты', 'Concepts')
+    # v14.16.18: EN label/desc + English prefix triggers (unit/sport/term/tool/concept)
+    tpl_en = {'единица %s': 'unit %s', 'спорт %s': 'sport %s', 'термин %s': 'term %s',
+              'инструмент %s': 'instrument %s', 'понятие %s': 'concept %s'}
     for cls, sl, path, tpl in (('wd:Q47574', 25, 'wdt:P31/wdt:P279*', 'единица %s'), ('wd:Q31629', 25, 'wdt:P31', 'спорт %s'),
                                ('wd:Q24034552', 30, 'wdt:P31', 'термин %s'), ('wd:Q34379', 30, 'wdt:P31/wdt:P279*', 'инструмент %s'),
                                ('wd:Q151885', 60, 'wdt:P31', 'понятие %s')):
-        for it in q_items(cls, sl, [], limit=1500, cls_path=path, tag='cc_%s_%d' % (cls[3:], sl)):
+        for it in q_items(cls, sl, [], limit=1500, cls_path=path, tag='cc_%s_%d' % (cls[3:], sl), en=True):
             l, d = it['l'], desc(it)
-            if ok_label(l) and d: o.add([l, tpl % l], sent('%s — %s.' % (cap(l), d)))
+            if not (ok_label(l) and d): continue
+            ru = sent('%s — %s.' % (cap(l), d))
+            le, de = it.get('en') or '', it.get('den') or ''
+            en = sent('%s — %s.' % (cap(le), de)) if le and de and not re.search(r'wikimedia|disambiguation', de, re.I) else ''
+            tt = [l, tpl % l]
+            if le and le.lower() != l.lower():
+                tt.append(le)
+                te = tpl_en.get(tpl)
+                if te: tt.append(te % le)
+            o.add(tt, maybe_pair(ru, en))
     o.write()
 
 if __name__ == '__main__':

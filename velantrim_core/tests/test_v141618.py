@@ -64,3 +64,12 @@ def test_geo_still_has_iso_after_rebuild():
     fr = _entry("countries", "Франция")
     assert "Код ISO: FR" in fr["a"] or "ISO" in fr["a"]
     assert fr.get("en"), "countries gained EN answers in v14.16.18"
+
+
+def test_remaining_sections_have_english():
+    ady = _entry("admin_regions", "Республика Адыгея")
+    assert ady.get("en") and "Administrative centre" in ady["en"]
+    day = _entry("concepts", "сутки")
+    assert day.get("en") and ("Day" in day["en"] or "day" in day["en"].lower())
+    sib = _entry("peoples_regions", "народы Сибири")
+    assert sib.get("en") and "Peoples of Siberia" in sib["en"]
