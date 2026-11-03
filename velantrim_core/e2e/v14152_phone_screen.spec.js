@@ -100,6 +100,17 @@ test('вместе с «Меньше иконки»: отступы прибав
   await shot(page, 'small-icons-island-412');
 });
 
+test('v14.16.16: чёлка + компактные табы (дефолт) — таб-бар 96+34, не откат к 110', async ({ page }) => {
+  await boot(page, { preset: 'iphone-notch', storage: { eiti_compact_chrome: '1' } });
+  expect(await page.evaluate(() => document.documentElement.classList.contains('eiti-compact-chrome'))).toBe(true);
+  const m = await layout(page);
+  expect(m.header.pt).toBe(47);
+  expect(Math.round(m.header.h)).toBe(88 + 47);
+  expect(Math.round(m.tab.h)).toBe(96 + 34);
+  expect(m.tab.pb).toBe(2 + 34);
+  expectFlush(m, VIEW.height);
+});
+
 test('альбомная: сверху только системный отступ, вырез уходит вбок (боковые отступы)', async ({ page }) => {
   await boot(page, { preset: 'iphone-island', view: { width: 915, height: 412 } });
   const m = await layout(page);

@@ -39,7 +39,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.15"; // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.16"; // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -8496,6 +8496,18 @@
             padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
         }
         html.eiti-phone body.many-tabs .tab-bar { height: calc(96px + var(--eiti-bottom-inset)) !important; padding-bottom: calc(2px + var(--eiti-bottom-inset)) !important; }
+        /* v14.16.16: пресет НЕ должен сбрасывать «Компактные табы» (по умолчанию вкл) — иначе чёлка/остров
+           визуально «ломают» низ (прыжок 96→110) и дают тяжёлый reflow */
+        html.eiti-phone.eiti-compact-chrome .tab-bar {
+            height: calc(96px + var(--eiti-bottom-inset)) !important;
+            padding: 4px 0 calc(2px + var(--eiti-bottom-inset)) !important;
+            padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
+        }
+        html.eiti-phone.eiti-compact-chrome body.many-tabs .tab-bar {
+            height: calc(88px + var(--eiti-bottom-inset)) !important;
+            padding: 3px 0 calc(1px + var(--eiti-bottom-inset)) !important;
+            padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
+        }
         html.eiti-phone.eiti-small-icons .tab-bar,
         html.eiti-phone.eiti-small-icons body.many-tabs .tab-bar { height: calc(var(--eiti-si-tabbar-h) + var(--eiti-bottom-inset)) !important; padding-bottom: calc(2px + var(--eiti-bottom-inset)) !important; }
         /* Шапка скрыта — отступ под вырезом переходит к контенту */
@@ -15418,9 +15430,12 @@
             ua = String(ua || ''); model = String(model || '');
             var a = Math.min(w || 0, h || 0), b = Math.max(w || 0, h || 0), k = a + 'x' + b;
             if (/iPhone/.test(ua)) {
-                if (/^(375x812|414x896|390x844|428x926)$/.test(k)) return 'iphone-notch';
+                // v14.16.16: + mini 360×780; остров 14 Pro–16 Pro Max; чёлка X–14 / 16e
+                if (/^(360x780|375x812|414x896|390x844|428x926)$/.test(k)) return 'iphone-notch';
                 if (/^(393x852|430x932|402x874|440x956)$/.test(k)) return 'iphone-island';
                 if (/^(320x568|375x667|414x736)$/.test(k)) return 'iphone-se';
+                // неизвестный размер iPhone с высоким экраном — лучше остров, чем «ничего»
+                if (b >= 780 && a >= 360) return (b >= 850 && a >= 390) ? 'iphone-island' : 'iphone-notch';
                 return null;
             }
             if (!/Android/.test(ua)) return null;
@@ -15445,6 +15460,14 @@
             var list = document.getElementById('eiti-ps-list');
             if (!list) return;
             var cur = eitiPhoneScreenGet();
+            // v14.16.16: не пересобирать весь список при каждом клике — только radio + превью (меньше reflow/MutationObserver)
+            if (list.childElementCount === EITI_PS_ORDER.length) {
+                var radios = list.querySelectorAll('input[name="eiti-phone-screen"]');
+                for (var i = 0; i < radios.length; i++) radios[i].checked = (radios[i].value === cur);
+                _eitiPsRenderPreview(cur);
+                _eitiPsRenderHint(cur);
+                return;
+            }
             list.innerHTML = '';
             EITI_PS_ORDER.forEach(function (id) {
                 var lab = document.createElement('label'); lab.className = 'eiti-ps-opt';
@@ -15483,9 +15506,14 @@
             if (!_eitiPsHas(id)) id = 'auto';
             _eitiPsHintGen++;
             try { if (id === 'auto') localStorage.removeItem('eiti_phone_screen'); else localStorage.setItem('eiti_phone_screen', id); } catch (e) {}
+            // сначала CSS-переменные (один reflow), UI — в rAF, чтобы не дёргать layout синхронно с кликом
             if (typeof window.eitiPhoneScreenApply === 'function') window.eitiPhoneScreenApply(id);
-            eitiRenderPhoneScreen();
-            if (typeof showToast === 'function') showToast(_eitiPsL('📱 Экран:') + ' ' + _eitiPsL(EITI_PS_LABELS[id][0]));
+            var label = _eitiPsL(EITI_PS_LABELS[id][0]);
+            var paint = function () {
+                eitiRenderPhoneScreen();
+                if (typeof showToast === 'function') showToast(_eitiPsL('📱 Экран:') + ' ' + label);
+            };
+            if (typeof requestAnimationFrame === 'function') requestAnimationFrame(paint); else paint();
         }
         function openPhoneScreenMode() { _eitiOpenSubview('phone-screen', eitiRenderPhoneScreen); }
         window.openPhoneScreenMode = openPhoneScreenMode;
