@@ -26,7 +26,10 @@ def test_typo_module_loaded_and_cached():
     assert "14.8.0" in js
     assert 'src="./local/eiti_typo.js" defer' in HTML
     assert "BASE + 'local/eiti_typo.js'" in SW
-    assert "BASE + 'local/eiti_typo_vocab.json'" in SW
+    # v14.16.15: vocab убран из CORE (1.2 MiB) — ленивый fetch + allowlist local/*
+    core = SW[SW.index("var CORE"): SW.index("var HEAVY")]
+    assert "eiti_typo_vocab.json" not in core
+    assert r"\/local\/eiti_[^/]+\.(js|json)$" in SW
     vocab = json.loads((ROOT / "local" / "eiti_typo_vocab.json").read_text(encoding="utf-8"))
     assert vocab["t"] and len((ROOT / "local" / "eiti_typo_vocab.json").read_bytes()) < 1_500_000
 

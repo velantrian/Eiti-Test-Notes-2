@@ -1,4 +1,4 @@
-# 🏛️ Архитектура VELANTRIM EITI (v14.13.0)
+# 🏛️ Архитектура VELANTRIM EITI (v14.16.15)
 
 > Этот документ описывает, как устроено приложение изнутри: какие файлы за что отвечают, где лежат данные, как работает офлайн-режим, синхронизация, голос, кеширование и как выпускается релиз.
 > Краткая инструкция для агентов и разработчиков — в [AGENTS.md](../AGENTS.md); ограничения платформы PWA — в [docs/PWA_LIMITS.md](PWA_LIMITS.md).
@@ -7,7 +7,7 @@
 
 1. [Общая схема](#1-общая-схема)
 2. [Структура файлов](#2-структура-файлов)
-3. [Хранилище: IndexedDB `eiti_v4` v18](#3-хранилище-indexeddb-eiti_v4-v17)
+3. [Хранилище: IndexedDB `eiti_v4` v18](#3-хранилище-indexeddb-eiti_v4-v18)
 4. [Модель дневника](#4-модель-дневника-journal--contexts)
 5. [Синхронизация с Google Drive](#5-синхронизация-с-google-drive)
 6. [Офлайн-конвейер ответа](#6-офлайн-конвейер-ответа)
@@ -254,8 +254,8 @@ flowchart TD
 
 | Кеш | Имя | Стратегия |
 |---|---|---|
-| CORE | `eiti-v14.13.0` | precache `index.html`, `local/*`, офлайн-модули, иконки; лимит 24 записи (`swTrimCache`) |
-| Офлайн-пакеты | `eiti-offline-v14.11.0` | `offline/**`, `kb/**`: cache-first + фоновое обновление, без лимита |
+| CORE | `eiti-v14.16.15` | precache `index.html`, `local/eiti_*.js` (+ frames.json, drive_sync; без typo_vocab), иконки; лимит 24, trim не трогает allowlist |
+| Офлайн-пакеты | `eiti-offline-v14.16.15` | `offline/**`, `kb/**`: cache-first + фоновое обновление, без лимита |
 | `data/*.json` | — | stale-while-revalidate |
 
 При активации старые кеши удаляются, клиентам отправляется `SW_UPDATED` с версией — приложение предлагает перезагрузку.
@@ -421,9 +421,8 @@ flowchart LR
 
 ## 17. Что публикуется на GitHub Pages
 
-- `.github/workflows/pages.yml`: на каждый push в `main` (и вручную) — `actions/checkout@v4` → `configure-pages@v5` → **`upload-pages-artifact@v3` с `path: .`** → `deploy-pages@v4`.
-- Значит, сейчас публикуется **весь репозиторий**: приложение, но также `folklore/` (непроверенный исследовательский корпус), `docs/`, тесты, скрипты. Пример: `https://velantrian.github.io/Eiti-Test-Notes/folklore/README.md` отвечает 200.
-- **PR #45 (черновик)** заменяет это на сборку по белому списку: в артефакт копируются только файлы, нужные PWA (≈ 237), без `folklore/`, исследовательской документации и служебных инструментов.
+- `.github/workflows/pages.yml`: на каждый push в `main` (и вручную) — `actions/checkout@v4` → `python3 scripts/build_pages.py` → **`upload-pages-artifact@v3`** с путём к собранному артефакту → `deploy-pages@v4`.
+- В артефакт попадает **белый список** runtime PWA (`index.html`, `sw.js`, `local/eiti_*`, `kb/`, `offline/`, иконки, wasm…). Папка `folklore/`, тесты, `docs/` и исследовательские материалы **не публикуются**.
 - Независимо от Pages: репозиторий публичный, поэтому всё содержимое видно на GitHub и в истории git.
 
 ## 18. Перенос в нативное приложение

@@ -1,15 +1,16 @@
-// VELANTRIM EITI — Service Worker v14.16.14
+// VELANTRIM EITI — Service Worker v14.16.15
 // Fixes: LAZY_FILES await race, cross-origin CDN cache, updatefound wiring, SWR for data/*.json
-// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.14
+// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.15
 
-var CACHE = 'eiti-v14.16.14'; // v14.16.2: KB 150k, lazy exact longtail fallback; v14.16.0: шлюз AI-действий + EITI Care (кризис, регионы); v14.15.2: «📱 Экран телефона»; v14.15.1: «Меньше иконки (small icons)»; v14.15.0: офлайн-интенты (новые слоты, составные реплики, Doweria); v14.14.0: EITI Frames + карточки понятий + Википедия без ключа; v14.13.1: EitiVoice P1-1; v14.13.0: «Похожие / Рассуждение» (local/eiti_related.js); v14.12.0: голосовые ассистенты OpenAI/Qwen/Алиса/Mistral, Mistral AI в чате; v14.11.0: голосовой набор 🎤, ассистент в «+»; v14.10.0: калькулятор EN/DE, поиск KB, перевод UI; v14.9.0: дневник journal + выбор голоса; v14.8.0: опечатки; v14.7.0: Drive-автосинхронизация; v14.5.0: память диалога + размер чата; v14.4.0: офлайн-ответы RU/EN/DE; v14.3.0: KB ~29k статей; v14.2.0: EITI Local (калькулятор, вопросы о своих данных); v14.1.0: библиотека знаний KB (+ v14.0.0 офлайн-диалоги, сказки)
+var CACHE = 'eiti-v14.16.15'; // v14.16.15: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
 // v14.0.0: офлайн-движок и пакеты (offline/**) — отдельный кеш без лимита 24 записей (≈30 файлов),
 // cache-first + фоновое обновление; не попадает в swTrimCache.
-var OFFLINE_CACHE = 'eiti-offline-v14.16.14';
+var OFFLINE_CACHE = 'eiti-offline-v14.16.15';
 var CACHE_MAX_ENTRIES = 24;
 var BASE = self.location.pathname.replace(/sw\.js$/, '');
 
 // Критическое ядро — без них app не запустится
+// v14.16.15: eiti_typo_vocab.json (1.2 MiB) убран из CORE — грузится лениво, allowlist local/*
 var CORE = [
     BASE,
     BASE + 'index.html',
@@ -22,7 +23,7 @@ var CORE = [
     BASE + 'local/eiti_voice.js', // EitiVoice P0: единый голосовой контроллер EitiVoice (состояния, ошибки, адаптеры)
     BASE + 'local/eiti_related.js', // v14.13.0: «Похожие / Рассуждение» (похожие заметки, карточки, настройки)
     BASE + 'local/eiti_typo.js', // v14.8.0: опечатки (нормализация + нечёткое сопоставление)
-    BASE + 'local/eiti_typo_vocab.json', // v14.8.0: словарь опечаток (грузится лениво при первом офлайн-запросе)
+    BASE + 'local/eiti_drive_sync.js', // v14.16.15: merge-движок Drive (ленивый script, но offline в precache)
     BASE + 'local/eiti_frames.js', // v14.14.0: EITI Frames — офлайн-понимание формулировок («расскажи / поясни / а зачем?»)
     BASE + 'local/eiti_care.js', // v14.14.0 intents+: EITI Care — кризис (112 + телефон доверия) и поддержка, первым в офлайн-цепочке
     BASE + 'local/eiti_frames.json', // v14.14.0: пакет фреймов (правится без кода; грузится лениво при первом офлайн-запросе)
@@ -82,7 +83,7 @@ self.addEventListener('activate', function(e) {
                     }).then(function() {
                     return self.clients.matchAll().then(function(clients) {
                         clients.forEach(function(c) {
-                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.14' });
+                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.15' });
                         });
                     });
                     });
@@ -95,8 +96,12 @@ function swIsAllowlisted(url) {
     var path = url.pathname || '';
     if (path === BASE || path === BASE + 'index.html') return true;
     if (path === BASE + 'manifest.json') return true;
+    if (path === BASE + 'offline_manifest.json') return true;
     if (path === BASE + 'sql-wasm.js' || path === BASE + 'sql-wasm.wasm') return true;
     if (/icon-.*\.png$/.test(path)) return true;
+    // v14.16.15: local/* и offline eiti_*.js не вытеснять и возвращать cache-first
+    if (/\/local\/eiti_[^/]+\.(js|json)$/.test(path)) return true;
+    if (/\/offline\/eiti_[^/]+\.js$/.test(path)) return true;
     if (/\/(data|kb)\/[^/]+\.json$/i.test(path)
         || path.endsWith('_kb_v3.json')
         || path.endsWith('lemma.json')
@@ -106,8 +111,23 @@ function swIsAllowlisted(url) {
 function swTrimCache(cache) {
     return cache.keys().then(function(keys) {
         if (!keys || keys.length <= CACHE_MAX_ENTRIES) return;
-        var extra = keys.length - CACHE_MAX_ENTRIES;
-        return Promise.all(keys.slice(0, extra).map(function(k) { return cache.delete(k); }));
+        var removable = [];
+        for (var i = 0; i < keys.length; i++) {
+            var req = keys[i], href = '';
+            try { href = typeof req === 'string' ? req : (req.url || req.href || ''); } catch (e1) { href = ''; }
+            var protect = false;
+            try {
+                var origin = (typeof self !== 'undefined' && self.location && self.location.origin)
+                    || (typeof location !== 'undefined' && location.origin)
+                    || 'http://localhost';
+                var u = new URL(href, origin);
+                if (swIsAllowlisted(u)) protect = true;
+            } catch (e2) { protect = false; }
+            if (!protect) removable.push(req);
+        }
+        var need = keys.length - CACHE_MAX_ENTRIES;
+        if (need <= 0 || !removable.length) return;
+        return Promise.all(removable.slice(0, need).map(function(k) { return cache.delete(k); }));
     });
 }
 

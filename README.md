@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.14-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.15-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -16,7 +16,7 @@ _Клиентское PWA без backend и build step. Основной инт�
 
 <div align="center">
 
-**[🚀 Установить](#-установить-приложение) · [🆕 Что нового](#-что-нового-в-v141613) · [🏗️ Как устроен проект](#️-как-устроен-проект) · [📐 Архитектура подробно](docs/ARCHITECTURE.md) · [⚠️ Ограничения PWA](docs/PWA_LIMITS.md) · [🤖 AGENTS.md](AGENTS.md)**
+**[🚀 Установить](#-установить-приложение) · [🆕 Что нового](#-что-нового-в-v141615) · [🏗️ Как устроен проект](#️-как-устроен-проект) · [📐 Архитектура подробно](docs/ARCHITECTURE.md) · [⚠️ Ограничения PWA](docs/PWA_LIMITS.md) · [🤖 AGENTS.md](AGENTS.md)**
 
 </div>
 
@@ -26,7 +26,7 @@ _Клиентское PWA без backend и build step. Основной инт�
 
 <div align="center">
 
-### [▶️ Открыть VELANTRIM EITI](https://velantrian.github.io/Eiti-Test-Notes/)
+### [▶️ Открыть VELANTRIM EITI](https://velantrian.github.io/Eiti-Test-Notes-2/)
 
 **📱 На телефоне:** открой ссылку в Chrome → меню (⋮) → «Добавить на главный экран»
 
@@ -38,7 +38,7 @@ _Клиентское PWA без backend и build step. Основной инт�
 
 ## ⬇️ Локальный запуск
 
-Скачайте [полный репозиторий](https://github.com/velantrian/Eiti-Test-Notes/archive/refs/heads/main.zip) и запустите его через статический HTTP-сервер:
+Скачайте [полный репозиторий](https://github.com/velantrian/Eiti-Test-Notes-2/archive/refs/heads/main.zip) и запустите его через статический HTTP-сервер:
 
 ```bash
 python3 -m http.server 8080
@@ -58,13 +58,20 @@ python3 -m http.server 8080
 | Синхронизация | Google Drive (`drive.file`, `EITI/eiti_backup.json`), LWW по записи, надгробия 90 дней, секреты не синхронизируются | [§14](docs/ARCHITECTURE.md#14-синхронизация-подробно) |
 | PWA / офлайн | `sw.js` (CORE + офлайн-пакеты), `manifest.json`, офлайн-ответы без сети и ключа | [§15](docs/ARCHITECTURE.md#15-pwa-и-офлайн-подробно) |
 | Сборка и тесты | генераторы данных KB/сказок; CI: node, pytest, Playwright, folklore | [§16](docs/ARCHITECTURE.md#16-сборка-инструменты-и-ci) |
-| GitHub Pages | сейчас публикуется весь репозиторий (`path: .`, включая `folklore/`); PR #45 вводит белый список | [§17](docs/ARCHITECTURE.md#17-что-публикуется-на-github-pages) |
+| GitHub Pages | артефакт через `scripts/build_pages.py` (белый список runtime; `folklore/` не публикуется) | [§17](docs/ARCHITECTURE.md#17-что-публикуется-на-github-pages) |
 | Экспорт | `eiti.archive.v1` (JSON) — формат сохраняется между версиями | [§13](docs/ARCHITECTURE.md#13-экспорт--импорт-eitiarchiveexport--eitiarchiveimport) |
 | Нативное приложение | соответствие веб → натив и инварианты | [§18](docs/ARCHITECTURE.md#18-перенос-в-нативное-приложение) |
 
 📐 Полная архитектура (для переноса в нативное приложение): **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ---
+
+## 🆕 Что нового в v14.16.15
+
+- 🐛 **Удаление заметок:** `notesSave` пишет `delete` в IndexedDB (и чистит SQLite index) — удалённые больше не «воскресают» после reload.
+- 📦 **Service Worker:** `local/eiti_*` в allowlist; trim не вытесняет CORE; `eiti_drive_sync.js` в precache; тяжёлый `eiti_typo_vocab.json` убран из CORE (ленивая загрузка).
+- 🔐 **Drive token** в localStorage с префиксом `drv1_` + obfuscation; сбои IDB write при sync больше не маскируются как успех.
+- 🧹 Шум: баннеры Patch/Vision и прогресс-логи только при `EITI_DEBUG`; docs Pages/якоря/AGENTS приведены в соответствие с репо.
 
 ## 🆕 Что нового в v14.16.14
 
@@ -436,8 +443,8 @@ CI (`.github/workflows/test.yml`) запускает все три уровня 
 - 📡 Service Worker ожидает cache writes и не принимает неполный CORE cache за успешную установку.
 - 🧹 Удалены запросы к отсутствующим legacy-файлам и необязательному DE patch.
 
-📜 **Полный список изменений:** [коммиты main](https://github.com/velantrian/Eiti-Test-Notes/commits/main)  
-🔍 **Открыть последнюю версию:** [velantrian.github.io/Eiti-Test-Notes/](https://velantrian.github.io/Eiti-Test-Notes/)
+📜 **Полный список изменений:** [коммиты main](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)  
+🔍 **Открыть последнюю версию:** [velantrian.github.io/Eiti-Test-Notes/](https://velantrian.github.io/Eiti-Test-Notes-2/)
 
 ---
 
@@ -589,6 +596,6 @@ eitiKBSetTruth(id, 'hypothesis') // эпистемический статус
 
 _Сделано с 🖤 для тех, кто строит своё AI_
 
-[🚀 Открыть](https://velantrian.github.io/Eiti-Test-Notes/) · [⬇️ Скачать](https://raw.githubusercontent.com/velantrian/Eiti-Test-Notes/main/index.html) · [🐛 Issues](https://github.com/velantrian/Eiti-Test-Notes/issues)
+[🚀 Открыть](https://velantrian.github.io/Eiti-Test-Notes-2/) · [⬇️ Скачать](https://raw.githubusercontent.com/velantrian/Eiti-Test-Notes-2/main/index.html) · [🐛 Issues](https://github.com/velantrian/Eiti-Test-Notes-2/issues)
 
 </div>
