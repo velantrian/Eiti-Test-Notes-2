@@ -66,7 +66,9 @@ def generated_fields(filename, title, trigger, answer, header):
     else:
         origin = 'Generated source %s; provenance header: %s; individual item ID is not recorded.' % (
             filename, header.lstrip('# ').strip())
-    # short: lead + up to 3 fact labels (what the card actually contains)
+    # short: lead + up to 3 fact labels (what the card actually contains).
+    # Не пишем «detail» на каждую из 150k записей — раздувает packs/index.gz; kbDetailCard
+    # собирает подробности из ответа. detail добавляет только enrich_geo_fields для гео.
     if lead:
         short = lead if len(lead) <= 220 else lead[:217].rstrip() + '…'
         if facts:
@@ -76,20 +78,12 @@ def generated_fields(filename, title, trigger, answer, header):
                 if len(cand) <= 360: short = cand
     else:
         short = 'Карточка «%s» из раздела «%s».' % (clean_trigger, clean_title)
-    detail_parts = []
-    if lead: detail_parts.append(lead)
-    if facts:
-        detail_parts.append('Сохранённые поля: ' + '; '.join('%s — %s' % (k, v) for k, v in facts) + '.')
-    else:
-        detail_parts.append('Отдельные поля «Метка: значение» в тексте не выделены; опирайтесь на сохранённое утверждение целиком.')
-    detail_parts.append('Раздел: «%s». Запись не претендует на полноту справочника.' % clean_title)
     why = ('Карточка «%s» собрана из сохранённого ответа в разделе «%s»%s. '
            'Это содержание записи, а не отдельный вывод о полноте темы.') % (
                clean_trigger, clean_title,
                (('; поля: ' + ', '.join(k for k, _ in facts[:6])) if facts else ''))
     return {
         'short': short[:360],
-        'detail': ' '.join(detail_parts)[:1200],
         'why': why[:360],
         'origin': origin,
         'verify': 'Сверить название и факты «%s» с соответствующей записью Wikidata и первоисточниками; исходная строка %s не содержит QID.' %
@@ -141,7 +135,9 @@ def enrich_geo_fields(domains_recs):
                         + ('…' if len(regs) > 10 else '') + ' (всего %d).' % len(regs))
         if bits:
             extra = ' '.join(bits)
-            f['detail'] = ((f.get('detail') or '').rstrip() + ' ' + extra).strip()[:1200]
+            # компактный detail только для гео (список городов/регионов) — не дублируем lead
+            base = (f.get('detail') or '').strip()
+            f['detail'] = ((base + ' ' if base else '') + extra).strip()[:900]
             f['count'] = ('В офлайн-базе: городов %d, регионов/областей %d по явной метке «Страна: %s».'
                           % (len(cities), len(regs), name))[:360]
         # отметить отсутствующие ожидаемые поля (Столица часто как «Столица — X.»)
@@ -180,7 +176,7 @@ def enrich_geo_fields(domains_recs):
                     country = v.split(',')[0].strip(); break
             if country and country in country_names:
                 tip = 'Связанная карточка страны в базе: «%s» (раздел «Страны мира»).' % country
-                f['detail'] = ((f.get('detail') or '').rstrip() + ' ' + tip).strip()[:1200]
+                f['detail'] = ((f.get('detail') or '').rstrip() + ' ' + tip).strip()[:500]
 
 def norm(s):
     return re.sub(r'\s+', ' ', re.sub(r'[^a-zа-я0-9+#²³ ]+', ' ', s.lower().replace('ё', 'е'))).strip()

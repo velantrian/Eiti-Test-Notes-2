@@ -57,8 +57,22 @@ def q_items(cls, minsl, props, extra='', limit=6000, tag=None, cls_path='wdt:P31
         out.append(it)
     return out
 
+# Латиница, визуально совпадающая с кириллицей (часто в описаниях Wikidata: «cтолица»).
+_LATIN_CYR = str.maketrans({
+    'a': 'а', 'A': 'А', 'c': 'с', 'C': 'С', 'e': 'е', 'E': 'Е', 'o': 'о', 'O': 'О',
+    'p': 'р', 'P': 'Р', 'x': 'х', 'X': 'Х', 'y': 'у', 'Y': 'У', 'H': 'Н', 'K': 'К',
+    'M': 'М', 'T': 'Т', 'B': 'В',
+})
+
 def clean(s):
     s = re.sub(r'\s+', ' ', str(s or '')).replace('|', '/').replace(';', ',').strip()
+    # чинить смешанные слова: латинская «c» перед кириллицей → «с» и т.п.
+    def fix_mixed(m):
+        w = m.group(0)
+        if re.search(r'[а-яёА-ЯЁ]', w) and re.search(r'[A-Za-z]', w):
+            return w.translate(_LATIN_CYR)
+        return w
+    s = re.sub(r'[A-Za-zА-Яа-яЁё]+', fix_mixed, s)
     return s
 
 def one(v):

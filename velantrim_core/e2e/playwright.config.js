@@ -7,6 +7,9 @@ module.exports = defineConfig({
   testDir: '.',
   testMatch: '*.spec.js',
   timeout: 60_000,
+  // Large KB pack trees make `git fetch` for GitCommitInfo dump huge stdout →
+  // RangeError: Invalid string length in playwright-core (CI smoke/Pages).
+  captureGitInfo: { commit: false, diff: false },
   use: {
     baseURL: 'http://127.0.0.1:8099',
     headless: true,
