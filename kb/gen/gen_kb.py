@@ -197,14 +197,44 @@ def main():
     if want('people'): gen_people()
     if want('concepts'): gen_concepts()
     if want('countries'):
+        # v14.16.17: + ISO (P297), площадь (P2046), соседи (P47) — стабильные справочные поля для офлайн-рассуждения
+        def fmt_country(it, l, d):
+            area = ''
+            if one(it.get('area')):
+                try:
+                    km2 = round(float(one(it['area'])))
+                    if 1 <= km2 <= 20000000: area = 'Площадь: около %s км².' % f'{km2:,}'.replace(',', ' ')
+                except (TypeError, ValueError): pass
+            return sent('%s — %s.' % (l, d or 'государство'),
+                        lab('Столица — ', it['cap'], 1), lab('Часть света: ', it['cont'], 2),
+                        lab('Официальный язык: ', it['lang'], 3), lab('Валюта: ', it['cur'], 2),
+                        ('Код ISO: %s.' % one(it['iso']).upper()) if one(it.get('iso')) else '',
+                        area, lab('Соседние страны: ', it.get('nb') or [], 5))
         gen_simple('countries', 'Страны мира', 'Countries', 'wd:Q3624078', 1,
-                   [('cap', 'wdt:P36', 'label'), ('cont', 'wdt:P30', 'label'), ('lang', 'wdt:P37', 'label'), ('cur', 'wdt:P38', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d or 'государство'), lab('Столица — ', it['cap'], 1), lab('Часть света: ', it['cont'], 2),
-                                         lab('Официальный язык: ', it['lang'], 3), lab('Валюта: ', it['cur'], 2)),
-                   trig=lambda it, l: [l, 'столица ' + l, 'страна ' + l] + (['валюта ' + l] if it['cur'] else []) + (['язык ' + l, 'официальный язык ' + l] if it['lang'] else []), extra='FILTER NOT EXISTS { ?x wdt:P576 ?end }', need_desc=False)
+                   [('cap', 'wdt:P36', 'label'), ('cont', 'wdt:P30', 'label'), ('lang', 'wdt:P37', 'label'),
+                    ('cur', 'wdt:P38', 'label'), ('iso', 'wdt:P297', 'v'), ('area', 'wdt:P2046', 'v'),
+                    ('nb', 'wdt:P47', 'label')],
+                   fmt_country,
+                   trig=lambda it, l: [l, 'столица ' + l, 'страна ' + l]
+                   + (['валюта ' + l] if it['cur'] else [])
+                   + (['язык ' + l, 'официальный язык ' + l] if it['lang'] else [])
+                   + (['код ' + one(it['iso']).upper(), 'ISO ' + one(it['iso']).upper()] if one(it.get('iso')) else []),
+                   extra='FILTER NOT EXISTS { ?x wdt:P576 ?end }', need_desc=False)
     if want('cities'):
-        gen_simple('cities', 'Города мира', 'Cities', 'wd:Q515', 48, [('c', 'wdt:P17', 'label')],
-                   lambda it, l, d: sent('%s — %s.' % (l, d), lab('Страна: ', it['c'], 1)),
+        # v14.16.17: + адм. единица (P131), год основания (P571, только устойчивые н. э. ≥500);
+        # порог sitelinks 36 → больше городов в ядре
+        def fmt_city(it, l, d):
+            founded = ''
+            y = yr(it.get('fd') or [])
+            if y.isdigit() and 500 <= int(y) <= 2020:
+                founded = 'Основан: %s.' % y
+            return sent('%s — %s.' % (l, d),
+                        lab('Страна: ', it['c'], 1),
+                        lab('Административно: ', it.get('adm') or [], 2),
+                        founded)
+        gen_simple('cities', 'Города мира', 'Cities', 'wd:Q515', 36,
+                   [('c', 'wdt:P17', 'label'), ('adm', 'wdt:P131', 'label'), ('fd', 'wdt:P571', 'year')],
+                   fmt_city,
                    trig=lambda it, l: [l, 'город ' + l], cls_path='wdt:P31/wdt:P279*')
     if want('elements'):
         gen_simple('elements', 'Химические элементы', 'Chemical elements', 'wd:Q11344', 1, [('sym', 'wdt:P246', 'v'), ('n', 'wdt:P1086', 'v')],

@@ -30,7 +30,9 @@ test('kbDetailCard renders grounded, self-contained detail for every packed reco
   for (const [domain, meta] of Object.entries(index.domains)) {
     const byHash = loadDomain(index, domain);
     for (const [hash, entry] of Object.entries(byHash)) {
-      const relatedCount = Math.min(3, (entry.r || []).length);
+      // v14.16.17: geo domains keep up to 5 related snapshots for richer offline reasoning
+      const rdCap = ['countries', 'cities', 'admin_regions', 'states'].includes(domain) ? 5 : 3;
+      const relatedCount = Math.min(rdCap, (entry.r || []).length);
       assert.strictEqual((entry.rd || []).length, relatedCount, `${domain}/${hash} lacks embedded related snapshots`);
       const detail = R.kbDetailCard(entry, entry.rd || [], 'ru');
       const essenceAt = detail.indexOf('**Суть**');
