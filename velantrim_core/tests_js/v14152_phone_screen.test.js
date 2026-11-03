@@ -86,10 +86,12 @@ test('CSS: всё под html.eiti-phone, max(env, пресет), альбомн
   assert.ok(flat.includes('--eiti-bottom-inset:max(var(--eiti-env-bottom),var(--eiti-pb,0px))'));
   assert.ok(/@media\(orientation:landscape\)/.test(flat));
   assert.ok(flat.includes('html.eiti-phone.eiti-small-icons.app-header'));
-  // v14.16.16: компактные табы совместимы с пресетом (не откат к 110px)
+  // v14.16.16: компактные табы совместимы с пресетом (не откат к 110px); тройной селектор с is-ios
   assert.ok(flat.includes('html.eiti-phone.eiti-compact-chrome.tab-bar'));
+  assert.ok(flat.includes('html.eiti-phone.eiti-compact-chrome.is-ios.tab-bar'));
   assert.ok(flat.includes('calc(96px+var(--eiti-bottom-inset))'));
   assert.ok(flat.includes('calc(88px+var(--eiti-bottom-inset))'));
+  assert.ok(flat.includes('html.eiti-phonebody.notes-fullscreen.notes-list'));
 });
 
 test('i18n EN/DE для раздела без кириллицы', () => {

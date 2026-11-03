@@ -8330,29 +8330,26 @@
         .eiti-rel-panel[hidden] { display: none !important; }
 
 
-        /* v14.16.13: «Компактные табы» — только нижняя полоса чуть ниже (padding/gap).
+        /* v14.16.13/16: «Компактные табы» — только нижняя полоса чуть ниже (padding/gap).
            Шапка с названием VELANTRIM EITI не трогаем. Иконки 48×48 / 30px и тени — как были
-           (скевоморфизм/drop-shadow). Класс html.eiti-compact-chrome, по умолчанию вкл. */
-        html.eiti-compact-chrome .tab-bar {
-            height: 96px !important;
-            padding: 4px 0 2px !important;
+           (скевоморфизм/drop-shadow). Класс html.eiti-compact-chrome, по умолчанию вкл.
+           v14.16.16+: всегда учитываем safe-area снизу (не только is-ios) — иначе на Android
+           с жестовой навигацией компакт «съедает» системный inset, а на iPhone без пресета
+           запасной путь остаётся через is-ios (та же формула). */
+        html.eiti-compact-chrome .tab-bar,
+        html.eiti-compact-chrome.is-ios .tab-bar {
+            height: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+            padding: 4px 0 calc(2px + env(safe-area-inset-bottom, 0px)) !important;
         }
-        html.eiti-compact-chrome body.many-tabs .tab-bar {
-            height: 88px !important;
-            padding: 3px 0 1px !important;
+        html.eiti-compact-chrome body.many-tabs .tab-bar,
+        html.eiti-compact-chrome.is-ios body.many-tabs .tab-bar {
+            height: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+            padding: 3px 0 calc(1px + env(safe-area-inset-bottom, 0px)) !important;
         }
         html.eiti-compact-chrome .tab-item {
             gap: 2px !important;
         }
         /* НЕ трогаем .tab-icon / .tab-icon-wrapper — иначе пропадает объём теней */
-        html.eiti-compact-chrome.is-ios .tab-bar {
-            height: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
-            padding-bottom: calc(2px + env(safe-area-inset-bottom, 0px)) !important;
-        }
-        html.eiti-compact-chrome.is-ios body.many-tabs .tab-bar {
-            height: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
-            padding-bottom: calc(1px + env(safe-area-inset-bottom, 0px)) !important;
-        }
 
         /* v14.15.1: «Меньше иконки (small icons)» — компактные нижний таб-бар и верхние панели.
            Включается классом html.eiti-small-icons (Настройки → 📌 Настройка табов). По умолчанию выкл:
@@ -8482,39 +8479,63 @@
                 --eiti-side-inset: max(var(--eiti-env-left), var(--eiti-env-right), var(--eiti-ps, 0px));
             }
         }
-        html.eiti-phone .app-header {
+        html.eiti-phone .app-header,
+        html.eiti-phone.is-ios .app-header {
             box-sizing: border-box !important;
             height: calc(88px + var(--eiti-top-inset)) !important;
             padding-top: var(--eiti-top-inset) !important;
             padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
         }
-        html.eiti-phone.eiti-small-icons .app-header { height: calc(var(--eiti-si-header-h) + var(--eiti-top-inset)) !important; }
-        html.eiti-phone .tab-bar {
+        html.eiti-phone.eiti-small-icons .app-header,
+        html.eiti-phone.eiti-small-icons.is-ios .app-header {
+            height: calc(var(--eiti-si-header-h) + var(--eiti-top-inset)) !important;
+            padding-top: var(--eiti-top-inset) !important;
+        }
+        html.eiti-phone .tab-bar,
+        html.eiti-phone.is-ios .tab-bar {
             box-sizing: border-box !important;
             height: calc(110px + var(--eiti-bottom-inset)) !important;
             padding-bottom: calc(4px + var(--eiti-bottom-inset)) !important;
             padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
         }
-        html.eiti-phone body.many-tabs .tab-bar { height: calc(96px + var(--eiti-bottom-inset)) !important; padding-bottom: calc(2px + var(--eiti-bottom-inset)) !important; }
+        html.eiti-phone body.many-tabs .tab-bar,
+        html.eiti-phone.is-ios body.many-tabs .tab-bar {
+            height: calc(96px + var(--eiti-bottom-inset)) !important;
+            padding-bottom: calc(2px + var(--eiti-bottom-inset)) !important;
+        }
         /* v14.16.16: пресет НЕ должен сбрасывать «Компактные табы» (по умолчанию вкл) — иначе чёлка/остров
-           визуально «ломают» низ (прыжок 96→110) и дают тяжёлый reflow */
-        html.eiti-phone.eiti-compact-chrome .tab-bar {
+           визуально «ломают» низ (прыжок 96→110) и дают тяжёлый reflow.
+           Явно включаем .is-ios: иначе compact.is-ios (3 класса) = phone.compact (3 класса) —
+           победа только по порядку в файле; тройной селектор надёжнее. */
+        html.eiti-phone.eiti-compact-chrome .tab-bar,
+        html.eiti-phone.eiti-compact-chrome.is-ios .tab-bar {
             height: calc(96px + var(--eiti-bottom-inset)) !important;
             padding: 4px 0 calc(2px + var(--eiti-bottom-inset)) !important;
             padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
         }
-        html.eiti-phone.eiti-compact-chrome body.many-tabs .tab-bar {
+        html.eiti-phone.eiti-compact-chrome body.many-tabs .tab-bar,
+        html.eiti-phone.eiti-compact-chrome.is-ios body.many-tabs .tab-bar {
             height: calc(88px + var(--eiti-bottom-inset)) !important;
             padding: 3px 0 calc(1px + var(--eiti-bottom-inset)) !important;
             padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
         }
         html.eiti-phone.eiti-small-icons .tab-bar,
-        html.eiti-phone.eiti-small-icons body.many-tabs .tab-bar { height: calc(var(--eiti-si-tabbar-h) + var(--eiti-bottom-inset)) !important; padding-bottom: calc(2px + var(--eiti-bottom-inset)) !important; }
+        html.eiti-phone.eiti-small-icons body.many-tabs .tab-bar,
+        html.eiti-phone.eiti-small-icons.is-ios .tab-bar,
+        html.eiti-phone.eiti-small-icons.is-ios body.many-tabs .tab-bar {
+            height: calc(var(--eiti-si-tabbar-h) + var(--eiti-bottom-inset)) !important;
+            padding-bottom: calc(2px + var(--eiti-bottom-inset)) !important;
+        }
         /* Шапка скрыта — отступ под вырезом переходит к контенту */
         html.eiti-phone body.header-hidden .app-content { padding-top: var(--eiti-top-inset); box-sizing: border-box; }
         html.eiti-phone .app-content { padding-left: var(--eiti-side-inset); padding-right: var(--eiti-side-inset); box-sizing: border-box; }
         /* Полноэкранные режимы: заметки, редактор, Ask AI, плеер, модалки */
         html.eiti-phone body.notes-fullscreen #view-notes { top: var(--eiti-top-inset) !important; height: calc(100dvh - var(--eiti-top-inset)) !important; }
+        /* как html.is-ios … .notes-list — иначе при пресете список тянется под чёлку */
+        html.eiti-phone body.notes-fullscreen .notes-list {
+            max-height: calc(100dvh - var(--eiti-top-inset)) !important;
+            height: calc(100dvh - var(--eiti-top-inset) - 20px) !important;
+        }
         html.eiti-phone .note-editor-overlay.editor-fullscreen { top: var(--eiti-top-inset) !important; height: calc(100dvh - var(--eiti-top-inset)) !important; }
         html.eiti-phone .note-editor-overlay.editor-fullscreen .note-tags-row { padding-bottom: calc(6px + var(--eiti-bottom-inset)) !important; }
         html.eiti-phone .notes-ai-panel.notes-ai-fullscreen { padding-top: var(--eiti-top-inset); }

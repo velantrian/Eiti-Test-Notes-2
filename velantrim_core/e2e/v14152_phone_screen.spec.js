@@ -111,6 +111,19 @@ test('v14.16.16: чёлка + компактные табы (дефолт) — �
   expectFlush(m, VIEW.height);
 });
 
+test('чёлка + compact + is-ios: пресет побеждает compact.is-ios (не только env)', async ({ page }) => {
+  await boot(page, { preset: 'iphone-island', storage: { eiti_compact_chrome: '1' } });
+  await page.evaluate(() => document.documentElement.classList.add('is-ios'));
+  // env=0 в Chromium: если бы победил compact.is-ios → tab=96 без inset; нужен 96+34 из пресета
+  await setEnv(page, { top: 0, bottom: 0 });
+  const m = await layout(page);
+  expect(m.header.pt).toBe(59);
+  expect(Math.round(m.header.h)).toBe(88 + 59);
+  expect(Math.round(m.tab.h)).toBe(96 + 34);
+  expect(m.tab.pb).toBe(2 + 34);
+  expectFlush(m, VIEW.height);
+});
+
 test('альбомная: сверху только системный отступ, вырез уходит вбок (боковые отступы)', async ({ page }) => {
   await boot(page, { preset: 'iphone-island', view: { width: 915, height: 412 } });
   const m = await layout(page);
