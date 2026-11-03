@@ -17,4 +17,5 @@ def test_compact_bottom_only():
     assert "html.eiti-compact-chrome .app-header" not in HTML
     assert "html.eiti-compact-chrome .tab-icon-wrapper" not in HTML
     assert "html.eiti-compact-chrome .tab-bar" in HTML
-    assert "height: 96px" in HTML
+    # compact всегда с safe-area (Android жесты / iOS), не «голые» 96px
+    assert "calc(96px + env(safe-area-inset-bottom" in HTML

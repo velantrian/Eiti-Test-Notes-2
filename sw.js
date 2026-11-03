@@ -1,16 +1,16 @@
-// VELANTRIM EITI — Service Worker v14.16.15
+// VELANTRIM EITI — Service Worker v14.16.16
 // Fixes: LAZY_FILES await race, cross-origin CDN cache, updatefound wiring, SWR for data/*.json
-// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.15
+// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.16
 
-var CACHE = 'eiti-v14.16.15'; // v14.16.15: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
+var CACHE = 'eiti-v14.16.16'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
 // v14.0.0: офлайн-движок и пакеты (offline/**) — отдельный кеш без лимита 24 записей (≈30 файлов),
 // cache-first + фоновое обновление; не попадает в swTrimCache.
-var OFFLINE_CACHE = 'eiti-offline-v14.16.15';
+var OFFLINE_CACHE = 'eiti-offline-v14.16.16';
 var CACHE_MAX_ENTRIES = 24;
 var BASE = self.location.pathname.replace(/sw\.js$/, '');
 
 // Критическое ядро — без них app не запустится
-// v14.16.15: eiti_typo_vocab.json (1.2 MiB) убран из CORE — грузится лениво, allowlist local/*
+// v14.16.16: eiti_typo_vocab.json (1.2 MiB) убран из CORE — грузится лениво, allowlist local/*
 var CORE = [
     BASE,
     BASE + 'index.html',
@@ -23,7 +23,7 @@ var CORE = [
     BASE + 'local/eiti_voice.js', // EitiVoice P0: единый голосовой контроллер EitiVoice (состояния, ошибки, адаптеры)
     BASE + 'local/eiti_related.js', // v14.13.0: «Похожие / Рассуждение» (похожие заметки, карточки, настройки)
     BASE + 'local/eiti_typo.js', // v14.8.0: опечатки (нормализация + нечёткое сопоставление)
-    BASE + 'local/eiti_drive_sync.js', // v14.16.15: merge-движок Drive (ленивый script, но offline в precache)
+    BASE + 'local/eiti_drive_sync.js', // v14.16.16: merge-движок Drive (ленивый script, но offline в precache)
     BASE + 'local/eiti_frames.js', // v14.14.0: EITI Frames — офлайн-понимание формулировок («расскажи / поясни / а зачем?»)
     BASE + 'local/eiti_care.js', // v14.14.0 intents+: EITI Care — кризис (112 + телефон доверия) и поддержка, первым в офлайн-цепочке
     BASE + 'local/eiti_frames.json', // v14.14.0: пакет фреймов (правится без кода; грузится лениво при первом офлайн-запросе)
@@ -83,7 +83,7 @@ self.addEventListener('activate', function(e) {
                     }).then(function() {
                     return self.clients.matchAll().then(function(clients) {
                         clients.forEach(function(c) {
-                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.15' });
+                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.16' });
                         });
                     });
                     });
@@ -99,7 +99,7 @@ function swIsAllowlisted(url) {
     if (path === BASE + 'offline_manifest.json') return true;
     if (path === BASE + 'sql-wasm.js' || path === BASE + 'sql-wasm.wasm') return true;
     if (/icon-.*\.png$/.test(path)) return true;
-    // v14.16.15: local/* и offline eiti_*.js не вытеснять и возвращать cache-first
+    // v14.16.16: local/* и offline eiti_*.js не вытеснять и возвращать cache-first
     if (/\/local\/eiti_[^/]+\.(js|json)$/.test(path)) return true;
     if (/\/offline\/eiti_[^/]+\.js$/.test(path)) return true;
     if (/\/(data|kb)\/[^/]+\.json$/i.test(path)

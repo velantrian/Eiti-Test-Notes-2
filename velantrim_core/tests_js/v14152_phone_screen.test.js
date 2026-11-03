@@ -62,9 +62,12 @@ test('подсказка по устройству: только предлож�
   const IOS = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X)';
   assert.equal(g(IOS, 390, 844), 'iphone-notch');
   assert.equal(g(IOS, 844, 390), 'iphone-notch');
+  assert.equal(g(IOS, 360, 780), 'iphone-notch'); // 12/13 mini
   assert.equal(g(IOS, 393, 852), 'iphone-island');
   assert.equal(g(IOS, 440, 956), 'iphone-island');
   assert.equal(g(IOS, 375, 667), 'iphone-se');
+  assert.equal(g(IOS, 388, 844), 'iphone-notch'); // неизвестный высокий → fallback notch/island
+  assert.equal(g(IOS, 400, 900), 'iphone-island');
   assert.equal(g(IOS, 500, 500), null);
   assert.equal(g('Mozilla/5.0 (Linux; Android 14; SM-S921U)', 360, 780), 'galaxy-s');
   assert.equal(g('Mozilla/5.0 (Linux; Android 14; SM-F946B)', 373, 839), 'galaxy-fold');
@@ -83,6 +86,12 @@ test('CSS: всё под html.eiti-phone, max(env, пресет), альбомн
   assert.ok(flat.includes('--eiti-bottom-inset:max(var(--eiti-env-bottom),var(--eiti-pb,0px))'));
   assert.ok(/@media\(orientation:landscape\)/.test(flat));
   assert.ok(flat.includes('html.eiti-phone.eiti-small-icons.app-header'));
+  // v14.16.16: компактные табы совместимы с пресетом (не откат к 110px); тройной селектор с is-ios
+  assert.ok(flat.includes('html.eiti-phone.eiti-compact-chrome.tab-bar'));
+  assert.ok(flat.includes('html.eiti-phone.eiti-compact-chrome.is-ios.tab-bar'));
+  assert.ok(flat.includes('calc(96px+var(--eiti-bottom-inset))'));
+  assert.ok(flat.includes('calc(88px+var(--eiti-bottom-inset))'));
+  assert.ok(flat.includes('html.eiti-phonebody.notes-fullscreen.notes-list'));
 });
 
 test('i18n EN/DE для раздела без кириллицы', () => {
