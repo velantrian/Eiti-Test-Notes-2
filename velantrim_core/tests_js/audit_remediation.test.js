@@ -96,6 +96,25 @@ test('service worker does not report a healthy install with incomplete CORE', ()
   assert.match(SW, /e\.waitUntil\(\s*self\.registration\.showNotification/);
 });
 
+test('v14.16.15 audit: notesSave deletes removed ids from IDB', () => {
+  const start = INDEX.indexOf('function notesSave(notes)');
+  assert.ok(start > 0);
+  const body = INDEX.slice(start, start + 9000);
+  assert.match(body, /store\.delete\(id\)/);
+  assert.match(body, /removed\.forEach/);
+  assert.match(body, /DELETE FROM notes_idx WHERE id=\?/);
+});
+
+test('v14.16.15 audit: SW CORE has drive_sync, not typo_vocab; pages whitelist docs', () => {
+  const core = SW.slice(SW.indexOf('var CORE'), SW.indexOf('var HEAVY'));
+  assert.match(core, /eiti_drive_sync\.js/);
+  assert.equal(core.includes('eiti_typo_vocab.json'), false);
+  assert.ok(SW.includes('\\/local\\/eiti_[^/]+\\.(js|json)$'));
+  assert.match(INDEX, /drv1_/);
+  assert.match(README, /build_pages\.py/);
+  assert.match(README, /Eiti-Test-Notes-2/);
+});
+
 test('runtime, service worker, manifest, and README versions stay synchronized', () => {
   const runtime = INDEX.match(/var EITI_VERSION = "([^"]+)"/);
   const cache = SW.match(/var CACHE = 'eiti-v([^']+)'/);

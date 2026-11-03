@@ -10,7 +10,11 @@ const { loadFunctions } = require('./harness');
 const SW = fs.readFileSync(path.join(__dirname, '..', '..', 'sw.js'), 'utf8');
 
 function loadSwFns() {
-  const sandbox = { Promise, Array, Object, console, BASE: '/' };
+  const sandbox = {
+    Promise, Array, Object, console, BASE: '/', URL,
+    location: { origin: 'http://localhost' },
+    self: { location: { origin: 'http://localhost' } },
+  };
   vm.createContext(sandbox);
   const names = ['swIsAllowlisted', 'swTrimCache'];
   names.forEach((name) => {
@@ -133,6 +137,9 @@ test('SW allowlist is CORE/HEAVY/data only and trim drops extras', async () => {
   assert.equal(sb.swIsAllowlisted({ pathname: '/index.html' }), true);
   assert.equal(sb.swIsAllowlisted({ pathname: '/sql-wasm.wasm' }), true);
   assert.equal(sb.swIsAllowlisted({ pathname: '/data/lemma.json' }), true);
+  assert.equal(sb.swIsAllowlisted({ pathname: '/local/eiti_frames.js' }), true);
+  assert.equal(sb.swIsAllowlisted({ pathname: '/local/eiti_drive_sync.js' }), true);
+  assert.equal(sb.swIsAllowlisted({ pathname: '/local/eiti_typo_vocab.json' }), true);
   assert.equal(sb.swIsAllowlisted({ pathname: '/random-asset.bin' }), false);
   const keys = [];
   for (let i = 0; i < 30; i++) keys.push({ href: 'k' + i });
@@ -143,4 +150,22 @@ test('SW allowlist is CORE/HEAVY/data only and trim drops extras', async () => {
   };
   await sb.swTrimCache(cache);
   assert.equal(deleted.length, 6);
+});
+
+test('SW trim never deletes allowlisted CORE modules', async () => {
+  const sb = loadSwFns();
+  const keys = [
+    { url: 'http://localhost/local/eiti_frames.js' },
+    { url: 'http://localhost/local/eiti_care.js' },
+    { url: 'http://localhost/index.html' },
+  ];
+  for (let i = 0; i < 30; i++) keys.push({ url: 'http://localhost/extra-' + i + '.bin' });
+  const deleted = [];
+  const cache = {
+    keys: async () => keys,
+    delete: async (k) => { deleted.push(k.url || k.href); },
+  };
+  await sb.swTrimCache(cache);
+  assert.ok(deleted.length >= 1);
+  assert.equal(deleted.some((u) => /\/local\/eiti_/.test(u) || /index\.html/.test(u)), false);
 });

@@ -39,7 +39,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.14"; // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.15"; // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -18845,7 +18845,7 @@
                     if (navigator.storage && navigator.storage.persist) {
                         navigator.storage.persist().then(function(granted) {
                             if (granted) {
-                                console.log('[EITI] Persistent storage granted ✅');
+                                if (window.EITI_DEBUG) console.log('[EITI] Persistent storage granted ✅');
                                 localStorage.setItem('eiti_storage_persistent', '1');
                             } else {
                                 // Не granted — показываем подсказку один раз
@@ -27253,7 +27253,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                     showToast('➕ Дописано в файл «' + f.name + '»');
                 } else {
                     _intentReply('⚠️ Файл <b>«' + name + '»</b> не найден.<br>Создать новый?<br>' +
-                        '<button onclick="eitiIR_createFileNow(\'' + name.replace(/'/g,"\\'") + '\',\'\')" style="margin-top:6px;padding:4px 12px;border-radius:8px;border:1px solid var(--accent-color);background:rgba(255,215,0,0.1);color:var(--accent-color);font-size:12px;cursor:pointer;">✅ Создать</button>', 'EITI Files');
+                        '<button onclick=\'eitiIR_createFileNow(' + JSON.stringify(String(name)) + ', "")\' style="margin-top:6px;padding:4px 12px;border-radius:8px;border:1px solid var(--accent-color);background:rgba(255,215,0,0.1);color:var(--accent-color);font-size:12px;cursor:pointer;">✅ Создать</button>', 'EITI Files');
                 }
             }
 
@@ -29132,7 +29132,7 @@ async function eitiVectorizeKB() {
             fact.vector = Array.from(out.data);
             toSave.push({ id: fact.id, vector: fact.vector });
             count++;
-            if (count % 10 === 0) console.log('📊 Векторизовано:', count, '/', kb.length);
+            if (count % 10 === 0 && window.EITI_DEBUG) console.log('📊 Векторизовано:', count, '/', kb.length);
         }
 
         // Сохраняем новые векторы в IDB пачкой
@@ -39072,8 +39072,17 @@ window.eitiLLMClearAll = async function() {
             return _idbNotesCache.slice();
         }
         function notesSave(notes) {
-            _idbNotesCache = (notes || []).slice();
-            (notes || []).forEach(function(n) {
+            // v14.16.15: put + delete — иначе удалённые остаются в IDB и «воскресают» после reload
+            notes = notes || [];
+            var prev = _idbNotesCache || [];
+            var keep = {};
+            notes.forEach(function(n) { if (n && n.id) keep[String(n.id)] = 1; });
+            var removed = [];
+            prev.forEach(function(n) {
+                if (n && n.id && !keep[String(n.id)]) removed.push(n.id);
+            });
+            _idbNotesCache = notes.slice();
+            notes.forEach(function(n) {
                 if (n && n.id) eitiQueueIndexDoc(n.id, (n.title||'') + '\n' + (n.body||''), { kind:'note', updated: n.updated||Date.now(), salience: n.salience||0 });
             });
             if (!eitiDb) return;
@@ -39081,8 +39090,9 @@ window.eitiLLMClearAll = async function() {
                 var tx = eitiDb.transaction(['notes'], 'readwrite');
                 var store = tx.objectStore('notes');
                 notes.forEach(function(n){ store.put(n); });
+                removed.forEach(function(id){ try { store.delete(id); } catch (eDel) {} });
                 tx.oncomplete = function() {
-                    // BUG-4 FIX: точечно обновляем SQLite notes_idx и notes_fts сразу после IDB put
+                    // BUG-4 FIX: точечно обновляем SQLite notes_idx и notes_fts сразу после IDB put/delete
                     if (window.eitiSQLReady && window._db) {
                         try {
                             notes.forEach(function(n) {
@@ -39112,6 +39122,15 @@ window.eitiLLMClearAll = async function() {
                                         }
                                     }
                                 } catch(e) {}
+                            });
+                            removed.forEach(function(id) {
+                                try {
+                                    var delRows = _db.exec("SELECT rowid FROM notes_idx WHERE id=?", [id]);
+                                    if (delRows && delRows[0] && delRows[0].values && delRows[0].values[0]) {
+                                        try { _db.run("DELETE FROM notes_fts WHERE rowid=?", [delRows[0].values[0][0]]); } catch (eF) {}
+                                    }
+                                    _db.run("DELETE FROM notes_idx WHERE id=?", [id]);
+                                } catch (eR) {}
                             });
                             if (typeof _persistSQLDebounced === 'function') {
                                 try { _persistSQLDebounced(); } catch(e) {}
@@ -48968,17 +48987,27 @@ function signedIn() { return localStorage.getItem(LS.on) === '1'; }
 function _saveToken(tok, expiresIn) {
     _driveToken = tok;
     var exp = Date.now() + (Number(expiresIn) || 3599) * 1000;
-    localStorage.setItem(LS.tok, tok);
+    // v14.16.15: не хранить OAuth token plaintext (префикс drv1_ + legacy XOR как у API-ключей)
+    var stored = tok;
+    try {
+        if (typeof _obfKey === 'function') stored = 'drv1_' + _obfKey(tok);
+    } catch (eObf) {}
+    localStorage.setItem(LS.tok, stored);
     localStorage.setItem(LS.ts, String(Date.now()));
     localStorage.setItem(LS.exp, String(exp));
     _scheduleRenew(exp);
 }
 function _loadToken() {
-    var tok = localStorage.getItem(LS.tok);
+    var raw = localStorage.getItem(LS.tok);
     var exp = parseInt(localStorage.getItem(LS.exp) || '0', 10) ||
               (parseInt(localStorage.getItem(LS.ts) || '0', 10) + 55 * 60000);
     _driveEmail = localStorage.getItem(LS.email) || '';
-    if (!tok || Date.now() > exp - 60000) { _driveToken = null; return null; }
+    if (!raw || Date.now() > exp - 60000) { _driveToken = null; return null; }
+    var tok = raw;
+    if (typeof raw === 'string' && raw.indexOf('drv1_') === 0 && typeof _deobfKey === 'function') {
+        try { tok = _deobfKey(raw.slice(5)) || ''; } catch (eDec) { tok = ''; }
+    }
+    if (!tok) { _driveToken = null; return null; }
     _driveToken = tok;
     return tok;
 }
@@ -49134,20 +49163,24 @@ function _getAll(store) {
     });
 }
 function _write(store, puts, dels) {
-    return new Promise(function(res) {
+    return new Promise(function(res, rej) {
         var db = _db();
         if (!db || !db.objectStoreNames.contains(store) || (!puts.length && !dels.length)) { res(); return; }
         try {
             var tx = db.transaction([store], 'readwrite'), os = tx.objectStore(store);
             puts.forEach(function(v){ os.put(v); });
             dels.forEach(function(id){ os.delete(id); });
-            tx.oncomplete = function(){ res(); }; tx.onerror = function(){ res(); }; tx.onabort = function(){ res(); };
-        } catch (e) { res(); }
+            tx.oncomplete = function(){ res(); };
+            // v14.16.15: не маскировать сбой IDB как успех merge
+            tx.onerror = function(){ console.warn('[EITI Drive] IDB write error', store, tx.error); rej(tx.error || new Error('idb write')); };
+            tx.onabort = function(){ console.warn('[EITI Drive] IDB write abort', store); rej(tx.error || new Error('idb abort')); };
+        } catch (e) { rej(e); }
     });
 }
 function _collect() {
-    var notesP = (window._idbNotesCache && window._idbNotesCache.length) || typeof idbRefreshNotesCache !== 'function'
-        ? Promise.resolve(window._idbNotesCache || []) : idbRefreshNotesCache();
+    // v14.16.15: всегда перечитываем notes из IDB — кэш мог расходиться после удалений
+    var notesP = typeof idbRefreshNotesCache === 'function'
+        ? idbRefreshNotesCache() : Promise.resolve(window._idbNotesCache || []);
     var names = Object.keys(SYNC_STORES).filter(function(n){ return n !== 'notes'; });
     return Promise.all([notesP].concat(names.map(_getAll))).then(function(all) {
         var stores = { notes: all[0] || [] };
@@ -49168,7 +49201,7 @@ function _apply(m) {
     var S = window.EitiDriveSync, jobs = [], changed = 0;
     Object.keys(m.apply.stores).forEach(function(name) {
         var a = m.apply.stores[name];
-        // Заметки: удаление в приложении убирает их только из кэша — дочищаем IDB по меткам удаления.
+        // Заметки: notesSave уже делает put+delete; здесь добиваем remote tombstones в IDB.
         var dels = a.dels.slice();
         if (name === 'notes') {
             var merged = m.sync.stores.notes || {};
@@ -50831,8 +50864,10 @@ window.EITI_PATCH = {
     }
 };
 
-console.log('%c🧠 EITI Patch 1.0.0 загружен', 'color:#d4a017;font-weight:bold;');
-console.log('%cAPI: window.EITI_PATCH', 'color:gray;font-size:11px;');
+if (window.EITI_DEBUG) {
+    console.log('%c🧠 EITI Patch 1.0.0 загружен', 'color:#d4a017;font-weight:bold;');
+    console.log('%cAPI: window.EITI_PATCH', 'color:gray;font-size:11px;');
+}
 
 })();
 
@@ -51869,7 +51904,7 @@ function _init() {
         window.eitiSetTTSProvider('qwen-tts');
     }
 
-    console.log('%c🟣 Qwen + TTS Chunking patch 1.0.0 загружен', 'color:#9c27b0;font-weight:bold;');
+    if (window.EITI_DEBUG) console.log('%c🟣 Qwen + TTS Chunking patch 1.0.0 загружен', 'color:#9c27b0;font-weight:bold;');
 }
 
 if (document.readyState === 'loading') {
@@ -52789,7 +52824,7 @@ window.eitiAskDeepSeek = function(userText) {
     return p;
 };
 
-console.log('%c📷 Vision chip fix loaded', 'color:#4CAF50;font-weight:bold;');
+if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF50;font-weight:bold;');
 
 // v13.4.0 P0 FIX #3: PIN-модал для шифрования API-ключей
 (function eitiCryptoBootstrap() {
