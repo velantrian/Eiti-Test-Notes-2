@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.15-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.16-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -16,7 +16,7 @@ _Клиентское PWA без backend и build step. Основной инт�
 
 <div align="center">
 
-**[🚀 Установить](#-установить-приложение) · [🆕 Что нового](#-что-нового-в-v141615) · [🏗️ Как устроен проект](#️-как-устроен-проект) · [📐 Архитектура подробно](docs/ARCHITECTURE.md) · [⚠️ Ограничения PWA](docs/PWA_LIMITS.md) · [🤖 AGENTS.md](AGENTS.md)**
+**[🚀 Установить](#-установить-приложение) · [🆕 Что нового](#-что-нового-в-v141616) · [🏗️ Как устроен проект](#️-как-устроен-проект) · [📐 Архитектура подробно](docs/ARCHITECTURE.md) · [⚠️ Ограничения PWA](docs/PWA_LIMITS.md) · [🤖 AGENTS.md](AGENTS.md)**
 
 </div>
 
@@ -65,6 +65,10 @@ python3 -m http.server 8080
 📐 Полная архитектура (для переноса в нативное приложение): **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ---
+
+## 🆕 Что нового в v14.16.16
+
+- 📱 **Экран телефона:** пресет чёлки/острова больше не сбрасывает «Компактные табы» (прыжок 96→110); быстрее переключение; подсказка знает iPhone mini и неизвестные размеры.
 
 ## 🆕 Что нового в v14.16.15
 
