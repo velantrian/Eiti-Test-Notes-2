@@ -238,7 +238,8 @@
       lines.push('', '**' + S('detailShared', lang) + '**');
       exact.slice(0, 5).forEach(function(r) {
         var title = (r.entry.q && r.entry.q[0]) || r.parsed.lead.split(' — ')[0] || r.entry.id;
-        // For untranslated related records preserve their stored facts, not just the lead.\n        var lead = (lang !== 'ru' && (!r.entry.en || enPlaceholder(r.entry.en))) ? r.text : (r.parsed.lead || r.text);
+        // For untranslated related records preserve their stored facts, not just the lead.
+        var lead = (lang !== 'ru' && (!r.entry.en || enPlaceholder(r.entry.en))) ? r.text : (r.parsed.lead || r.text);
         lines.push('- **' + esc(title) + '** — ' + esc(lead.length > 320 ? lead.slice(0, 317) + '…' : lead));
         lines.push('  ' + esc(r.shared.map(function(f) { return f[0] + ': ' + f[1]; }).join('; ')));
       });
@@ -247,7 +248,8 @@
       lines.push('', '**' + S('detailSimilar', lang) + '**');
       similar.slice(0, 4).forEach(function(r) {
         var title = (r.entry.q && r.entry.q[0]) || r.parsed.lead.split(' — ')[0] || r.entry.id;
-        // For untranslated related records preserve their stored facts, not just the lead.\n        var lead = (lang !== 'ru' && (!r.entry.en || enPlaceholder(r.entry.en))) ? r.text : (r.parsed.lead || r.text);
+        // For untranslated related records preserve their stored facts, not just the lead.
+        var lead = (lang !== 'ru' && (!r.entry.en || enPlaceholder(r.entry.en))) ? r.text : (r.parsed.lead || r.text);
         lines.push('- **' + esc(title) + '** — ' + esc(lead.length > 320 ? lead.slice(0, 317) + '…' : lead));
       });
       lines.push('', S('detailSimilarity', lang));
