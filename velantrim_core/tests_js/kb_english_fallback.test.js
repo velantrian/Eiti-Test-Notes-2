@@ -19,7 +19,7 @@ test('an English placeholder must not conceal original facts or related snapshot
   };
   for (const card of [R.kbCard(e, 'en'), R.kbDetailCard(e, [], 'en')]) {
     assert.match(card, /No substantive English answer/);
-    assert.match(card, /Столица \(P36\): Амстердам/);
+    assert.match(card, /Столица \(P36\):(?:\*\*)? Амстердам/);
     assert.doesNotMatch(card, /Wikidata entry; English description is unavailable/);
     assert.match(card, /Source:/);
   }
