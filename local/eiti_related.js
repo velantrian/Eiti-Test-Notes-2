@@ -81,6 +81,7 @@
     detailNoRelated: { ru: 'В базе не нашлось связанных карточек для контекста; дополнительная информация ограничена данными этой записи.', en: 'No linked entries were available for context; further information is limited to this record.', de: 'Es wurden keine verknüpften Einträge als Kontext gefunden; weitere Informationen sind auf diesen Datensatz beschränkt.' },
     detailFields: { ru: 'Поля карточки', en: 'Record fields', de: 'Felder des Eintrags' },
     detailMissing: { ru: 'Чего нет в записи', en: 'Not in this record', de: 'Fehlt im Eintrag' },
+    originalSourceFallback: { ru: 'Нет содержательного английского ответа; показан исходный текст без перевода.', en: 'No substantive English answer is available; the original source text is shown without translation.', de: 'Keine inhaltliche englische Antwort vorhanden; der Originaltext wird ohne Übersetzung gezeigt.' },
     detailRelatedUnavailable: { ru: 'Для этой записи есть связи, но в установленном офлайн-пакете нет их снимков. Показаны только данные самой записи.', en: 'This record has links, but their snapshots are not present in the installed offline pack. Only this record’s data is shown.', de: 'Für diesen Eintrag gibt es Verknüpfungen, aber ihre Momentaufnahmen fehlen im installierten Offline-Paket. Angezeigt werden nur die Daten dieses Eintrags.' },
     detailNoContext: { ru: 'Сейчас нет свежей карточки знаний для уточнения. Сначала задай вопрос по теме, а затем попроси объяснить подробнее.', en: 'There is no recent knowledge card to expand. Ask about a topic first, then ask for more detail.', de: 'Es gibt keine aktuelle Wissenskarte zum Vertiefen. Stelle zuerst eine Frage zum Thema und bitte dann um mehr Details.' },
     copied:    { ru: '📋 Скопировано', en: '📋 Copied', de: '📋 Kopiert' },
@@ -153,11 +154,16 @@
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[\\`*_\[\]<>|]/g, function (c) { return '\\' + c; }); }
 
+  // A persisted longtail placeholder is metadata, not an English translation.
+  function enPlaceholder(text) { return /\bWikidata entry;\s*English description is unavailable\b/i.test(String(text || '')); }
+
   // kbCard(entry, lang) — entry = {title, title_en, a, en, q, gen} (из EitiKBHost.entry)
   function kbCard(e, lang) {
     lang = L(lang);
-    var useEn = lang !== 'ru' && e.en, text = useEn ? e.en : e.a, p = parseFacts(text), name = (e.q && e.q[0]) || '';
+    var useEn = lang !== 'ru' && e.en && !enPlaceholder(e.en), fallback = lang !== 'ru' && !useEn;
+    var text = useEn ? e.en : e.a, p = parseFacts(text), name = (e.q && e.q[0]) || '';
     var head = p.lead.split(' — ')[0] || name, lines = ['### 🧠 ' + esc(head.replace(/\.$/, ''))];
+    if (fallback) lines.push('', S('originalSourceFallback', lang));
     if (p.lead) lines.push('', esc(p.lead));
     if (p.facts.length) { lines.push('', '**' + S('facts', lang) + '**'); p.facts.forEach(function (f) { lines.push('- **' + esc(f[0]) + ':** ' + esc(f[1])); }); }
     lines.push('', '**' + S('section', lang) + ':** ' + esc(useEn || lang !== 'ru' ? (e.title_en || e.title) : e.title));
@@ -179,7 +185,8 @@
   function kbDetailCard(e, related, lang) {
     e = e || {};
     lang = L(lang);
-    var useEn = lang !== 'ru' && e.en, text = useEn ? e.en : e.a, p = parseFacts(text);
+    var useEn = lang !== 'ru' && e.en && !enPlaceholder(e.en), fallback = lang !== 'ru' && !useEn;
+    var text = useEn ? e.en : e.a, p = parseFacts(text);
     var base = kbCard(e, lang).split('\n'), source = base.pop(), section = base.pop(), header = base[0];
     var authored = e.f && typeof e.f.detail === 'string' ? e.f.detail.trim() : '';
     var fields = e.f && typeof e.f === 'object' ? Object.keys(e.f).filter(function(k) { return k !== 'detail' && typeof e.f[k] === 'string' && e.f[k].trim(); }) : [];
@@ -187,6 +194,7 @@
     // f.short is built from the RU answer; for EN/DE UI prefer the language answer lead instead.
     var short = (!useEn && e.f && typeof e.f.short === 'string') ? e.f.short.trim() : '';
     var lines = [header || ('### 🧠 ' + esc(title)), '', '**' + S('essence', lang) + '**'];
+    if (fallback) lines.push('', S('originalSourceFallback', lang));
     if (short) lines.push(esc(short));
     if (p.lead && (!short || p.lead.toLowerCase().replace(/\s+/g, ' ').trim() !== short.toLowerCase().replace(/\s+/g, ' ').trim())) {
       lines.push(S('essenceSourceLead', lang) + ' ' + esc(p.lead));
@@ -221,7 +229,8 @@
     var exact = [], similar = [];
     rows.forEach(function(n) {
       if (!n || n.id === e.id) return;
-      var nt = lang !== 'ru' && n.en ? n.en : n.a, np = parseFacts(nt), shared = sharedFactPairs(p.facts, np.facts);
+      var nt = lang !== 'ru' && n.en && !enPlaceholder(n.en) ? n.en : n.a;
+      var np = parseFacts(nt), shared = sharedFactPairs(p.facts, np.facts);
       var row = { entry: n, parsed: np, shared: shared, text: nt };
       if (shared.length) exact.push(row); else similar.push(row);
     });

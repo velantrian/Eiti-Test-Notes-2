@@ -34,6 +34,8 @@ jobs:
       - name: Run pytest
         working-directory: velantrim_core
         run: pytest tests/ -v
+      - name: Measure English KB coverage by domain (read-only)
+        run: python3 scripts/audit_kb_english.py
 
   e2e-smoke:
     name: Playwright smoke tests (PWA)
