@@ -9,9 +9,13 @@ AGENTS = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
 
 
 def test_version_sync():
-    assert 'EITI_VERSION = "14.16.19"' in HTML or 'EITI_VERSION="14.16.19"' in HTML
-    assert "eiti-v14.16.19" in SW and "eiti-offline-v14.16.19" in SW
-    assert "v14.16.19" in MANIFEST and "v14.16.19" in AGENTS
+    import re
+    m = re.search(r'var EITI_VERSION = "(\d+\.\d+\.\d+)"', HTML)
+    assert m, "missing runtime version"
+    version = m.group(1)
+    assert tuple(map(int, version.split("."))) >= (14, 16, 19)
+    assert f"eiti-v{version}" in SW and f"eiti-offline-v{version}" in SW
+    assert f"v{version}" in MANIFEST and f"v{version}" in AGENTS
 
 
 def test_perf_guards_present():

@@ -120,7 +120,7 @@ def test_world_entities_have_entity_specific_reasoning_and_category_floors():
 
 def test_all_longtail_rows_have_explanations_and_english_answer():
     cards = _all_tail_cards()
-    assert len(cards) == 117_291   # v14.16.17: −800 строк хвоста под +800 городов в ядре
+    assert len(cards) == 117082   # v14.16.18: хвост урезан под рост ядра (EN/факты)
     for filename, line_no, record in cards:
         location = f"{filename}:{line_no}"
         assert record["english"], location
@@ -202,11 +202,12 @@ def test_people_region_aggregates_filter_false_geography_and_separate_p17_p131()
 def test_p131_is_never_rendered_as_a_country():
     item = {"qid": "Q166176", "l": "ненцы", "country": [],
             "parent": ["Воркута", "Городской округ Архангельск"], "d": "народ Сибири", "sl": 10}
-    answer, used = world_peoples._answer("Сибирь", [item], 1,
-                                         allowed_countries={"Россия"}, preferred_countries={"Россия"})
+    answer, en, used = world_peoples._answer("Сибирь", [item], 1,
+                                             allowed_countries={"Россия"}, preferred_countries={"Россия"})
     assert used == [item]
     assert "P17: Воркута" not in answer
     assert "административная связь P131: Воркута" in answer
+    assert en and "admin link P131: Воркута" in en
 
 
 def test_continent_relevance_uses_described_primary_p17_country():

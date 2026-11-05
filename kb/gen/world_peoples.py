@@ -114,27 +114,46 @@ def _countries_for(it, preferred=(), allowed=()):
     return vals[:3]
 
 
+TITLE_EN = {
+    "Африка": "Africa", "Азия": "Asia", "Европа": "Europe",
+    "Северная Америка": "North America", "Южная Америка": "South America", "Океания": "Oceania",
+    "Россия": "Russia", "Китай": "China", "Сибирь": "Siberia", "Кавказ": "the Caucasus",
+    "Центральная Азия": "Central Asia",
+}
+
+
 def _answer(title, selected, total, allowed_countries=(), preferred_countries=()):
-    bits = []
-    used = []
+    bits, bits_en, used = [], [], []
     for it in selected[:10]:
         countries = _countries_for(it, preferred_countries, allowed_countries)
         available = [x for x in _p17_countries(it)
                      if not allowed_countries or norm(x) in {norm(c) for c in allowed_countries}]
         suffix = (" (P17: " + ", ".join(countries) + (", и др." if len(available) > 3 else "") + ")") if countries else ""
+        suffix_en = (" (P17: " + ", ".join(countries) + (", etc." if len(available) > 3 else "") + ")") if countries else ""
         if not countries and title in ("Сибирь", "Кавказ"):
             parents = sorted({clean(x) for x in it.get("parent", []) if clean(x)}, key=norm)
             if parents:
                 suffix = " (административная связь P131: " + parents[0] + ")"
+                suffix_en = " (admin link P131: " + parents[0] + ")"
+        # Prefer EN label when present (q_items en=True); fall back to RU.
+        name_en = (it.get("en") or it["l"]).strip() or it["l"]
         bits.append(f"{it['l']}{suffix}")
+        bits_en.append(f"{name_en}{suffix_en}")
         used.append(it)
     display = TRIGGER_FORMS.get(title, (title, ""))[0]
     prefix = f"Народы {display} — выборка по записям Wikidata: "
     ending = f". Найдено {total}; P17/P131 и P30 — только записанные связи и приближение, не карта расселения и не полный список."
+    title_en = TITLE_EN.get(title, title)
+    prefix_en = f"Peoples of {title_en} — Wikidata sample: "
+    ending_en = (f". Found {total}; P17/P131 and P30 are recorded links only — not a settlement map "
+                 "or a complete list.")
     while bits and len(prefix + "; ".join(bits) + ending) > 690:
-        bits.pop()
-        used.pop()
-    return prefix + "; ".join(bits) + ending, used
+        bits.pop(); bits_en.pop(); used.pop()
+    while bits_en and len(prefix_en + "; ".join(bits_en) + ending_en) > 690:
+        bits_en.pop()
+    ru = prefix + "; ".join(bits) + ending
+    en = prefix_en + "; ".join(bits_en) + ending_en if bits_en else ""
+    return ru, en, used
 
 
 def _fields(title, qids, basis):
@@ -159,9 +178,14 @@ TRIGGER_FORMS = {
 def _triggers(title):
     """Return colloquial and inflected triggers; the KB stemmer handles the rest."""
     forms = TRIGGER_FORMS.get(title, (title, "в " + title))
-    return [f"народы {forms[0]}", f"народы {forms[1]}", f"народности {forms[0]}", f"народности {forms[1]}",
-            f"расскажи о народах {forms[0]}", f"перечисли народы {forms[0]}",
-            f"какие народы живут {forms[1]}", f"какие народности {forms[0]}"]
+    tt = [f"народы {forms[0]}", f"народы {forms[1]}", f"народности {forms[0]}", f"народности {forms[1]}",
+          f"расскажи о народах {forms[0]}", f"перечисли народы {forms[0]}",
+          f"какие народы живут {forms[1]}", f"какие народности {forms[0]}"]
+    en = TITLE_EN.get(title)
+    if en:
+        bare = en.replace("the ", "")
+        tt += [f"peoples of {bare}", f"peoples in {bare}", f"who lives in {bare}"]
+    return tt
 
 
 def build_people_region_source(items=None):
@@ -201,10 +225,11 @@ def build_people_region_source(items=None):
         cards.append((title, selected[:10], len(selected), "P17", {key}, {key}))
     lines = ["# Народы мира | Peoples of the world", "# @generated from Wikidata (CC0) — direct P31=Q41710; do not edit by hand"]
     for title, selected, total, basis, allowed, preferred in cards:
-        answer, used = _answer(title, selected, total, allowed_countries=allowed,
-                               preferred_countries=preferred)
+        answer, en, used = _answer(title, selected, total, allowed_countries=allowed,
+                                   preferred_countries=preferred)
         qids = [it["qid"] for it in used]
-        lines.append("; ".join(_triggers(title)) + " || " + answer + " || " + _fields(title, qids, basis))
+        mid = (" || " + en) if en else ""
+        lines.append("; ".join(_triggers(title)) + " || " + answer + mid + " || " + _fields(title, qids, basis))
     return lines
 
 

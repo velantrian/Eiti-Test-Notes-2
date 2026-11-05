@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.19-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.20-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -66,8 +66,18 @@ python3 -m http.server 8080
 
 ---
 
+## 🆕 Что нового в v14.16.20
+- 📚 **KB RU+EN + рассуждения:** обогащение разделов (фильмы, книги, люди, элементы, …) и EN для регионов/понятий/народов; фикс related-снимков без `id` в EN fallback-карточках.
+- ⚡ Наследует UI-perf v14.16.19.
+
 ## 🆕 Что нового в v14.16.19
 - ⚡ **UI быстрее:** на русском i18n-MutationObserver не гоняет DOM; при стриминге чата — без перевода каждого токена; загрузка сообщений через `DocumentFragment`; скролл стрима — раз за кадр; наблюдатели истории/заметок уже не слушают весь `document.body`.
+
+## 🆕 Что нового в v14.16.18
+
+- 📚 **KB RU+EN:** обогащены ответы по фильмам, книгам, людям, элементам, рекам, горам, озёрам, островам, видам, языкам, блюдам, войнам, компаниям, аэропортам, космосу, динозаврам, регионам, понятиям, народам и др. — больше стабильных полей Wikidata и полноценные английские ответы.
+- 🧠 **Рассуждение:** метки «чего нет в записи» для многих разделов (RU/EN), до 5 похожих снимков шире; в EN UI суть берётся из английского ответа, не из русского `short`.
+
 
 ## 🆕 Что нового в v14.16.17
 

@@ -1,658 +1,666 @@
 # Динозавры и древние животные | Dinosaurs and prehistoric animals
 # @generated from Wikidata (CC0) by kb/gen/gen_more.py — do not edit by hand
-Тираннозавр; Tyrannosaurus || Тираннозавр (лат. Tyrannosaurus) — род тираннозаврид.
-Археоптерикс; Archaeopteryx || Археоптерикс (лат. Archaeopteryx) — род манираптор.
-Трицератопсы; Triceratops || Трицератопсы (лат. Triceratops) — род цератопсид.
-велоцираптор; Velociraptor || Велоцираптор (лат. Velociraptor) — род дромеозаврид.
-Спинозавр; Spinosaurus || Спинозавр (лат. Spinosaurus) — род спинозаврид.
-Диплодок; Diplodocus || Диплодок (лат. Diplodocus) — род юрских завропод.
-Брахиозавр; Brachiosaurus || Брахиозавр (лат. Brachiosaurus) — род брахиозаврид.
-апатозавр; Apatosaurus || Апатозавр (лат. Apatosaurus) — род динозавров.
-Аллозавры; Allosaurus || Аллозавры (лат. Allosaurus) — вымерший род крупных теропод.
-Игуанодон; Iguanodon || Игуанодон (лат. Iguanodon) — род орнитоподных динозавров.
-анкилозавр; Ankylosaurus || Анкилозавр (лат. Ankylosaurus) — род динозавров.
-птицетазовые; Ornithischia || Птицетазовые (лат. Ornithischia) — одна из двух основных клад динозавров.
-Завроподы; Sauropoda || Завроподы (лат. Sauropoda) — клада завроподоморфных динозавров.
-Цератозавр; Ceratosaurus || Цератозавр (лат. Ceratosaurus) — род цератозавров.
-Паразауролофы; Parasaurolophus || Паразауролофы (лат. Parasaurolophus) — род гадрозаврид с изогнутым гребнем.
-Carnotaurus || Carnotaurus — род абелизаврид.
-Аргентинозавр; Argentinosaurus || Аргентинозавр (лат. Argentinosaurus) — род титанозавров.
-Альбертозавр; Albertosaurus || Альбертозавр (лат. Albertosaurus) — род тираннозаврид.
-Компсогнат; Compsognathus || Компсогнат (лат. Compsognathus) — род теропод-компсогнатид юрского периода.
-завроподоморфы; Sauropodomorpha || Завроподоморфы (лат. Sauropodomorpha) — подотряд ящеротазовых динозавров.
-Эдмонтозавры; Edmontosaurus || Эдмонтозавры (лат. Edmontosaurus) — род птицетазовых динозавров.
-Дилофозавр; Dilophosaurus || Дилофозавр (лат. Dilophosaurus) — род тероподных динозавров.
-Пахицефалозавр; Pachycephalosaurus || Пахицефалозавр (лат. Pachycephalosaurus) — род пахицефалозаврид.
-дейноних; Deinonychus || Дейноних (лат. Deinonychus) — род дромеозаврид.
-Акрокантозавр; Acrocanthosaurus || Акрокантозавр (лат. Acrocanthosaurus) — род динозавров семейства карахадонтозаврид.
-Кархародонтозавр; Carcharodontosaurus || Кархародонтозавр (лат. Carcharodontosaurus) — род кархародонтозаврид.
-Барионикс; Baryonyx || Барионикс (лат. Baryonyx) — род спинозаврид.
-анкилозавры; Ankylosauria || Анкилозавры (лат. Ankylosauria) — инфраотряд птицетазовых динозавров.
-Платеозавр; Plateosaurus || Платеозавр (лат. Plateosaurus) — род триасовых завроподоморф.
-Овираптор; Oviraptor || Овираптор (лат. Oviraptor) — род овирапторид.
-Дромеозавриды; Dromaeosauridae || Дромеозавриды (лат. Dromaeosauridae) — семейство манираптор.
-Цератопсы; Ceratopsia || Цератопсы (лат. Ceratopsia) — клада птицетазовых динозавров.
-Тарбозавр; Tarbosaurus || Тарбозавр (лат. Tarbosaurus) — род тираннозаврид.
-Целофиз; Coelophysis || Целофиз (лат. Coelophysis) — вымерший род теропод.
-Абелизавр; Abelisaurus || Абелизавр (лат. Abelisaurus) — род абелизаврид.
-Микрораптор; Microraptor || Микрораптор (лат. Microraptor) — род дромеозаврид.
-Стиракозавры; Styracosaurus || Стиракозавры (лат. Styracosaurus) — род цератопсид.
-Мегалозавр; Megalosaurus || Мегалозавр (лат. Megalosaurus) — род динозавров.
-Галлимим; Gallimimus || Галлимим (лат. Gallimimus) — род тероподных динозавров.
-Сколозавры; Euoplocephalus || Сколозавры (лат. Euoplocephalus) — род анкилозаврид.
-Кентрозавр; Kentrosaurus || Кентрозавр (лат. Kentrosaurus) — род стегозавров.
-Коритозавр; Corythosaurus || Коритозавр (лат. Corythosaurus) — род гадрозаврид.
-Протоцератопс; Protoceratops || Протоцератопс (лат. Protoceratops) — род цератопсов.
-Маменчизавр; Mamenchisaurus || Маменчизавр (лат. Mamenchisaurus) — род мамэньсизаврид.
-Пситтакозавр; Psittacosaurus || Пситтакозавр (лат. Psittacosaurus) — род цератопсов.
-Барозавр; Barosaurus || Барозавр (лат. Barosaurus) — род завроподных динозавров.
-Brontosaurus || Brontosaurus — род гигантских четвероногих завроподных динозавров.
-Горгозавры; Gorgosaurus || Горгозавры (лат. Gorgosaurus) — род тираннозаврид.
-тиреофоры; Thyreophora || Тиреофоры (лат. Thyreophora) — клада птицетазовых динозавров.
-гадрозавриды; Hadrosauridae || Гадрозавриды (лат. Hadrosauridae) — семейство птицетазовых динозавров.
-целурозавры; Coelurosauria || Целурозавры (лат. Coelurosauria) — клада тероподных динозавров.
-Камптозавр; Camptosaurus || Камптозавр (лат. Camptosaurus) — род орнитоподных динозавров.
-орнитоподы; Ornithopoda || Орнитоподы (лат. Ornithopoda) — инфраотряд птицетазовых травоядных динозавров..
-Ламбеозавр; Lambeosaurus || Ламбеозавр (лат. Lambeosaurus) — род гадрозаврид.
-Суперзавр; Supersaurus || Суперзавр (лат. Supersaurus) — гигантский завроподоморфный динозавр.
-Торозавр; Torosaurus || Торозавр (лат. Torosaurus) — род цератопсид.
-Дасплетозавр; Daspletosaurus || Дасплетозавр (лат. Daspletosaurus) — род тероподовых динозавров.
-Авимим; Avimimus || Авимим (лат. Avimimus) — род овирапторозавров.
-Аламозавр; Alamosaurus || Аламозавр (лат. Alamosaurus) — род титанозавров.
-цератозавры; Ceratosauria || Цератозавры (лат. Ceratosauria) — инфраотряд тероподовых динозавров.
-Торвозавр; Torvosaurus || Торвозавр (лат. Torvosaurus) — род мегалозаврид.
-Тетануры; Tetanurae || Тетануры (лат. Tetanurae) — клада тероподных динозавров.
-Amphicoelias || Amphicoelias — род травоядных динозавров из группы зауропод.
-Спинозавриды; Spinosauridae || Спинозавриды (лат. Spinosauridae) — семейство тероподных динозавров.
-цератопсиды; Ceratopsidae || Цератопсиды (лат. Ceratopsidae) — семейство цератопсов.
-Завропосейдон; Sauroposeidon || Завропосейдон (лат. Sauroposeidon) — род завроподных динозавров.
-Струтиомим; Struthiomimus || Струтиомим (лат. Struthiomimus) — род тероподовых динозавров.
-Теризинозавр; Therizinosaurus || Теризинозавр (лат. Therizinosaurus) — род теризинозаврид.
-Гесперорнисы; Hesperornis || Гесперорнисы (лат. Hesperornis) — род вымерших авиал, или птиц в широком смысле.
-Пахиринозавры; Pachyrhinosaurus || Пахиринозавры (лат. Pachyrhinosaurus) — род цератопсид.
-Троодонтиды; Troodontidae || Троодонтиды (лат. Troodontidae) — семейство манираптор.
-Эдмонтония; Edmontonia || Эдмонтония (лат. Edmontonia) — род позднемеловых анкилозавров.
-манирапторы; Maniraptora || Манирапторы (лат. Maniraptora) — клада целурозавров.
-Дейнохейрус; Deinocheirus || Дейнохейрус (лат. Deinocheirus) — род тероподных динозавров.
-Завролофы; Saurolophus || Завролофы (лат. Saurolophus) — вымерший род гадрозаврид.
-Cryolophosaurus ellioti || Cryolophosaurus ellioti — род тероподных динозавров.
-Гетеродонтозавр; Heterodontosaurus || Гетеродонтозавр (лат. Heterodontosaurus) — род птицетазовых динозавров.
-Зухомим; Suchomimus || Зухомим (лат. Suchomimus) — род спинозаврид.
-Ахиллобатор; Achillobator || Ахиллобатор (лат. Achillobator) — род дромеозаврид.
-Центрозавры; Centrosaurus || Центрозавры (лат. Centrosaurus) — род цератопсид.
-Дромеозавр; Dromaeosaurus || Дромеозавр (лат. Dromaeosaurus) — род дромеозаврид.
-Пахицефалозавры; Pachycephalosauria || Пахицефалозавры (лат. Pachycephalosauria) — инфраотряд животных.
-Ставрикозавр; Staurikosaurus || Ставрикозавр (лат. Staurikosaurus) — род герреразаврид.
-Карнозавры; Carnosauria || Карнозавры (лат. Carnosauria) — инфраотряд динозавров.
-Сцелидозавр; Scelidosaurus || Сцелидозавр (лат. Scelidosaurus) — род птицетазовых динозавров.
-Ирритатор; Irritator || Ирритатор (лат. Irritator) — род спинозаврид.
-Шантунгозавр; Shantungosaurus || Шантунгозавр (лат. Shantungosaurus) — род динозавров.
-Авиалы; Avialae || Авиалы (лат. Avialae) — птицы и их ближайшие вымершие родственники.
-тираннозавриды; Tyrannosauridae || Тираннозавриды (лат. Tyrannosauridae) — семейство тероподных динозавров.
-целофизоиды; Coelophysoidea || Целофизоиды (лат. Coelophysoidea) — надсемейство тероподных динозавров.
-Ютараптор; Utahraptor || Ютараптор (лат. Utahraptor) — род дромеозаврид.
-гигантораптор; Gigantoraptor || Гигантораптор (лат. Gigantoraptor) — род ценагнатид.
-Yutyrannus || Yutyrannus — род тираннозавроид.
-Афровенатор; Afrovenator abakensis || Афровенатор (лат. Afrovenator abakensis) — род тероподовых динозавров.
-Синорнитозавр; Sinornithosaurus || Синорнитозавр (лат. Sinornithosaurus) — род дромеозаврид.
-Huayangosaurus || Huayangosaurus — род стегозавров.
-Конфуциусорнис; Confuciusornis || Конфуциусорнис (лат. Confuciusornis) — род вымерших авиал, или птиц в широком смысле.
-Кархародонтозавриды; Carcharodontosauridae || Кархародонтозавриды (лат. Carcharodontosauridae) — семейство вымерших животных.
-Тираннозавроиды; Tyrannosauroidea || Тираннозавроиды (лат. Tyrannosauroidea) — надсемейство целурозавров.
-Mapusaurus || Mapusaurus — род кархародонтозаврид.
-цераподы; Cerapoda || Цераподы (лат. Cerapoda) — один из двух подотрядов или групп птицетазовых динозавров.
-Дейнонихозавры; Deinonychosauria || Дейнонихозавры (лат. Deinonychosauria) — клада манираптор.
-Хасмозавр; Chasmosaurus || Хасмозавр (лат. Chasmosaurus) — род цератопсид.
-Минми; Minmi || Минми (лат. Minmi) — род небольших динозавров из семейства анкилозаврид.
-Алиорам; Alioramus || Алиорам (лат. Alioramus) — род тираннозаврид.
-Анхизавр; Anchisaurus || Анхизавр (лат. Anchisaurus) — род завроподоморф.
-Агилизавр; Agilisaurus || Агилизавр (лат. Agilisaurus) — род птицетазовых динозавров.
-Титанозавры; Titanosauria || Титанозавры (лат. Titanosauria) — клада завроподных динозавров.
-Мононик; Mononykus || Мононик (лат. Mononykus) — род альваресзаврид.
-Орнитомимозавры; Ornithomimosauria || Орнитомимозавры (лат. Ornithomimosauria) — инфраотряд целурозавров.
-Majungasaurus || Majungasaurus — род абелизаврид.
-Герреразавриды; Herrerasauridae || Герреразавриды (лат. Herrerasauridae) — семейство ящеротазовых динозавров.
-Акантофолис; Acanthopholis || Акантофолис (лат. Acanthopholis) — род анкилозавров.
-Анкилозавриды; Ankylosauridae || Анкилозавриды (лат. Ankylosauridae) — семейство анкилозавров.
-Monolophosaurus || Monolophosaurus — род юрских теропод.
-Компсогнатиды; Compsognathidae || Компсогнатиды (лат. Compsognathidae) — семейство целурозавров.
-Balaur bondoc || Balaur bondoc — род тероподовых динозавров.
-Megaraptor || Megaraptor — род тероподных динозавров.
-Diplodocidae || Diplodocidae — семейство завроподовых динозавров.
-Рахонавис; Rahonavis || Рахонавис (лат. Rahonavis) — род вымерших животных.
-Египтозавр; Aegyptosaurus || Египтозавр (лат. Aegyptosaurus) — род меловых титанозавров.
-Брахиозавриды; Brachiosauridae || Брахиозавриды (лат. Brachiosauridae) — семейство завроподных динозавров.
-Ахелоузавр; Achelousaurus || Ахелоузавр (лат. Achelousaurus) — род цератопсид.
-игуанодонты; Iguaonodontia || Игуанодонты (лат. Iguaonodontia) — группа позднеюрских-раннемеловых орнитоподных динозавров.
-Скутеллозавр; Scutellosaurus || Скутеллозавр (лат. Scutellosaurus) — род птицетазовых динозавров.
-Буитрераптор; Buitreraptor || Буитрераптор (лат. Buitreraptor) — род дромеозаврид.
-Гетеродонтозавриды; Heterodontosauridae || Гетеродонтозавриды (лат. Heterodontosauridae) — семейство птицетазовых динозавров.
-Каудиптерикс; Caudipteryx || Каудиптерикс (лат. Caudipteryx) — род овирапторозавров.
-Альваресзавр; Alvarezsaurus || Альваресзавр (лат. Alvarezsaurus) — род альваресзаврид.
-Аллозавроиды; Allosauroidea || Аллозавроиды (лат. Allosauroidea) — надсемейство вымерших животных.
-Masiakasaurus || Masiakasaurus — род ноазаврид.
-Бэмбираптор; Bambiraptor || Бэмбираптор (лат. Bambiraptor) — род вымерших животных.
-Заурорнитоид; Saurornithoides || Заурорнитоид (лат. Saurornithoides) — род троодонтид.
-Сегнозавр; Segnosaurus || Сегнозавр (лат. Segnosaurus) — род теризинозаврид.
-Багацератопс; Bagaceratops rozhdestvenskyi || Багацератопс (лат. Bagaceratops rozhdestvenskyi) — род цератопсов.
-Зуницератопс; Zuniceratops || Зуницератопс (лат. Zuniceratops) — род цератопсов.
-Polacanthus || Polacanthus — род анкилозавров.
-Нигерзавр; Nigersaurus taqueti || Нигерзавр (лат. Nigersaurus taqueti) — род завроподовых динозавров.
-Зауропельта; Sauropelta || Зауропельта (лат. Sauropelta) — род анкилозавров.
-Marginocephalia || Marginocephalia — клада птицетазовых динозавров.
-Wuerhosaurus || Wuerhosaurus — род стегозавров.
-Стегоцер; Stegoceras || Стегоцер (лат. Stegoceras) — род пахицефалозаврид.
-Homalocephale || Homalocephale — род пахицефалозаврид.
-Антарктозавр; Antarctosaurus || Антарктозавр (лат. Antarctosaurus) — род титанозавров.
-Энанциорнисовые птицы; Enantiornithes || Энанциорнисовые птицы (лат. Enantiornithes) — клада вымерших авиал, или птиц в широком смысле.
-Агустиния; Agustinia || Агустиния (лат. Agustinia) — род завроподных динозавров.
-Уненлагия; Unenlagia || Уненлагия (лат. Unenlagia) — род дромеозаврид.
-Пентацератопс; Pentaceratops || Пентацератопс (лат. Pentaceratops) — род цератопсид.
-овирапториды; Oviraptoridae || Овирапториды (лат. Oviraptoridae) — семейство овирапторозавров.
-Гастония; Gastonia || Гастония (лат. Gastonia) — род анкилозавров.
-Нодозавриды; Nodosauridae || Нодозавриды (лат. Nodosauridae) — семейство анкилозавров.
-Нанотиранус; Nanotyrannus || Нанотиранус (лат. Nanotyrannus) — род тираннозавроид.
-Зупайзавр; Zupaysaurus || Зупайзавр (лат. Zupaysaurus) — род тероподных динозавров.
-Zhuchengtyrannus || Zhuchengtyrannus — род азиатских тираннозаврид.
-Alxasaurus elesitaiensis; Alxasaurus || Alxasaurus elesitaiensis (лат. Alxasaurus) — род теризинозавров.
-Раджазавр; Rajasaurus || Раджазавр (лат. Rajasaurus) — род абелизаврид.
-Ornithurae || Ornithurae — клада авиал (птиц в широком смысле).
-Тираннотитан; Tyrannotitan chubutensis || Тираннотитан (лат. Tyrannotitan chubutensis) — род кархародонтозаврид.
-Sinoceratops || Sinoceratops — род цератопсид.
-Aeolosaurus || Aeolosaurus — род меловых титанозавров.
-Aerosteon || Aerosteon — род нептичьих теропод.
-Noasaurus || Noasaurus — род ноазаврид.
-литронакс; Lythronax || Литронакс (лат. Lythronax) — род североамериканских тираннозаврид.
-овирапторозавры; Oviraptorosauria || Овирапторозавры (лат. Oviraptorosauria) — клада манираптор.
-Адазавр; Adasaurus || Адазавр (лат. Adasaurus) — род дромеозаврид.
-Конкавенатор; Concavenator || Конкавенатор (лат. Concavenator) — Вид динозавров теропод, живший на территории современной Испании.
-Австраловенатор; Australovenator wintonensis || Австраловенатор (лат. Australovenator wintonensis) — род тероподных динозавров.
-Паралититан; Paralititan || Паралититан (лат. Paralititan) — Род растительноядных динозавров.
-Дацентрур; Dacentrurus || Дацентрур (лат. Dacentrurus) — род стегозавров.
-Манирапториформы; Maniraptoriformes || Манирапториформы (лат. Maniraptoriformes) — клада целурозавров.
-Европазавр; Europasaurus || Европазавр (лат. Europasaurus) — род завроподных динозавров.
-годжиразавр; Gojirasaurus || Годжиразавр (лат. Gojirasaurus) — род крупных триасовых динозавров-теропод надсемейства целофизоидов.
-Агухацератопс; Agujaceratops || Агухацератопс (лат. Agujaceratops) — род позднемеловых цератопсид.
-Omeisaurus || Omeisaurus — род мамэньсизаврид.
-Эйниозавр; Einiosaurus || Эйниозавр (лат. Einiosaurus) — род цератопсид.
-Грипозавр; Gryposaurus || Грипозавр (лат. Gryposaurus) — род гадрозаврид живших 83-74 млн лет назад.
-Рапетозавр; Rapetosaurus || Рапетозавр (лат. Rapetosaurus) — Род растительноядных динозавров.
-Dreadnoughtus || Dreadnoughtus — род вымерших животных.
-Ауказавр; Aucasaurus || Ауказавр (лат. Aucasaurus) — позднемеловой род динозавров.
-Дриптозавр; Dryptosaurus || Дриптозавр (лат. Dryptosaurus) — род тираннозавроид.
-Shuvuuia || Shuvuuia — род альваресзаврид.
-Анхицератопс; Anchiceratops || Анхицератопс (лат. Anchiceratops) — род цератопсид.
-Riojasaurus || Riojasaurus — род динозавров.
-Атласкопкозавр; Atlascopcosaurus || Атласкопкозавр (лат. Atlascopcosaurus) — род животных.
-Alectrosaurus || Alectrosaurus — род тероподовых динозавров.
-Diplodocoidea || Diplodocoidea — надсемейство завроподных динозавров.
-Альтирин; Altirhinus || Альтирин (лат. Altirhinus) — род вымерших животных.
-пелеканимим; Pelecanimimus || Пелеканимим (лат. Pelecanimimus) — род вымерших животных.
-Процератозавр; Proceratosaurus || Процератозавр (лат. Proceratosaurus) — род тираннозавроид.
-Micropachycephalosaurus || Micropachycephalosaurus — род птицетазовых динозавров.
-Харонозавр; Charonosaurus || Харонозавр (лат. Charonosaurus) — род гадрозаврид.
-эпидексиптерикс; Epidexipteryx || Эпидексиптерикс (лат. Epidexipteryx) — род скансориоптеригид.
-Хиндезавр; Chindesaurus || Хиндезавр (лат. Chindesaurus) — род ящеротазовых динозавров.
-Рапторекс; Raptorex || Рапторекс (лат. Raptorex) — род динозавров.
-шунозавр; Shunosaurus || Шунозавр (лат. Shunosaurus) — род динозавров.
-Юравенатор; Juravenator || Юравенатор (лат. Juravenator) — род тероподовых динозавров.
-Dracorex || Dracorex — синоним рода динозавров.
-Adamantisaurus || Adamantisaurus — род позднемеловых титанозавров.
-гилеозавр; Hylaeosaurus || Гилеозавр (лат. Hylaeosaurus) — род анкилозавров.
-Неовенатор; Neovenator || Неовенатор (лат. Neovenator) — род тероподовых динозавров.
-цяньчжоузавр; Qianzhousaurus || Цяньчжоузавр (лат. Qianzhousaurus) — род тираннозаврид.
-Метриакантозавр; Metriacanthosaurus parkeri || Метриакантозавр (лат. Metriacanthosaurus parkeri) — род аллозавроид.
-ультразавр; Ultrasaurus || Ультразавр (лат. Ultrasaurus) — сомнительный род растительноядных ящеротазовых динозавров из группы завроподов.
-гарпимим; Harpymimus || Гарпимим (лат. Harpymimus) — род динозавров.
-Chirostenotes || Chirostenotes — род ценагнатид.
-Авацератопс; Avaceratops || Авацератопс (лат. Avaceratops) — род цератопсид.
-Джобария; Jobaria || Джобария (лат. Jobaria) — род завроподных динозавров.
-Тератофоней; Teratophoneus || Тератофоней (лат. Teratophoneus) — род позднемеловых тираннозаврид.
-Эотиранн; Eotyrannus || Эотиранн (лат. Eotyrannus) — род тираннозавроид.
-Magyarosaurus || Magyarosaurus — род карликовых титанозавров.
-Альваресзавриды; Alvarezsauridae || Альваресзавриды (лат. Alvarezsauridae) — семейство целурозавров.
-Космоцератопс; Kosmoceratops || Космоцератопс (лат. Kosmoceratops) — род цератопсид.
-Prenocephale || Prenocephale — род пахицефалозаврид.
-Макронарии; Macronaria || Макронарии (лат. Macronaria) — клада динозавров.
-Немегтозавр; Nemegtosaurus || Немегтозавр (лат. Nemegtosaurus) — род титанозавров.
-Ахиллезавр; Achillesaurus || Ахиллезавр (лат. Achillesaurus) — род альваресзаврид.
-Прокомпсогнат; Procompsognathus || Прокомпсогнат (лат. Procompsognathus) — род триасовых теропод.
-Hesperosaurus || Hesperosaurus — род стегозавров.
-Byronosaurus || Byronosaurus — род троодонтид.
-мирагая; Miragaia || Мирагая (лат. Miragaia) — род стегозавров.
-Saurornitholestes || Saurornitholestes — род дромеозаврид.
-Aurornis || Aurornis — род манираптор.
-Мегапнозавр; Megapnosaurus || Мегапнозавр (лат. Megapnosaurus) — вымерший род теропод.
-Арагозавр; Aragosaurus || Арагозавр (лат. Aragosaurus) — род вымерших животных.
-Дилофозавриды; Dilophosauridae || Дилофозавриды (лат. Dilophosauridae) — устаревшее семейство тероподных динозавров.
-Orodromeus || Orodromeus — Род динозавров.
-Альбертацератопс; Albertaceratops || Альбертацератопс (лат. Albertaceratops) — род цератопсид.
-Эухелоп; Euhelopus || Эухелоп (лат. Euhelopus) — род вымерших животных.
-Протархеоптерикс; Protarchaeopteryx || Протархеоптерикс (лат. Protarchaeopteryx) — род овирапторозавров.
-Микровенатор; Microvenator || Микровенатор (лат. Microvenator) — род ценагнатид.
-Лилиенстерн; Liliensternus || Лилиенстерн (лат. Liliensternus) — род тероподных динозавров.
-Ichthyovenator || Ichthyovenator — род спинозаврид.
-андезавр; Andesaurus || Андезавр (лат. Andesaurus) — род динозавров.
-Segisaurus || Segisaurus — род динозавров.
-Anserimimus || Anserimimus — род динозавров.
-Криптопс; Kryptops || Криптопс (лат. Kryptops) — род абелизаврид.
-Теризинозавриды; Therizinosauridae || Теризинозавриды (лат. Therizinosauridae) — семейство теризинозавров.
-Эотрицератопс; Eotriceratops || Эотрицератопс (лат. Eotriceratops) — род цератопсид.
-Scansoriopteryx || Scansoriopteryx — род скансориоптеригид.
-Рабдодон; Rhabdodon || Рабдодон (лат. Rhabdodon) — род вымерших животных.
-Atlasaurus imelakei || Atlasaurus imelakei — вымерший род динозавров.
-Аардоникс; Aardonyx || Аардоникс (лат. Aardonyx) — род завроподоморфных динозавров.
-Сиамотиран; Siamotyrannus || Сиамотиран (лат. Siamotyrannus) — род аллозавроид.
-Аляскацефал; Alaskacephale || Аляскацефал (лат. Alaskacephale) — род пахицефалозаврид.
-Lexovisaurus || Lexovisaurus — род юрских тиреофор.
-ноазавриды; Noasauridae || Ноазавриды (лат. Noasauridae) — семейство цератозавров.
-Telmatosaurus || Telmatosaurus — архаичный род птицетазовых динозавров.
-Utahceratops || Utahceratops — род цератопсид.
-Синозавр; Sinosaurus || Синозавр (лат. Sinosaurus) — род тероподных динозавров.
-Guaibasaurus || Guaibasaurus — вымерший род ящеротазовых динозавров.
-Conchoraptor || Conchoraptor — род овирапторид.
-Bonitasaura || Bonitasaura — род вымерших животных.
-Garudimimus || Garudimimus — род тероподовых динозавров.
-Abydosaurus || Abydosaurus — род брахиозаврид.
-целофизиды; Coelophysidae || Целофизиды (лат. Coelophysidae) — вымершее семейство теропод.
-Anchiornis huxleyi || Anchiornis huxleyi — вид тероподовых динозавров.
-Titanoceratops ouranos; Titanoceratops || Titanoceratops ouranos (лат. Titanoceratops) — род цератопсид.
-Diplodocus hallorum || Diplodocus hallorum — вид крупных диплодоков.
-инцисивозавр; Incisivosaurus || Инцисивозавр (лат. Incisivosaurus) — род овирапторозавров.
-гигантозавр; Gigantosaurus || Гигантозавр (лат. Gigantosaurus) — род завроподных динозавров.
-Nasutoceratops; Nasutoceratops titusi || Nasutoceratops (лат. Nasutoceratops titusi) — род цератопсид.
-Линьхэраптор; Linheraptor || Линьхэраптор (лат. Linheraptor) — род тероподовых динозавров.
-Xiaotingia zhengi || Xiaotingia zhengi — род манираптор.
-Хилантаизавр; Chilantaisaurus || Хилантаизавр (лат. Chilantaisaurus) — род вымерших животных.
-Эмаузавры; Emausaurus || Эмаузавры (лат. Emausaurus) — Вид динозавров.
-Скансориоптеригиды; Scansoriopterygidae || Скансориоптеригиды (лат. Scansoriopterygidae) — семейство манираптор.
-дикреозавриды; Dicraeosauridae || Дикреозавриды (лат. Dicraeosauridae) — семейство диплодокоидей.
-Неозавроподы; Neosauropoda || Неозавроподы (лат. Neosauropoda) — группа ящеротазовых динозавров.
-Goyocephale || Goyocephale — род пахицефалозаврид.
-Oryctodromeus || Oryctodromeus — род птицетазовых динозавров, известных из отложений позднего мелового периода.
-Chungkingosaurus || Chungkingosaurus — род стегозавров.
-Yaverlandia || Yaverlandia — род вымерших животных.
-Диаблоцератопс; Diabloceratops || Диаблоцератопс (лат. Diabloceratops) — род цератопсид.
-Labocania || Labocania — род тираннозаврид.
-Atrociraptor || Atrociraptor — род дромеозаврид.
-Sinornithoides || Sinornithoides — род троодонтид.
-Ламбеозаврины; Lambeosaurinae || Ламбеозаврины (лат. Lambeosaurinae) — подсемейство вымерших животных.
-Leptoceratopsidae || Leptoceratopsidae — семейство цератопсов.
-Indosaurus || Indosaurus — вымерший род динозавров.
-Cristatusaurus || Cristatusaurus — род спинозаврид.
-Тураноцератопс; Turanoceratops || Тураноцератопс (лат. Turanoceratops) — род цератопсов.
-Puertasaurus || Puertasaurus — род титанозавров.
-Stokesosaurus || Stokesosaurus — род тираннозавроид.
-Гадрозавроиды; Hadrosauroidea || Гадрозавроиды (лат. Hadrosauroidea) — надсемейство птицетазовых динозавров.
-Prenoceratops || Prenoceratops — род цератопсов.
-Занабазар; Zanabazar || Занабазар (лат. Zanabazar) — род троодонтид.
-Montanoceratops || Montanoceratops — род цератопсов.
-Dakotaraptor || Dakotaraptor — спорный род тероподных динозавров.
-Аппалачиозавр; Appalachiosaurus || Аппалачиозавр (лат. Appalachiosaurus) — род тираннозавроид.
-Килеск; Kileskus || Килеск (лат. Kileskus) — род тираннозавроид.
-Archaeoceratops || Archaeoceratops — род цератопсов.
-Janenschia || Janenschia — род вымерших животных.
-Tsaagan || Tsaagan — род дромеозаврид.
-Стегозавриды; Stegosauridae || Стегозавриды (лат. Stegosauridae) — семейство динозавров-тиреофор.
-Бороговия; Borogovia || Бороговия (лат. Borogovia) — род троодонтид.
-Malawisaurus || Malawisaurus — род титанозавров.
-ценагнатазия; Caenagnathasia || Ценагнатазия (лат. Caenagnathasia) — род ценагнатид.
-Xiongguanlong || Xiongguanlong — род тираннозавроид.
-Элмизавр; Elmisaurus || Элмизавр (лат. Elmisaurus) — род ценагнатид.
-Gargoyleosaurus || Gargoyleosaurus — род анкилозавров.
-Анимантаркс; Animantarx || Анимантаркс (лат. Animantarx) — род анкилозавров.
-Coahuilaceratops || Coahuilaceratops — род цератопсид.
-Altispinax || Altispinax — род вымерших животных.
-Эрликозавр; Erlikosaurus || Эрликозавр (лат. Erlikosaurus) — род теризинозаврид.
-Tianyuraptor ostromi || Tianyuraptor ostromi — род дромеозаврид.
-процератозавриды; Proceratosauridae || Процератозавриды (лат. Proceratosauridae) — семейство тираннозавроид.
-Struthiosaurus || Struthiosaurus — род позднемеловых анкилозавров.
-Ajkaceratops; Ajkaceratops kozmai || Ajkaceratops (лат. Ajkaceratops kozmai) — род цератопсов.
-платеозавриды; Plateosauridae || Платеозавриды (лат. Plateosauridae) — семейство завроподоморфных динозавров.
-Velocisaurus || Velocisaurus — род ноазаврид.
-Limusaurus inextricabilis; Limusaurus || Limusaurus inextricabilis (лат. Limusaurus) — род ноазаврид.
-Chilesaurus || Chilesaurus — род динозавров.
-Huaxiagnathus || Huaxiagnathus — род динозавров.
-реббахизавриды; Rebbachisauridae || Реббахизавриды (лат. Rebbachisauridae) — семейство завроподных динозавров.
-Metriacanthosauridae || Metriacanthosauridae — семейство аллозавроид.
-Panphagia || Panphagia — Род динозавров.
-Dinheirosaurus lourinhanensis || Dinheirosaurus lourinhanensis — род диплодоцид.
-Massospondylidae || Massospondylidae — семейство вымерших животных.
-итемир; Itemirus || Итемир (лат. Itemirus) — род дромеозаврид.
-Археоптериксовые; Archaeopterygidae || Археоптериксовые (лат. Archaeopterygidae) — семейство животных.
-Neuquenraptor || Neuquenraptor — род дромеозаврид.
-Amtocephale gobiensis; Amtocephale || Amtocephale gobiensis (лат. Amtocephale) — Род динозавров.
-лессемозавр; Lessemsaurus || Лессемозавр (лат. Lessemsaurus) — род динозавров.
-Liaoceratops || Liaoceratops — род цератопсов.
-Cerasinops || Cerasinops — род цератопсов.
-Чанъюйраптор; Changyuraptor || Чанъюйраптор (лат. Changyuraptor) — вид хищных динозавров.
-Graciliraptor || Graciliraptor — род дромеозаврид.
-Цетиозавриды; Cetiosauridae || Цетиозавриды (лат. Cetiosauridae) — семейство завроподных динозавров.
-Marshosaurus || Marshosaurus — Вымерший род динозавров.
-Heyuannia || Heyuannia — род овирапторид.
-Nemegtomaia barsboldi; Nemegtomaia || Nemegtomaia barsboldi (лат. Nemegtomaia) — род овирапторид.
-Ринчения; Rinchenia || Ринчения (лат. Rinchenia) — род овирапторид.
-Медузацератопс; Medusaceratops lokii || Медузацератопс (лат. Medusaceratops lokii) — род цератопсид.
-Ксеноцератопсы; Xenoceratops || Ксеноцератопсы (лат. Xenoceratops) — род цератопсид.
-Алгоазавр; Algoasaurus || Алгоазавр (лат. Algoasaurus) — род вымерших животных.
-Zuolong salleei; Zuolong || Zuolong salleei (лат. Zuolong) — Род позднеюрских тероподов.
-Эукнемезавр; Eucnemesaurus || Эукнемезавр (лат. Eucnemesaurus) — род примитивных динозавров.
-Siats || Siats — род вымерших животных.
-Вендицератопс; Wendiceratops || Вендицератопс (лат. Wendiceratops) — род цератопсид.
-Vagaceratops || Vagaceratops — род цератопсид.
-Eolambia || Eolambia — род вымерших животных.
-Протоцератопсиды; Protoceratopsidae || Протоцератопсиды (лат. Protoceratopsidae) — семейство цератопсов.
-Regaliceratops || Regaliceratops — род цератопсид.
-Эокурсор; Eocursor || Эокурсор (лат. Eocursor) — род базальных птицетазовых динозавров.
-Алетопельта; Aletopelta || Алетопельта (лат. Aletopelta) — род анкилозавров.
-Gigantspinosaurus || Gigantspinosaurus — род стегозавров.
-Aviatyrannis || Aviatyrannis — род тираннозавроид.
-сантанараптор; Santanaraptor || Сантанараптор (лат. Santanaraptor) — род тираннозавроид.
-Jaxartosaurus || Jaxartosaurus — род гадрозаврид.
-Falcarius || Falcarius — род теризинозавров.
-Гилмореозавры; Gilmoreosaurus || Гилмореозавры (лат. Gilmoreosaurus) — род птицетазовых динозавров.
-Draconyx || Draconyx — род орнитоподных динозавров.
-Albalophosaurus || Albalophosaurus — род цератопсов.
-Asiatosaurus || Asiatosaurus — род меловых завропод.
-Patagonykus || Patagonykus — род манираптор.
-Stenopelix || Stenopelix — род цератопсов.
-Brontomerus || Brontomerus — род завроподных динозавров.
-Игуаноколосс; Iguanacolossus || Игуаноколосс (лат. Iguanacolossus) — род животных.
-Конфуциусорнитиды; Confuciusornithidae || Конфуциусорнитиды (лат. Confuciusornithidae) — семейство вымерших авиал, или птиц в широком смысле.
-тираннозавр рекс; Tyrannosaurus rex || Тираннозавр рекс (лат. Tyrannosaurus rex) — вид позднемеловых тираннозаврид.
-Zhuchengceratops || Zhuchengceratops — род динозавров.
-Juratyrant langhami || Juratyrant langhami — вид позднеюрских тираннозавроидов.
-Arenysaurus || Arenysaurus — род гадрозаврид.
-Фукуизавр; Fukuisaurus || Фукуизавр (лат. Fukuisaurus) — род вымерших животных.
-Valdosaurus || Valdosaurus — Вымерший род динозавров.
-Laquintasaura venezuelae; Laquintasaura || Laquintasaura venezuelae (лат. Laquintasaura) — вымерший род примитивных птицетазовых динозавров.
-ценагнатиды; Caenagnathidae || Ценагнатиды (лат. Caenagnathidae) — семейство овирапторозавров.
-Guaibasauridae || Guaibasauridae — семейство примитивных ящеротазовых динозавров.
-Gobisaurus || Gobisaurus — вымерший род рептилий.
-Qiaowanlong || Qiaowanlong — род вымерших животных.
-Chaoyangsauridae || Chaoyangsauridae — семейство цератопсов.
-Dysalotosaurus || Dysalotosaurus — род вымерших животных.
-Linhenykus monodactylus; Linhenykus || Linhenykus monodactylus (лат. Linhenykus) — род альваресзаврид.
-Ekrixinatosaurus || Ekrixinatosaurus — род абелизаврид.
-Anchisauria || Anchisauria — клада завроподоморфных динозавров.
-Alvarezsauroidea || Alvarezsauroidea — надсемейство манираптор.
-Tanycolagreus || Tanycolagreus — род динозавров.
-Jeyawati || Jeyawati — Род динозавров.
-тимурленгия; Timurlengia || Тимурленгия (лат. Timurlengia) — род тираннозавроид.
-Mamenchisauridae || Mamenchisauridae — семейство завроподных динозавров.
-Jakapil || Jakapil — род динозавров из подотряда тиреофор.
-Sanjuansaurus || Sanjuansaurus — род герреразаврид.
-Anoplosaurus || Anoplosaurus — род птицетазовых динозавров.
-Тираннорапторы; Tyrannoraptora || Тираннорапторы (лат. Tyrannoraptora) — клада целурозавров.
-номингия; Nomingia || Номингия (лат. Nomingia) — род ценагнатид.
-Acheroraptor || Acheroraptor — род дромеозаврид.
-Hulsanpes || Hulsanpes — род дромеозаврид.
-Acristavus || Acristavus — род гадрозаврид.
-Агносфитис; Agnosphitys || Агносфитис (лат. Agnosphitys) — вымерший род архозавров.
-Гондванатитан; Gondwanatitan || Гондванатитан (лат. Gondwanatitan) — род вымерших животных.
-Tethyshadros || Tethyshadros — род вымерших животных.
-отниелозавр; Othnielosaurus || Отниелозавр (лат. Othnielosaurus) — род животных.
-Aepyornithomimus || Aepyornithomimus — род орнитомимид.
-Rinconsaurus || Rinconsaurus — род завроподных динозавров.
-Savannasaurus || Savannasaurus — род завроподных динозавров.
-Zby atlanticus || Zby atlanticus — род завроподных динозавров.
-котазавр; Kotasaurus || Котазавр (лат. Kotasaurus) — род завроподных динозавров.
-Hungarosaurus || Hungarosaurus — род анкилозавров.
-Coloradisaurus || Coloradisaurus — род завроподоморфных динозавров.
-Maip || Maip — род тероподных динозавров.
-Ляонинозавр; Liaoningosaurus || Ляонинозавр (лат. Liaoningosaurus) — род анкилозавров.
-Энигмозавр; Enigmosaurus || Энигмозавр (лат. Enigmosaurus) — род теризинозаврид.
-Yuxisaurus || Yuxisaurus — род базальных тиреофор.
-Илокелезия; Ilokelesia || Илокелезия (лат. Ilokelesia) — род динозавров.
-Нэмэгтозавриды; Nemegtosauridae || Нэмэгтозавриды (лат. Nemegtosauridae) — семейство титанозавров.
-Hanssuesia || Hanssuesia — род пахицефалозаврид.
-Eshanosaurus || Eshanosaurus — род тероподных динозавров.
-Tameryraptor || Tameryraptor — род кархародонтозаврид.
-Ajancingenia || Ajancingenia — род овирапторид.
-Orkoraptor || Orkoraptor — род вымерших животных.
-Ganzhousaurus nankangensis || Ganzhousaurus nankangensis — род овирапторид.
-Machairasaurus || Machairasaurus — род овирапторид.
-дриозавриды; Dryosauridae || Дриозавриды (лат. Dryosauridae) — семейство птицетазовых динозавров.
-Dracopelta || Dracopelta — род анкилозавров.
-Aquilops || Aquilops — род цератопсов.
-Shenzhousaurus || Shenzhousaurus — род орнитомимозавров.
-Ксиксиазавр; Xixiasaurus || Ксиксиазавр (лат. Xixiasaurus) — род троодонтид.
-Proa || Proa — род вымерших животных.
-Sauroniops || Sauroniops — род вымерших животных.
-Iberomesornis romerali || Iberomesornis romerali — род энанциорнисовых птиц.
-Kakuru kujani || Kakuru kujani — вид вымерших животных.
-Panamericansaurus || Panamericansaurus — род титанозавров.
-Raptor; Rapator || Raptor (лат. Rapator) — сомнительный род тероподных динозавров.
-Фукуититан; Fukuititan || Фукуититан (лат. Fukuititan) — род вымерших животных.
-Caenagnathoidea || Caenagnathoidea — надсемейство овирапторозавров.
-Adratiklit || Adratiklit — род юрских стегозаврид.
-Colepiocephale || Colepiocephale — род пахицефалозаврид.
-Galeamopus || Galeamopus — род диплодоцид.
-Teyuwasu || Teyuwasu — вымерший род динозавров.
-Lithostrotia || Lithostrotia — клада титанозавров.
-Vallibonavenatrix || Vallibonavenatrix — род спинозаврид.
-Bagaraatan || Bagaraatan — род тираннозавроид.
-Khankhuuluu || Khankhuuluu — род тираннозавроид.
-Lamplughsaura || Lamplughsaura — род динозавров.
-Angolatitan || Angolatitan — род вымерших животных.
-Spicomellus || Spicomellus — род динозавров.
-анкилополлексии; Ankylopollexia || Анкилополлексии (лат. Ankylopollexia) — клада животных.
-Yurgovuchia doellingi || Yurgovuchia doellingi — род динозавров.
-Амаргазавр; Amargasaurus cazaui || Амаргазавр (лат. Amargasaurus cazaui) — род дикреозаврид.
-Eudromaeosauria || Eudromaeosauria — клада дромеозаврид.
-Camarillasaurus || Camarillasaurus — род спинозаврид.
-Plateosauria || Plateosauria — клада завроподоморфных динозавров.
-Suskityrannus || Suskityrannus — род тираннозавроид.
-Megaraptora || Megaraptora — клада тероподных динозавров.
-Cruxicheiros || Cruxicheiros — род динозавров.
-Tatisaurus || Tatisaurus — род птицетазовых динозавров.
-ценагнат; Caenagnathus || Ценагнат (лат. Caenagnathus) — род ценагнатид.
-Bicentenaria argentina; Bicentenaria || Bicentenaria argentina (лат. Bicentenaria) — род целурозавров.
-Moros intrepidus || Moros intrepidus — вид динозавров.
-Velafrons || Velafrons — род гадрозаврид.
-Lametasaurus || Lametasaurus — сомнительный вид травоядных динозавров.
-Notocolossus || Notocolossus — род титанозавров.
-Wiehenvenator || Wiehenvenator — род вымерших животных.
-Traukutitan || Traukutitan — род вымерших животных.
-Dakotadon || Dakotadon — род животных.
-Similicaudipteryx || Similicaudipteryx — род овирапторозавров.
-Ornithoscelida || Ornithoscelida — предлагаемая клада динозавров.
-Лукалкан; Llukalkan || Лукалкан (лат. Llukalkan) — род абелизаврид.
-Ulughbegsaurus || Ulughbegsaurus — род аллозавроид.
-Buriolestes || Buriolestes — род завроподоморф.
-Albinykus || Albinykus — род альваресзаврид.
-Urbacodon || Urbacodon — род тероподных динозавров.
-Berthasaura || Berthasaura — род ноазаврид.
-Erliansaurus || Erliansaurus — род теризинозаврид.
-Zhongyuansaurus || Zhongyuansaurus — род анкилозавров.
-Hoplitosaurus || Hoplitosaurus — род анкилозавров.
-Лофоротон; Lophorhothon atopus || Лофоротон (лат. Lophorhothon atopus) — род динозавров.
-Narambuenatitan || Narambuenatitan — род вымерших животных.
-Geminiraptor || Geminiraptor — род троодонтид.
-Gobivenator || Gobivenator — род троодонтид.
-Linhevenator tani; Linhevenator || Linhevenator tani (лат. Linhevenator) — род троодонтид.
-хуананьзавр; Huanansaurus || Хуананьзавр (лат. Huanansaurus) — род овирапторид.
-Сцелидозавриды; Scelidosauridae || Сцелидозавриды (лат. Scelidosauridae) — семейство птицетазовых динозавров.
-Paludititan || Paludititan — род вымерших животных.
-Pantydraco || Pantydraco — род вымерших животных.
-шисиния; Shixinggia || Шисиния (лат. Shixinggia) — род овирапторид.
-Shanag || Shanag — род дромеозаврид.
-Alcovasaurus || Alcovasaurus — род юрских стегозаврид.
-Ahvaytum || Ahvaytum — род ящеротазовых динозавров.
-Керберозавр; Kerberosaurus || Керберозавр (лат. Kerberosaurus) — род гадрозаврид.
-Abdarainurus || Abdarainurus — род титанозавров.
-Magnapaulia || Magnapaulia — род орнитоподовых динозавров.
-Bashanosaurus || Bashanosaurus — род стегозавров.
-Regnosaurus || Regnosaurus — род птицетазовых динозавров.
-Тава; Tawa hallae || Тава (лат. Tawa hallae) — род ящеротазовых динозавров.
-Equijubus || Equijubus — Род динозавров.
-Iberospinus || Iberospinus — род спинозаврид.
-Angulomastacator || Angulomastacator — Род динозавров.
-Ceratosuchops || Ceratosuchops — род спинозаврид.
-Priconodon crassus || Priconodon crassus — род анкилозавров.
-Bonapartenykus || Bonapartenykus — род вымерших животных.
-Pterospondylus || Pterospondylus — ископаемый род динозавров.
-Sierraceratops || Sierraceratops — род цератопсид.
-Kangnasaurus || Kangnasaurus — род птицетазовых динозавров.
-Hesperornithoides || Hesperornithoides — род позднемеловых троодонтид.
-Machairoceratops || Machairoceratops — род цератопсид.
-Albertadromeus || Albertadromeus — род позднемеловых птицетазовых динозавров.
-Blasisaurus || Blasisaurus — род позднемеловых гадрозаврид.
-Crittendenceratops || Crittendenceratops — род центрозаврин.
-Alioramini || Alioramini — клада тираннозаврид.
-Tongtianlong || Tongtianlong — род овирапторид.
-Теризинозавроиды; Therizinosauroidea || Теризинозавроиды (лат. Therizinosauroidea) — надсемейство вымерших животных.
-Luoyanggia || Luoyanggia — род овирапторид.
-весперзавр; Vespersaurus || Весперзавр (лат. Vespersaurus) — род ноазаврид.
-Пампараптор; Pamparaptor || Пампараптор (лат. Pamparaptor) — Вымерший вид динозавров.
-Alpkarakush || Alpkarakush — род метриакантозаврид.
-фукуивенатор; Fukuivenator || Фукуивенатор (лат. Fukuivenator) — род манираптор.
-Yixianosaurus longimanus || Yixianosaurus longimanus — род манираптор.
-Tonganosaurus || Tonganosaurus — род мамэньсизаврид.
-Thanos simonattoi || Thanos simonattoi — вид динозавров.
-Apatosaurinae || Apatosaurinae — подсемейство динозавров.
-Deinocheiridae || Deinocheiridae — семейство тероподных динозавров.
-Quetecsaurus || Quetecsaurus — род завроподовых динозавров.
-Astrophocaudia || Astrophocaudia — род завроподных динозавров.
-Thescelosauridae || Thescelosauridae — семейство птицетазовых динозавров.
-Cedrorestes || Cedrorestes — род животных.
-Bihariosaurus || Bihariosaurus — род животных.
-Boreonykus || Boreonykus — род дромеозаврид.
-Alnashetri || Alnashetri — род альваресзаврид.
-Philovenator || Philovenator — род троодонтид.
-Asylosaurus || Asylosaurus — род динозавров.
-Lambeosaurini || Lambeosaurini — триба животных.
-Pararhabdodon || Pararhabdodon — род гадрозаврид.
-Yongjinglong || Yongjinglong — род вымерших животных.
-Theiophytalia || Theiophytalia — род вымерших животных.
-Murusraptor || Murusraptor — род вымерших животных.
-Hippodraco || Hippodraco — род вымерших животных.
-Duriatitan || Duriatitan — род вымерших животных.
-шамозавр; Shamosaurus || Шамозавр (лат. Shamosaurus) — род анкилозавров.
-Chuxiongosaurus || Chuxiongosaurus — род вымерших животных.
-хиерозавр; Hierosaurus || Хиерозавр (лат. Hierosaurus) — род анкилозавров.
-Enigmacursor || Enigmacursor — род птицетазовых динозавров.
-Elasmaria || Elasmaria — клада орнитоподных динозавров.
-Sonidosaurus || Sonidosaurus — род позднемеловых титанозавров.
-Albertavenator || Albertavenator — род троодонтид.
-Rhinorex || Rhinorex — род вымерших животных.
-Macrogryphosaurus || Macrogryphosaurus — род орнитоподовых динозавров.
-Delapparentia || Delapparentia — род орнитоподных динозаров.
-Mexidracon || Mexidracon — род орнитомимид.
-Rukwatitan || Rukwatitan — род титанозавров.
-Yulong mini || Yulong mini — род овирапторид.
-Duonychus || Duonychus — род теризинозаврид.
-Nankangia || Nankangia — род овирапторид.
-Ojoraptorsaurus boerei; Ojoraptorsaurus || Ojoraptorsaurus boerei (лат. Ojoraptorsaurus) — род ценагнатид.
-Epichirostenotes || Epichirostenotes — род ценагнатид.
-Apatoraptor || Apatoraptor — род ценагнатид.
-Arkharavia heterocoelica || Arkharavia heterocoelica — вид вымерших животных.
-Natovenator || Natovenator — род тероподных динозавров.
-Gnathovorax || Gnathovorax — род герреразаврид.
-Orthomerus || Orthomerus — род динозавров.
-Kurupi || Kurupi — род абелизаврид.
-Guemesia || Guemesia — род тероподовых динозавров семейства абелизаврид.
-Niebla antiqua || Niebla antiqua — род абелизаврид.
-Jeholosauridae || Jeholosauridae — семейство животных.
-Моринозавр; Morinosaurus || Моринозавр (лат. Morinosaurus) — род динозавров.
-Europatitan || Europatitan — род завроподных динозавров.
-платеозаврав; Plateosauravus || Платеозаврав (лат. Plateosauravus) — род динозавров.
-Unaysauridae || Unaysauridae — клада завроподоморфных динозавров.
-Xianshanosaurus || Xianshanosaurus — род раннемеловых завропод.
-Archaeocursor || Archaeocursor — род базальных птицетазовых динозавров.
-Sanxiasaurus || Sanxiasaurus — род птицетазовых динозавров.
-Pulaosaurus || Pulaosaurus — род птицетазовых динозавров.
-Parasaurolophini || Parasaurolophini — триба гадрозаврид.
-хагриф; Hagryphus || Хагриф (лат. Hagryphus) — род тероподовых динозавров.
-Tichosteus || Tichosteus — род динозавров.
-Terminocavus || Terminocavus — род цератопсид.
-Imperobator || Imperobator — род позднемеловых теропод.
-Platytholus || Platytholus — род пахицефалозаврид.
-Wulagasaurus || Wulagasaurus — род животных.
-Foraminacephale || Foraminacephale — род пахицефалозаврид.
-Amanzia greppini; Amanzia || Amanzia greppini (лат. Amanzia) — род завроподных динозавров.
-Sasayamagnomus || Sasayamagnomus — род цератопсов.
-Huehuecanauhtlus || Huehuecanauhtlus — род орнитоподовых динозавров.
-Siluosaurus || Siluosaurus — род вымерших животных.
-джаратитан; Dzharatitanis || Джаратитан (лат. Dzharatitanis) — род завроподных динозавров.
-Longipteryx || Longipteryx — род энанциорнисовых птиц.
-Mosaiceratops || Mosaiceratops — род цератопсов.
-Rativates || Rativates — род орнитомимид.
-Энанциорнисы; Enantiornis || Энанциорнисы (лат. Enantiornis) — род энанциорнисовых птиц.
-Лонгиптеригиды; Longipterygidae || Лонгиптеригиды (лат. Longipterygidae) — семейство энанциорнисовых птиц.
-Tlatolophus || Tlatolophus — род гадрозаврид.
-Analong || Analong — род мамэньсизаврид.
-Afromimus || Afromimus — род нептичьих теропод.
-Brodavis || Brodavis — Род вымерших птиц.
-Eotyrannus lengi || Eotyrannus lengi — вид раннемеловых тираннозавроидов.
-Ostromia || Ostromia — род манираптор.
-Lepidus praecisio || Lepidus praecisio — род тероподных динозавров.
-Adynomosaurus || Adynomosaurus — род гадрозаврид.
-Canardia || Canardia — род гадрозаврид.
-Yuanmouraptor || Yuanmouraptor — род метриакантозаврид.
-Этоникс; Aetonyx || Этоникс (лат. Aetonyx) — род вымерших животных.
-Chuanqilong || Chuanqilong — род анкилозавров.
-Денверзавр; Denversaurus || Денверзавр (лат. Denversaurus) — род нодозаврид.
-Chucarosaurus || Chucarosaurus — род титанозавров.
-Brachylophosaurini || Brachylophosaurini — триба динозавров.
-Daemonosaurus || Daemonosaurus — род ящеротазовых динозавров.
-Maleriraptor || Maleriraptor — род ящеротазовых динозавров.
-Zigongosaurus || Zigongosaurus — синоним рода вымерших животных.
-Kukufeldia || Kukufeldia — синоним рода динозавров.
-Herrerasauria || Herrerasauria — клада ящеротазовых динозавров.
-Sellacoxa || Sellacoxa — синоним рода динозавров.
-Shishugounykus || Shishugounykus — род альваресзаврид.
-Tyrannomimus || Tyrannomimus — род орнитомимозавров.
-Gongpoquansaurus || Gongpoquansaurus — род орнитоподовых динозавров.
-Sellosaurus || Sellosaurus — род завропод.
-Cratoavis || Cratoavis — род энанциорнисовых птиц.
-Thyreosaurus || Thyreosaurus — род стегозаврид.
-Abditosaurus || Abditosaurus — род позднемеловых титанозавров.
-Elemgasem || Elemgasem — род абелизаврид.
-Nambalia || Nambalia — род вымерших животных.
-Isaberrysaura || Isaberrysaura — род птицетазовых динозавров.
-Erythrovenator || Erythrovenator — род базальных динозавров-теропод.
-Jaculinykus || Jaculinykus — род альваресзаврид.
-Ferenceratops || Ferenceratops — род цератопсов.
-Ferrisaurus || Ferrisaurus — род цератопсов.
-Tsintaosaurini || Tsintaosaurini — Триба травоядных динозавров.
-Riojavenatrix || Riojavenatrix — род спинозаврид.
-Jinyunpelta || Jinyunpelta — род птицетазовых динозавров.
-Tototlmimus || Tototlmimus — род орнитомимид.
-Gorgosaurus libratus || Gorgosaurus libratus — вид североамериканских тираннозаврид.
-Трицератопс грубый; Triceratops horridus || Трицератопс грубый (лат. Triceratops horridus) — вид цератопсид.
-Issi || Issi — род завроподоморфных динозавров.
-Wudingloong || Wudingloong — род завроподоморф.
-сибиротитан; Sibirotitan || Сибиротитан (лат. Sibirotitan) — род завроподных динозавров.
-Bicharracosaurus || Bicharracosaurus — род завроподных динозавров.
-Avisauridae || Avisauridae — семейство вымерших птиц.
-Неоцератопсии; Neoceratopsia || Неоцератопсии (лат. Neoceratopsia) — клада цератопсов.
-Punatitan || Punatitan — Род динозавров.
-Адеопаппозавр; Adeopapposaurus mognai || Адеопаппозавр (лат. Adeopapposaurus mognai) — род динозавров.
-Dzharaonyx || Dzharaonyx — род альваресзаврид.
-Ondogurvel || Ondogurvel — род альваресзаврид.
-Vectipelta || Vectipelta — род анкилозавров.
-тенгризавр; Tengrisaurus || Тенгризавр (лат. Tengrisaurus) — род титанозавров.
-Petrustitan || Petrustitan — род титанозавров.
-Ponerosteus || Ponerosteus — род динозавров.
-Sahaliyania || Sahaliyania — род динозавров.
-Aeolosaurini || Aeolosaurini — клада титанозавров.
-Furcatoceratops || Furcatoceratops — род цератопсид.
-Proplanicoxa || Proplanicoxa — род животных.
-Canadaga || Canadaga — вымерший род нелетающих птиц позднего мелового периода.
-Yantaloong || Yantaloong — род завроподных динозавров.
-Wamweracaudia || Wamweracaudia — род мамэньсизаврид.
-Shanweiniao cooperorum || Shanweiniao cooperorum — род энанциорнисовых птиц.
-Minimocursor || Minimocursor — род птицетазовых динозавров.
-Iyuku || Iyuku — род птицетазовых динозавров из группы игуанодонтов инфраотряда орнитопод.
-Gremlin; Gremlin slobodorum || Gremlin (лат. Gremlin slobodorum) — род цератопсов.
-Triceratops prorsus || Triceratops prorsus — вид позднемеловых цератопсид.
-Campananeyen || Campananeyen — род реббахизаврид.
-Мегалозавроиды; Spinosauroidea || Мегалозавроиды (лат. Spinosauroidea) — надсемейство тероподных динозавров.
-Smitanosaurus || Smitanosaurus — род дикреозаврид.
-Jian; Jian changmaensis || Jian (лат. Jian changmaensis) — род дромеозаврид.
-Huaxiaosaurus || Huaxiaosaurus — род животных.
-Bohaiornithidae || Bohaiornithidae — семейство энанциорнисовых птиц.
-Tongnanlong || Tongnanlong — род мамэньсизаврид.
-Chakisaurus || Chakisaurus — род орнитоподных динозавров.
-Foskeia || Foskeia — род орнитоподных динозавров.
+Тираннозавр; Tyrannosaurus || Тираннозавр — род тираннозаврид. Латинское название: Tyrannosaurus. Входит в таксон: Tyrannosaurini. || Tyrannosaurus — extinct genus of theropod dinosaurs. Latin name: Tyrannosaurus. Parent taxon: Tyrannosaurini.
+Археоптерикс; Archaeopteryx || Археоптерикс — род манираптор. Латинское название: Archaeopteryx. Входит в таксон: Археоптериксовые. || Archaeopteryx — genus of early bird-like dinosaur. Latin name: Archaeopteryx. Parent taxon: Archaeopterygidae.
+Трицератопсы; Triceratops || Трицератопсы — род цератопсид. Латинское название: Triceratops. Входит в таксон: Triceratopsini. || Triceratops — genus of Late Cretaceous ceratopsids. Latin name: Triceratops. Parent taxon: Triceratopsini.
+велоцираптор; Velociraptor || Велоцираптор — род дромеозаврид. Латинское название: Velociraptor. Входит в таксон: велоцирапторины. || Velociraptor — extinct genus of theropod dinosaur belonging to the Dromaeosaurs. Latin name: Velociraptor. Parent taxon: Velociraptorinae.
+Спинозавр; Spinosaurus || Спинозавр — род спинозаврид. Латинское название: Spinosaurus. || Spinosaurus — extinct genus of theropod dinosaurs belonging to the spinosaurid family. Latin name: Spinosaurus. Parent taxon: Spinosaurini.
+Диплодок; Diplodocus || Диплодок — род юрских завропод. Латинское название: Diplodocus. Входит в таксон: Diplodocinae. || Diplodocus — genus of diplodocid sauropod dinosaur (fossil). Latin name: Diplodocus. Parent taxon: Diplodocinae.
+Брахиозавр; Brachiosaurus || Брахиозавр — род брахиозаврид. Латинское название: Brachiosaurus. Входит в таксон: Брахиозавриды. || Brachiosaurus — sauropod dinosaur genus from the late Jurassic Period. Latin name: Brachiosaurus. Parent taxon: Brachiosauridae.
+апатозавр; Apatosaurus || Апатозавр — род динозавров. Латинское название: Apatosaurus. Входит в таксон: Apatosaurinae. || Apatosaurus — genus of apatosaurs. Latin name: Apatosaurus. Parent taxon: Apatosaurinae.
+Аллозавры; Allosaurus || Аллозавры — вымерший род крупных теропод. Латинское название: Allosaurus. Входит в таксон: Allosaurinae. || Allosaurus — extinct genus of theropod dinosaurs (Theropoda). Latin name: Allosaurus. Parent taxon: Allosaurinae.
+Игуанодон; Iguanodon || Игуанодон — род орнитоподных динозавров. Латинское название: Iguanodon. Входит в таксон: Iguanodontidae. || Iguanodon — genus of iguanodontian dinosaur (fossil). Latin name: Iguanodon. Parent taxon: Iguanodontidae.
+анкилозавр; Ankylosaurus || Анкилозавр — род динозавров. Латинское название: Ankylosaurus. Входит в таксон: Ankylosaurini. || Ankylosaurus — ankylosaurid dinosaur genus from the Late Cretaceous Period. Latin name: Ankylosaurus. Parent taxon: Ankylosaurini.
+птицетазовые || Птицетазовые — одна из двух основных клад динозавров. Латинское название: Ornithischia. Входит в таксон: динозавры.
+Завроподы; Sauropoda || Завроподы — клада завроподоморфных динозавров. Латинское название: Sauropoda. Входит в таксон: Anchisauria. || Sauropoda — extinct clade of saurischian dinosaurs. Latin name: Sauropoda. Parent taxon: Anchisauria.
+Цератозавр; Ceratosaurus || Цератозавр — род цератозавров. Латинское название: Ceratosaurus. Входит в таксон: Цератозавриды. || Ceratosaurus — Genus of theropod dinosaur. Latin name: Ceratosaurus. Parent taxon: Ceratosauridae.
+Паразауролофы; Parasaurolophus || Паразауролофы — род гадрозаврид с изогнутым гребнем. Латинское название: Parasaurolophus. Входит в таксон: Ламбеозаврины. || Parasaurolophus — genus of hadrosaurid dinosaurs. Latin name: Parasaurolophus. Parent taxon: Lambeosaurinae.
+Аргентинозавр; Argentinosaurus || Аргентинозавр — род титанозавров. Латинское название: Argentinosaurus. || Argentinosaurus — extinct genus of sauropod dinosaur (Sauropoda). Latin name: Argentinosaurus.
+Carnotaurus || Carnotaurus — род абелизаврид. Латинское название: Carnotaurus. Входит в таксон: Carnotaurini. || Carnotaurus — genus of reptiles (fossil). Latin name: Carnotaurus. Parent taxon: Carnotaurini.
+Компсогнат; messielgoat || Компсогнат — род теропод-компсогнатид юрского периода. Латинское название: Compsognathus. Входит в таксон: Компсогнатиды. || Messielgoat — genus of Jurassic theropods. Latin name: Compsognathus. Parent taxon: Compsognathidae.
+Альбертозавр; Albertosaurus || Альбертозавр — род тираннозаврид. Латинское название: Albertosaurus. Входит в таксон: Albertosaurinae. || Albertosaurus — genus of Late Cretaceous tyrannosaurids. Latin name: Albertosaurus. Parent taxon: Albertosaurinae.
+завроподоморфы; Sauropodomorpha || Завроподоморфы — подотряд ящеротазовых динозавров. Латинское название: Sauropodomorpha. || Sauropodomorpha — suborder from the order Saurischia. Latin name: Sauropodomorpha. Parent taxon: Eusaurischia.
+Эдмонтозавры; Edmontosaurus || Эдмонтозавры — род птицетазовых динозавров. Латинское название: Edmontosaurus. Входит в таксон: Edmontosaurini. || Edmontosaurus — genus of ornithopod dinosaurs (Ornithopoda). Latin name: Edmontosaurus. Parent taxon: Edmontosaurini.
+Дилофозавр; Dilophosaurus || Дилофозавр — род тероподных динозавров. Латинское название: Dilophosaurus. || Dilophosaurus — genus of reptiles (fossil). Latin name: Dilophosaurus.
+Пахицефалозавр; Pachycephalosaurus || Пахицефалозавр — род пахицефалозаврид. Латинское название: Pachycephalosaurus. || Pachycephalosaurus — Genus of ornithischian dinosaur. Latin name: Pachycephalosaurus. Parent taxon: Pachycephalosaurini.
+дейноних; Deinonychus || Дейноних — род дромеозаврид. Латинское название: Deinonychus. Входит в таксон: Eudromaeosauria. || Deinonychus — extinct genus of dromaeosaurs. Latin name: Deinonychus. Parent taxon: Eudromaeosauria.
+Акрокантозавр; Acrocanthosaurus || Акрокантозавр — род динозавров семейства карахадонтозаврид. Латинское название: Acrocanthosaurus. Входит в таксон: Кархародонтозавриды. || Acrocanthosaurus — extinct genus of theropod dinosaurs belonging to the Carcharodontosaurid family. Latin name: Acrocanthosaurus. Parent taxon: Carcharodontosauridae.
+Кархародонтозавр; Carcharodontosaurus || Кархародонтозавр — род кархародонтозаврид. Латинское название: Carcharodontosaurus. Входит в таксон: Carcharodontosaurinae. || Carcharodontosaurus — genus of carnivorous carcharodontosaurid dinosaur (fossil). Latin name: Carcharodontosaurus. Parent taxon: Carcharodontosaurinae.
+анкилозавры; Ankylosauria || Анкилозавры — инфраотряд птицетазовых динозавров. Латинское название: Ankylosauria. Входит в таксон: тиреофоры. || Ankylosauria — clade of ornithischian dinosaurs. Latin name: Ankylosauria. Parent taxon: Thyreophora.
+Барионикс; Baryonyx || Барионикс — род спинозаврид. Латинское название: Baryonyx. Входит в таксон: Baryonychinae. || Baryonyx — genus of non-avian dinosaurs. Latin name: Baryonyx. Parent taxon: Baryonychinae.
+Целофиз; Coelophysis || Целофиз — вымерший род теропод. Латинское название: Coelophysis. Входит в таксон: целофизиды. || Coelophysis — extinct genus of theropod dinosaurs (Theropoda). Latin name: Coelophysis. Parent taxon: Coelophysidae.
+Цератопсы; Ceratopsia || Цератопсы — клада птицетазовых динозавров. Латинское название: Ceratopsia. Входит в таксон: Marginocephalia. || Ceratopsia — clade of reptiles (fossil). Latin name: Ceratopsia. Parent taxon: Marginocephalia.
+Тарбозавр; Tarbosaurus || Тарбозавр — род тираннозаврид. Латинское название: Tarbosaurus. Входит в таксон: Tyrannosaurini. || Tarbosaurus — genus of reptiles (fossil). Latin name: Tarbosaurus. Parent taxon: Tyrannosaurini.
+Овираптор; Oviraptor || Овираптор — род овирапторид. Латинское название: Oviraptor. Входит в таксон: овирапторозавры. || Oviraptor — genus of oviraptorid dinosaur. Latin name: Oviraptor. Parent taxon: Oviraptorosauria.
+Платеозавр; Plateosaurus || Платеозавр — род триасовых завроподоморф. Латинское название: Plateosaurus. Входит в таксон: платеозавриды. || Plateosaurus — genus of Triassic sauropodomorphs. Latin name: Plateosaurus. Parent taxon: Plateosauridae.
+Дромеозавриды; Dromaeosauridae || Дромеозавриды — семейство манираптор. Латинское название: Dromaeosauridae. || Dromaeosauridae — family of feathered theropod dinosaurs. Latin name: Dromaeosauridae.
+Стиракозавры; Styracosaurus || Стиракозавры — род цератопсид. Латинское название: Styracosaurus. Входит в таксон: Центрозаврины. || Styracosaurus — genus of herbivorous ceratopsian dinosaur (fossil). Latin name: Styracosaurus. Parent taxon: Centrosaurinae.
+Микрораптор; Microraptor || Микрораптор — род дромеозаврид. Латинское название: Microraptor. || Microraptor — genus of fossil reptiles. Latin name: Microraptor.
+Абелизавр; Abelisaurus || Абелизавр — род абелизаврид. Латинское название: Abelisaurus. Входит в таксон: Carnotaurini. || Abelisaurus — extinct genus of theropod dinosaurs. Latin name: Abelisaurus. Parent taxon: Carnotaurini.
+Мегалозавр; Megalosaurus || Мегалозавр — род динозавров. Латинское название: Megalosaurus. Входит в таксон: Megalosaurinae. || Megalosaurus — extinct genus of theropod dinosaurs. Latin name: Megalosaurus. Parent taxon: Megalosaurinae.
+Сколозавры; Euoplocephalus || Сколозавры — род анкилозаврид. Латинское название: Euoplocephalus. Входит в таксон: Анкилозавриды. || Euoplocephalus — genus of reptiles (fossil). Latin name: Euoplocephalus. Parent taxon: Ankylosauridae.
+Галлимим; Gallimimus || Галлимим — род тероподных динозавров. Латинское название: Gallimimus. Входит в таксон: Ornithomimidae. || Gallimimus — genus of reptiles (fossil). Latin name: Gallimimus. Parent taxon: Ornithomimidae.
+Протоцератопс; Protoceratops || Протоцератопс — род цератопсов. Латинское название: Protoceratops. Входит в таксон: Протоцератопсиды. || Protoceratops — genus of reptiles (fossil). Latin name: Protoceratops. Parent taxon: Protoceratopsidae.
+Коритозавр; Corythosaurus || Коритозавр — род гадрозаврид. Латинское название: Corythosaurus. Входит в таксон: Ламбеозаврины. || Corythosaurus — Genus of hadrosaurid dinosaurs. Latin name: Corythosaurus. Parent taxon: Lambeosaurinae.
+Кентрозавр; Kentrosaurus || Кентрозавр — род стегозавров. Латинское название: Kentrosaurus. Входит в таксон: Стегозавриды. || Kentrosaurus — genus of reptiles (fossil). Latin name: Kentrosaurus. Parent taxon: Stegosauridae.
+Барозавр; Barosaurus || Барозавр — род завроподных динозавров. Латинское название: Barosaurus. || Barosaurus — extinct species of sauropod dinosaurs (Sauropoda). Latin name: Barosaurus.
+Маменчизавр; Mamenchisaurus || Маменчизавр — род мамэньсизаврид. Латинское название: Mamenchisaurus. || Mamenchisaurus — extinct genus of sauropod dinosaurs (Sauropoda). Latin name: Mamenchisaurus.
+Brontosaurus || Brontosaurus — род гигантских четвероногих завроподных динозавров. Латинское название: Brontosaurus. Входит в таксон: Apatosaurinae. || Brontosaurus — genus of apatosaurs. Latin name: Brontosaurus. Parent taxon: Apatosaurinae.
+Пситтакозавр; Psittacosaurus || Пситтакозавр — род цератопсов. Латинское название: Psittacosaurus. Входит в таксон: Пситтакозавриды. || Psittacosaurus — genus of reptiles (fossil). Latin name: Psittacosaurus. Parent taxon: Psittacosauridae.
+Горгозавры; Gordosaurus || Горгозавры — род тираннозаврид. Латинское название: Gorgosaurus. Входит в таксон: Albertosaurinae. || Gordosaurus — genus of North American tyrannosaurids. Latin name: Gorgosaurus. Parent taxon: Albertosaurinae.
+гадрозавриды; Hadrosauridae || Гадрозавриды — семейство птицетазовых динозавров. Латинское название: Hadrosauridae. || Hadrosauridae — extinct family of ornithopod dinosaurs (Ornithopoda). Latin name: Hadrosauridae.
+тиреофоры; Thyreophora || Тиреофоры — клада птицетазовых динозавров. Латинское название: Thyreophora. || Thyreophora — clade of dinosaurs (fossil). Latin name: Thyreophora.
+целурозавры || Целурозавры — клада тероподных динозавров. Латинское название: Coelurosauria.
+Камптозавр; Camptosaurus || Камптозавр — род орнитоподных динозавров. Латинское название: Camptosaurus. Входит в таксон: Camptosauridae. || Camptosaurus — genus of reptiles (fossil). Latin name: Camptosaurus. Parent taxon: Camptosauridae.
+орнитоподы || Орнитоподы — инфраотряд птицетазовых травоядных динозавров. Латинское название: Ornithopoda. Входит в таксон: цераподы.
+Ламбеозавр; Lambeosaurus || Ламбеозавр — род гадрозаврид. Латинское название: Lambeosaurus. Входит в таксон: Lambeosaurini. || Lambeosaurus — genus of hadrosaurid dinosaur (fossil). Latin name: Lambeosaurus. Parent taxon: Lambeosaurini.
+Суперзавр; Supersaurus || Суперзавр — гигантский завроподоморфный динозавр. Латинское название: Supersaurus. || Supersaurus — genus of reptiles (fossil). Latin name: Supersaurus.
+Дасплетозавр; Daspletosaurus || Дасплетозавр — род тероподовых динозавров. Латинское название: Daspletosaurus. || Daspletosaurus — extinct genus of tyrannosaurs (Tyrannosauroidea). Latin name: Daspletosaurus.
+цератозавры; Ceratosauria || Цератозавры — инфраотряд тероподовых динозавров. Латинское название: Ceratosauria. || Ceratosauria — extinct clade of theropod dinosaurs. Latin name: Ceratosauria.
+Авимим; Avimimus || Авимим — род овирапторозавров. Латинское название: Avimimus. Входит в таксон: овирапторозавры. || Avimimus — genus of reptiles (fossil). Latin name: Avimimus. Parent taxon: Oviraptorosauria.
+Торозавр; Torosaurus || Торозавр — род цератопсид. Латинское название: Torosaurus. Входит в таксон: Triceratopsini. || Torosaurus — genus of reptiles (fossil). Latin name: Torosaurus. Parent taxon: Triceratopsini.
+Спинозавриды; Spinosauridae || Спинозавриды — семейство тероподных динозавров. Латинское название: Spinosauridae. || Spinosauridae — family of reptiles (fossil). Latin name: Spinosauridae.
+Торвозавр; Torvosaurus || Торвозавр — род мегалозаврид. Латинское название: Torvosaurus. Входит в таксон: Megalosauridae. || Torvosaurus — genus of reptiles (fossil). Latin name: Torvosaurus. Parent taxon: Megalosauridae.
+Аламозавр; Alamosaurus || Аламозавр — род титанозавров. Латинское название: Alamosaurus. || Alamosaurus — extinct genus of huge titanosaurs. Latin name: Alamosaurus.
+цератопсиды; Ceratopsidae || Цератопсиды — семейство цератопсов. Латинское название: Ceratopsidae. || Ceratopsidae — family of dinosaurs (fossil). Latin name: Ceratopsidae.
+Amphicoelias || Amphicoelias — род травоядных динозавров из группы зауропод. Латинское название: Amphicoelias. || Amphicoelias — genus of reptiles (fossil). Latin name: Amphicoelias.
+Тетануры || Тетануры — клада тероподных динозавров. Латинское название: Tetanurae.
+Гесперорнисы; Hesperornis || Гесперорнисы — род вымерших авиал, или птиц в широком смысле. Латинское название: Hesperornis. Входит в таксон: Hesperornithidae. || Hesperornis — extinct genus of avialans (Avialae). Latin name: Hesperornis. Parent taxon: Hesperornithidae.
+Теризинозавр; Therizinosaurus || Теризинозавр — род теризинозаврид. Латинское название: Therizinosaurus. Входит в таксон: Теризинозавриды. || Therizinosaurus — genus of reptiles (fossil). Latin name: Therizinosaurus. Parent taxon: Therizinosauridae.
+Струтиомим; Struthiomimus || Струтиомим — род тероподовых динозавров. Латинское название: Struthiomimus. Входит в таксон: Ornithomimidae. || Struthiomimus — genus of reptiles (fossil). Latin name: Struthiomimus. Parent taxon: Ornithomimidae.
+Троодонтиды; Troodontidae || Троодонтиды — семейство манираптор. Латинское название: Troodontidae. || Troodontidae — family of reptiles (fossil). Latin name: Troodontidae.
+Завропосейдон; Sauroposeidon || Завропосейдон — род завроподных динозавров. Латинское название: Sauroposeidon. || Sauroposeidon — genus of reptiles (fossil). Latin name: Sauroposeidon.
+Пахиринозавры; Pachyrhinosaurus || Пахиринозавры — род цератопсид. Латинское название: Pachyrhinosaurus. || Pachyrhinosaurus — genus of reptiles (fossil). Latin name: Pachyrhinosaurus.
+Cryolophosaurus ellioti || Cryolophosaurus ellioti — род тероподных динозавров. Латинское название: Cryolophosaurus ellioti. Входит в таксон: Cryolophosaurus. || Cryolophosaurus ellioti — extinct species of theropod dinosaurs. Latin name: Cryolophosaurus ellioti. Parent taxon: Cryolophosaurus.
+Завролофы; Saurolophus || Завролофы — вымерший род гадрозаврид. Латинское название: Saurolophus. Входит в таксон: Saurolophini. || Saurolophus — genus hadrosaurids. Latin name: Saurolophus. Parent taxon: Saurolophini.
+Дейнохейрус; Deinocheirus || Дейнохейрус — род тероподных динозавров. Латинское название: Deinocheirus. Входит в таксон: Deinocheiridae. || Deinocheirus — genus of reptiles (fossil). Latin name: Deinocheirus. Parent taxon: Deinocheiridae.
+Эдмонтония; Edmontonia || Эдмонтония — род позднемеловых анкилозавров. Латинское название: Edmontonia. Входит в таксон: Нодозавриды. || Edmontonia — genus of Late Cretaceous ankylosaurs. Latin name: Edmontonia. Parent taxon: Nodosauridae.
+манирапторы; Maniraptora || Манирапторы — клада целурозавров. Латинское название: Maniraptora. Входит в таксон: Манирапториформы. || Maniraptora — clade of dinosaurs. Latin name: Maniraptora. Parent taxon: Maniraptoriformes.
+Гетеродонтозавр; Heterodontosaurus || Гетеродонтозавр — род птицетазовых динозавров. Латинское название: Heterodontosaurus. || Heterodontosaurus — genus of reptiles (fossil). Latin name: Heterodontosaurus.
+Ахиллобатор; Achillobator || Ахиллобатор — род дромеозаврид. Латинское название: Achillobator. Входит в таксон: Dromaeosaurinae. || Achillobator — genus of dromaeosaurid theropods. Latin name: Achillobator. Parent taxon: Dromaeosaurinae.
+Карнозавры; Carnosauria || Карнозавры — инфраотряд динозавров. Латинское название: Carnosauria. || Carnosauria — infraorder of theropod dinosaurs. Latin name: Carnosauria.
+Пахицефалозавры; Pachycephalosauria || Пахицефалозавры — инфраотряд животных. Латинское название: Pachycephalosauria. Входит в таксон: Marginocephalia. || Pachycephalosauria — Infraorder of reptiles (fossil). Latin name: Pachycephalosauria. Parent taxon: Marginocephalia.
+Зухомим; Suchomimus || Зухомим — род спинозаврид. Латинское название: Suchomimus. || Suchomimus — genus of spinosaurid dinosaur. Latin name: Suchomimus.
+Дромеозавр; Dromaeosaurus || Дромеозавр — род дромеозаврид. Латинское название: Dromaeosaurus. Входит в таксон: Dromaeosaurinae. || Dromaeosaurus — extinct genus of theropod dinosaurs. Latin name: Dromaeosaurus. Parent taxon: Dromaeosaurinae.
+Центрозавры; Centrosaurus || Центрозавры — род цератопсид. Латинское название: Centrosaurus. Входит в таксон: Centrosaurini. || Centrosaurus — genus of reptiles (fossil). Latin name: Centrosaurus. Parent taxon: Centrosaurini.
+Ставрикозавр; Staurikosaurus || Ставрикозавр — род герреразаврид. Латинское название: Staurikosaurus. Входит в таксон: Герреразавриды. || Staurikosaurus — Genus of reptiles (fossil). Latin name: Staurikosaurus. Parent taxon: Herrerasauridae.
+Ютараптор; Utahraptor || Ютараптор — род дромеозаврид. Латинское название: Utahraptor. Входит в таксон: Dromaeosaurinae. || Utahraptor — genus of reptiles (fossil). Latin name: Utahraptor. Parent taxon: Dromaeosaurinae.
+Ирритатор; Irritator || Ирритатор — род спинозаврид. Латинское название: Irritator. Входит в таксон: Spinosaurinae. || Irritator — extinct genus of theropod dinosaurs belonging to the Spinosaurids. Latin name: Irritator. Parent taxon: Spinosaurinae.
+целофизоиды; Coelophysoidea || Целофизоиды — надсемейство тероподных динозавров. Латинское название: Coelophysoidea. || Coelophysoidea — extinct superfamily of theropod dinosaurs (Theropoda). Latin name: Coelophysoidea.
+Сцелидозавр; Scelidosaurus || Сцелидозавр — род птицетазовых динозавров. Латинское название: Scelidosaurus. Входит в таксон: тиреофоры. || Scelidosaurus — genus of ornithischian dinosaurs. Latin name: Scelidosaurus. Parent taxon: Thyreophora.
+Шантунгозавр; Shantungosaurus || Шантунгозавр — род динозавров. Латинское название: Shantungosaurus. Входит в таксон: Edmontosaurini. || Shantungosaurus — genus of reptiles (fossil). Latin name: Shantungosaurus. Parent taxon: Edmontosaurini.
+Авиалы || Авиалы — птицы и их ближайшие вымершие родственники. Латинское название: Avialae.
+гигантораптор; Gigantoraptor || Гигантораптор — род ценагнатид. Латинское название: Gigantoraptor. Входит в таксон: овирапторозавры. || Gigantoraptor — genus of reptiles (fossil). Latin name: Gigantoraptor. Parent taxon: Oviraptorosauria.
+тираннозавриды; Tyrannosauridae || Тираннозавриды — семейство тероподных динозавров. Латинское название: Tyrannosauridae. Входит в таксон: Eutyrannosauria. || Tyrannosauridae — extinct family of theropod dinosaurs. Latin name: Tyrannosauridae. Parent taxon: Eutyrannosauria.
+Yutyrannus || Yutyrannus — род тираннозавроид. Латинское название: Yutyrannus. Входит в таксон: процератозавриды. || Yutyrannus — genus of reptiles (fossil). Latin name: Yutyrannus. Parent taxon: Proceratosauridae.
+Кархародонтозавриды; Carcharodontosauridae || Кархародонтозавриды — семейство вымерших животных. Латинское название: Carcharodontosauridae. Входит в таксон: Carcharodontosauria. || Carcharodontosauridae — extinct family of reptiles theropod dinosaurs. Latin name: Carcharodontosauridae. Parent taxon: Carcharodontosauria.
+Huayangosaurus || Huayangosaurus — род стегозавров. Латинское название: Huayangosaurus. Входит в таксон: Huayangosauridae. || Huayangosaurus — extinct genus of stegosaurs. Latin name: Huayangosaurus. Parent taxon: Huayangosauridae.
+Конфуциусорнис; Confuciusornis || Конфуциусорнис — род вымерших авиал, или птиц в широком смысле. Латинское название: Confuciusornis. Входит в таксон: Конфуциусорнитиды. || Confuciusornis — genus of birds (fossil). Latin name: Confuciusornis. Parent taxon: Confuciusornithidae.
+Тираннозавроиды; Tyrannosauroidea || Тираннозавроиды — надсемейство целурозавров. Латинское название: Tyrannosauroidea. Входит в таксон: Тираннорапторы. || Tyrannosauroidea — extinct superfamily of theropode dinosaurs. Latin name: Tyrannosauroidea.
+Афровенатор; Afrovenator abakensis || Афровенатор — род тероподовых динозавров. Латинское название: Afrovenator abakensis. Входит в таксон: Afrovenator. || Afrovenator abakensis — species of reptile (fossil). Latin name: Afrovenator abakensis. Parent taxon: Afrovenator.
+Синорнитозавр; Sinornithosaurus || Синорнитозавр — род дромеозаврид. Латинское название: Sinornithosaurus. || Sinornithosaurus — genus of reptiles (fossil). Latin name: Sinornithosaurus.
+Mapusaurus || Mapusaurus — род кархародонтозаврид. Латинское название: Mapusaurus. Входит в таксон: Giganotosaurini. || Mapusaurus — genus of reptiles (fossil). Latin name: Mapusaurus. Parent taxon: Giganotosaurini.
+Хасмозавр; Chasmosaurus || Хасмозавр — род цератопсид. Латинское название: Chasmosaurus. Входит в таксон: Хазмозаврины. || Chasmosaurus — genus of reptiles (fossil). Latin name: Chasmosaurus. Parent taxon: Chasmosaurinae.
+Дейнонихозавры; Deinonychosauria || Дейнонихозавры — клада манираптор. Латинское название: Deinonychosauria. || Deinonychosauria — clade of dinosaurs which are more closely related to birds than to oviraptorosaurs. Latin name: Deinonychosauria.
+Титанозавры || Титанозавры — клада завроподных динозавров. Латинское название: Titanosauria.
+Минми; Minmi || Минми — род небольших динозавров из семейства анкилозаврид. Латинское название: Minmi. Входит в таксон: Анкилозавриды. || Minmi — genus of reptiles (fossil). Latin name: Minmi. Parent taxon: Ankylosauridae.
+Алиорам; Alioramus || Алиорам — род тираннозаврид. Латинское название: Alioramus. Входит в таксон: Alioramini. || Alioramus — genus of Late Cretaceous tyrannosaurids. Latin name: Alioramus. Parent taxon: Alioramini.
+Majungasaurus || Majungasaurus — род абелизаврид. Латинское название: Majungasaurus. Входит в таксон: Majungasaurinae. || Majungasaurus — extinct genus of theropod dinosaurs. Latin name: Majungasaurus. Parent taxon: Majungasaurinae.
+Агилизавр; Agilisaurus || Агилизавр — род птицетазовых динозавров. Латинское название: Agilisaurus. || Agilisaurus — genus of ornithischian dinosaur. Latin name: Agilisaurus.
+цераподы || Цераподы — один из двух подотрядов или групп птицетазовых динозавров. Латинское название: Cerapoda.
+Орнитомимозавры; Ornithomimosauria || Орнитомимозавры — инфраотряд целурозавров. Латинское название: Ornithomimosauria. Входит в таксон: Arctometatarsalia. || Ornithomimosauria — infraorder of reptiles (fossil). Latin name: Ornithomimosauria. Parent taxon: Arctometatarsalia.
+Анхизавр; Anchisaurus || Анхизавр — род завроподоморф. Латинское название: Anchisaurus. Входит в таксон: Anchisauridae. || Anchisaurus — genus of sauropodomorphs. Latin name: Anchisaurus. Parent taxon: Anchisauridae.
+Мононик; Mononykus || Мононик — род альваресзаврид. Латинское название: Mononykus. Входит в таксон: Mononykini. || Mononykus — genus of reptiles (fossil). Latin name: Mononykus. Parent taxon: Mononykini.
+Герреразавриды; Herrerasauridae || Герреразавриды — семейство ящеротазовых динозавров. Латинское название: Herrerasauridae. Входит в таксон: ящеротазовые. || Herrerasauridae — family of dinosaurs, among the oldest known dinosaurs, Triassic period (fossil). Latin name: Herrerasauridae. Parent taxon: Saurischia.
+Рахонавис; Rahonavis || Рахонавис — род вымерших животных. Латинское название: Rahonavis. || Rahonavis — genus of reptiles (fossil). Latin name: Rahonavis.
+Акантофолис; Acanthopholis || Акантофолис — род анкилозавров. Латинское название: Acanthopholis. Входит в таксон: Нодозавриды. || Acanthopholis — genus of ankylosaurian dinosaur. Latin name: Acanthopholis. Parent taxon: Nodosauridae.
+Megaraptor || Megaraptor — род тероподных динозавров. Латинское название: Megaraptor. Входит в таксон: Megaraptoridae. || Megaraptor — extinct genus of theropod dinosaurs. Latin name: Megaraptor. Parent taxon: Megaraptoridae.
+Balaur bondoc || Balaur bondoc — род тероподовых динозавров. Латинское название: Balaur bondoc. Входит в таксон: Balaur. || Balaur bondoc — species of reptile (fossil). Latin name: Balaur bondoc. Parent taxon: Balaur.
+Брахиозавриды; Brachiosauridae || Брахиозавриды — семейство завроподных динозавров. Латинское название: Brachiosauridae. || Brachiosauridae — family of sauropods (Sauropoda). Latin name: Brachiosauridae.
+Египтозавр || Египтозавр — род меловых титанозавров. Латинское название: Aegyptosaurus. Входит в таксон: Титанозавры.
+Компсогнатиды; Compsognathidae || Компсогнатиды — семейство целурозавров. Латинское название: Compsognathidae. || Compsognathidae — family of reptiles (fossil). Latin name: Compsognathidae. Parent taxon: Neocoelurosauria.
+Diplodocidae || Diplodocidae — семейство завроподовых динозавров. Латинское название: Diplodocidae. Входит в таксон: Flagellicaudata. || Diplodocidae — family of sauropod dinosaurs (Sauropoda). Latin name: Diplodocidae. Parent taxon: Flagellicaudata.
+Анкилозавриды; Ankylosauridae || Анкилозавриды — семейство анкилозавров. Латинское название: Ankylosauridae. Входит в таксон: Euankylosauria. || Ankylosauridae — family of reptiles (fossil). Latin name: Ankylosauridae. Parent taxon: Euankylosauria.
+Monolophosaurus || Monolophosaurus — род юрских теропод. Латинское название: Monolophosaurus. Входит в таксон: Тетануры. || Monolophosaurus — extinct genus of theropod dinosaurs. Latin name: Monolophosaurus.
+Багацератопс; Bagaceratops rozhdestvenskyi || Багацератопс — род цератопсов. Латинское название: Bagaceratops rozhdestvenskyi. Входит в таксон: Bagaceratops. || Bagaceratops rozhdestvenskyi — species of reptiles (fossil). Latin name: Bagaceratops rozhdestvenskyi. Parent taxon: Bagaceratops.
+игуанодонты || Игуанодонты — группа позднеюрских-раннемеловых орнитоподных динозавров. Латинское название: Iguaonodontia. Входит в таксон: орнитоподы.
+Сегнозавр; Segnosaurus || Сегнозавр — род теризинозаврид. Латинское название: Segnosaurus. Входит в таксон: Теризинозавриды. || Segnosaurus — genus of reptiles (fossil). Latin name: Segnosaurus. Parent taxon: Therizinosauridae.
+Нигерзавр; Nigersaurus taqueti || Нигерзавр — род завроподовых динозавров. Латинское название: Nigersaurus taqueti. Входит в таксон: Nigersaurus. || Nigersaurus taqueti — extinct species of sauropod dinosaurs (Sauropoda). Latin name: Nigersaurus taqueti. Parent taxon: Nigersaurus.
+Бэмбираптор; Bambiraptor || Бэмбираптор — род вымерших животных. Латинское название: Bambiraptor. || Bambiraptor — genus of reptiles (fossil). Latin name: Bambiraptor.
+Зауропельта; Sauropelta || Зауропельта — род анкилозавров. Латинское название: Sauropelta. Входит в таксон: Нодозавриды. || Sauropelta — genus of reptiles (fossil). Latin name: Sauropelta. Parent taxon: Nodosauridae.
+Polacanthus || Polacanthus — род анкилозавров. Латинское название: Polacanthus. Входит в таксон: Нодозавриды. || Polacanthus — genus of reptiles (fossil). Latin name: Polacanthus. Parent taxon: Nodosauridae.
+Альваресзавр; Alvarezsaurus || Альваресзавр — род альваресзаврид. Латинское название: Alvarezsaurus. Входит в таксон: Альваресзавриды. || Alvarezsaurus — genus of reptiles (fossil). Latin name: Alvarezsaurus. Parent taxon: Alvarezsauridae.
+Заурорнитоид; Saurornithoides || Заурорнитоид — род троодонтид. Латинское название: Saurornithoides. || Saurornithoides — genus of reptiles (fossil). Latin name: Saurornithoides. Parent taxon: Saurornithoidini.
+Скутеллозавр; Scutellosaurus || Скутеллозавр — род птицетазовых динозавров. Латинское название: Scutellosaurus. Входит в таксон: тиреофоры. || Scutellosaurus — genus of reptiles (fossil). Latin name: Scutellosaurus. Parent taxon: Thyreophora.
+Гетеродонтозавриды; Heterodontosauridae || Гетеродонтозавриды — семейство птицетазовых динозавров. Латинское название: Heterodontosauridae. || Heterodontosauridae — family of reptiles (fossil). Latin name: Heterodontosauridae.
+Masiakasaurus || Masiakasaurus — род ноазаврид. Латинское название: Masiakasaurus. Входит в таксон: Noasaurinae. || Masiakasaurus — genus of reptiles (fossil). Latin name: Masiakasaurus. Parent taxon: Noasaurinae.
+Ахелоузавр; Achelousaurus || Ахелоузавр — род цератопсид. Латинское название: Achelousaurus. Входит в таксон: Центрозаврины. || Achelousaurus — genus of ceratopsid dinosaurs. Latin name: Achelousaurus. Parent taxon: Centrosaurinae.
+Аллозавроиды; Allosauroidea || Аллозавроиды — надсемейство вымерших животных. Латинское название: Allosauroidea. Входит в таксон: Карнозавры. || Allosauroidea — superfamily of theropod dinosaurs. Latin name: Allosauroidea. Parent taxon: Carnosauria.
+Зуницератопс; Zuniceratops || Зуницератопс — род цератопсов. Латинское название: Zuniceratops. Входит в таксон: Coronosauria. || Zuniceratops — genus of Ceratopsian dinosaur. Latin name: Zuniceratops. Parent taxon: Coronosauria.
+Каудиптерикс; Caudipteryx || Каудиптерикс — род овирапторозавров. Латинское название: Caudipteryx. Входит в таксон: Caudipteridae. || Caudipteryx — genus of reptiles (fossil). Latin name: Caudipteryx. Parent taxon: Caudipteridae.
+Буитрераптор; Buitreraptor || Буитрераптор — род дромеозаврид. Латинское название: Buitreraptor. || Buitreraptor — genus of reptiles (fossil). Latin name: Buitreraptor.
+Homalocephale || Homalocephale — род пахицефалозаврид. Латинское название: Homalocephale. Входит в таксон: Пахицефалозавры. || Homalocephale — genus of reptiles (fossil). Latin name: Homalocephale. Parent taxon: Pachycephalosauria.
+Агустиния; Agustinia || Агустиния — род завроподных динозавров. Латинское название: Agustinia. || Agustinia — genus of sauropod dinosaurs. Latin name: Agustinia.
+овирапториды; Oviraptoridae || Овирапториды — семейство овирапторозавров. Латинское название: Oviraptoridae. Входит в таксон: Caenagnathoidea. || Oviraptoridae — family of reptiles (fossil). Latin name: Oviraptoridae. Parent taxon: Caenagnathoidea.
+Marginocephalia || Marginocephalia — клада птицетазовых динозавров. Латинское название: Marginocephalia. Входит в таксон: цераподы. || Marginocephalia — clade of ornithischian dinosaurs. Latin name: Marginocephalia.
+Стегоцер; Stegoceras || Стегоцер — род пахицефалозаврид. Латинское название: Stegoceras. Входит в таксон: Пахицефалозавры. || Stegoceras — genus of reptiles (fossil). Latin name: Stegoceras. Parent taxon: Pachycephalosauria.
+Нодозавриды; Nodosauridae || Нодозавриды — семейство анкилозавров. Латинское название: Nodosauridae. Входит в таксон: анкилозавры. || Nodosauridae — family of ankylosaurs (Ankylosauria). Latin name: Nodosauridae. Parent taxon: Ankylosauria.
+Энанциорнисовые птицы || Энанциорнисовые птицы — клада вымерших авиал, или птиц в широком смысле. Латинское название: Enantiornithes.
+Уненлагия; Unenlagia || Уненлагия — род дромеозаврид. Латинское название: Unenlagia. || Unenlagia — genus of reptiles (fossil). Latin name: Unenlagia.
+Пентацератопс; Pentaceratops || Пентацератопс — род цератопсид. Латинское название: Pentaceratops. Входит в таксон: Хазмозаврины. || Pentaceratops — genus of reptiles (fossil). Latin name: Pentaceratops. Parent taxon: Chasmosaurinae.
+Антарктозавр; Antarctosaurus || Антарктозавр — род титанозавров. Латинское название: Antarctosaurus. || Antarctosaurus — genus of reptiles (fossil). Latin name: Antarctosaurus.
+Гастония; Gastonia || Гастония — род анкилозавров. Латинское название: Gastonia. Входит в таксон: Нодозавриды. || Gastonia — genus of reptiles (fossil). Latin name: Gastonia. Parent taxon: Nodosauridae.
+Wuerhosaurus || Wuerhosaurus — род стегозавров. Латинское название: Wuerhosaurus. Входит в таксон: Стегозавриды. || Wuerhosaurus — genus of reptiles (fossil). Latin name: Wuerhosaurus. Parent taxon: Stegosauridae.
+Зупайзавр; Zupaysaurus || Зупайзавр — род тероподных динозавров. Латинское название: Zupaysaurus. || Zupaysaurus — genus of reptiles (fossil). Latin name: Zupaysaurus.
+Aerosteon || Aerosteon — род нептичьих теропод. Латинское название: Aerosteon. Входит в таксон: Megaraptoridae. || Aerosteon — genus of megaraptoran dinosaur. Latin name: Aerosteon. Parent taxon: Megaraptoridae.
+Конкавенатор; Concavenator || Конкавенатор — вид динозавров теропод, живший на территории современной Испании. Латинское название: Concavenator. || Concavenator — extinct genus of theropod dinosaurs from the Carcharodontosaurid family. Latin name: Concavenator.
+Адазавр; Adasaurus || Адазавр — род дромеозаврид. Латинское название: Adasaurus. || Adasaurus — genus of dromaeosaurid dinosaurs. Latin name: Adasaurus.
+Нанотиранус; Nanotyrannus || Нанотиранус — род тираннозавроид. Латинское название: Nanotyrannus. Входит в таксон: Eutyrannosauria. || Nanotyrannus — Genus of Late Cretaceous tyrannosauroids. Latin name: Nanotyrannus. Parent taxon: Eutyrannosauria.
+Noasaurus || Noasaurus — род ноазаврид. Латинское название: Noasaurus. Входит в таксон: ноазавриды. || Noasaurus — genus of reptiles (fossil). Latin name: Noasaurus. Parent taxon: Noasauridae.
+Тираннотитан; Tyrannotitan chubutensis || Тираннотитан — род кархародонтозаврид. Латинское название: Tyrannotitan chubutensis. Входит в таксон: Tyrannotitan. || Tyrannotitan chubutensis — extinct species of theropod dinosaurs. Latin name: Tyrannotitan chubutensis. Parent taxon: Tyrannotitan.
+Alxasaurus elesitaiensis; Alxasaurus || Alxasaurus elesitaiensis — род теризинозавров. Латинское название: Alxasaurus. Входит в таксон: Alxasauridae. || Alxasaurus — genus of reptiles (fossil). Latin name: Alxasaurus. Parent taxon: Alxasauridae.
+овирапторозавры; Oviraptorosauria || Овирапторозавры — клада манираптор. Латинское название: Oviraptorosauria. Входит в таксон: манирапторы. || Oviraptorosauria — infraorder of reptiles (fossil). Latin name: Oviraptorosauria. Parent taxon: Maniraptora.
+Zhuchengtyrannus || Zhuchengtyrannus — род азиатских тираннозаврид. Латинское название: Zhuchengtyrannus. Входит в таксон: Tyrannosaurini. || Zhuchengtyrannus — genus of Asian tyrannosaurids. Latin name: Zhuchengtyrannus. Parent taxon: Tyrannosaurini.
+Ornithurae || Ornithurae — клада авиал (птиц в широком смысле). Латинское название: Ornithurae. Входит в таксон: Ornithuromorpha. || Ornithurae — clade of dinosaurs. Latin name: Ornithurae. Parent taxon: Ornithuromorpha.
+литронакс; Lythronax || Литронакс — род североамериканских тираннозаврид. Латинское название: Lythronax. || Lythronax — genus of North American tyrannosaurids. Latin name: Lythronax. Parent taxon: Teratophoneini.
+Aeolosaurus || Aeolosaurus — род меловых титанозавров. Латинское название: Aeolosaurus. || Aeolosaurus — genus of Cretaceous titanosaurs. Latin name: Aeolosaurus.
+Раджазавр; Rajasaurus || Раджазавр — род абелизаврид. Латинское название: Rajasaurus. Входит в таксон: Majungasaurinae. || Rajasaurus — extinct genus of theropod dinosaurs. Latin name: Rajasaurus. Parent taxon: Majungasaurinae.
+Sinoceratops || Sinoceratops — род цератопсид. Латинское название: Sinoceratops. Входит в таксон: Центрозаврины. || Sinoceratops — genus of reptiles (fossil). Latin name: Sinoceratops. Parent taxon: Centrosaurinae.
+Дацентрур; Dacentrurus || Дацентрур — род стегозавров. Латинское название: Dacentrurus. Входит в таксон: Dacentrurinae. || Dacentrurus — genus of reptiles (fossil). Latin name: Dacentrurus. Parent taxon: Dacentrurinae.
+Ауказавр; Aucasaurus || Ауказавр — позднемеловой род динозавров. Латинское название: Aucasaurus. || Aucasaurus — Genus of reptiles (fossil). Latin name: Aucasaurus.
+Паралититан; Paralititan || Паралититан — род растительноядных динозавров. Латинское название: Paralititan. || Paralititan — genus of reptiles (fossil). Latin name: Paralititan.
+Micropachycephalosaurus || Micropachycephalosaurus — род птицетазовых динозавров. Латинское название: Micropachycephalosaurus. || Micropachycephalosaurus — genus of reptiles (fossil). Latin name: Micropachycephalosaurus.
+Рапетозавр; Rapetosaurus || Рапетозавр — род растительноядных динозавров. Латинское название: Rapetosaurus. || Rapetosaurus — extinct genus of sauropod dinosaurs (Sauropoda). Latin name: Rapetosaurus.
+Shuvuuia || Shuvuuia — род альваресзаврид. Латинское название: Shuvuuia. Входит в таксон: Mononykini. || Shuvuuia — genus of reptiles (fossil). Latin name: Shuvuuia. Parent taxon: Mononykini.
+Omeisaurus || Omeisaurus — род мамэньсизаврид. Латинское название: Omeisaurus. Входит в таксон: Mamenchisauridae. || Omeisaurus — genus of sauropod from the middle Jurassic. Latin name: Omeisaurus. Parent taxon: Mamenchisauridae.
+Эйниозавр; Einiosaurus || Эйниозавр — род цератопсид. Латинское название: Einiosaurus. Входит в таксон: Центрозаврины. || Einiosaurus — genus of reptiles (fossil). Latin name: Einiosaurus. Parent taxon: Centrosaurinae.
+Агухацератопс; Agujaceratops || Агухацератопс — род позднемеловых цератопсид. Латинское название: Agujaceratops. Входит в таксон: Хазмозаврины. || Agujaceratops — genus of ceratopsid dinosaurs. Latin name: Agujaceratops. Parent taxon: Chasmosaurinae.
+годжиразавр; Gojirasaurus || Годжиразавр — род крупных триасовых динозавров-теропод надсемейства целофизоидов. Латинское название: Gojirasaurus. Входит в таксон: целофизоиды. || Gojirasaurus — genus of reptiles (fossil). Latin name: Gojirasaurus. Parent taxon: Coelophysoidea.
+Грипозавр; Gryposaurus || Грипозавр — род гадрозаврид живших 83-74 млн лет назад. Латинское название: Gryposaurus. Входит в таксон: Kritosaurini. || Gryposaurus — genus of reptiles (fossil). Latin name: Gryposaurus. Parent taxon: Kritosaurini.
+Манирапториформы; Maniraptoriformes || Манирапториформы — клада целурозавров. Латинское название: Maniraptoriformes. || Maniraptoriformes — clade of dinosaurs. Latin name: Maniraptoriformes. Parent taxon: Neocoelurosauria.
+Австраловенатор; Australovenator wintonensis || Австраловенатор — род тероподных динозавров. Латинское название: Australovenator wintonensis. Входит в таксон: Australovenator. || Australovenator wintonensis — species of reptile (fossil). Latin name: Australovenator wintonensis. Parent taxon: Australovenator.
+Дриптозавр; Dryptosaurus || Дриптозавр — род тираннозавроид. Латинское название: Dryptosaurus. Входит в таксон: Dryptosauridae. || Dryptosaurus — extinct genus of coelurosaurs. Latin name: Dryptosaurus. Parent taxon: Dryptosauridae.
+Европазавр; Europasaurus || Европазавр — род завроподных динозавров. Латинское название: Europasaurus. || Europasaurus — extinct genus of sauropod dinosaurs (Sauropoda). Latin name: Europasaurus.
+Dreadnoughtus || Dreadnoughtus — род вымерших животных. Латинское название: Dreadnoughtus. Входит в таксон: Lithostrotia. || Dreadnoughtus — extinct genus of sauropod dinosaurs (Sauropoda). Latin name: Dreadnoughtus. Parent taxon: Lithostrotia.
+Процератозавр; Proceratosaurus || Процератозавр — род тираннозавроид. Латинское название: Proceratosaurus. Входит в таксон: процератозавриды. || Proceratosaurus — genus of reptiles (fossil). Latin name: Proceratosaurus. Parent taxon: Proceratosauridae.
+Diplodocoidea || Diplodocoidea — надсемейство завроподных динозавров. Латинское название: Diplodocoidea. Входит в таксон: Неозавроподы. || Diplodocoidea — extinct superfamily of sauropod dinosaurs. Latin name: Diplodocoidea. Parent taxon: Neosauropoda.
+Анхицератопс; Anchiceratops || Анхицератопс — род цератопсид. Латинское название: Anchiceratops. Входит в таксон: Хазмозаврины. || Anchiceratops — genus of reptiles (fossil). Latin name: Anchiceratops. Parent taxon: Chasmosaurinae.
+Альтирин; Altirhinus || Альтирин — род вымерших животных. Латинское название: Altirhinus. Входит в таксон: анкилополлексии. || Altirhinus — genus of reptiles (fossil). Latin name: Altirhinus.
+Alectrosaurus || Alectrosaurus — род тероподовых динозавров. Латинское название: Alectrosaurus. Входит в таксон: Pantyrannosauria. || Alectrosaurus — genus of reptiles (fossil). Latin name: Alectrosaurus. Parent taxon: Pantyrannosauria.
+Riojasaurus || Riojasaurus — род динозавров. Латинское название: Riojasaurus. || Riojasaurus — genus of dinosaurs. Latin name: Riojasaurus.
+пелеканимим; Pelecanimimus || Пелеканимим — род вымерших животных. Латинское название: Pelecanimimus. Входит в таксон: Орнитомимозавры. || Pelecanimimus — genus of reptiles (fossil). Latin name: Pelecanimimus. Parent taxon: Ornithomimosauria.
+Атласкопкозавр; Atlascopcosaurus || Атласкопкозавр — род животных. Латинское название: Atlascopcosaurus. Входит в таксон: орнитоподы. || Atlascopcosaurus — genus of reptiles (fossil). Latin name: Atlascopcosaurus.
+Неовенатор; Neovenator || Неовенатор — род тероподовых динозавров. Латинское название: Neovenator. Входит в таксон: Неовенаториды. || Neovenator — genus (fossil) of family Neovenatoridae. Latin name: Neovenator. Parent taxon: Neovenatoridae.
+Dracorex || Dracorex — синоним рода динозавров. Латинское название: Dracorex. Входит в таксон: Пахицефалозавры. || Dracorex — genus of reptiles (fossil). Latin name: Dracorex. Parent taxon: Pachycephalosauria.
+Рапторекс; Raptorex || Рапторекс — род динозавров. Латинское название: Raptorex. Входит в таксон: Pantyrannosauria. || Raptorex — genus of reptiles (fossil). Latin name: Raptorex. Parent taxon: Pantyrannosauria.
+эпидексиптерикс; Epidexipteryx || Эпидексиптерикс — род скансориоптеригид. Латинское название: Epidexipteryx. Входит в таксон: Скансориоптеригиды. || Epidexipteryx — genus of reptiles (fossil). Latin name: Epidexipteryx. Parent taxon: Scansoriopterygidae.
+Метриакантозавр; Metriacanthosaurus parkeri || Метриакантозавр — род аллозавроид. Латинское название: Metriacanthosaurus parkeri. Входит в таксон: Metriacanthosaurus. || Metriacanthosaurus parkeri — species of reptiles (fossil). Latin name: Metriacanthosaurus parkeri. Parent taxon: Metriacanthosaurus.
+ультразавр; Ultrasaurus || Ультразавр — сомнительный род растительноядных ящеротазовых динозавров из группы завроподов. Латинское название: Ultrasaurus. Входит в таксон: Неозавроподы. || Ultrasaurus — genus of large, Brachiosaurus-related plant-eating dinosaur from the Early Cretaceous period. Latin name: Ultrasaurus. Parent taxon: Neosauropoda.
+Юравенатор; Juravenator || Юравенатор — род тероподовых динозавров. Латинское название: Juravenator. || Juravenator — genus of reptiles (fossil). Latin name: Juravenator.
+Adamantisaurus || Adamantisaurus — род позднемеловых титанозавров. Латинское название: Adamantisaurus. Входит в таксон: Титанозавры. || Adamantisaurus — genus of titanosaurian sauropods. Latin name: Adamantisaurus.
+цяньчжоузавр; Qianzhousaurus || Цяньчжоузавр — род тираннозаврид. Латинское название: Qianzhousaurus. Входит в таксон: Alioramini. || Qianzhousaurus — tyrannosaurid dinosaur from China, described in 2014. Latin name: Qianzhousaurus. Parent taxon: Alioramini.
+гилеозавр; Hylaeosaurus || Гилеозавр — род анкилозавров. Латинское название: Hylaeosaurus. Входит в таксон: Нодозавриды. || Hylaeosaurus — genus of reptiles (fossil). Latin name: Hylaeosaurus. Parent taxon: Nodosauridae.
+Хиндезавр; Chindesaurus || Хиндезавр — род ящеротазовых динозавров. Латинское название: Chindesaurus. Входит в таксон: ящеротазовые. || Chindesaurus — genus of reptiles (fossil). Latin name: Chindesaurus. Parent taxon: Saurischia.
+Харонозавр; Charonosaurus || Харонозавр — род гадрозаврид. Латинское название: Charonosaurus. Входит в таксон: Ламбеозаврины. || Charonosaurus — genus of reptiles (fossil). Latin name: Charonosaurus. Parent taxon: Lambeosaurinae.
+Джобария; Jobaria || Джобария — род завроподных динозавров. Латинское название: Jobaria. Входит в таксон: Макронарии. || Jobaria — genus of reptiles (fossil). Latin name: Jobaria. Parent taxon: Macronaria.
+шунозавр; Shunosaurus || Шунозавр — род динозавров. Латинское название: Shunosaurus. Входит в таксон: Shunosaurinae. || Shunosaurus — extinct genus of sauropod dinosaurs (Sauropoda). Latin name: Shunosaurus. Parent taxon: Shunosaurinae.
+Magyarosaurus || Magyarosaurus — род карликовых титанозавров. Латинское название: Magyarosaurus. || Magyarosaurus — genus of reptiles (fossil). Latin name: Magyarosaurus.
+Orodromeus || Orodromeus — род динозавров. Латинское название: Orodromeus. Входит в таксон: Orodrominae. || Orodromeus — genus of reptiles (fossil). Latin name: Orodromeus. Parent taxon: Orodrominae.
+Альваресзавриды; Alvarezsauridae || Альваресзавриды — семейство целурозавров. Латинское название: Alvarezsauridae. Входит в таксон: Alvarezsauroidea. || Alvarezsauridae — family of reptiles (fossil). Latin name: Alvarezsauridae. Parent taxon: Alvarezsauroidea.
+Макронарии; Macronaria || Макронарии — клада динозавров. Латинское название: Macronaria. Входит в таксон: Неозавроподы. || Macronaria — extinct clade of sauropod dinosaurs. Latin name: Macronaria. Parent taxon: Neosauropoda.
+гарпимим; Harpymimus || Гарпимим — род динозавров. Латинское название: Harpymimus. Входит в таксон: Орнитомимозавры. || Harpymimus — genus of reptiles (fossil). Latin name: Harpymimus. Parent taxon: Ornithomimosauria.
+Chirostenotes || Chirostenotes — род ценагнатид. Латинское название: Chirostenotes. Входит в таксон: ценагнатиды. || Chirostenotes — genus of oviraptorosaurs. Latin name: Chirostenotes. Parent taxon: Caenagnathidae.
+Мегапнозавр; Megapnosaurus || Мегапнозавр — вымерший род теропод. Латинское название: Megapnosaurus. Входит в таксон: целофизоиды. || Megapnosaurus — extinct genus of theropods. Latin name: Megapnosaurus. Parent taxon: Coelophysoidea.
+Арагозавр; Aragosaurus || Арагозавр — род вымерших животных. Латинское название: Aragosaurus. Входит в таксон: Макронарии. || Aragosaurus — genus of reptiles (fossil). Latin name: Aragosaurus. Parent taxon: Macronaria.
+Aurornis || Aurornis — род манираптор. Латинское название: Aurornis. Входит в таксон: Авиалы. || Aurornis — genus of reptiles (fossil). Latin name: Aurornis.
+мирагая; Miragaia || Мирагая — род стегозавров. Латинское название: Miragaia. Входит в таксон: Dacentrurinae. || Miragaia — genus of reptiles (fossil). Latin name: Miragaia. Parent taxon: Dacentrurinae.
+Byronosaurus || Byronosaurus — род троодонтид. Латинское название: Byronosaurus. || Byronosaurus — genus of reptiles (fossil). Latin name: Byronosaurus.
+Прокомпсогнат; Procompsognathus || Прокомпсогнат — род триасовых теропод. Латинское название: Procompsognathus. || Procompsognathus — genus of Triassic theropods. Latin name: Procompsognathus. Parent taxon: Coelophysidae.
+Ахиллезавр; Achillesaurus || Ахиллезавр — род альваресзаврид. Латинское название: Achillesaurus. Входит в таксон: Альваресзавриды. || Achillesaurus — genus of alvarezsaurid theropods. Latin name: Achillesaurus. Parent taxon: Alvarezsauridae.
+Немегтозавр; Nemegtosaurus || Немегтозавр — род титанозавров. Латинское название: Nemegtosaurus. || Nemegtosaurus — extinct genus of sauropod dinosaurs (Sauropoda). Latin name: Nemegtosaurus.
+Тератофоней; Teratophoneus || Тератофоней — род позднемеловых тираннозаврид. Латинское название: Teratophoneus. || Teratophoneus — genus of Late Cretaceous tyrannosaurids. Latin name: Teratophoneus. Parent taxon: Teratophoneini.
+Авацератопс; Avaceratops || Авацератопс — род цератопсид. Латинское название: Avaceratops. Входит в таксон: Центрозаврины. || Avaceratops — genus of reptiles (fossil). Latin name: Avaceratops. Parent taxon: Centrosaurinae.
+Saurornitholestes || Saurornitholestes — род дромеозаврид. Латинское название: Saurornitholestes. Входит в таксон: Saurornitholestinae. || Saurornitholestes — genus of reptiles (fossil). Latin name: Saurornitholestes. Parent taxon: Saurornitholestinae.
+Prenocephale || Prenocephale — род пахицефалозаврид. Латинское название: Prenocephale. Входит в таксон: Pachycephalosaurinae. || Prenocephale — genus of reptiles (fossil). Latin name: Prenocephale. Parent taxon: Pachycephalosaurinae.
+Эотиранн; Eotyrannus || Эотиранн — род тираннозавроид. Латинское название: Eotyrannus. Входит в таксон: Тираннозавроиды. || Eotyrannus — genus of Early Cretaceous tyrannosauroids. Latin name: Eotyrannus. Parent taxon: Tyrannosauroidea.
+Дилофозавриды; Dilophosauridae || Дилофозавриды — устаревшее семейство тероподных динозавров. Латинское название: Dilophosauridae. Входит в таксон: тероподы. || Dilophosauridae — family of dinosaurs. Latin name: Dilophosauridae. Parent taxon: Тhеrороdа.
+Космоцератопс; Kosmoceratops || Космоцератопс — род цератопсид. Латинское название: Kosmoceratops. Входит в таксон: цератопсиды. || Kosmoceratops — dinosaur genus from the Late Cretaceous period. Latin name: Kosmoceratops. Parent taxon: Ceratopsidae.
+Hesperosaurus || Hesperosaurus — род стегозавров. Латинское название: Hesperosaurus. Входит в таксон: Стегозавры. || Hesperosaurus — genus of reptiles (fossil). Latin name: Hesperosaurus. Parent taxon: Stegosauria.
+Atlasaurus imelakei || Atlasaurus imelakei — вымерший род динозавров. Латинское название: Atlasaurus imelakei. Входит в таксон: Atlasaurus. || Atlasaurus imelakei — species of reptile (fossil). Latin name: Atlasaurus imelakei. Parent taxon: Atlasaurus.
+Эухелоп; Euhelopus || Эухелоп — род вымерших животных. Латинское название: Euhelopus. || Euhelopus — genus of reptiles (fossil). Latin name: Euhelopus.
+Лилиенстерн; Liliensternus || Лилиенстерн — род тероподных динозавров. Латинское название: Liliensternus. Входит в таксон: целофизоиды. || Liliensternus — genus of reptiles (fossil). Latin name: Liliensternus. Parent taxon: Coelophysoidea.
+Эотрицератопс; Eotriceratops || Эотрицератопс — род цератопсид. Латинское название: Eotriceratops. Входит в таксон: Хазмозаврины. || Eotriceratops — genus of reptiles (fossil). Latin name: Eotriceratops. Parent taxon: Chasmosaurinae.
+Криптопс; Kryptops || Криптопс — род абелизаврид. Латинское название: Kryptops. Входит в таксон: Абелизавриды. || Kryptops — genus of reptiles (fossil). Latin name: Kryptops. Parent taxon: Abelisauridae.
+Аардоникс; Aardonyx || Аардоникс — род завроподоморфных динозавров. Латинское название: Aardonyx. Входит в таксон: Anchisauria. || Aardonyx — genus of sauropodomorphs. Latin name: Aardonyx. Parent taxon: Anchisauria.
+андезавр; Andesaurus || Андезавр — род динозавров. Латинское название: Andesaurus. Входит в таксон: Титанозавры. || Andesaurus — genus of dinosaurs. Latin name: Andesaurus.
+Segisaurus || Segisaurus — род динозавров. Латинское название: Segisaurus. Входит в таксон: целофизиды. || Segisaurus — genus of reptiles (fossil). Latin name: Segisaurus. Parent taxon: Coelophysidae.
+Микровенатор; Microvenator || Микровенатор — род ценагнатид. Латинское название: Microvenator. Входит в таксон: ценагнатиды. || Microvenator — genus of reptiles (fossil). Latin name: Microvenator. Parent taxon: Caenagnathidae.
+Ichthyovenator || Ichthyovenator — род спинозаврид. Латинское название: Ichthyovenator. || Ichthyovenator — extinct genus of spinosaurids. Latin name: Ichthyovenator.
+Anserimimus || Anserimimus — род динозавров. Латинское название: Anserimimus. Входит в таксон: Ornithomimidae. || Anserimimus — genus of reptiles (fossil). Latin name: Anserimimus. Parent taxon: Ornithomimidae.
+Рабдодон; Rhabdodon || Рабдодон — род вымерших животных. Латинское название: Rhabdodon. Входит в таксон: рабдодонтиды. || Rhabdodon — extinct genus of ornithopod dinosaurs. Latin name: Rhabdodon. Parent taxon: Rhabdodontidae.
+Теризинозавриды; Therizinosauridae || Теризинозавриды — семейство теризинозавров. Латинское название: Therizinosauridae. Входит в таксон: Теризинозавроиды. || Therizinosauridae — family of reptiles (fossil). Latin name: Therizinosauridae. Parent taxon: Therizinosauroidea.
+Альбертацератопс; Albertaceratops || Альбертацератопс — род цератопсид. Латинское название: Albertaceratops. || Albertaceratops — genus of Late Cretaceous ceratopsids. Latin name: Albertaceratops. Parent taxon: Albertaceratopsini.
+Протархеоптерикс; Protarchaeopteryx || Протархеоптерикс — род овирапторозавров. Латинское название: Protarchaeopteryx. || Protarchaeopteryx — genus of reptiles (fossil). Latin name: Protarchaeopteryx.
+Хилантаизавр; Chilantaisaurus || Хилантаизавр — род вымерших животных. Латинское название: Chilantaisaurus. Входит в таксон: Неовенаториды. || Chilantaisaurus — genus of reptiles (fossil). Latin name: Chilantaisaurus. Parent taxon: Neovenatoridae.
+целофизиды; Coelophysidae || Целофизиды — вымершее семейство теропод. Латинское название: Coelophysidae. Входит в таксон: целофизоиды. || Coelophysidae — extinct family of theropod dinosaurs (Theropoda). Latin name: Coelophysidae. Parent taxon: Coelophysoidea.
+Anchiornis huxleyi || Anchiornis huxleyi — вид тероподовых динозавров. Латинское название: Anchiornis huxleyi. Входит в таксон: Anchiornis. || Anchiornis huxleyi — species of fossil reptile in genus Anchiornis. Latin name: Anchiornis huxleyi. Parent taxon: Anchiornis.
+Аляскацефал; Alaskacephale || Аляскацефал — род пахицефалозаврид. Латинское название: Alaskacephale. Входит в таксон: Пахицефалозавры. || Alaskacephale — genus of pachycephalosaurids. Latin name: Alaskacephale. Parent taxon: Pachycephalosauria.
+Diplodocus hallorum || Diplodocus hallorum — вид крупных диплодоков. || Diplodocus hallorum — species of sauropod dinosaur (fossil).
+инцисивозавр; Incisivosaurus || Инцисивозавр — род овирапторозавров. Латинское название: Incisivosaurus. Входит в таксон: овирапторозавры. || Incisivosaurus — genus of reptiles (fossil). Latin name: Incisivosaurus. Parent taxon: Oviraptorosauria.
+Carinatae || Carinatae — клада птиц. Латинское название: Carinatae. Входит в таксон: Ornithurae. || Carinatae — taxon containing modern and prehistoric birds. Latin name: Carinatae. Parent taxon: Ornithurae.
+Guaibasaurus || Guaibasaurus — вымерший род ящеротазовых динозавров. Латинское название: Guaibasaurus. Входит в таксон: Guaibasauridae. || Guaibasaurus — extinct genus of Saurischian dinosaurs. Latin name: Guaibasaurus. Parent taxon: Guaibasauridae.
+Conchoraptor || Conchoraptor — род овирапторид. Латинское название: Conchoraptor. Входит в таксон: овирапториды. || Conchoraptor — genus of reptiles (fossil). Latin name: Conchoraptor. Parent taxon: Oviraptoridae.
+Линьхэраптор; Linheraptor || Линьхэраптор — род тероподовых динозавров. Латинское название: Linheraptor. || Linheraptor — genus of reptiles (fossil). Latin name: Linheraptor.
+Utahceratops || Utahceratops — род цератопсид. Латинское название: Utahceratops. Входит в таксон: Хазмозаврины. || Utahceratops — genus of reptiles (fossil). Latin name: Utahceratops. Parent taxon: Chasmosaurinae.
+Bonitasaura || Bonitasaura — род вымерших животных. Латинское название: Bonitasaura. || Bonitasaura — genus of reptiles (fossil). Latin name: Bonitasaura.
+Titanoceratops ouranos; Titanoceratops || Titanoceratops ouranos — род цератопсид. Латинское название: Titanoceratops. Входит в таксон: Хазмозаврины. || Titanoceratops — genus of reptiles (fossil). Latin name: Titanoceratops. Parent taxon: Chasmosaurinae.
+Nasutoceratops; Nasutoceratops titusi || Nasutoceratops — род цератопсид. Латинское название: Nasutoceratops titusi. Входит в таксон: Nasutoceratops. || Nasutoceratops titusi — extinct species of ceratopsian dinosaurs. Latin name: Nasutoceratops titusi. Parent taxon: Nasutoceratops.
+ноазавриды; Noasauridae || Ноазавриды — семейство цератозавров. Латинское название: Noasauridae. Входит в таксон: абелизавриды. || Noasauridae — family of reptiles (fossil). Latin name: Noasauridae. Parent taxon: Abelisauroidea.
+Garudimimus || Garudimimus — род тероподовых динозавров. Латинское название: Garudimimus. Входит в таксон: Орнитомимозавры. || Garudimimus — genus of reptiles (fossil). Latin name: Garudimimus. Parent taxon: Ornithomimosauria.
+Scansoriopteryx || Scansoriopteryx — род скансориоптеригид. Латинское название: Scansoriopteryx. Входит в таксон: Скансориоптеригиды. || Scansoriopteryx — genus of reptiles (fossil). Latin name: Scansoriopteryx. Parent taxon: Scansoriopterygidae.
+Abydosaurus || Abydosaurus — род брахиозаврид. Латинское название: Abydosaurus. Входит в таксон: Брахиозавриды. || Abydosaurus — genus of Cretaceous sauropods. Latin name: Abydosaurus. Parent taxon: Brachiosauridae.
+Xiaotingia zhengi || Xiaotingia zhengi — род манираптор. Латинское название: Xiaotingia zhengi. Входит в таксон: Xiaotingia. || Xiaotingia zhengi — species of reptile (fossil). Latin name: Xiaotingia zhengi. Parent taxon: Xiaotingia.
+Telmatosaurus || Telmatosaurus — архаичный род птицетазовых динозавров. Латинское название: Telmatosaurus. || Telmatosaurus — genus of reptiles (fossil). Latin name: Telmatosaurus.
+гигантозавр; Gigantosaurus || Гигантозавр — род завроподных динозавров. Латинское название: Gigantosaurus. Входит в таксон: Завроподы. || Gigantosaurus — genus of reptiles (fossil). Latin name: Gigantosaurus. Parent taxon: Sauropoda.
+Синозавр; Sinosaurus || Синозавр — род тероподных динозавров. Латинское название: Sinosaurus. Входит в таксон: Тетануры. || Sinosaurus — genus of reptiles (fossil). Latin name: Sinosaurus.
+Lexovisaurus || Lexovisaurus — род юрских тиреофор. Латинское название: Lexovisaurus. Входит в таксон: Стегозавриды. || Lexovisaurus — genus of Jurassic thyreophorans. Latin name: Lexovisaurus. Parent taxon: Stegosauridae.
+Сиамотиран; Siamotyrannus || Сиамотиран — род аллозавроид. Латинское название: Siamotyrannus. Входит в таксон: Metriacanthosauridae. || Siamotyrannus — genus of reptiles (fossil). Latin name: Siamotyrannus. Parent taxon: Metriacanthosauridae.
+Montanoceratops || Montanoceratops — род цератопсов. Латинское название: Montanoceratops. Входит в таксон: Leptoceratopsidae. || Montanoceratops — genus of reptiles (fossil). Latin name: Montanoceratops. Parent taxon: Leptoceratopsidae.
+дикреозавриды; Dicraeosauridae || Дикреозавриды — семейство диплодокоидей. Латинское название: Dicraeosauridae. Входит в таксон: Flagellicaudata. || Dicraeosauridae — extinct family of sauropod dinosaurs (Sauropoda). Latin name: Dicraeosauridae. Parent taxon: Flagellicaudata.
+Скансориоптеригиды; Scansoriopterygidae || Скансориоптеригиды — семейство манираптор. Латинское название: Scansoriopterygidae. || Scansoriopterygidae — family of reptiles (fossil). Latin name: Scansoriopterygidae.
+Sinornithoides || Sinornithoides — род троодонтид. Латинское название: Sinornithoides. Входит в таксон: Троодонтиды. || Sinornithoides — genus of reptiles (fossil). Latin name: Sinornithoides. Parent taxon: Troodontidae.
+Тураноцератопс; Turanoceratops || Тураноцератопс — род цератопсов. Латинское название: Turanoceratops. Входит в таксон: Неоцератопсии. || Turanoceratops — genus of reptiles (fossil). Latin name: Turanoceratops. Parent taxon: Neoceratopsia.
+Tsaagan || Tsaagan — род дромеозаврид. Латинское название: Tsaagan. || Tsaagan — genus of reptiles (fossil). Latin name: Tsaagan.
+Archaeoceratops || Archaeoceratops — род цератопсов. Латинское название: Archaeoceratops. Входит в таксон: Archaeoceratopsidae. || Archaeoceratops — genus of reptiles (fossil). Latin name: Archaeoceratops. Parent taxon: Archaeoceratopsidae.
+Занабазар; Zanabazar junior || Занабазар — род троодонтид. Латинское название: Zanabazar. || Zanabazar junior — genus of reptiles (fossil). Latin name: Zanabazar. Parent taxon: Saurornithoidini.
+Leptoceratopsidae || Leptoceratopsidae — семейство цератопсов. Латинское название: Leptoceratopsidae. Входит в таксон: Euceratopia. || Leptoceratopsidae — family of reptiles (fossil). Latin name: Leptoceratopsidae. Parent taxon: Euceratopia.
+Chungkingosaurus || Chungkingosaurus — род стегозавров. Латинское название: Chungkingosaurus. Входит в таксон: Стегозавры. || Chungkingosaurus — genus of reptiles (fossil). Latin name: Chungkingosaurus. Parent taxon: Stegosauria.
+Puertasaurus || Puertasaurus — род титанозавров. Латинское название: Puertasaurus. || Puertasaurus — genus of reptiles (fossil). Latin name: Puertasaurus.
+Cristatusaurus || Cristatusaurus — род спинозаврид. Латинское название: Cristatusaurus. Входит в таксон: Baryonychinae. || Cristatusaurus — extinct genus of dinosaurs. Latin name: Cristatusaurus. Parent taxon: Baryonychinae.
+Atrociraptor || Atrociraptor — род дромеозаврид. Латинское название: Atrociraptor. || Atrociraptor — genus of reptiles (fossil). Latin name: Atrociraptor.
+Неозавроподы; Neosauropoda || Неозавроподы — группа ящеротазовых динозавров. Латинское название: Neosauropoda. || Neosauropoda — extinct clade of sauropod dinosaurs. Latin name: Neosauropoda. Parent taxon: Eusauropoda.
+Ламбеозаврины; Lambeosaurinae || Ламбеозаврины — подсемейство вымерших животных. Латинское название: Lambeosaurinae. || Lambeosaurinae — subfamily of reptiles (fossil). Latin name: Lambeosaurinae.
+Oryctodromeus || Oryctodromeus — род птицетазовых динозавров, известных из отложений позднего мелового периода. Латинское название: Oryctodromeus. Входит в таксон: Euornithopoda. || Oryctodromeus — genus of small ornithopod dinosaur (fossil). Latin name: Oryctodromeus. Parent taxon: Euornithopoda.
+Эмаузавры; Emausaurus || Эмаузавры — вид динозавров. Латинское название: Emausaurus. Входит в таксон: тиреофоры. || Emausaurus — genus of reptiles (fossil). Latin name: Emausaurus. Parent taxon: Thyreophora.
+Килеск; Kileskus || Килеск — род тираннозавроид. Латинское название: Kileskus. Входит в таксон: процератозавриды. || Kileskus — genus of reptiles (fossil). Latin name: Kileskus. Parent taxon: Proceratosauridae.
+Velocisaurus || Velocisaurus — род ноазаврид. Латинское название: Velocisaurus. Входит в таксон: ноазавриды. || Velocisaurus — genus of reptiles (fossil). Latin name: Velocisaurus. Parent taxon: Noasauridae.
+Аппалачиозавр; Appalachiosaurus || Аппалачиозавр — род тираннозавроид. Латинское название: Appalachiosaurus. Входит в таксон: Eutyrannosauria. || Appalachiosaurus — genus of Late Cretaceous tyrannosauroids. Latin name: Appalachiosaurus. Parent taxon: Eutyrannosauria.
+Stokesosaurus || Stokesosaurus — род тираннозавроид. Латинское название: Stokesosaurus. Входит в таксон: Тираннозавроиды. || Stokesosaurus — genus of reptiles (fossil). Latin name: Stokesosaurus. Parent taxon: Tyrannosauroidea.
+Janenschia || Janenschia — род вымерших животных. Латинское название: Janenschia. Входит в таксон: Макронарии. || Janenschia — genus of reptiles (fossil). Latin name: Janenschia. Parent taxon: Macronaria.
+Гадрозавроиды; Hadrosauroidea || Гадрозавроиды — надсемейство птицетазовых динозавров. Латинское название: Hadrosauroidea. || Hadrosauroidea — extinct superfamily of ornithopod dinosaurs (Ornithopoda). Latin name: Hadrosauroidea.
+Yaverlandia || Yaverlandia — род вымерших животных. Латинское название: Yaverlandia. || Yaverlandia — genus of reptiles (fossil). Latin name: Yaverlandia.
+Диаблоцератопс; Diabloceratops || Диаблоцератопс — род цератопсид. Латинское название: Diabloceratops. Входит в таксон: Центрозаврины. || Diabloceratops — genus of reptiles (fossil). Latin name: Diabloceratops. Parent taxon: Centrosaurinae.
+Dakotaraptor || Dakotaraptor — спорный род тероподных динозавров. Латинское название: Dakotaraptor. Входит в таксон: Dromaeosaurinae. || Dakotaraptor — genus of reptiles (fossil). Latin name: Dakotaraptor. Parent taxon: Dromaeosaurinae.
+Prenoceratops || Prenoceratops — род цератопсов. Латинское название: Prenoceratops. Входит в таксон: Leptoceratopsidae. || Prenoceratops — genus of reptiles (fossil). Latin name: Prenoceratops. Parent taxon: Leptoceratopsidae.
+Goyocephale || Goyocephale — род пахицефалозаврид. Латинское название: Goyocephale. Входит в таксон: Пахицефалозавры. || Goyocephale — genus of reptiles (fossil). Latin name: Goyocephale. Parent taxon: Pachycephalosauria.
+Labocania || Labocania — род тираннозаврид. Латинское название: Labocania. Входит в таксон: тероподы. || Labocania — genus of reptiles (fossil). Latin name: Labocania. Parent taxon: Тhеrороdа.
+Indosaurus || Indosaurus — вымерший род динозавров. Латинское название: Indosaurus. Входит в таксон: Majungasaurinae. || Indosaurus — genus of reptiles (fossil). Latin name: Indosaurus. Parent taxon: Majungasaurinae.
+итемир; Itemirus || Итемир — род дромеозаврид. Латинское название: Itemirus. Входит в таксон: Dromaeosaurinae. || Itemirus — genus of reptiles (fossil). Latin name: Itemirus. Parent taxon: Dromaeosaurinae.
+Эрликозавр; Erlikosaurus || Эрликозавр — род теризинозаврид. Латинское название: Erlikosaurus. || Erlikosaurus — genus of reptiles (fossil). Latin name: Erlikosaurus.
+Euornithes || Euornithes — клада птиц. Латинское название: Euornithes. || Euornithes — clade of avialans, including birds (Aves) and their extinct relatives. Latin name: Euornithes.
+процератозавриды; Proceratosauridae || Процератозавриды — семейство тираннозавроид. Латинское название: Proceratosauridae. Входит в таксон: Тираннозавроиды. || Proceratosauridae — extinct family of theropods. Latin name: Proceratosauridae. Parent taxon: Tyrannosauroidea.
+платеозавриды; Plateosauridae || Платеозавриды — семейство завроподоморфных динозавров. Латинское название: Plateosauridae. Входит в таксон: Plateosauria. || Plateosauridae — family of sauropodomorph dinosaurs. Latin name: Plateosauridae. Parent taxon: Plateosauria.
+реббахизавриды; Rebbachisauridae || Реббахизавриды — семейство завроподных динозавров. Латинское название: Rebbachisauridae. Входит в таксон: Diplodocoidea. || Rebbachisauridae — extinct family of sauropod dinosaurs (Sauropoda). Latin name: Rebbachisauridae. Parent taxon: Diplodocoidea.
+Археоптериксовые; Archaeopterygidae || Археоптериксовые — семейство животных. Латинское название: Archaeopterygidae. Входит в таксон: Археоптериксообразные. || Archaeopterygidae — family of tetrapods. Latin name: Archaeopterygidae. Parent taxon: Archaeopterygiformes.
+Gargoyleosaurus || Gargoyleosaurus — род анкилозавров. Латинское название: Gargoyleosaurus. Входит в таксон: Нодозавриды. || Gargoyleosaurus — genus of reptiles (fossil). Latin name: Gargoyleosaurus. Parent taxon: Nodosauridae.
+Анимантаркс; Animantarx || Анимантаркс — род анкилозавров. Латинское название: Animantarx. Входит в таксон: Нодозавриды. || Animantarx — genus of reptiles (fossil). Latin name: Animantarx. Parent taxon: Nodosauridae.
+Стегозавриды; Stegosauridae || Стегозавриды — семейство динозавров-тиреофор. Латинское название: Stegosauridae. Входит в таксон: Стегозавры. || Stegosauridae — extinct family of ornithischian dinosaurs (Ornithischia). Latin name: Stegosauridae. Parent taxon: Stegosauria.
+Altispinax || Altispinax — род вымерших животных. Латинское название: Altispinax. Входит в таксон: Спинозавриды. || Altispinax — genus of reptiles (fossil). Latin name: Altispinax. Parent taxon: Spinosauridae.
+Massospondylidae || Massospondylidae — семейство вымерших животных. Латинское название: Massospondylidae. Входит в таксон: Massopoda. || Massospondylidae — family of reptiles (fossil). Latin name: Massospondylidae. Parent taxon: Massopoda.
+Metriacanthosauridae || Metriacanthosauridae — семейство аллозавроид. Латинское название: Metriacanthosauridae. Входит в таксон: Аллозавроиды. || Metriacanthosauridae — family of reptiles (fossil). Latin name: Metriacanthosauridae. Parent taxon: Allosauroidea.
+Liaoceratops || Liaoceratops — род цератопсов. Латинское название: Liaoceratops. Входит в таксон: Неоцератопсии. || Liaoceratops — genus of reptiles (fossil). Latin name: Liaoceratops. Parent taxon: Neoceratopsia.
+Ajkaceratops; Ajkaceratops kozmai || Ajkaceratops — род цератопсов. Латинское название: Ajkaceratops kozmai. Входит в таксон: Ajkaceratops. || Ajkaceratops kozmai — species of reptile (fossil). Latin name: Ajkaceratops kozmai. Parent taxon: Ajkaceratops.
+Вендицератопс; Wendiceratops || Вендицератопс — род цератопсид. Латинское название: Wendiceratops. Входит в таксон: Центрозаврины. || Wendiceratops — genus of reptiles (fossil). Latin name: Wendiceratops. Parent taxon: Centrosaurinae.
+Coahuilaceratops || Coahuilaceratops — род цератопсид. Латинское название: Coahuilaceratops. Входит в таксон: Хазмозаврины. || Coahuilaceratops — genus of reptiles (fossil). Latin name: Coahuilaceratops. Parent taxon: Chasmosaurinae.
+Элмизавр; Elmisaurus || Элмизавр — род ценагнатид. Латинское название: Elmisaurus. Входит в таксон: ценагнатиды. || Elmisaurus — genus of reptiles (fossil). Latin name: Elmisaurus. Parent taxon: Caenagnathidae.
+ценагнатазия; Caenagnathasia || Ценагнатазия — род ценагнатид. Латинское название: Caenagnathasia. Входит в таксон: ценагнатиды. || Caenagnathasia — genus of reptiles (fossil). Latin name: Caenagnathasia. Parent taxon: Caenagnathidae.
+Бороговия; Borogovia || Бороговия — род троодонтид. Латинское название: Borogovia. || Borogovia — genus of reptiles (fossil). Latin name: Borogovia. Parent taxon: Saurornithoidini.
+Chilesaurus || Chilesaurus — род динозавров. Латинское название: Chilesaurus. Входит в таксон: Тетануры. || Chilesaurus — genus of reptiles (fossil). Latin name: Chilesaurus.
+Malawisaurus || Malawisaurus — род титанозавров. Латинское название: Malawisaurus. || Malawisaurus — extinct genus of sauropod dinosaurs (Sauropoda). Latin name: Malawisaurus.
+Xiongguanlong || Xiongguanlong — род тираннозавроид. Латинское название: Xiongguanlong. Входит в таксон: Pantyrannosauria. || Xiongguanlong — genus of Early Cretaceous tyrannosauroids. Latin name: Xiongguanlong. Parent taxon: Pantyrannosauria.
+Huaxiagnathus || Huaxiagnathus — род динозавров. Латинское название: Huaxiagnathus. Входит в таксон: Компсогнатиды. || Huaxiagnathus — genus of reptiles (fossil). Latin name: Huaxiagnathus. Parent taxon: Compsognathidae.
+Struthiosaurus || Struthiosaurus — род позднемеловых анкилозавров. Латинское название: Struthiosaurus. Входит в таксон: Нодозавриды. || Struthiosaurus — genus of Cretaceous ankylosaurian dinosaurs. Latin name: Struthiosaurus. Parent taxon: Nodosauridae.
+Limusaurus inextricabilis; Limusaurus || Limusaurus inextricabilis — род ноазаврид. Латинское название: Limusaurus. Входит в таксон: ноазавриды. || Limusaurus — genus of beaked herbivorous theropod dinosaur. Latin name: Limusaurus. Parent taxon: Noasauridae.
+Panphagia || Panphagia — род динозавров. Латинское название: Panphagia. Входит в таксон: ящеротазовые. || Panphagia — genus of reptiles (fossil). Latin name: Panphagia. Parent taxon: Saurischia.
+Dinheirosaurus lourinhanensis || Dinheirosaurus lourinhanensis — род диплодоцид. Латинское название: Dinheirosaurus lourinhanensis. Входит в таксон: Dinheirosaurus. || Dinheirosaurus lourinhanensis — species of reptile (fossil). Latin name: Dinheirosaurus lourinhanensis. Parent taxon: Dinheirosaurus.
+Tianyuraptor ostromi || Tianyuraptor ostromi — род дромеозаврид. Латинское название: Tianyuraptor ostromi. Входит в таксон: Tianyuraptor. || Tianyuraptor ostromi — species of reptile (fossil). Latin name: Tianyuraptor ostromi. Parent taxon: Tianyuraptor.
+Алгоазавр; Algoasaurus || Алгоазавр — род вымерших животных. Латинское название: Algoasaurus. || Algoasaurus — genus of reptiles (fossil). Latin name: Algoasaurus. Parent taxon: Eusauropoda.
+Neuquenraptor || Neuquenraptor — род дромеозаврид. Латинское название: Neuquenraptor. Входит в таксон: Unenlagiinae. || Neuquenraptor — genus of reptiles (fossil). Latin name: Neuquenraptor. Parent taxon: Unenlagiinae.
+Протоцератопсиды; Protoceratopsidae || Протоцератопсиды — семейство цератопсов. Латинское название: Protoceratopsidae. Входит в таксон: Цератопсы. || Protoceratopsidae — family of reptiles (fossil). Latin name: Protoceratopsidae. Parent taxon: Ceratopsia.
+Graciliraptor || Graciliraptor — род дромеозаврид. Латинское название: Graciliraptor. || Graciliraptor — genus of reptiles (fossil). Latin name: Graciliraptor.
+Amtocephale gobiensis; Amtocephale || Amtocephale gobiensis — род динозавров. Латинское название: Amtocephale. Входит в таксон: Пахицефалозавриды. || Amtocephale — genus of reptiles (fossil). Latin name: Amtocephale. Parent taxon: Pachycephalosauridae.
+Heyuannia || Heyuannia — род овирапторид. Латинское название: Heyuannia. Входит в таксон: овирапторозавры. || Heyuannia — genus of reptiles (fossil). Latin name: Heyuannia. Parent taxon: Oviraptorosauria.
+Цетиозавриды; Cetiosauridae || Цетиозавриды — семейство завроподных динозавров. Латинское название: Cetiosauridae. Входит в таксон: Неозавроподы. || Cetiosauridae — family of reptiles (fossil). Latin name: Cetiosauridae. Parent taxon: Neosauropoda.
+Nemegtomaia barsboldi; Nemegtomaia || Nemegtomaia barsboldi — род овирапторид. Латинское название: Nemegtomaia. Входит в таксон: овирапторозавры. || Nemegtomaia — genus of reptiles (fossil). Latin name: Nemegtomaia. Parent taxon: Oviraptorosauria.
+Ринчения; Rinchenia || Ринчения — род овирапторид. Латинское название: Rinchenia. Входит в таксон: овирапториды. || Rinchenia — genus of reptiles (fossil). Latin name: Rinchenia. Parent taxon: Oviraptoridae.
+Zuolong salleei; Zuolong || Zuolong salleei — род позднеюрских тероподов. Латинское название: Zuolong. Входит в таксон: целурозавры. || Zuolong — genus of reptiles (fossil). Latin name: Zuolong.
+Эукнемезавр; Eucnemesaurus || Эукнемезавр — род примитивных динозавров. Латинское название: Eucnemesaurus. Входит в таксон: Riojasauridae. || Eucnemesaurus — genus of reptiles (fossil). Latin name: Eucnemesaurus. Parent taxon: Riojasauridae.
+лессемозавр; Lessemsaurus || Лессемозавр — род динозавров. Латинское название: Lessemsaurus. Входит в таксон: Lessemsauridae. || Lessemsaurus — genus of reptiles (fossil). Latin name: Lessemsaurus. Parent taxon: Lessemsauridae.
+Алетопельта; Aletopelta || Алетопельта — род анкилозавров. Латинское название: Aletopelta. Входит в таксон: анкилозавры. || Aletopelta — genus of reptiles (fossil). Latin name: Aletopelta. Parent taxon: Ankylosauria.
+Эокурсор; Eocursor || Эокурсор — род базальных птицетазовых динозавров. Латинское название: Eocursor. Входит в таксон: птицетазовые. || Eocursor — genus of reptiles (fossil). Latin name: Eocursor.
+Gigantspinosaurus || Gigantspinosaurus — род стегозавров. Латинское название: Gigantspinosaurus. Входит в таксон: Стегозавры. || Gigantspinosaurus — genus of reptiles (fossil). Latin name: Gigantspinosaurus. Parent taxon: Stegosauria.
+Eolambia || Eolambia — род вымерших животных. Латинское название: Eolambia. Входит в таксон: анкилополлексии. || Eolambia — genus of reptiles (fossil). Latin name: Eolambia.
+Cerasinops || Cerasinops — род цератопсов. Латинское название: Cerasinops. Входит в таксон: Неоцератопсии. || Cerasinops — genus of reptiles (fossil). Latin name: Cerasinops. Parent taxon: Neoceratopsia.
+Aviatyrannis || Aviatyrannis — род тираннозавроид. Латинское название: Aviatyrannis. Входит в таксон: Тираннозавроиды. || Aviatyrannis — genus of reptiles (fossil). Latin name: Aviatyrannis. Parent taxon: Tyrannosauroidea.
+Siats || Siats — род вымерших животных. Латинское название: Siats. Входит в таксон: тероподы. || Siats — genus of reptiles (fossil). Latin name: Siats. Parent taxon: Тhеrороdа.
+Медузацератопс; Medusaceratops lokii || Медузацератопс — род цератопсид. Латинское название: Medusaceratops lokii. Входит в таксон: Medusaceratops. || Medusaceratops lokii — Genus of reptiles (fossil). Latin name: Medusaceratops lokii. Parent taxon: Medusaceratops.
+Ксеноцератопсы; Xenoceratops || Ксеноцератопсы — род цератопсид. Латинское название: Xenoceratops. Входит в таксон: Центрозаврины. || Xenoceratops — genus of dinosaurs. Latin name: Xenoceratops. Parent taxon: Centrosaurinae.
+Vagaceratops || Vagaceratops — род цератопсид. Латинское название: Vagaceratops. Входит в таксон: Хазмозаврины. || Vagaceratops — genus of reptiles (fossil). Latin name: Vagaceratops. Parent taxon: Chasmosaurinae.
+сантанараптор; Santanaraptor || Сантанараптор — род тираннозавроид. Латинское название: Santanaraptor. Входит в таксон: целурозавры. || Santanaraptor — genus of reptiles (fossil). Latin name: Santanaraptor.
+Чанъюйраптор; Changyuraptor || Чанъюйраптор — вид хищных динозавров. Латинское название: Changyuraptor. || Changyuraptor — genus of four-winged Asian dinosaurs. Latin name: Changyuraptor.
+Jaxartosaurus || Jaxartosaurus — род гадрозаврид. Латинское название: Jaxartosaurus. Входит в таксон: Ламбеозаврины. || Jaxartosaurus — genus of reptiles (fossil). Latin name: Jaxartosaurus. Parent taxon: Lambeosaurinae.
+Regaliceratops || Regaliceratops — род цератопсид. Латинское название: Regaliceratops. Входит в таксон: Triceratopsini. || Regaliceratops — extinct genus of ceratopsian dinosaurs belonging to the Chasmosaurinae subfamily. Latin name: Regaliceratops. Parent taxon: Triceratopsini.
+Marshosaurus || Marshosaurus — вымерший род динозавров. Латинское название: Marshosaurus. Входит в таксон: Piatnitzkysauridae. || Marshosaurus — genus of reptiles (fossil). Latin name: Marshosaurus. Parent taxon: Piatnitzkysauridae.
+Ekrixinatosaurus || Ekrixinatosaurus — род абелизаврид. Латинское название: Ekrixinatosaurus. Входит в таксон: Carnotaurinae. || Ekrixinatosaurus — genus of reptiles (fossil). Latin name: Ekrixinatosaurus. Parent taxon: Carnotaurinae.
+Valdosaurus || Valdosaurus — вымерший род динозавров. Латинское название: Valdosaurus. Входит в таксон: дриозавриды. || Valdosaurus — genus of reptiles (fossil). Latin name: Valdosaurus. Parent taxon: Dryosauridae.
+Arenysaurus || Arenysaurus — род гадрозаврид. Латинское название: Arenysaurus. Входит в таксон: Ламбеозаврины. || Arenysaurus — genus of hadrosaurid dinosaur (fossil). Latin name: Arenysaurus. Parent taxon: Lambeosaurinae.
+Laquintasaura venezuelae; Laquintasaura || Laquintasaura venezuelae — вымерший род примитивных птицетазовых динозавров. Латинское название: Laquintasaura. Входит в таксон: птицетазовые. || Laquintasaura — genus of primitive dinosaur from Venezuela. Latin name: Laquintasaura.
+Gobisaurus || Gobisaurus — вымерший род рептилий. Латинское название: Gobisaurus. Входит в таксон: Анкилозавриды. || Gobisaurus — genus of reptiles (fossil). Latin name: Gobisaurus. Parent taxon: Ankylosauridae.
+Qiaowanlong || Qiaowanlong — род вымерших животных. Латинское название: Qiaowanlong. || Qiaowanlong — genus of reptiles (fossil). Latin name: Qiaowanlong.
+Albalophosaurus || Albalophosaurus — род цератопсов. Латинское название: Albalophosaurus. Входит в таксон: Marginocephalia. || Albalophosaurus — genus of ornithischian dinosaur. Latin name: Albalophosaurus. Parent taxon: Marginocephalia.
+Zhuchengceratops || Zhuchengceratops — род динозавров. Латинское название: Zhuchengceratops. Входит в таксон: Leptoceratopsidae. || Zhuchengceratops — genus of reptiles (fossil). Latin name: Zhuchengceratops. Parent taxon: Leptoceratopsidae.
+Stenopelix || Stenopelix — род цератопсов. Латинское название: Stenopelix. Входит в таксон: Пахицефалозавры. || Stenopelix — genus of reptiles (fossil). Latin name: Stenopelix. Parent taxon: Pachycephalosauria.
+Falcarius || Falcarius — род теризинозавров. Латинское название: Falcarius. Входит в таксон: Теризинозавры. || Falcarius — genus of reptiles (fossil). Latin name: Falcarius. Parent taxon: Therizinosauria.
+Dysalotosaurus || Dysalotosaurus — род вымерших животных. Латинское название: Dysalotosaurus. Входит в таксон: дриозавриды. || Dysalotosaurus — genus of reptiles (fossil). Latin name: Dysalotosaurus. Parent taxon: Dryosauridae.
+Конфуциусорнитиды; Confuciusornithidae || Конфуциусорнитиды — семейство вымерших авиал, или птиц в широком смысле. Латинское название: Confuciusornithidae. Входит в таксон: Confuciusornithiformes. || Confuciusornithidae — family of birds (fossil). Latin name: Confuciusornithidae. Parent taxon: Confuciusornithiformes.
+Juratyrant langhami || Juratyrant langhami — вид позднеюрских тираннозавроидов. Латинское название: Juratyrant langhami. Входит в таксон: Juratyrant. || Juratyrant langhami — species of Late Jurassic tyrannosauroids. Latin name: Juratyrant langhami. Parent taxon: Juratyrant.
+тираннозавр рекс; Tyrannosaurus rex || Тираннозавр рекс — вид позднемеловых тираннозаврид. Латинское название: Tyrannosaurus rex. Входит в таксон: Тираннозавр. || Tyrannosaurus rex — large carnivorous species of dinosaur, one of the most popular species of fossil taxa known by the general public. Latin name: Tyrannosaurus rex. Parent taxon: Tyrannosaurus.
+Linhenykus monodactylus; Linhenykus || Linhenykus monodactylus — род альваресзаврид. Латинское название: Linhenykus. || Linhenykus — genus of reptiles (fossil). Latin name: Linhenykus.
+Гилмореозавры; Gilmoreosaurus || Гилмореозавры — род птицетазовых динозавров. Латинское название: Gilmoreosaurus. Входит в таксон: гадрозавриды. || Gilmoreosaurus — genus of reptiles (fossil). Latin name: Gilmoreosaurus. Parent taxon: Hadrosauridae.
+Draconyx || Draconyx — род орнитоподных динозавров. Латинское название: Draconyx. Входит в таксон: Camptosauridae. || Draconyx — genus of reptiles (fossil). Latin name: Draconyx. Parent taxon: Camptosauridae.
+Khaan || Khaan — род овирапторид. Латинское название: Khaan. || Khaan — genus of reptiles (fossil). Latin name: Khaan. Parent taxon: Heyuanniinae.
+Banji || Banji — род овирапторид. Латинское название: Banji. Входит в таксон: овирапторозавры. || Banji — genus of reptiles (fossil). Latin name: Banji. Parent taxon: Oviraptorosauria.
+Anchisauria || Anchisauria — клада завроподоморфных динозавров. Латинское название: Anchisauria. Входит в таксон: Sauropodiformes. || Anchisauria — extinct clade of saurischian dinosaurs. Latin name: Anchisauria. Parent taxon: Sauropodiformes.
+ценагнатиды; Caenagnathidae || Ценагнатиды — семейство овирапторозавров. Латинское название: Caenagnathidae. Входит в таксон: Oviraptoroidea. || Caenagnathidae — family of reptiles (fossil). Latin name: Caenagnathidae. Parent taxon: Oviraptoroidea.
+Guaibasauridae || Guaibasauridae — семейство примитивных ящеротазовых динозавров. Латинское название: Guaibasauridae. Входит в таксон: завроподоморфы. || Guaibasauridae — family of basal saurischian dinosaurs (extinct). Latin name: Guaibasauridae. Parent taxon: Sauropodomorpha.
+Asiatosaurus || Asiatosaurus — род меловых завропод. Латинское название: Asiatosaurus. || Asiatosaurus — genus of Cretaceous sauropods. Latin name: Asiatosaurus.
+Chaoyangsauridae || Chaoyangsauridae — семейство цератопсов. Латинское название: Chaoyangsauridae. Входит в таксон: Цератопсы. || Chaoyangsauridae — family of reptiles (fossil). Latin name: Chaoyangsauridae. Parent taxon: Ceratopsia.
+Patagonykus || Patagonykus — род манираптор. Латинское название: Patagonykus. Входит в таксон: Patagonykinae. || Patagonykus — genus of reptiles (fossil). Latin name: Patagonykus. Parent taxon: Patagonykinae.
+Brontomerus || Brontomerus — род завроподных динозавров. Латинское название: Brontomerus. || Brontomerus — genus of reptiles (fossil). Latin name: Brontomerus.
+Игуаноколосс; Iguanacolossus || Игуаноколосс — род животных. Латинское название: Iguanacolossus. || Iguanacolossus — genus of reptiles (fossil). Latin name: Iguanacolossus.
+Drinker; Drinker nisti || Drinker — род животных. Латинское название: Drinker. Входит в таксон: Гипсилофодонтиды. || Drinker nisti — genus of reptiles (fossil). Latin name: Drinker. Parent taxon: Hypsilophodontidae.
+Alvarezsauroidea || Alvarezsauroidea — надсемейство манираптор. Латинское название: Alvarezsauroidea. Входит в таксон: Alvarezsauria. || Alvarezsauroidea — extinct superfamily of theropod dinosaurs (Theropoda). Latin name: Alvarezsauroidea. Parent taxon: Alvarezsauria.
+Фукуизавр; Fukuisaurus || Фукуизавр — род вымерших животных. Латинское название: Fukuisaurus. Входит в таксон: Гадрозавроиды. || Fukuisaurus — genus of reptiles (fossil). Latin name: Fukuisaurus. Parent taxon: Hadrosauroidea.
+Jeyawati || Jeyawati — род динозавров. Латинское название: Jeyawati. Входит в таксон: Гадрозавроиды. || Jeyawati — genus of reptiles (fossil). Latin name: Jeyawati. Parent taxon: Hadrosauroidea.
+Yuxisaurus || Yuxisaurus — род базальных тиреофор. Латинское название: Yuxisaurus. Входит в таксон: тиреофоры. || Yuxisaurus — genus of basal thyreophoran dinosaur. Latin name: Yuxisaurus. Parent taxon: Thyreophora.
+Jakapil || Jakapil — род динозавров из подотряда тиреофор. Латинское название: Jakapil. Входит в таксон: тиреофоры. || Jakapil — late Cretaceous Thyreophoran. Latin name: Jakapil. Parent taxon: Thyreophora.
+номингия; Nomingia || Номингия — род ценагнатид. Латинское название: Nomingia. Входит в таксон: ценагнатиды. || Nomingia — genus of reptiles (fossil). Latin name: Nomingia. Parent taxon: Caenagnathidae.
+Илокелезия; Ilokelesia || Илокелезия — род динозавров. Латинское название: Ilokelesia. Входит в таксон: Абелизавриды. || Ilokelesia — genus of reptiles (fossil). Latin name: Ilokelesia. Parent taxon: Abelisauridae.
+Hungarosaurus || Hungarosaurus — род анкилозавров. Латинское название: Hungarosaurus. Входит в таксон: Нодозавриды. || Hungarosaurus — genus of reptiles (fossil). Latin name: Hungarosaurus. Parent taxon: Nodosauridae.
+Coloradisaurus || Coloradisaurus — род завроподоморфных динозавров. Латинское название: Coloradisaurus. Входит в таксон: Massospondylidae. || Coloradisaurus — genus of reptiles (fossil). Latin name: Coloradisaurus. Parent taxon: Massospondylidae.
+тимурленгия; Timurlengia || Тимурленгия — род тираннозавроид. Латинское название: Timurlengia. Входит в таксон: Тираннозавроиды. || Timurlengia — genus of reptiles (fossil). Latin name: Timurlengia. Parent taxon: Tyrannosauroidea.
+Anoplosaurus || Anoplosaurus — род птицетазовых динозавров. Латинское название: Anoplosaurus. Входит в таксон: Нодозавриды. || Anoplosaurus — genus of reptiles (fossil). Latin name: Anoplosaurus. Parent taxon: Nodosauridae.
+Тираннорапторы || Тираннорапторы — клада целурозавров. Латинское название: Tyrannoraptora. Входит в таксон: целурозавры.
+Acheroraptor || Acheroraptor — род дромеозаврид. Латинское название: Acheroraptor. || Acheroraptor — genus of dromaeosaurid theropod. Latin name: Acheroraptor.
+котазавр; Kotasaurus || Котазавр — род завроподных динозавров. Латинское название: Kotasaurus. Входит в таксон: Завроподы. || Kotasaurus — genus of reptiles (fossil). Latin name: Kotasaurus. Parent taxon: Sauropoda.
+Агносфитис; Agnosphitys || Агносфитис — вымерший род архозавров. Латинское название: Agnosphitys. Входит в таксон: ящеротазовые. || Agnosphitys — extinct genus of archosaurs. Latin name: Agnosphitys. Parent taxon: Saurischia.
+Tanycolagreus || Tanycolagreus — род динозавров. Латинское название: Tanycolagreus. Входит в таксон: Coeluridae. || Tanycolagreus — genus of reptiles (fossil). Latin name: Tanycolagreus. Parent taxon: Coeluridae.
+Aepyornithomimus || Aepyornithomimus — род орнитомимид. Латинское название: Aepyornithomimus. Входит в таксон: Ornithomimidae. || Aepyornithomimus — genus of ornithomimid theropods. Latin name: Aepyornithomimus. Parent taxon: Ornithomimidae.
+Hulsanpes || Hulsanpes — род дромеозаврид. Латинское название: Hulsanpes. Входит в таксон: Halszkaraptorinae. || Hulsanpes — genus of dromaeosaurid theropod dinosaur (fossil). Latin name: Hulsanpes. Parent taxon: Halszkaraptorinae.
+Гондванатитан; Gondwanatitan || Гондванатитан — род вымерших животных. Латинское название: Gondwanatitan. Входит в таксон: Aeolosaurini. || Gondwanatitan — genus of reptiles (fossil). Latin name: Gondwanatitan. Parent taxon: Aeolosaurini.
+Zby atlanticus || Zby atlanticus — род завроподных динозавров. Латинское название: Zby atlanticus. Входит в таксон: Zby. || Zby atlanticus — species of reptile (fossil). Latin name: Zby atlanticus. Parent taxon: Zby.
+Savannasaurus || Savannasaurus — род завроподных динозавров. Латинское название: Savannasaurus. Входит в таксон: Титанозавры. || Savannasaurus — genus of reptiles. Latin name: Savannasaurus.
+Mamenchisauridae || Mamenchisauridae — семейство завроподных динозавров. Латинское название: Mamenchisauridae. || Mamenchisauridae — extinct family of sauropod dinosaurs (Sauropoda). Latin name: Mamenchisauridae. Parent taxon: Eusauropoda.
+тетисгадрос; Tethyshadros || Тетисгадрос — род вымерших животных. Латинское название: Tethyshadros. Входит в таксон: Гадрозавроиды. || Tethyshadros — extinct genus of ornithopod dinosaurs (Ornithopoda). Latin name: Tethyshadros. Parent taxon: Hadrosauroidea.
+Энигмозавр; Enigmosaurus || Энигмозавр — род теризинозаврид. Латинское название: Enigmosaurus. Входит в таксон: Теризинозавриды. || Enigmosaurus — genus of reptiles (fossil). Latin name: Enigmosaurus. Parent taxon: Therizinosauridae.
+Rinconsaurus || Rinconsaurus — род завроподных динозавров. Латинское название: Rinconsaurus. || Rinconsaurus — genus of reptiles. Latin name: Rinconsaurus.
+Maip || Maip — род тероподных динозавров. Латинское название: Maip. Входит в таксон: Megaraptoridae. || Maip — extinct genus of theropod dinosaurs. Latin name: Maip. Parent taxon: Megaraptoridae.
+Sanjuansaurus || Sanjuansaurus — род герреразаврид. Латинское название: Sanjuansaurus. Входит в таксон: Герреразавриды. || Sanjuansaurus — genus of dinosaurs, among the oldest known dinosaurs, Triassic period. Latin name: Sanjuansaurus. Parent taxon: Herrerasauridae.
+Acristavus || Acristavus — род гадрозаврид. Латинское название: Acristavus. Входит в таксон: гадрозавриды. || Acristavus — genus of hadrosaurid dinosaurs. Latin name: Acristavus. Parent taxon: Hadrosauridae.
+отниелозавр; Othnielosaurus || Отниелозавр — род животных. Латинское название: Othnielosaurus. || Othnielosaurus — genus of reptiles (fossil). Latin name: Othnielosaurus.
+Ляонинозавр; Liaoningosaurus || Ляонинозавр — род анкилозавров. Латинское название: Liaoningosaurus. Входит в таксон: Нодозавриды. || Liaoningosaurus — genus of reptiles (fossil). Latin name: Liaoningosaurus. Parent taxon: Nodosauridae.
+Ganzhousaurus nankangensis || Ganzhousaurus nankangensis — род овирапторид. Латинское название: Ganzhousaurus nankangensis. Входит в таксон: Ganzhousaurus.
+Adratiklit || Adratiklit — род юрских стегозаврид. Латинское название: Adratiklit. Входит в таксон: Dacentrurinae. || Adratiklit — genus of stegosaurian dinosaur. Latin name: Adratiklit. Parent taxon: Dacentrurinae.
+Iberomesornis romerali || Iberomesornis romerali — род энанциорнисовых птиц. Латинское название: Iberomesornis romerali. Входит в таксон: Iberomesornis. || Iberomesornis romerali — species of bird (fossil). Latin name: Iberomesornis romerali. Parent taxon: Iberomesornis.
+Machairasaurus || Machairasaurus — род овирапторид. Латинское название: Machairasaurus. Входит в таксон: овирапториды. || Machairasaurus — genus of reptiles (fossil). Latin name: Machairasaurus. Parent taxon: Oviraptoridae.
+Eshanosaurus || Eshanosaurus — род тероподных динозавров. Латинское название: Eshanosaurus. Входит в таксон: ящеротазовые. || Eshanosaurus — genus of reptiles (fossil). Latin name: Eshanosaurus. Parent taxon: Saurischia.
+Фукуититан; Fukuititan || Фукуититан — род вымерших животных. Латинское название: Fukuititan. || Fukuititan — genus of reptiles (fossil). Latin name: Fukuititan.
+Ксиксиазавр; Xixiasaurus || Ксиксиазавр — род троодонтид. Латинское название: Xixiasaurus. Входит в таксон: Троодонтиды. || Xixiasaurus — Genus of dinosaur. Latin name: Xixiasaurus. Parent taxon: Troodontidae.
+Lamplughsaura || Lamplughsaura — род динозавров. Латинское название: Lamplughsaura. Входит в таксон: Завроподы. || Lamplughsaura — genus of reptiles (fossil). Latin name: Lamplughsaura. Parent taxon: Sauropoda.
+Vallibonavenatrix || Vallibonavenatrix — род спинозаврид. Латинское название: Vallibonavenatrix. Входит в таксон: Spinosaurinae. || Vallibonavenatrix — Genus of spinosaurid theropod dinosaur. Latin name: Vallibonavenatrix. Parent taxon: Spinosaurinae.
+Aquilops || Aquilops — род цератопсов. Латинское название: Aquilops. Входит в таксон: Неоцератопсии. || Aquilops — extinct genus of ceratopsian dinosaurs (Ceratopsia). Latin name: Aquilops. Parent taxon: Neoceratopsia.
+Caenagnathoidea || Caenagnathoidea — надсемейство овирапторозавров. Латинское название: Caenagnathoidea. || Caenagnathoidea — superfamily of reptiles (fossil). Latin name: Caenagnathoidea. Parent taxon: Edentoraptora.
+дриозавриды; Dryosauridae || Дриозавриды — семейство птицетазовых динозавров. Латинское название: Dryosauridae. Входит в таксон: игуанодонты. || Dryosauridae — family of reptiles (fossil). Latin name: Dryosauridae.
+Ajancingenia || Ajancingenia — род овирапторид. Латинское название: Ajancingenia. Входит в таксон: овирапторозавры. || Ajancingenia — genus of reptiles (fossil). Latin name: Ajancingenia. Parent taxon: Oviraptorosauria.
+Camarillasaurus || Camarillasaurus — род спинозаврид. Латинское название: Camarillasaurus. Входит в таксон: ящеротазовые. || Camarillasaurus — genus of reptiles (fossil). Latin name: Camarillasaurus. Parent taxon: Saurischia.
+Spicomellus || Spicomellus — род динозавров. Латинское название: Spicomellus. Входит в таксон: анкилозавры. || Spicomellus — extinct genus of dinosaurs. Latin name: Spicomellus. Parent taxon: Ankylosauria.
+Shenzhousaurus || Shenzhousaurus — род орнитомимозавров. Латинское название: Shenzhousaurus. Входит в таксон: Орнитомимозавры. || Shenzhousaurus — genus of reptiles (fossil). Latin name: Shenzhousaurus. Parent taxon: Ornithomimosauria.
+Sauroniops || Sauroniops — род вымерших животных. Латинское название: Sauroniops. Входит в таксон: Кархародонтозавриды. || Sauroniops — genus of reptiles (fossil). Latin name: Sauroniops. Parent taxon: Carcharodontosauridae.
+Proa || Proa — род вымерших животных. Латинское название: Proa. || Proa — genus of reptiles (fossil). Latin name: Proa.
+Нэмэгтозавриды; Nemegtosauridae || Нэмэгтозавриды — семейство титанозавров. Латинское название: Nemegtosauridae. Входит в таксон: Lithostrotia. || Nemegtosauridae — extinct family of sauropod dinosaurs (Sauropoda). Latin name: Nemegtosauridae. Parent taxon: Lithostrotia.
+Bagaraatan || Bagaraatan — род тираннозавроид. Латинское название: Bagaraatan. Входит в таксон: Тираннозавроиды. || Bagaraatan — genus of reptiles (fossil). Latin name: Bagaraatan. Parent taxon: Tyrannosauroidea.
+Khankhuuluu || Khankhuuluu — род тираннозавроид. Латинское название: Khankhuuluu. Входит в таксон: Pantyrannosauria. || Khankhuuluu — extinct genus of tyrannosauroid dinosaurs. Latin name: Khankhuuluu. Parent taxon: Pantyrannosauria.
+Teyuwasu || Teyuwasu — вымерший род динозавров. Латинское название: Teyuwasu. Входит в таксон: ящеротазовые. || Teyuwasu — genus of reptiles (fossil). Latin name: Teyuwasu. Parent taxon: Saurischia.
+Orkoraptor || Orkoraptor — род вымерших животных. Латинское название: Orkoraptor. Входит в таксон: Megaraptoridae. || Orkoraptor — genus of reptiles (fossil). Latin name: Orkoraptor. Parent taxon: Megaraptoridae.
+Lithostrotia || Lithostrotia — клада титанозавров. Латинское название: Lithostrotia. Входит в таксон: Титанозавры. || Lithostrotia — extinct clade of sauropod dinosaurs (Sauropoda). Latin name: Lithostrotia.
+Galeamopus || Galeamopus — род диплодоцид. Латинское название: Galeamopus. Входит в таксон: Diplodocinae. || Galeamopus — genus of reptiles (fossil). Latin name: Galeamopus. Parent taxon: Diplodocinae.
+Panamericansaurus || Panamericansaurus — род титанозавров. Латинское название: Panamericansaurus. || Panamericansaurus — genus of reptiles (fossil). Latin name: Panamericansaurus.
+Colepiocephale || Colepiocephale — род пахицефалозаврид. Латинское название: Colepiocephale. Входит в таксон: Пахицефалозавры. || Colepiocephale — genus of reptiles (fossil). Latin name: Colepiocephale. Parent taxon: Pachycephalosauria.
+Angolatitan || Angolatitan — род вымерших животных. Латинское название: Angolatitan. || Angolatitan — genus of reptiles (fossil). Latin name: Angolatitan.
+Dracopelta || Dracopelta — род анкилозавров. Латинское название: Dracopelta. Входит в таксон: анкилозавры. || Dracopelta — genus of reptiles (fossil). Latin name: Dracopelta. Parent taxon: Ankylosauria.
+Hanssuesia || Hanssuesia — род пахицефалозаврид. Латинское название: Hanssuesia. Входит в таксон: Пахицефалозавриды. || Hanssuesia — genus of reptiles (fossil). Latin name: Hanssuesia. Parent taxon: Pachycephalosauridae.
+Tameryraptor || Tameryraptor — род кархародонтозаврид. Латинское название: Tameryraptor. Входит в таксон: Кархародонтозавриды. || Tameryraptor — extinct genus of carcharodontosaurid theropod dinosaurs. Latin name: Tameryraptor. Parent taxon: Carcharodontosauridae.
+Raptor; Rapator || Raptor — сомнительный род тероподных динозавров. Латинское название: Rapator. Входит в таксон: Megaraptora. || Rapator — genus of reptiles (fossil). Latin name: Rapator. Parent taxon: Megaraptora.
+Kakuru kujani || Kakuru kujani — вид вымерших животных. Латинское название: Kakuru kujani. Входит в таксон: Kakuru. || Kakuru kujani — species of reptile (fossil). Latin name: Kakuru kujani. Parent taxon: Kakuru.
+Eudromaeosauria || Eudromaeosauria — клада дромеозаврид. Латинское название: Eudromaeosauria. Входит в таксон: Дромеозавриды. || Eudromaeosauria — extinct clade of theropod dinosaurs. Latin name: Eudromaeosauria. Parent taxon: Dromaeosauridae.
+Bicentenaria argentina; Bicentenaria || Bicentenaria argentina — род целурозавров. Латинское название: Bicentenaria. Входит в таксон: ящеротазовые. || Bicentenaria — genus of reptiles (fossil). Latin name: Bicentenaria. Parent taxon: Saurischia.
+Lametasaurus || Lametasaurus — сомнительный вид травоядных динозавров. Латинское название: Lametasaurus. Входит в таксон: Carnotaurinae. || Lametasaurus — genus of reptiles (fossil). Latin name: Lametasaurus. Parent taxon: Carnotaurinae.
+ценагнат; Caenagnathus || Ценагнат — род ценагнатид. Латинское название: Caenagnathus. Входит в таксон: Caenagnathinae. || Caenagnathus — genus of reptiles (fossil). Latin name: Caenagnathus. Parent taxon: Caenagnathinae.
+анкилополлексии || Анкилополлексии — клада животных. Латинское название: Ankylopollexia. Входит в таксон: дриоморфы.
+Plateosauria || Plateosauria — клада завроподоморфных динозавров. Латинское название: Plateosauria. Входит в таксон: Bagualosauria. || Plateosauria — extinct clade of saurischian dinosaurs. Latin name: Plateosauria. Parent taxon: Bagualosauria.
+Zhongyuansaurus || Zhongyuansaurus — род анкилозавров. Латинское название: Zhongyuansaurus. Входит в таксон: Анкилозавриды. || Zhongyuansaurus — genus of reptiles (fossil). Latin name: Zhongyuansaurus. Parent taxon: Ankylosauridae.
+Megaraptora || Megaraptora — клада тероподных динозавров. Латинское название: Megaraptora. Входит в таксон: целурозавры. || Megaraptora — extinct clade of theropod dinosaurs (Theropoda). Latin name: Megaraptora.
+Tatisaurus || Tatisaurus — род птицетазовых динозавров. Латинское название: Tatisaurus. Входит в таксон: тиреофоры. || Tatisaurus — genus of ornithischian dinosaurs. Latin name: Tatisaurus. Parent taxon: Thyreophora.
+Yurgovuchia doellingi || Yurgovuchia doellingi — род динозавров. Латинское название: Yurgovuchia doellingi. Входит в таксон: Yurgovuchia. || Yurgovuchia doellingi — species of reptile (fossil). Latin name: Yurgovuchia doellingi. Parent taxon: Yurgovuchia.
+Ceratosuchops || Ceratosuchops — род спинозаврид. Латинское название: Ceratosuchops. || Ceratosuchops — extinct species of theropod dinosaurs belonging tot the Spinosaurids. Latin name: Ceratosuchops.
+Notocolossus || Notocolossus — род титанозавров. Латинское название: Notocolossus. || Notocolossus — genus of reptiles. Latin name: Notocolossus.
+Iberospinus || Iberospinus — род спинозаврид. Латинское название: Iberospinus. Входит в таксон: Спинозавриды. || Iberospinus — extinct genus of spinosaurid dinosaur. Latin name: Iberospinus. Parent taxon: Spinosauridae.
+Buriolestes || Buriolestes — род завроподоморф. Латинское название: Buriolestes. Входит в таксон: завроподоморфы. || Buriolestes — genus of reptiles (fossil). Latin name: Buriolestes. Parent taxon: Sauropodomorpha.
+Similicaudipteryx || Similicaudipteryx — род овирапторозавров. Латинское название: Similicaudipteryx. Входит в таксон: Caudipterygidae. || Similicaudipteryx — genus of reptiles (fossil). Latin name: Similicaudipteryx. Parent taxon: Caudipterygidae.
+Berthasaura || Berthasaura — род ноазаврид. Латинское название: Berthasaura. Входит в таксон: ноазавриды. || Berthasaura — genus of noasaurid dinosaur from the Late Cretaceous period. Latin name: Berthasaura. Parent taxon: Noasauridae.
+Albinykus || Albinykus — род альваресзаврид. Латинское название: Albinykus. || Albinykus — genus of alvarezsaurid dinosaur. Latin name: Albinykus.
+Suskityrannus || Suskityrannus — род тираннозавроид. Латинское название: Suskityrannus. Входит в таксон: Тираннозавроиды. || Suskityrannus — genus of tyrannosauroids. Latin name: Suskityrannus. Parent taxon: Tyrannosauroidea.
+Moros intrepidus || Moros intrepidus — вид динозавров. Латинское название: Moros intrepidus. Входит в таксон: Moros. || Moros intrepidus — extinct species of tyrannosaur (Tyrannosauroidea). Latin name: Moros intrepidus. Parent taxon: Moros.
+Ulughbegsaurus || Ulughbegsaurus — род аллозавроид. Латинское название: Ulughbegsaurus. Входит в таксон: Кархародонтозавриды. || Ulughbegsaurus — genus of carnivorous carcharodontosaurid dinosaur (fossil). Latin name: Ulughbegsaurus. Parent taxon: Carcharodontosauridae.
+Cruxicheiros || Cruxicheiros — род динозавров. Латинское название: Cruxicheiros. Входит в таксон: ящеротазовые. || Cruxicheiros — genus of reptiles (fossil). Latin name: Cruxicheiros. Parent taxon: Saurischia.
+Traukutitan || Traukutitan — род вымерших животных. Латинское название: Traukutitan. Входит в таксон: Lognkosauria. || Traukutitan — genus of reptiles (fossil). Latin name: Traukutitan. Parent taxon: Lognkosauria.
+Амаргазавр; Amargasaurus cazaui || Амаргазавр — род дикреозаврид. Латинское название: Amargasaurus cazaui. Входит в таксон: Amargasaurus. || Amargasaurus cazaui — species of sauropod. Latin name: Amargasaurus cazaui. Parent taxon: Amargasaurus.
+Erliansaurus || Erliansaurus — род теризинозаврид. Латинское название: Erliansaurus. Входит в таксон: Теризинозавриды. || Erliansaurus — genus of reptiles (fossil). Latin name: Erliansaurus. Parent taxon: Therizinosauridae.
+Wiehenvenator || Wiehenvenator — род вымерших животных. Латинское название: Wiehenvenator. Входит в таксон: Megalosauridae. || Wiehenvenator — genus of megalosaurid theropod dinosaur (fossil). Latin name: Wiehenvenator. Parent taxon: Megalosauridae.
+Лукалкан; Llukalkan || Лукалкан — род абелизаврид. Латинское название: Llukalkan. Входит в таксон: Furileusauria. || Llukalkan — Genus of abelisaurid dinosaur from the Late Cretaceous period. Latin name: Llukalkan. Parent taxon: Furileusauria.
+Ornithoscelida || Ornithoscelida — предлагаемая клада динозавров. Латинское название: Ornithoscelida. Входит в таксон: динозавры. || Ornithoscelida — taxon of reptiles. Latin name: Ornithoscelida. Parent taxon: dinosaur.
+Urbacodon || Urbacodon — род тероподных динозавров. Латинское название: Urbacodon. Входит в таксон: Troodontinae. || Urbacodon — genus of reptiles (fossil). Latin name: Urbacodon. Parent taxon: Troodontinae.
+Velafrons || Velafrons — род гадрозаврид. Латинское название: Velafrons. Входит в таксон: Lambeosaurini. || Velafrons — genus of reptiles (fossil). Latin name: Velafrons. Parent taxon: Lambeosaurini.
+Dakotadon || Dakotadon — род животных. Латинское название: Dakotadon. || Dakotadon — genus of reptiles (fossil). Latin name: Dakotadon.
+Тава; Tawa hallae || Тава — род ящеротазовых динозавров. Латинское название: Tawa hallae. Входит в таксон: Tawa. || Tawa hallae — species of reptile (fossil). Latin name: Tawa hallae. Parent taxon: Tawa.
+Linhevenator tani; Linhevenator || Linhevenator tani — род троодонтид. Латинское название: Linhevenator. || Linhevenator — genus of reptiles (fossil). Latin name: Linhevenator.
+Ahvaytum || Ahvaytum — род ящеротазовых динозавров. Латинское название: Ahvaytum. Входит в таксон: завроподоморфы. || Ahvaytum — extinct genus of sauropodomorph dinosaurs. Latin name: Ahvaytum. Parent taxon: Sauropodomorpha.
+Керберозавр; Kerberosaurus || Керберозавр — род гадрозаврид. Латинское название: Kerberosaurus. Входит в таксон: гадрозавриды. || Kerberosaurus — genus of reptiles (fossil). Latin name: Kerberosaurus. Parent taxon: Hadrosauridae.
+Alcovasaurus || Alcovasaurus — род юрских стегозаврид. Латинское название: Alcovasaurus. Входит в таксон: Стегозавры. || Alcovasaurus — genus of Jurassic stegosaurids. Latin name: Alcovasaurus. Parent taxon: Stegosauria.
+хуананьзавр; Huanansaurus || Хуананьзавр — род овирапторид. Латинское название: Huanansaurus. Входит в таксон: Oviraptorinae. || Huanansaurus — genus of reptiles (fossil). Latin name: Huanansaurus. Parent taxon: Oviraptorinae.
+Pantydraco || Pantydraco — род вымерших животных. Латинское название: Pantydraco. Входит в таксон: ящеротазовые. || Pantydraco — extinct genus of sauropodomorph dinosaurs (Sauropodomorpha). Latin name: Pantydraco. Parent taxon: Saurischia.
+Paludititan || Paludititan — род вымерших животных. Латинское название: Paludititan. || Paludititan — genus of reptiles (fossil). Latin name: Paludititan.
+Bashanosaurus || Bashanosaurus — род стегозавров. Латинское название: Bashanosaurus. Входит в таксон: Стегозавры. || Bashanosaurus — extinct genus of dinosaurs. Latin name: Bashanosaurus. Parent taxon: Stegosauria.
+Angulomastacator || Angulomastacator — род динозавров. Латинское название: Angulomastacator. Входит в таксон: гадрозавриды. || Angulomastacator — genus of reptiles (fossil). Latin name: Angulomastacator. Parent taxon: Hadrosauridae.
+Equijubus || Equijubus — род динозавров. Латинское название: Equijubus. Входит в таксон: Гадрозавроиды. || Equijubus — genus of reptiles (fossil). Latin name: Equijubus. Parent taxon: Hadrosauroidea.
+шисиния; Shixinggia || Шисиния — род овирапторид. Латинское название: Shixinggia. Входит в таксон: овирапторозавры. || Shixinggia — genus of reptiles (fossil). Latin name: Shixinggia. Parent taxon: Oviraptorosauria.
+Shanag || Shanag — род дромеозаврид. Латинское название: Shanag. Входит в таксон: Дромеозавриды. || Shanag — genus of reptiles (fossil). Latin name: Shanag. Parent taxon: Dromaeosauridae.
+Narambuenatitan || Narambuenatitan — род вымерших животных. Латинское название: Narambuenatitan. Входит в таксон: Lithostrotia. || Narambuenatitan — genus of reptiles (fossil). Latin name: Narambuenatitan. Parent taxon: Lithostrotia.
+Abdarainurus || Abdarainurus — род титанозавров. Латинское название: Abdarainurus. Входит в таксон: Титанозавры. || Abdarainurus — genus of sauropods. Latin name: Abdarainurus.
+Сцелидозавриды; Scelidosauridae || Сцелидозавриды — семейство птицетазовых динозавров. Латинское название: Scelidosauridae. || Scelidosauridae — family of ornithischian dinosaurs. Latin name: Scelidosauridae.
+Hoplitosaurus || Hoplitosaurus — род анкилозавров. Латинское название: Hoplitosaurus. Входит в таксон: анкилозавры. || Hoplitosaurus — genus of reptiles (fossil). Latin name: Hoplitosaurus. Parent taxon: Ankylosauria.
+Regnosaurus || Regnosaurus — род птицетазовых динозавров. Латинское название: Regnosaurus. Входит в таксон: Huayangosauridae. || Regnosaurus — genus of reptiles (fossil). Latin name: Regnosaurus. Parent taxon: Huayangosauridae.
+Magnapaulia || Magnapaulia — род орнитоподовых динозавров. Латинское название: Magnapaulia. Входит в таксон: гадрозавриды. || Magnapaulia — genus of reptiles (fossil). Latin name: Magnapaulia. Parent taxon: Hadrosauridae.
+Priconodon crassus || Priconodon crassus — род анкилозавров. Латинское название: Priconodon crassus. Входит в таксон: Priconodon. || Priconodon crassus — species of reptile (fossil). Latin name: Priconodon crassus. Parent taxon: Priconodon.
+Geminiraptor || Geminiraptor — род троодонтид. Латинское название: Geminiraptor. Входит в таксон: Троодонтиды. || Geminiraptor — genus of troodontid dinosaur, Cretaceous period (fossil). Latin name: Geminiraptor. Parent taxon: Troodontidae.
+Лофоротон; Lophorhothon atopus || Лофоротон — род динозавров. Латинское название: Lophorhothon atopus. Входит в таксон: Lophorhothon. || Lophorhothon atopus — species of reptile (fossil). Latin name: Lophorhothon atopus. Parent taxon: Lophorhothon.
+Gobivenator || Gobivenator — род троодонтид. Латинское название: Gobivenator. || Gobivenator — genus of reptiles (fossil). Latin name: Gobivenator.
+Crittendenceratops || Crittendenceratops — род центрозаврин. Латинское название: Crittendenceratops. Входит в таксон: Nasutoceratopsini. || Crittendenceratops — genus of horned centrosaurine ceratopsid dinosaur. Latin name: Crittendenceratops. Parent taxon: Nasutoceratopsini.
+Albertadromeus || Albertadromeus — род позднемеловых птицетазовых динозавров. Латинское название: Albertadromeus. Входит в таксон: Orodrominae. || Albertadromeus — genus of Late Cretaceous ornithischian dinosaurs. Latin name: Albertadromeus. Parent taxon: Orodrominae.
+Pterospondylus || Pterospondylus — ископаемый род динозавров. Латинское название: Pterospondylus. Входит в таксон: целофизиды. || Pterospondylus — genus of reptiles (fossil). Latin name: Pterospondylus. Parent taxon: Coelophysidae.
+Hesperornithoides || Hesperornithoides — род позднемеловых троодонтид. Латинское название: Hesperornithoides. Входит в таксон: Троодонтиды. || Hesperornithoides — genus of troodontid theropod dinosaur. Latin name: Hesperornithoides. Parent taxon: Troodontidae.
+Alioramini || Alioramini — клада тираннозаврид. Латинское название: Alioramini. Входит в таксон: Тираннозаврины. || Alioramini — tribe of reptiles (fossil). Latin name: Alioramini. Parent taxon: Tyrannosaurinae.
+Kangnasaurus || Kangnasaurus — род птицетазовых динозавров. Латинское название: Kangnasaurus. Входит в таксон: дриозавриды. || Kangnasaurus — genus of reptiles (fossil). Latin name: Kangnasaurus. Parent taxon: Dryosauridae.
+Boreonykus || Boreonykus — род дромеозаврид. Латинское название: Boreonykus. Входит в таксон: Dromaeosaurinae. || Boreonykus — genus of reptiles (fossil). Latin name: Boreonykus. Parent taxon: Dromaeosaurinae.
+Deinocheiridae || Deinocheiridae — семейство тероподных динозавров. Латинское название: Deinocheiridae. Входит в таксон: Ornithomimoidea. || Deinocheiridae — family of reptiles (fossil). Latin name: Deinocheiridae. Parent taxon: Ornithomimoidea.
+Thescelosauridae || Thescelosauridae — семейство птицетазовых динозавров. Латинское название: Thescelosauridae. || Thescelosauridae — family of reptiles (fossil). Latin name: Thescelosauridae.
+Пампараптор; Pamparaptor || Пампараптор — вымерший вид динозавров. Латинское название: Pamparaptor. Входит в таксон: Дейнонихозавры. || Pamparaptor — genus of reptiles (fossil). Latin name: Pamparaptor. Parent taxon: Deinonychosauria.
+Теризинозавроиды; Therizinosauroidea || Теризинозавроиды — надсемейство вымерших животных. Латинское название: Therizinosauroidea. Входит в таксон: Теризинозавры. || Therizinosauroidea — superfamily of reptiles (fossil). Latin name: Therizinosauroidea. Parent taxon: Therizinosauria.
+Asylosaurus || Asylosaurus — род динозавров. Латинское название: Asylosaurus. Входит в таксон: ящеротазовые. || Asylosaurus — genus of reptiles (fossil). Latin name: Asylosaurus. Parent taxon: Saurischia.
+Thanos simonattoi || Thanos simonattoi — вид динозавров. Латинское название: Thanos simonattoi. Входит в таксон: Thanos. || Thanos simonattoi — species of reptile (fossil). Latin name: Thanos simonattoi. Parent taxon: Thanos.
+Lambeosaurini || Lambeosaurini — триба животных. Латинское название: Lambeosaurini. Входит в таксон: Corythosauria. || Lambeosaurini — tribe of reptiles (fossil). Latin name: Lambeosaurini. Parent taxon: Corythosauria.
+Duonychus || Duonychus — род теризинозаврид. Латинское название: Duonychus. Входит в таксон: Теризинозавриды. || Duonychus — extinct genus of therizinosaurid dinosaurs. Latin name: Duonychus. Parent taxon: Therizinosauridae.
+Tongtianlong || Tongtianlong — род овирапторид. Латинское название: Tongtianlong. Входит в таксон: овирапториды. || Tongtianlong — genus of reptiles (fossil). Latin name: Tongtianlong. Parent taxon: Oviraptoridae.
+Bihariosaurus || Bihariosaurus — род животных. Латинское название: Bihariosaurus. Входит в таксон: игуанодонты. || Bihariosaurus — genus of reptiles (fossil). Latin name: Bihariosaurus.
+Cedrorestes || Cedrorestes — род животных. Латинское название: Cedrorestes. Входит в таксон: гадрозавриды. || Cedrorestes — genus of reptiles (fossil). Latin name: Cedrorestes. Parent taxon: Hadrosauridae.
+Luoyanggia || Luoyanggia — род овирапторид. Латинское название: Luoyanggia. Входит в таксон: овирапториды. || Luoyanggia — genus of reptiles (fossil). Latin name: Luoyanggia. Parent taxon: Oviraptoridae.
+Apatosaurinae || Apatosaurinae — подсемейство динозавров. Латинское название: Apatosaurinae. Входит в таксон: Diplodocidae. || Apatosaurinae — extinct subfamily of sauropod dinosaurs. Latin name: Apatosaurinae. Parent taxon: Diplodocidae.
+Haya || Haya — род животных. Латинское название: Haya. Входит в таксон: Jeholosauridae. || Haya — genus of reptiles (fossil). Latin name: Haya. Parent taxon: Jeholosauridae.
+Pararhabdodon || Pararhabdodon — род гадрозаврид. Латинское название: Pararhabdodon. Входит в таксон: Tsintaosaurini. || Pararhabdodon — genus of reptiles (fossil). Latin name: Pararhabdodon. Parent taxon: Tsintaosaurini.
+Astrophocaudia || Astrophocaudia — род завроподных динозавров. Латинское название: Astrophocaudia. || Astrophocaudia — genus of reptiles (fossil). Latin name: Astrophocaudia.
+весперзавр; Vespersaurus || Весперзавр — род ноазаврид. Латинское название: Vespersaurus. Входит в таксон: Noasaurinae. || Vespersaurus — genus of noasaurine theropod dinosaur. Latin name: Vespersaurus. Parent taxon: Noasaurinae.
+Yongjinglong || Yongjinglong — род вымерших животных. Латинское название: Yongjinglong. || Yongjinglong — genus of dinosaurs. Latin name: Yongjinglong.
+Alnashetri || Alnashetri — род альваресзаврид. Латинское название: Alnashetri. Входит в таксон: Альваресзавриды. || Alnashetri — genus of reptiles (fossil). Latin name: Alnashetri. Parent taxon: Alvarezsauridae.
+Theiophytalia || Theiophytalia — род вымерших животных. Латинское название: Theiophytalia. || Theiophytalia — genus of reptiles (fossil). Latin name: Theiophytalia.
+Alpkarakush || Alpkarakush — род метриакантозаврид. Латинское название: Alpkarakush. Входит в таксон: Metriacanthosaurinae. || Alpkarakush — extinct genus of theropod dinosaurs. Latin name: Alpkarakush. Parent taxon: Metriacanthosaurinae.
+Quetecsaurus || Quetecsaurus — род завроподовых динозавров. Латинское название: Quetecsaurus. || Quetecsaurus — genus of dinosaurs. Latin name: Quetecsaurus.
+Murusraptor || Murusraptor — род вымерших животных. Латинское название: Murusraptor. Входит в таксон: Megaraptoridae. || Murusraptor — genus of reptiles (fossil). Latin name: Murusraptor. Parent taxon: Megaraptoridae.
+Hippodraco || Hippodraco — род вымерших животных. Латинское название: Hippodraco. || Hippodraco — genus of reptiles (fossil). Latin name: Hippodraco.
+фукуивенатор; Fukuivenator || Фукуивенатор — род манираптор. Латинское название: Fukuivenator. Входит в таксон: Теризинозавры. || Fukuivenator — extinct genus of theropod dinosaurs. Latin name: Fukuivenator. Parent taxon: Therizinosauria.
+Philovenator || Philovenator — род троодонтид. Латинское название: Philovenator. Входит в таксон: Jinfengopteryginae. || Philovenator — genus of reptiles (fossil). Latin name: Philovenator. Parent taxon: Jinfengopteryginae.
+Sierraceratops || Sierraceratops — род цератопсид. Латинское название: Sierraceratops. Входит в таксон: цератопсиды. || Sierraceratops — genus of chasmosaurine dinosaur (fossil). Latin name: Sierraceratops. Parent taxon: Ceratopsidae.
+Yixianosaurus longimanus || Yixianosaurus longimanus — род манираптор. Латинское название: Yixianosaurus longimanus. Входит в таксон: Yixianosaurus. || Yixianosaurus longimanus — species of reptile (fossil). Latin name: Yixianosaurus longimanus. Parent taxon: Yixianosaurus.
+Duriatitan || Duriatitan — род вымерших животных. Латинское название: Duriatitan. || Duriatitan — genus of reptiles (fossil). Latin name: Duriatitan.
+Chuxiongosaurus || Chuxiongosaurus — род вымерших животных. Латинское название: Chuxiongosaurus. Входит в таксон: Anchisauria. || Chuxiongosaurus — genus of reptiles (fossil). Latin name: Chuxiongosaurus. Parent taxon: Anchisauria.
+шамозавр; Shamosaurus || Шамозавр — род анкилозавров. Латинское название: Shamosaurus. Входит в таксон: Анкилозавриды. || Shamosaurus — genus of reptiles (fossil). Latin name: Shamosaurus. Parent taxon: Ankylosauridae.
+Tonganosaurus || Tonganosaurus — род мамэньсизаврид. Латинское название: Tonganosaurus. Входит в таксон: Mamenchisauridae. || Tonganosaurus — genus of reptiles (fossil). Latin name: Tonganosaurus. Parent taxon: Mamenchisauridae.
+Blasisaurus || Blasisaurus — род позднемеловых гадрозаврид. Латинское название: Blasisaurus. Входит в таксон: гадрозавриды. || Blasisaurus — genus of Late Cretaceous hadrosaurids. Latin name: Blasisaurus. Parent taxon: Hadrosauridae.
+Machairoceratops || Machairoceratops — род цератопсид. Латинское название: Machairoceratops. Входит в таксон: Центрозаврины. || Machairoceratops — genus of reptiles (fossil). Latin name: Machairoceratops. Parent taxon: Centrosaurinae.
+Bonapartenykus || Bonapartenykus — род вымерших животных. Латинское название: Bonapartenykus. Входит в таксон: Patagonykinae. || Bonapartenykus — extinct genus of alvarezsaurid theropods. Latin name: Bonapartenykus. Parent taxon: Patagonykinae.
+Ojoraptorsaurus boerei; Ojoraptorsaurus || Ojoraptorsaurus boerei — род ценагнатид. Латинское название: Ojoraptorsaurus. Входит в таксон: ценагнатиды. || Ojoraptorsaurus — genus of reptiles (fossil). Latin name: Ojoraptorsaurus. Parent taxon: Caenagnathidae.
+хиерозавр; Hierosaurus || Хиерозавр — род анкилозавров. Латинское название: Hierosaurus. Входит в таксон: Нодозавриды. || Hierosaurus — genus of reptiles (fossil). Latin name: Hierosaurus. Parent taxon: Nodosauridae.
+Epichirostenotes || Epichirostenotes — род ценагнатид. Латинское название: Epichirostenotes. Входит в таксон: ценагнатиды. || Epichirostenotes — genus of reptiles (fossil). Latin name: Epichirostenotes. Parent taxon: Caenagnathidae.
+Apatoraptor || Apatoraptor — род ценагнатид. Латинское название: Apatoraptor. Входит в таксон: ценагнатиды. || Apatoraptor — genus of reptiles (fossil). Latin name: Apatoraptor. Parent taxon: Caenagnathidae.
+Albertavenator || Albertavenator — род троодонтид. Латинское название: Albertavenator. || Albertavenator — genus of troodontids. Latin name: Albertavenator. Parent taxon: Troodontini.
+Rukwatitan || Rukwatitan — род титанозавров. Латинское название: Rukwatitan. || Rukwatitan — genus of reptiles (fossil). Latin name: Rukwatitan.
+Rhinorex || Rhinorex — род вымерших животных. Латинское название: Rhinorex. Входит в таксон: Завролофины. || Rhinorex — genus of reptiles (fossil). Latin name: Rhinorex. Parent taxon: Saurolophinae.
+Niebla antiqua || Niebla antiqua — род абелизаврид. Латинское название: Niebla antiqua. Входит в таксон: Niebla. || Niebla antiqua — species of reptiles (fossil). Latin name: Niebla antiqua. Parent taxon: Niebla.
+Kurupi || Kurupi — род абелизаврид. Латинское название: Kurupi. Входит в таксон: Абелизавриды. || Kurupi — genus of abelisaurid theropod dinosaur. Latin name: Kurupi. Parent taxon: Abelisauridae.
+Guemesia || Guemesia — род тероподовых динозавров семейства абелизаврид. Латинское название: Guemesia. Входит в таксон: Carnotaurinae. || Guemesia — extinct genus of reptiles. Latin name: Guemesia. Parent taxon: Carnotaurinae.
+Natovenator || Natovenator — род тероподных динозавров. Латинское название: Natovenator. Входит в таксон: Halszkaraptorinae. || Natovenator — extinct genus of dinosaurs. Latin name: Natovenator. Parent taxon: Halszkaraptorinae.
+Nankangia || Nankangia — род овирапторид. Латинское название: Nankangia. Входит в таксон: Caenagnathoidea. || Nankangia — extinct genus of reptiles. Latin name: Nankangia. Parent taxon: Caenagnathoidea.
+Gnathovorax || Gnathovorax — род герреразаврид. Латинское название: Gnathovorax. Входит в таксон: Герреразавриды. || Gnathovorax — Genus of dinosaur. Latin name: Gnathovorax. Parent taxon: Herrerasauridae.
+Yulong mini || Yulong mini — род овирапторид. Латинское название: Yulong mini. Входит в таксон: Yulong. || Yulong mini — species of reptile (fossil). Latin name: Yulong mini. Parent taxon: Yulong.
+Jeholosauridae || Jeholosauridae — семейство животных. Латинское название: Jeholosauridae. || Jeholosauridae — family of reptiles (fossil). Latin name: Jeholosauridae.
+Orthomerus || Orthomerus — род динозавров. Латинское название: Orthomerus. Входит в таксон: гадрозавриды. || Orthomerus — genus of reptiles (fossil). Latin name: Orthomerus. Parent taxon: Hadrosauridae.
+Mexidracon || Mexidracon — род орнитомимид. Латинское название: Mexidracon. Входит в таксон: Ornithomimidae. || Mexidracon — extinct genus of ornithomimid theropod dinosaurs. Latin name: Mexidracon. Parent taxon: Ornithomimidae.
+Sonidosaurus || Sonidosaurus — род позднемеловых титанозавров. Латинское название: Sonidosaurus. || Sonidosaurus — genus of Late Cretaceous titanosaurs. Latin name: Sonidosaurus.
+Delapparentia || Delapparentia — род орнитоподных динозаров. Латинское название: Delapparentia. || Delapparentia — genus of reptiles (fossil). Latin name: Delapparentia.
+Macrogryphosaurus || Macrogryphosaurus — род орнитоподовых динозавров. Латинское название: Macrogryphosaurus. Входит в таксон: игуанодонты. || Macrogryphosaurus — genus of reptiles (fossil). Latin name: Macrogryphosaurus.
+Enigmacursor || Enigmacursor — род птицетазовых динозавров. Латинское название: Enigmacursor. || Enigmacursor — extinct genus of dinosaurs. Latin name: Enigmacursor.
+Моринозавр; Morinosaurus || Моринозавр — род динозавров. Латинское название: Morinosaurus. Входит в таксон: ящеротазовые. || Morinosaurus — genus of reptiles (fossil). Latin name: Morinosaurus. Parent taxon: Saurischia.
+Arkharavia heterocoelica || Arkharavia heterocoelica — вид вымерших животных. Латинское название: Arkharavia heterocoelica. Входит в таксон: Arkharavia. || Arkharavia heterocoelica — species of reptile (fossil). Latin name: Arkharavia heterocoelica. Parent taxon: Arkharavia.
+Elasmaria || Elasmaria — клада орнитоподных динозавров. Латинское название: Elasmaria. || Elasmaria — extinct clade of ornithopod dinosaurs (Ornithopoda). Latin name: Elasmaria.
+Terminocavus || Terminocavus — род цератопсид. Латинское название: Terminocavus. Входит в таксон: Хазмозаврины. || Terminocavus — genus of ceratopsid dinosaurs (fossil). Latin name: Terminocavus. Parent taxon: Chasmosaurinae.
+Parasaurolophini || Parasaurolophini — триба гадрозаврид. Латинское название: Parasaurolophini. Входит в таксон: Ламбеозаврины. || Parasaurolophini — tribe of reptiles (fossil). Latin name: Parasaurolophini. Parent taxon: Lambeosaurinae.
+платеозаврав; Plateosauravus || Платеозаврав — род динозавров. Латинское название: Plateosauravus. Входит в таксон: Прозавроподы. || Plateosauravus — genus of reptiles (fossil). Latin name: Plateosauravus. Parent taxon: Prosauropod.
+Xianshanosaurus || Xianshanosaurus — род раннемеловых завропод. Латинское название: Xianshanosaurus. Входит в таксон: Титанозавры. || Xianshanosaurus — genus of Early Cretaceous sauropods. Latin name: Xianshanosaurus.
+Tichosteus || Tichosteus — род динозавров. Латинское название: Tichosteus. Входит в таксон: игуанодонты. || Tichosteus — genus of reptiles (fossil). Latin name: Tichosteus.
+Sanxiasaurus || Sanxiasaurus — род птицетазовых динозавров. Латинское название: Sanxiasaurus. || Sanxiasaurus — genus of reptiles (fossil). Latin name: Sanxiasaurus.
+Лонгиптеригиды; Longipterygidae || Лонгиптеригиды — семейство энанциорнисовых птиц. Латинское название: Longipterygidae. Входит в таксон: Энанциорнисовые птицы. || Longipterygidae — extinct family of birds. Latin name: Longipterygidae.
+Pulaosaurus || Pulaosaurus — род птицетазовых динозавров. Латинское название: Pulaosaurus. || Pulaosaurus — extinct genus of neornithischian dinosaurs. Latin name: Pulaosaurus.
+Imperobator || Imperobator — род позднемеловых теропод. Латинское название: Imperobator. || Imperobator — genus of late Cretaceous theropods. Latin name: Imperobator.
+Unaysauridae || Unaysauridae — клада завроподоморфных динозавров. Латинское название: Unaysauridae. Входит в таксон: завроподоморфы. || Unaysauridae — Clade of sauropodomorphs (fossil). Latin name: Unaysauridae. Parent taxon: Sauropodomorpha.
+хагриф; Hagryphus || Хагриф — род тероподовых динозавров. Латинское название: Hagryphus. Входит в таксон: ценагнатиды. || Hagryphus — genus of reptiles (fossil). Latin name: Hagryphus. Parent taxon: Caenagnathidae.
+Tlatolophus || Tlatolophus — род гадрозаврид. Латинское название: Tlatolophus. Входит в таксон: Parasaurolophini. || Tlatolophus — genus of reptiles (fossil). Latin name: Tlatolophus. Parent taxon: Parasaurolophini.
+Wulagasaurus || Wulagasaurus — род животных. Латинское название: Wulagasaurus. || Wulagasaurus — genus of reptiles (fossil). Latin name: Wulagasaurus.
+Platytholus || Platytholus — род пахицефалозаврид. Латинское название: Platytholus. Входит в таксон: Pachycephalosaurinae. || Platytholus — extinct genus of pachycephalosaurid dinosaur. Latin name: Platytholus. Parent taxon: Pachycephalosaurinae.
+Amanzia greppini; Amanzia || Amanzia greppini — род завроподных динозавров. Латинское название: Amanzia. Входит в таксон: Turiasauria. || Amanzia — genus of reptiles (fossil). Latin name: Amanzia. Parent taxon: Turiasauria.
+Foraminacephale || Foraminacephale — род пахицефалозаврид. Латинское название: Foraminacephale. Входит в таксон: Пахицефалозавриды. || Foraminacephale — genus of reptiles (fossil). Latin name: Foraminacephale. Parent taxon: Pachycephalosauridae.
+Brodavis || Brodavis — род вымерших птиц. Латинское название: Brodavis. Входит в таксон: Brodavidae. || Brodavis — genus of birds (fossil). Latin name: Brodavis. Parent taxon: Brodavidae.
+Europatitan || Europatitan — род завроподных динозавров. Латинское название: Europatitan. || Europatitan — genus of reptiles (fossil). Latin name: Europatitan.
+Huehuecanauhtlus || Huehuecanauhtlus — род орнитоподовых динозавров. Латинское название: Huehuecanauhtlus. Входит в таксон: Гадрозавроиды. || Huehuecanauhtlus — genus of reptiles (fossil). Latin name: Huehuecanauhtlus. Parent taxon: Hadrosauroidea.
+Rativates || Rativates — род орнитомимид. Латинское название: Rativates. Входит в таксон: Ornithomimidae. || Rativates — genus of reptiles. Latin name: Rativates. Parent taxon: Ornithomimidae.
+джаратитан; Dzharatitanis || Джаратитан — род завроподных динозавров. Латинское название: Dzharatitanis. || Dzharatitanis — extinct genus of dinosaurs. Latin name: Dzharatitanis.
+Siluosaurus || Siluosaurus — род вымерших животных. Латинское название: Siluosaurus. Входит в таксон: орнитоподы. || Siluosaurus — genus of reptiles (fossil). Latin name: Siluosaurus.
+Энанциорнисы; Enantiornis || Энанциорнисы — род энанциорнисовых птиц. Латинское название: Enantiornis. Входит в таксон: Euenantiornithes. || Enantiornis — genus of birds (fossil). Latin name: Enantiornis. Parent taxon: Euenantiornithes.
+Longipteryx || Longipteryx — род энанциорнисовых птиц. Латинское название: Longipteryx. Входит в таксон: Лонгиптеригиды. || Longipteryx — genus of birds (fossil). Latin name: Longipteryx. Parent taxon: Longipterygidae.
+Sasayamagnomus || Sasayamagnomus — род цератопсов. Латинское название: Sasayamagnomus. Входит в таксон: Неоцератопсии. || Sasayamagnomus — extinct genus of neoceratopsian ornithischian dinosaurs. Latin name: Sasayamagnomus. Parent taxon: Neoceratopsia.
+Mosaiceratops || Mosaiceratops — род цератопсов. Латинское название: Mosaiceratops. Входит в таксон: Неоцератопсии. || Mosaiceratops — genus of reptiles (fossil). Latin name: Mosaiceratops. Parent taxon: Neoceratopsia.
+Analong || Analong — род мамэньсизаврид. Латинское название: Analong. Входит в таксон: Mamenchisauridae. || Analong — genus of sauropod dinosaur (fossil). Latin name: Analong. Parent taxon: Mamenchisauridae.
+Archaeocursor || Archaeocursor — род базальных птицетазовых динозавров. Латинское название: Archaeocursor. || Archaeocursor — extinct genus of basal ornithischian dinosaurs. Latin name: Archaeocursor.
+Afromimus || Afromimus — род нептичьих теропод. Латинское название: Afromimus. Входит в таксон: Орнитомимозавры. || Afromimus — extinct genus of theropod dinosaurs. Latin name: Afromimus. Parent taxon: Ornithomimosauria.
+Eotyrannus lengi || Eotyrannus lengi — вид раннемеловых тираннозавроидов. Латинское название: Eotyrannus lengi. Входит в таксон: Эотиранн. || Eotyrannus lengi — species of Early Cretaceous tyrannosauroids. Latin name: Eotyrannus lengi. Parent taxon: Eotyrannus.
+Yuanmouraptor || Yuanmouraptor — род метриакантозаврид. Латинское название: Yuanmouraptor. Входит в таксон: Metriacanthosauridae. || Yuanmouraptor — extinct genus of metriacanthosaurid dinosaurs. Latin name: Yuanmouraptor. Parent taxon: Metriacanthosauridae.
+Chuanqilong || Chuanqilong — род анкилозавров. Латинское название: Chuanqilong. Входит в таксон: Анкилозавриды. || Chuanqilong — genus of reptiles (fossil). Latin name: Chuanqilong. Parent taxon: Ankylosauridae.
+Ostromia || Ostromia — род манираптор. Латинское название: Ostromia. Входит в таксон: Anchiornithidae. || Ostromia — genus of dinosaurs. Latin name: Ostromia. Parent taxon: Anchiornithidae.
+Brachylophosaurini || Brachylophosaurini — триба динозавров. Латинское название: Brachylophosaurini. Входит в таксон: Завролофины. || Brachylophosaurini — extinct tribe of ornithopod dinosaurs (Ornithopoda). Latin name: Brachylophosaurini. Parent taxon: Saurolophinae.
+Ferenceratops || Ferenceratops — род цератопсов. Латинское название: Ferenceratops. Входит в таксон: Ceratopsoidea. || Ferenceratops — genus of ceratopsian dinosaurs. Latin name: Ferenceratops. Parent taxon: Ceratopsoidea.
+Shishugounykus || Shishugounykus — род альваресзаврид. Латинское название: Shishugounykus. Входит в таксон: Alvarezsauroidea. || Shishugounykus — extinct genus of reptiles. Latin name: Shishugounykus. Parent taxon: Alvarezsauroidea.
+Jaculinykus || Jaculinykus — род альваресзаврид. Латинское название: Jaculinykus. Входит в таксон: Parvicursorinae. || Jaculinykus — extinct genus of alvarezsaurid theropod dinosaur. Latin name: Jaculinykus. Parent taxon: Parvicursorinae.
+Erythrovenator || Erythrovenator — род базальных динозавров-теропод. Латинское название: Erythrovenator. Входит в таксон: тероподы. || Erythrovenator — genus of basal theropod dinosaurs. Latin name: Erythrovenator. Parent taxon: Тhеrороdа.
+Денверзавр; Denversaurus || Денверзавр — род нодозаврид. Латинское название: Denversaurus. Входит в таксон: Нодозавриды. || Denversaurus — genus of reptiles (fossil). Latin name: Denversaurus. Parent taxon: Nodosauridae.
+Elemgasem || Elemgasem — род абелизаврид. Латинское название: Elemgasem. Входит в таксон: Абелизавриды. || Elemgasem — extinct genus of brachyrostran abelisaurid. Latin name: Elemgasem. Parent taxon: Abelisauridae.
+Ferrisaurus || Ferrisaurus — род цератопсов. Латинское название: Ferrisaurus. Входит в таксон: Leptoceratopsidae. || Ferrisaurus — extinct genus of reptiles. Latin name: Ferrisaurus. Parent taxon: Leptoceratopsidae.
+Cratoavis || Cratoavis — род энанциорнисовых птиц. Латинское название: Cratoavis. Входит в таксон: Euenantiornithes. || Cratoavis — genus of birds (fossil). Latin name: Cratoavis. Parent taxon: Euenantiornithes.
+Nambalia || Nambalia — род вымерших животных. Латинское название: Nambalia. Входит в таксон: завроподоморфы. || Nambalia — genus of reptiles (fossil). Latin name: Nambalia. Parent taxon: Sauropodomorpha.
+Daemonosaurus || Daemonosaurus — род ящеротазовых динозавров. Латинское название: Daemonosaurus. Входит в таксон: ящеротазовые. || Daemonosaurus — genus of reptiles (fossil). Latin name: Daemonosaurus. Parent taxon: Saurischia.
+Maleriraptor || Maleriraptor — род ящеротазовых динозавров. Латинское название: Maleriraptor. Входит в таксон: Herrerasauria. || Maleriraptor — extinct genus of herrerasaurian dinosaurs. Latin name: Maleriraptor. Parent taxon: Herrerasauria.
+Herrerasauria || Herrerasauria — клада ящеротазовых динозавров. Латинское название: Herrerasauria. || Herrerasauria — infraorder of theropoda. Latin name: Herrerasauria.
+Tyrannomimus || Tyrannomimus — род орнитомимозавров. Латинское название: Tyrannomimus. Входит в таксон: Deinocheiridae. || Tyrannomimus — genus of reptiles (fossil). Latin name: Tyrannomimus. Parent taxon: Deinocheiridae.
+Igai || Igai — род титанозавров. Латинское название: Igai. Входит в таксон: Saltasauridae. || Igai — genus of titanosaur sauropod dinosaur. Latin name: Igai. Parent taxon: Saltasauridae.
+Chucarosaurus || Chucarosaurus — род титанозавров. Латинское название: Chucarosaurus. Входит в таксон: Colososauria. || Chucarosaurus — genus of colossosaurian titanosaur. Latin name: Chucarosaurus. Parent taxon: Colossosauria.
+Gongpoquansaurus || Gongpoquansaurus — род орнитоподовых динозавров. Латинское название: Gongpoquansaurus. Входит в таксон: Гадрозавроиды. || Gongpoquansaurus — genus of reptiles (fossil). Latin name: Gongpoquansaurus. Parent taxon: Hadrosauroidea.
+Этоникс; Aetonyx || Этоникс — род вымерших животных. Латинское название: Aetonyx. Входит в таксон: Прозавроподы. || Aetonyx — genus of reptiles (fossil). Latin name: Aetonyx. Parent taxon: Prosauropod.
+Adynomosaurus || Adynomosaurus — род гадрозаврид. Латинское название: Adynomosaurus. Входит в таксон: Ламбеозаврины. || Adynomosaurus — genus of dinosaurs (fossil). Latin name: Adynomosaurus. Parent taxon: Lambeosaurinae.
+Sellosaurus || Sellosaurus — род завропод. Латинское название: Sellosaurus. Входит в таксон: Платеозавр. || Sellosaurus — genus of sauropodomorphs. Latin name: Sellosaurus. Parent taxon: Plateosaurus.
+Canardia || Canardia — род гадрозаврид. Латинское название: Canardia. Входит в таксон: Aralosaurini. || Canardia — genus of reptiles (fossil). Latin name: Canardia. Parent taxon: Aralosaurini.
+Avisauridae || Avisauridae — семейство вымерших птиц. Латинское название: Avisauridae. Входит в таксон: Энанциорнисовые птицы. || Avisauridae — family of birds (fossil). Latin name: Avisauridae.
+Abditosaurus || Abditosaurus — род позднемеловых титанозавров. Латинское название: Abditosaurus. Входит в таксон: Saltasauridae. || Abditosaurus — genus of titanosaurian sauropod dinosaur. Latin name: Abditosaurus. Parent taxon: Saltasauridae.
+Lepidus praecisio || Lepidus praecisio — род тероподных динозавров. Латинское название: Lepidus praecisio. Входит в таксон: Lepidus. || Lepidus praecisio — species of dinosaur. Latin name: Lepidus praecisio. Parent taxon: Lepidus.
+Isaberrysaura || Isaberrysaura — род птицетазовых динозавров. Латинское название: Isaberrysaura. || Isaberrysaura — genus of dinosaurs. Latin name: Isaberrysaura.
+Zigongosaurus || Zigongosaurus — синоним рода вымерших животных. Латинское название: Zigongosaurus. Входит в таксон: Mamenchisauridae. || Zigongosaurus — genus of reptiles (fossil). Latin name: Zigongosaurus. Parent taxon: Mamenchisauridae.
+Kukufeldia || Kukufeldia — синоним рода динозавров. Латинское название: Kukufeldia. Входит в таксон: Iguanodontidae. || Kukufeldia — genus of reptiles (fossil). Latin name: Kukufeldia. Parent taxon: Iguanodontidae.
+Sellacoxa || Sellacoxa — синоним рода динозавров. Латинское название: Sellacoxa. Входит в таксон: Euornithopoda. || Sellacoxa — genus of reptiles (fossil). Latin name: Sellacoxa. Parent taxon: Euornithopoda.
+Thyreosaurus || Thyreosaurus — род стегозаврид. Латинское название: Thyreosaurus. Входит в таксон: Dacentrurinae. || Thyreosaurus — extinct genus of stegosaurs. Latin name: Thyreosaurus. Parent taxon: Dacentrurinae.
+Riojavenatrix || Riojavenatrix — род спинозаврид. Латинское название: Riojavenatrix. Входит в таксон: Baryonychinae. || Riojavenatrix — theropod dinosaur. Latin name: Riojavenatrix. Parent taxon: Baryonychinae.
+Gorgosaurus libratus || Gorgosaurus libratus — вид североамериканских тираннозаврид. Латинское название: Gorgosaurus libratus. Входит в таксон: Горгозавры. || Gorgosaurus libratus — species of North American tyrannosaurids. Latin name: Gorgosaurus libratus. Parent taxon: Gordosaurus.
+Трицератопс грубый; Triceratops horridus || Трицератопс грубый — вид цератопсид. Латинское название: Triceratops horridus. Входит в таксон: Трицератопсы. || Triceratops horridus — extinct species of ceratopsian dinosaurs (Ceratopsia). Latin name: Triceratops horridus. Parent taxon: Triceratops.
+Punatitan || Punatitan — род динозавров. Латинское название: Punatitan. Входит в таксон: Aeolosaurini. || Punatitan — genus of sauropod. Latin name: Punatitan. Parent taxon: Aeolosaurini.
+Адеопаппозавр; Adeopapposaurus mognai || Адеопаппозавр — род динозавров. Латинское название: Adeopapposaurus mognai. Входит в таксон: Adeopapposaurus. || Adeopapposaurus mognai — species of reptile (fossil). Latin name: Adeopapposaurus mognai. Parent taxon: Adeopapposaurus.
+Tsintaosaurini || Tsintaosaurini — триба травоядных динозавров. Латинское название: Tsintaosaurini. Входит в таксон: гадрозавриды. || Tsintaosaurini — tribe of reptiles (fossil). Latin name: Tsintaosaurini. Parent taxon: Hadrosauridae.
+Bicharracosaurus || Bicharracosaurus — род завроподных динозавров. Латинское название: Bicharracosaurus. Входит в таксон: Брахиозавриды. || Bicharracosaurus — extinct genus of dinosaurs. Latin name: Bicharracosaurus. Parent taxon: Brachiosauridae.
+Jinyunpelta || Jinyunpelta — род птицетазовых динозавров. Латинское название: Jinyunpelta. Входит в таксон: Ankylosaurinae. || Jinyunpelta — genus of reptiles (fossil). Latin name: Jinyunpelta. Parent taxon: Ankylosaurinae.
+сибиротитан; Sibirotitan || Сибиротитан — род завроподных динозавров. Латинское название: Sibirotitan. || Sibirotitan — genus of dinosaurs. Latin name: Sibirotitan.
+Wudingloong || Wudingloong — род завроподоморф. Латинское название: Wudingloong. Входит в таксон: Massopoda. || Wudingloong — extinct genus of sauropodomorph dinosaurs. Latin name: Wudingloong. Parent taxon: Massopoda.
+Issi || Issi — род завроподоморфных динозавров. Латинское название: Issi. Входит в таксон: платеозавриды. || Issi — genus of sauropodomorph dinosaurs. Latin name: Issi. Parent taxon: Plateosauridae.
+Vectipelta || Vectipelta — род анкилозавров. Латинское название: Vectipelta. Входит в таксон: анкилозавры. || Vectipelta — genus of ankylosaurian dinosaur. Latin name: Vectipelta. Parent taxon: Ankylosauria.
+Ondogurvel || Ondogurvel — род альваресзаврид. Латинское название: Ondogurvel. || Ondogurvel — genus of alvarezsaurid dinosaur. Latin name: Ondogurvel.
+Dzharaonyx || Dzharaonyx — род альваресзаврид. Латинское название: Dzharaonyx. Входит в таксон: Parvicursorinae. || Dzharaonyx — genus of alvarezsaurid dinosaur. Latin name: Dzharaonyx. Parent taxon: Parvicursorinae.
+Неоцератопсии; Neoceratopsia || Неоцератопсии — клада цератопсов. Латинское название: Neoceratopsia. Входит в таксон: Цератопсы. || Neoceratopsia — clade of reptiles (fossil). Latin name: Neoceratopsia. Parent taxon: Ceratopsia.
+Tototlmimus || Tototlmimus — род орнитомимид. Латинское название: Tototlmimus. Входит в таксон: Ornithomimidae. || Tototlmimus — genus of theropod dinosaurs. Latin name: Tototlmimus. Parent taxon: Ornithomimidae.
+Petrustitan || Petrustitan — род титанозавров. Латинское название: Petrustitan. Входит в таксон: Титанозавры. || Petrustitan — genus of reptile (fossil). Latin name: Petrustitan.
+тенгризавр; Tengrisaurus || Тенгризавр — род титанозавров. Латинское название: Tengrisaurus. || Tengrisaurus — genus of reptiles (fossil). Latin name: Tengrisaurus.
+Sahaliyania || Sahaliyania — род динозавров. Латинское название: Sahaliyania. Входит в таксон: Lambeosaurini. || Sahaliyania — genus of reptiles (fossil). Latin name: Sahaliyania. Parent taxon: Lambeosaurini.
+Bohaiornithidae || Bohaiornithidae — семейство энанциорнисовых птиц. Латинское название: Bohaiornithidae. Входит в таксон: Энанциорнисовые птицы. || Bohaiornithidae — family of birds (fossil). Latin name: Bohaiornithidae.
+Aeolosaurini || Aeolosaurini — клада титанозавров. Латинское название: Aeolosaurini. || Aeolosaurini — tribe of reptiles (fossil). Latin name: Aeolosaurini.
+Ponerosteus || Ponerosteus — род динозавров. Латинское название: Ponerosteus. Входит в таксон: орнитоподы. || Ponerosteus — genus of reptiles (fossil). Latin name: Ponerosteus.
+Furcatoceratops || Furcatoceratops — род цератопсид. Латинское название: Furcatoceratops. Входит в таксон: Nasutoceratopsini. || Furcatoceratops — extinct genus of centrosaurine dinosaurs. Latin name: Furcatoceratops. Parent taxon: Nasutoceratopsini.
+Canadaga || Canadaga — вымерший род нелетающих птиц позднего мелового периода. Латинское название: Canadaga. Входит в таксон: Hesperornithinae. || Canadaga — genus of birds (fossil). Latin name: Canadaga. Parent taxon: Hesperornithinae.
+Minimocursor || Minimocursor — род птицетазовых динозавров. Латинское название: Minimocursor. || Minimocursor — extinct genus of neornithischian dinosaur. Latin name: Minimocursor.
+Proplanicoxa || Proplanicoxa — род животных. Латинское название: Proplanicoxa. Входит в таксон: орнитоподы. || Proplanicoxa — genus of reptiles (fossil). Latin name: Proplanicoxa.
+Yantaloong || Yantaloong — род завроподных динозавров. Латинское название: Yantaloong. Входит в таксон: Turiasauria. || Yantaloong — extinct genus of eusauropod dinosaur. Latin name: Yantaloong. Parent taxon: Turiasauria.
+Wamweracaudia || Wamweracaudia — род мамэньсизаврид. Латинское название: Wamweracaudia. Входит в таксон: Mamenchisauridae. || Wamweracaudia — sauropod dinosaur. Latin name: Wamweracaudia. Parent taxon: Mamenchisauridae.
+Shanweiniao cooperorum || Shanweiniao cooperorum — род энанциорнисовых птиц. Латинское название: Shanweiniao cooperorum. Входит в таксон: Shanweiniao. || Shanweiniao cooperorum — species of bird (fossil). Latin name: Shanweiniao cooperorum. Parent taxon: Shanweiniao.
+Gremlin; Gremlin slobodorum || Gremlin — род цератопсов. Латинское название: Gremlin slobodorum. || Gremlin slobodorum — extinct species of dinosaur. Latin name: Gremlin slobodorum. Parent taxon: Gremlin.
+Tongnanlong || Tongnanlong — род мамэньсизаврид. Латинское название: Tongnanlong. Входит в таксон: Mamenchisauridae. || Tongnanlong — genus of dinosaurs. Latin name: Tongnanlong. Parent taxon: Mamenchisauridae.
+Ceratocaudia || Ceratocaudia — род завроподных динозавров. Латинское название: Ceratocaudia. Входит в таксон: Макронарии. || Ceratocaudia — genus of macronarian sauropod dinosaurs. Latin name: Ceratocaudia. Parent taxon: Macronaria.
+Huaxiaosaurus || Huaxiaosaurus — род животных. Латинское название: Huaxiaosaurus. Входит в таксон: гадрозавриды. || Huaxiaosaurus — genus of reptiles (fossil). Latin name: Huaxiaosaurus. Parent taxon: Hadrosauridae.
+Foskeia || Foskeia — род орнитоподных динозавров. Латинское название: Foskeia. Входит в таксон: Rhabdodontomorpha. || Foskeia — genus of rhabdodontomorph ornithopod dinosaurs. Latin name: Foskeia. Parent taxon: Rhabdodontomorpha.
+Jian; Jian changmaensis || Jian — род дромеозаврид. Латинское название: Jian changmaensis. || Jian changmaensis — extinct species of theropod dinosaur. Latin name: Jian changmaensis. Parent taxon: Jian.
+Мегалозавроиды; Spinosauroidea || Мегалозавроиды — надсемейство тероподных динозавров. Латинское название: Spinosauroidea. Входит в таксон: Тетануры. || Spinosauroidea — superfamily of reptiles (fossil). Latin name: Spinosauroidea.
+Chakisaurus || Chakisaurus — род орнитоподных динозавров. Латинское название: Chakisaurus. Входит в таксон: Elasmaria. || Chakisaurus — extinct genus of elasmarian ornithopods. Latin name: Chakisaurus. Parent taxon: Elasmaria.
+Iyuku || Iyuku — род птицетазовых динозавров из группы игуанодонтов инфраотряда орнитопод. Латинское название: Iyuku. Входит в таксон: дриозавриды. || Iyuku — extinct genus of iguanodontian. Latin name: Iyuku. Parent taxon: Dryosauridae.
+Triceratops prorsus || Triceratops prorsus — вид позднемеловых цератопсид. Латинское название: Triceratops prorsus. Входит в таксон: Трицератопсы. || Triceratops prorsus — extinct species of ceratopsian dinosaurs (Ceratopsia). Latin name: Triceratops prorsus. Parent taxon: Triceratops.
+Campananeyen || Campananeyen — род реббахизаврид. Латинское название: Campananeyen. Входит в таксон: реббахизавриды. || Campananeyen — Genus of dinosaur. Latin name: Campananeyen. Parent taxon: Rebbachisauridae.
+Smitanosaurus || Smitanosaurus — род дикреозаврид. Латинское название: Smitanosaurus. Входит в таксон: дикреозавриды. || Smitanosaurus — extinct genus of sauropod dinosaurs. Latin name: Smitanosaurus. Parent taxon: Dicraeosauridae.

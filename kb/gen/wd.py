@@ -8,17 +8,24 @@ def sparql(q, tag):
     os.makedirs(CACHE, exist_ok=True)
     f = os.path.join(CACHE, tag + '.json')
     if os.path.exists(f): return json.load(open(f, encoding='utf-8'))
-    for att in range(4):
+    for att in range(8):
         try:
-            if att < 2:
+            # Alternate QLever ↔ WDQS; long backoff on 429/5xx (Wikidata mirrors throttle bursts).
+            use_qlever = (att % 2) == 0
+            if use_qlever:
                 req = urllib.request.Request('https://qlever.dev/api/wikidata?' + urllib.parse.urlencode({'query': PFX + q}),
                                              headers={'User-Agent': 'eiti-kb-builder/1.0', 'Accept': 'application/sparql-results+json'})
-            else:   # fallback: official WDQS (POST; same SPARQL, same result shape)
+            else:
                 req = urllib.request.Request('https://query.wikidata.org/sparql', data=urllib.parse.urlencode({'query': PFX + q}).encode(),
                                              headers={'User-Agent': 'eiti-kb-builder/1.0 (https://github.com/velantrian/Eiti-Test-Notes)', 'Accept': 'application/sparql-results+json'})
             d = json.load(urllib.request.urlopen(req, timeout=300))
             rows = [{k: v['value'] for k, v in b.items()} for b in d['results']['bindings']]
-            json.dump(rows, open(f, 'w', encoding='utf-8'), ensure_ascii=False); return rows
+            json.dump(rows, open(f, 'w', encoding='utf-8'), ensure_ascii=False)
+            time.sleep(1.5)  # polite gap between successful calls
+            return rows
         except Exception as e:
-            print('retry', tag, att, e, file=sys.stderr); time.sleep(5 * (att + 1))
+            msg = str(e)
+            wait = 20 * (att + 1) if ('429' in msg or '503' in msg or '504' in msg) else 5 * (att + 1)
+            print('retry', tag, att, e, 'sleep', wait, file=sys.stderr)
+            time.sleep(wait)
     raise SystemExit('sparql failed ' + tag)

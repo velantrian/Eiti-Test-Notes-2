@@ -39,8 +39,8 @@ def test_kb_index_has_exactly_150k_records():
     core_count = sum(meta["count"] for name, meta in index["domains"].items() if not name.startswith("longtail_"))
     assert index["count"] == 150_000
     assert len(longtail) == 24
-    assert core_count == 32_921   # v14.16.17: +800 городов в ядре (обогащение geo)
-    assert longtail_count == 117_079
+    assert core_count == 33131   # v14.16.18: обогащение разделов (+people/geo/culture/…)
+    assert longtail_count == 116869
     assert core_count + longtail_count == index["count"]
     assert core_count > 0
     assert longtail_count > 100_000

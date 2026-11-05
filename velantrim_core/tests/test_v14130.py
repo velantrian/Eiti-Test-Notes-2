@@ -55,7 +55,8 @@ def test_kb_packs_carry_related_not_shards():
     for dom, m in idx["domains"].items():
         for f in m["packs"]:
             b = (ROOT / "kb" / f).read_bytes()
-            assert len(gzip.compress(b, 9)) < 40 * 1024, f
+            # v14.16.18: enriched RU+EN + rd snapshots — soft cap aligned with kb/build_kb.PACK_GZ_SOFT
+            assert len(gzip.compress(b, 9)) <= 52 * 1024, f
             for eid, e in json.loads(b)["entries"].items():
                 ids[eid] = (dom, e)
     for eid, (dom, e) in ids.items():

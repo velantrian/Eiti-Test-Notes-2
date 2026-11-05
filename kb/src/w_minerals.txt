@@ -1,145 +1,148 @@
 # Минералы и горные породы | Minerals and rocks
 # @generated from Wikidata (CC0) by kb/gen/gen_more.py — do not edit by hand
-алмаз; минерал алмаз || Алмаз — минерал, кубическая аллотропная форма углерода. Формула: C.
-кварц; минерал кварц || Кварц — минерал. Формула: SiO₂.
-графит; минерал графит || Графит — минерал, аллотропная модификация углерода. Формула: C.
-гипс; минерал гипс || Гипс — минерал. Формула: CaSO₄·2H₂O.
-минерал топаз || Топаз — минерал из группы островных силикатов алюминия. Формула: Al₂SiO₄F₂.
-бирюза; минерал бирюза || Бирюза — минерал, гидратированный фосфат алюминия и меди. Формула: CuAl₆(PO₄)₄(OH)₈·4H₂O.
-берилл; минерал берилл || Берилл — минерал гексагональной сингонии из подкласса кольцевых силикатов. Формула: Be₃Al₂Si₆O₁₈.
-галит; минерал галит || Галит — каменная соль, минерал подкласса хлоридов, кристаллическая форма хлорида натрия. Формула: NaCl.
-кальцит; минерал кальцит || Кальцит — минерал, одна из форм карбоната кальция. Формула: CaCO₃.
-Тальк; минерал Тальк || Тальк — минерал, тетрасиликат магния.
-корунд; минерал корунд || Корунд — минерал, кристаллический оксид аллюминия. Формула: Al₂O₃.
-опал; минерал опал || Опал — минерал группы кварцев со скрытнокристаллической структурой. Формула: SiO₂·nH₂O.
-гематит; минерал гематит || Гематит — минерал железа. Формула: Fe₂O₃.
-пирит; минерал пирит || Пирит — серный колчедан, железный колчедан минерал, дисульфид железа. Формула: FeS₂.
-доломит; минерал доломит || Доломит — минерал из класса карбонатов. Формула: CaMg(CO₃)₂.
-малахит; минерал малахит || Малахит — минерал. Формула: Cu₂(CO₃)(OH)₂.
-Киноварь; минерал Киноварь || Киноварь — минерал класса сульфидов. Формула: HgS.
-магнетит; минерал магнетит || Магнетит — минерал железной руды. Формула: Fe²⁺Fe³⁺₂O₄.
-циркон; минерал циркон || Циркон — минерал подкласса островных силикатов, ортосиликат циркония. Формула: ZrSiO₄.
-каолинит; минерал каолинит || Каолинит — глинистый минерал. Формула: Al₂Si₂O₅(OH)₄.
-флюорит; минерал флюорит || Флюорит — минерал, фторид кальция. Формула: CaF₂.
-арагонит; минерал арагонит || Арагонит — минерал, один из естественных полиморфов карбоната кальция. Формула: CaCO₃.
-Галенит; минерал Галенит || Галенит — минерал. Формула: PbS.
-азурит; минерал азурит || Азурит — минерал синего цвета. Формула: Cu₃(CO₃)₂(OH)₂.
-барит; минерал барит || Барит — минерал. Формула: BaSO₄.
-халькопирит; минерал халькопирит || Халькопирит — минерал. Формула: CuFeS₂.
-шпинель; минерал шпинель || Шпинель — минерал, смешанный оксид магния и алюминия. Формула: MgAl₂O₄.
-ортоклаз; минерал ортоклаз || Ортоклаз — породообразующий минерал из класса силикатов. Формула: K(AlSi₃O₈).
-гётит; минерал гётит || Гётит — минерал. Формула: FeO(OH).
-рутил; минерал рутил || Рутил — минерал класса оксидов. Формула: TiO₂.
-Магнезит; минерал Магнезит || Магнезит — распространённый минерал, карбонат магния MgCO3.. Формула: MgCO₃.
-антимонит; минерал антимонит || Антимонит — минерал. Формула: Sb₂S₃.
-альбит; минерал альбит || Альбит — породообразующий минерал. Формула: NaAlSi₃O₈.
-Аурипигмент; минерал Аурипигмент || Аурипигмент — минерал. Формула: As₂S₃.
-хризоберилл; минерал хризоберилл || Хризоберилл — минерал, алюминат бериллия. Формула: BeAl₂O₄.
-Кианит; минерал Кианит || Кианит — минерал. Формула: Al₂OSiO₄.
-альмандин; минерал альмандин || Альмандин — минерал, разновидность граната. Формула: Fe²⁺₃Al₂(SiO₄)₃.
-актинолит; минерал актинолит || Актинолит — минерал группы амфиболов класса силикатов.
-авгит; минерал авгит || Авгит — минерал, который относится к цепочечным силикатам. Формула: (Ca,Na)(Mg,Fe,Al,Ti)(Si,Al)₂O.
-пиролюзит; минерал пиролюзит || Пиролюзит — минерал, диоксид марганца. Формула: MnO₂.
-Куприт; минерал Куприт || Куприт — минерал оксида меди. Формула: Cu₂O.
-Монтмориллонит; минерал Монтмориллонит || Монтмориллонит — глинистый минерал. Формула: (Na,Ca)₀.₃₃(Al,Mg)₂(Si₄O₁₀)(OH)₂ * nH₂O.
-Сидерит; минерал Сидерит || Сидерит — минерал, основной компонент — карбонат железа. Формула: FeCO₃.
-Родохрозит; минерал Родохрозит || Родохрозит — минерал карбоната марганца. Формула: MnCO₃.
-лазурит; минерал лазурит || Лазурит — сульфат-содержащий непрозрачный минерал. Формула: Na[(AlSiO4)SO4].
-жадеит; минерал жадеит || Жадеит — минерал. Формула: NaAlSi₂O₆.
-Родонит; минерал Родонит || Родонит — минерал, соединение марганца. Формула: CaMn₃Mn(Si₅O₁₅).
-ванадинит; минерал ванадинит || Ванадинит — минерал. Формула: Pb₅(VO₄)₃Cl.
-Титанит; минерал Титанит || Титанит — Минерал. Формула: CaTiSiO₅.
-Нефелин; минерал Нефелин || Нефелин — породообразующий минерал, алюмосиликат калия и натрия. Формула: Na₃K(Al₄Si₄O₁₆).
-хризоколла; минерал хризоколла || Хризоколла — минерал класса силикатов. Формула: Cu₂₋ₓAlₓ(H₂₋ₓSi₂O₅)(OH)₄ · nH₂O.
-сподумен; минерал сподумен || Сподумен — минерал, силикат лития и алюминия из группы пироксенов. Формула: LiAlSi₂O₆.
-перовскит; минерал перовскит || Перовскит — минерал титанат кальция. Формула: CaTiO₃.
-сильвин; минерал сильвин || Сильвин — минерал, хлорид калия. Формула: KCl.
-Шеелит; минерал Шеелит || Шеелит — минерал. Формула: CaWO₄.
-силлиманит; минерал силлиманит || Силлиманит — минерал. Формула: Al₂OSiO₄.
-Гидраргиллит; минерал Гидраргиллит || Гидраргиллит — Минерал, форма гидроксида алюминия. Формула: Al(OH)₃.
-акантит; минерал акантит || Акантит — минерал серебра. Формула: Ag₂S.
-вивианит; минерал вивианит || Вивианит — гидратированный железосодержащий фосфатный минерал. Формула: Fe²⁺₃(PO₄)₂·8H₂O.
-Везувиан; минерал Везувиан || Везувиан — прозрачный, полупрозрачный минерал. Формула: (Ca,Na)₁₉(Al,Mg,Fe)₁₃(SiO₄)₁₀(Si₂O₇)₄(OH,F,O)₁₀.
-Энстатит; минерал Энстатит || Энстатит — минерал группы пироксенов. Формула: Mg₂Si₂O₆.
-карналлит; минерал карналлит || Карналлит — минерал, двойная соль: водный хлорид калия и магния. Формула: KMgCl₃·6H₂O.
-Эгирин; минерал Эгирин || Эгирин — минерал, силикат группы моноклинных пироксенов. Формула: NaFe³⁺Si₂O₆.
-анатаз; минерал анатаз || Анатаз — Минерал диоксида титана. Формула: TiO₂.
-атакамит; минерал атакамит || Атакамит — минерал гидроксихлорида меди. Формула: Cu₂Cl(OH)₃.
-цоизит; минерал цоизит || Цоизит — минерал. Формула: Ca₂Al₃(Si₂O₇)(SiO₄)O(OH).
-Микроклин; минерал Микроклин || Микроклин — Минерал класса силикатов. Формула: KAlSi₃O₈.
-кордиерит; минерал кордиерит || Кордиерит — минерал, алюмосиликат магния и железа. Формула: Mg₂Al₄Si₅O₁₈.
-пироп; минерал пироп || Пироп — минерал, силикат из группы гранатов. Формула: Mg₃Al₂(SiO₄)₃.
-фаялит; минерал фаялит || Фаялит — минерал, богатый железом крайний член группы оливина. Формула: Fe²⁺₂SiO₄.
-Лейцит; минерал Лейцит || Лейцит — породообразующий минерал магматического происхождения. Формула: K(AlSi₂O₆).
-фенакит; минерал фенакит || Фенакит — минерал, силикат бериллия. Формула: Be₂SiO₄.
-ставролит; минерал ставролит || Ставролит — минерал. Формула: Fe²⁺₂Al₉Si₄O₂₃(OH).
-Санидин; минерал Санидин || Санидин — Минерал класса силикатов. Формула: KAlSi₃O₈.
-Торит; минерал Торит || Торит — Минерал. Формула: ThSiO₄.
-форстерит; минерал форстерит || Форстерит — минерал, ортосиликат магния из группы оливина. Формула: Mg₂SiO₄.
-Сепиолит; минерал Сепиолит || Сепиолит — минерал. Формула: Mg₄Si₆O₁₅(OH)₂·6H₂O.
-Висмутин; минерал Висмутин || Висмутин — минерал класса сульфидов. Формула: Bi₂S₃.
-диоптаз; минерал диоптаз || Диоптаз — минерал водного силиката меди. Формула: CuSiO₃·H₂O.
-спессартин; минерал спессартин || Спессартин — распространённый минерал, силикат из группы гранатов. Формула: Mn²⁺₃Al₂(SiO₄)₃.
-энаргит; минерал энаргит || Энаргит — минерал класса сложных сульфидов. Формула: Cu₃AsS₄.
-кераргирит; минерал кераргирит || Кераргирит — минерал, хлорид серебра. Формула: AgCl.
-петалит; минерал петалит || Петалит — минерал, алюмосиликат лития. Формула: LiAl(Si₄O₁₀).
-витерит; минерал витерит || Витерит — минерал группы карбонатов. Формула: BaCO₃.
-Палыгорскит; минерал Палыгорскит || Палыгорскит — Минерал. Формула: (Mg,Al)₅(Si,Al)₈O₂₀(OH)₂·8H₂O.
-Брошантит; минерал Брошантит || Брошантит — минерал класса сульфатов. Формула: Cu₄SO₄(OH)₆.
-улексит; минерал улексит || Улексит — редкий минерал из водных боратов. Формула: NaCaB₅O₆(OH)₆·5H₂O.
-каинит; минерал каинит || Каинит — минерал, двойная соль магния и калия. Формула: KMg(SO₄)Cl·3H₂O.
-Амблигонит; минерал Амблигонит || Амблигонит — минерал класса фосфатов. Формула: LiAlPO₄F.
-абелсонит; минерал абелсонит || Абелсонит — минерал. Формула: NiC₃₁H₃₂N₄.
-Пирофиллит; минерал Пирофиллит || Пирофиллит — Минерал класса силикатов. Формула: Al₂Si₄O₁₀(OH)₂.
-Эвклаз; минерал Эвклаз || Эвклаз — редкий минерал класса силикатов. Формула: BeAlSiO₄(OH).
-Эвдиалит; минерал Эвдиалит || Эвдиалит — минерал. Формула: Na₁₅Ca₆(Fe²⁺,Mn²⁺)₃Zr₃[Si₂₅O₇₃](O,OH,H₂O)₃(OH,Cl)₂.
-рибекит; минерал рибекит || Рибекит — один из породообразующих минералов. Формула: ☐Na₂(Fe²⁺₃Fe³⁺₂)Si₂O₂₂(OH)₂.
-пираргирит; минерал пираргирит || Пираргирит — минерал подкласса сложных сульфидов. Формула: Ag₃SbS₃.
-Периклаз; минерал Периклаз || Периклаз — минерал. Формула: MgO.
-Арсенолит; минерал Арсенолит || Арсенолит — Минерал. Формула: As₂O₃.
-Тенорит; минерал Тенорит || Тенорит — Минерал. Формула: CuO.
-чароит; минерал чароит || Чароит — минерал из силикатов и горная порода. Формула: (K,Sr)₁₅-₁₆(Ca,Na)₃₂[Si₆O₁₁(O,OH)₆]₂[Si₁₂O₁₈(O,OH)₁₂]₂[Si₁₇O₂₅(O,OH)₁₈]₂(OH,F)₄ * ~₃H₂O.
-Поллуцит; минерал Поллуцит || Поллуцит — Минерал. Формула: Cs(Si₂Al)O₆·nH₂O.
-оливенит; минерал оливенит || Оливенит — вторичный минерал из класса арсенатов. Формула: Cu₂(AsO₄)(OH).
-вавеллит; минерал вавеллит || Вавеллит — минерал. Формула: Al₃(PO₄)₂(OH)₃·5H₂O.
-Афганит; минерал Афганит || Афганит — Минерал. Формула: (Na,K)₂₂Ca₁₀(Si₂₄Al₂₄)O₉₆(SO₄)₆Cl₆.
-мирабилит; минерал мирабилит || Мирабилит — минерал, десятиводный кристаллогидрат (декагидрат) сульфата натрия. Формула: Na₂SO₄·10H₂O.
-грюнерит; минерал грюнерит || Грюнерит — минерал из группы амфиболов. Формула: ☐Fe²⁺₂Fe²⁺₅Si₈O₂₂(OH)₂.
-пейнит; минерал пейнит || Пейнит — минерал класса боратов. Формула: CaZrAl₉(BO₃)O₁₅.
-Эльбаит; минерал Эльбаит || Эльбаит — Минерал из класса силикатов. Формула: Na(Li₁.₅Al₁.₅)Al₆(Si₆O₁₈)(BO₃)₃(OH)₃(OH).
-алабандин; минерал алабандин || Алабандин — минерал марганца. Формула: MnS.
-астрофиллит; минерал астрофиллит || Астрофиллит — минерал класса силикатов. Формула: K₂NaFe²⁺₇Ti₂Si₈O₂₈(OH)₄F.
-Чёрный турмалин; минерал Чёрный турмалин || Чёрный турмалин — минерал подкласса кольцевых боросиликатов. Формула: Na(Fe²⁺₃)Al₆(Si₆O₁₈)(BO₃)₃(OH)₃(OH).
-армалколит; минерал армалколит || Армалколит — минерал. Формула: (Mg,Fe²⁺)Ti₂O₅.
-Куммингтонит; минерал Куммингтонит || Куммингтонит — минерал, гидроксилсиликат магния и железа. Формула: ☐Mg₂Mg₅Si₈O₂₂(OH)₂.
-шамозит; минерал шамозит || Шамозит — минерал. Формула: (Fe²⁺,Mg,Al,Fe³⁺)₆(Si,Al)₄O₁₀(OH,O)₈.
-муллит; минерал муллит || Муллит — минерал. Формула: 3Al₂O₃·2SiO₂.
-Тугтупит; минерал Тугтупит || Тугтупит — Минерал. Формула: Na₄BeAlSi₄O₁₂Cl.
-Сапонит; минерал Сапонит || Сапонит — минерал из подкласса слоистых силикатов, группы монтмориллонита. Формула: Ca₀.₂₅(Mg,Fe)₃((Si,Al)₄O₁₀)(OH)₂ * nH₂O.
-тааффеит; минерал тааффеит || Тааффеит — редкий минерал класса окислов. Формула: Mg₃BeAl₈O₁₆.
-Бертрандит; минерал Бертрандит || Бертрандит — Минерал. Формула: Be₄Si₂O₇(OH)₂.
-аргиродит; минерал аргиродит || Аргиродит — минерал. Формула: Ag₈GeS₆.
-сперрилит; минерал сперрилит || Сперрилит — сульфидный минерал. Формула: PtAs₂.
-грейгит; минерал грейгит || Грейгит — минерал сульфида железа. Формула: Fe²⁺Fe³⁺₂S₄.
-Сколецит; минерал Сколецит || Сколецит — Минерал. Формула: Ca(Si₃Al₂)O₁₀·3H₂O.
-гессит; минерал гессит || Гессит — минерал, теллурид серебра. Формула: Ag₂Te.
-минерал золото || Золото — минерал класса самородных элементов. Формула: Au.
-Клинохлор; минерал Клинохлор || Клинохлор — минерал, филлосиликат магния и алюминия с гидроксилом. Формула: Mg₅Al(AlSi₃O₁₀)(OH)₈.
-Бишофит; минерал Бишофит || Бишофит — Минерал. Формула: MgCl₂·6H₂O.
-Тюямунит; минерал Тюямунит || Тюямунит — радиоактивный минерал группы урановых слюдок. Формула: Ca(UO₂)₂(VO₄)₂·5-8H₂O.
-еремеевит; минерал еремеевит || Еремеевит — минерал. Формула: Al₆(BO₃)₅F₃.
-Шрейберзит; минерал Шрейберзит || Шрейберзит — минерал. Формула: (Fe,Ni,Cr)₃P.
-Тефроит; минерал Тефроит || Тефроит — Минерал. Формула: Mn²⁺₂SiO₄.
-стишовит; минерал стишовит || Стишовит — минерал, модификация кремнезёма. Формула: SiO₂.
-Лопарит; минерал Лопарит || Лопарит — минерал подкласса сложных оксидов. Формула: (Na₀.₅REE₀.₅)TiO₃.
-железо самородное; минерал железо самородное || Железо самородное — минерал. Формула: Fe.
-нитронатрит; минерал нитронатрит || Нитронатрит — минерал. Формула: NaNO₃.
-Транквиллитит; минерал Транквиллитит || Транквиллитит — силикатный минерал. Формула: (Fe²⁺,Ca)₈(Zr,Y)₂Ti₃(SiO₄)₃O₁₂.
-триплит; минерал триплит || Триплит — минерал. Формула: Mn²⁺₂PO₄F.
-Сапфирин; минерал Сапфирин || Сапфирин — Минерал. Формула: Mg₄(Mg₃Al₉)O₄[Si₃Al₉O₃₆].
-селадонит; минерал селадонит || Селадонит — минерал группы слюд.
-Ульманнит; минерал Ульманнит || Ульманнит — никелевый антимонидно-сульфидный минерал. Формула: NiSbS.
-сервантит; минерал сервантит || Сервантит — вторичный минерал, тетраоксид сурьмы. Формула: Sb³⁺Sb⁵⁺O₄.
-Фатерит; минерал Фатерит || Фатерит — минерал. Формула: Ca(CO₃).
-Серандит; минерал Серандит || Серандит — Минерал. Формула: NaMn²⁺₂Si₃O₈(OH).
-бура; минерал бура || Бура — минерал, борат. Формула: Na₂B₄O₅(OH)₄·8H₂O.
+алмаз; минерал алмаз; diamond || Алмаз — минерал, кубическая аллотропная форма углерода. Формула: C. || Diamond — allotrope of carbon often used as a gemstone and an abrasive. Formula: C.
+кварц; минерал кварц; quartz || Кварц — минерал. Формула: SiO₂. || Quartz — mineral made of silicon and oxygen. Formula: SiO₂. Subclass of: dioxosilicate minerals (silica family), tectosilicates.
+графит; минерал графит; graphite || Графит — минерал, аллотропная модификация углерода. Формула: C. || Graphite — allotrope of carbon, mineral, substance. Formula: C.
+гипс; минерал гипс || Гипс — минерал. Формула: CaSO₄·2H₂O. || Gypsum — mineral, calcium sulfate with bounded water. Formula: CaSO₄·2H₂O.
+минерал топаз || Топаз — минерал из группы островных силикатов алюминия. Формула: Al₂SiO₄F₂. Подкласс: циклосиликаты, незосиликат. || Topaz — nesosilicate mineral. Formula: Al₂SiO₄F₂. Subclass of: cyclosilicates, nesosilicates.
+бирюза; минерал бирюза; turquoise || Бирюза — минерал, гидратированный фосфат алюминия и меди. Формула: CuAl₆(PO₄)₄(OH)₈·4H₂O. || Turquoise — opaque, blue-to-green mineral. Formula: CuAl₆(PO₄)₄(OH)₈·4H₂O. Subclass of: phosphate mineral, turquoise mineral group.
+берилл; минерал берилл; beryl || Берилл — минерал гексагональной сингонии из подкласса кольцевых силикатов. Формула: Be₃Al₂Si₆O₁₈. Подкласс: циклосиликаты, берилловая группа. || Beryl — gemstone: cyclosilicate. Formula: Be₃Al₂Si₆O₁₈. Subclass of: cyclosilicates, beryl group.
+галит; минерал галит; halite || Галит — каменная соль, минерал подкласса хлоридов, кристаллическая форма хлорида натрия. Формула: NaCl. Подкласс: галитная минеральная группа, галогениды. || Halite — mineral form of sodium chloride. Formula: NaCl. Subclass of: halite mineral group, halide class of minerals.
+кальцит; минерал кальцит; calcite || Кальцит — минерал, одна из форм карбоната кальция. Формула: CaCO₃. || Calcite — carbonate mineral. Formula: CaCO₃. Subclass of: calcite group.
+Тальк; минерал Тальк; talc || Тальк — минерал, тетрасиликат магния. || Talc — hydrous magnesium phyllosilicate mineral. Subclass of: talc mineral group, phyllosilicates.
+гематит; минерал гематит; hematite || Гематит — минерал железа. Формула: Fe₂O₃. || Hematite — common iron oxide mineral (Fe₂O₃). Formula: Fe₂O₃. Subclass of: hematite mineral group.
+корунд; минерал корунд; corundum || Корунд — минерал, кристаллический оксид аллюминия. Формула: Al₂O₃. || Corundum — oxide mineral. Formula: Al₂O₃. Subclass of: hematite mineral group.
+доломит; минерал доломит; dolomite || Доломит — минерал из класса карбонатов. Формула: CaMg(CO₃)₂. || Dolomite — carbonate mineral – CaMg(CO₃)₂. Formula: CaMg(CO₃)₂. Subclass of: dolomite mineral group.
+пирит; минерал пирит; pyrite || Пирит — серный колчедан, железный колчедан минерал, дисульфид железа. Формула: FeS₂. || Pyrite — iron(II) disulfide mineral. Formula: FeS₂.
+опал; минерал опал; opal || Опал — минерал группы кварцев со скрытнокристаллической структурой. Формула: SiO₂·nH₂O. Подкласс: твердый геологический материал. || Opal — silica mineraloid. Formula: SiO₂·nH₂O. Subclass of: solid geologic material.
+Киноварь; минерал Киноварь; cinnabar || Киноварь — минерал класса сульфидов. Формула: HgS. || Cinnabar — mercury sulfide mineral. Formula: HgS. Subclass of: cinnabar mineral group, sulfide class of minerals.
+малахит; минерал малахит; malachite || Малахит — минерал. Формула: Cu₂(CO₃)(OH)₂. || Malachite — carbonate mineral. Formula: Cu₂(CO₃)(OH)₂. Subclass of: rosasite mineral group.
+магнетит; минерал магнетит; magnetite || Магнетит — минерал железной руды. Формула: Fe²⁺Fe³⁺₂O₄. Подкласс: группа оксишпинелей. || Magnetite — iron ore mineral. Formula: Fe²⁺Fe³⁺₂O₄. Subclass of: oxyspinel group.
+циркон; минерал циркон; zircon || Циркон — минерал подкласса островных силикатов, ортосиликат циркония. Формула: ZrSiO₄. || Zircon — mineral belonging to the group of nesosilicates. Formula: ZrSiO₄. Subclass of: zircon mineral group, nesosilicates.
+флюорит; минерал флюорит; fluorite || Флюорит — минерал, фторид кальция. Формула: CaF₂. Подкласс: флюоридная минеральная группа, галогениды. || Fluorite — mineral, calcium fluoride. Formula: CaF₂. Subclass of: fluorite mineral group, halide class of minerals.
+каолинит; минерал каолинит; kaolinite || Каолинит — глинистый минерал. Формула: Al₂Si₂O₅(OH)₄. || Kaolinite — layered aluminosilicate 1:1 clay mineral. Formula: Al₂Si₂O₅(OH)₄. Subclass of: kaolinite mineral subgroup.
+Галенит; минерал Галенит; galena || Галенит — минерал. Формула: PbS. || Galena — rocksalt group, sulfide mineral. Formula: PbS. Subclass of: galena mineral group, sulfide class of minerals.
+арагонит; минерал арагонит; aragonite || Арагонит — минерал, один из естественных полиморфов карбоната кальция. Формула: CaCO₃. || Aragonite — carbonate mineral. Formula: CaCO₃. Subclass of: aragonite mineral group.
+азурит; минерал азурит; azurite || Азурит — минерал синего цвета. Формула: Cu₃(CO₃)₂(OH)₂. Подкласс: карбонаты. || Azurite — carbonate mineral. Formula: Cu₃(CO₃)₂(OH)₂. Subclass of: carbonate and nitrate class of minerals.
+шпинель; минерал шпинель; spinel || Шпинель — минерал, смешанный оксид магния и алюминия. Формула: MgAl₂O₄. Подкласс: группа оксишпинелей. || Spinel — oxide mineral. Formula: MgAl₂O₄. Subclass of: oxyspinel group.
+барит; минерал барит; baryte || Барит — минерал. Формула: BaSO₄. || Baryte — sulfate mineral. Formula: BaSO₄. Subclass of: baryte mineral group, sulfate mineral.
+халькопирит; минерал халькопирит; chalcopyrite || Халькопирит — минерал. Формула: CuFeS₂. || Chalcopyrite — sulfide mineral. Formula: CuFeS₂. Subclass of: chalcopyrite mineral group, intermediate good.
+ортоклаз; минерал ортоклаз; orthoclase || Ортоклаз — породообразующий минерал из класса силикатов. Формула: K(AlSi₃O₈). || Orthoclase — feldspar mineral. Formula: K(AlSi₃O₈). Subclass of: feldspar, alkali feldspar.
+гётит; минерал гётит; goethite || Гётит — минерал. Формула: FeO(OH). || Goethite — iron(III) oxide-hydroxide named in honor to the poet Goethe. Formula: FeO(OH). Subclass of: diaspore mineral group.
+Магнезит; минерал Магнезит; magnesite || Магнезит — распространённый минерал, карбонат магния MgCO3. Формула: MgCO₃. || Magnesite — carbonate mineral. Formula: MgCO₃. Subclass of: calcite group, magnesium carbonate.
+антимонит; минерал антимонит; stibnite || Антимонит — минерал. Формула: Sb₂S₃. || Stibnite — sulfide mineral. Formula: Sb₂S₃. Subclass of: stibnite mineral group.
+рутил; минерал рутил; rutile || Рутил — минерал класса оксидов. Формула: TiO₂. || Rutile — oxide mineral. Formula: TiO₂. Subclass of: rutile mineral group.
+альбит; минерал альбит; albite || Альбит — породообразующий минерал. Формула: NaAlSi₃O₈. || Albite — mineral, Na-feldspar, Na-silicate, tectosilicate. Formula: NaAlSi₃O₈. Subclass of: alkali feldspar, plagioclase.
+Аурипигмент; минерал Аурипигмент; orpiment || Аурипигмент — минерал. Формула: As₂S₃. || Orpiment — sulfide mineral. Formula: As₂S₃. Subclass of: arsenopyrite mineral group, special, orpiment.
+хризоберилл; минерал хризоберилл; chrysoberyl || Хризоберилл — минерал, алюминат бериллия. Формула: BeAl₂O₄. || Chrysoberyl — oxide mineral. Formula: BeAl₂O₄. Subclass of: olivine structural group.
+Кианит; минерал Кианит; kyanite || Кианит — минерал. Формула: Al₂OSiO₄. Подкласс: незосиликат, алюмосиликаты. || Kyanite — nesosilicate mineral. Formula: Al₂OSiO₄. Subclass of: nesosilicates, aluminosilicate.
+альмандин; минерал альмандин; almandine || Альмандин — минерал, разновидность граната. Формула: Fe²⁺₃Al₂(SiO₄)₃. Подкласс: гранат. || Almandine — garnet, nesosilicate mineral. Formula: Fe²⁺₃Al₂(SiO₄)₃. Subclass of: garnet group.
+актинолит; минерал актинолит; actinolite || Актинолит — минерал группы амфиболов класса силикатов. Формула: Ca₂(Mg,Fe)₅[OH/Si₄O₁₁]₂. || Actinolite — Ca-amphibole, double chain inosilicate mineral. Formula: Ca₂(Mg,Fe)₅[OH/Si₄O₁₁]₂. Subclass of: ferro-actinolite – tremolite series.
+Куприт; минерал Куприт; cuprite || Куприт — минерал оксида меди. Формула: Cu₂O. Подкласс: класс оксидных минералов. || Cuprite — oxide mineral. Formula: Cu₂O. Subclass of: oxide class of minerals.
+авгит; минерал авгит; augite || Авгит — минерал, который относится к цепочечным силикатам. Формула: (Ca,Na)(Mg,Fe,Al,Ti)(Si,Al)₂O. Подкласс: пироксены. || Augite — pyroxene mineral. Formula: (Ca,Na)(Mg,Fe,Al,Ti)(Si,Al)₂O. Subclass of: pyroxene.
+Сидерит; минерал Сидерит; siderite || Сидерит — минерал, основной компонент — карбонат железа. Формула: FeCO₃. || Siderite — carbonate mineral. Formula: FeCO₃. Subclass of: calcite group.
+пиролюзит; минерал пиролюзит; pyrolusite || Пиролюзит — минерал, диоксид марганца. Формула: MnO₂. || Pyrolusite — manganese dioxide mineral. Formula: MnO₂. Subclass of: rutile mineral group.
+Родохрозит; минерал Родохрозит; rhodochrosite || Родохрозит — минерал карбоната марганца. Формула: MnCO₃. || Rhodochrosite — manganese carbonate mineral. Formula: MnCO₃. Subclass of: calcite group.
+Монтмориллонит; минерал Монтмориллонит; montmorillonite || Монтмориллонит — глинистый минерал. Формула: (Na,Ca)₀.₃₃(Al,Mg)₂(Si₄O₁₀)(OH)₂ * nH₂O. Подкласс: Смектиты. || Montmorillonite — smectite, phyllosilicate mineral. Formula: (Na,Ca)₀.₃₃(Al,Mg)₂(Si₄O₁₀)(OH)₂ * nH₂O. Subclass of: smectite mineral group.
+лазурит; минерал лазурит; lazurite || Лазурит — сульфат-содержащий непрозрачный минерал. Формула: Na[(AlSiO4)SO4]. || Lazurite — tectosilicate mineral, probably a sulfide-rich variety of haüyne. Formula: Na[(AlSiO4)SO4]. Subclass of: tectosilicates, sodalite group.
+Титанит; минерал Титанит; titanite || Титанит — минерал. Формула: CaTiSiO₅. || Titanite — nesosilicate mineral. Formula: CaTiSiO₅.
+жадеит; минерал жадеит; jadeite || Жадеит — минерал. Формула: NaAlSi₂O₆. Подкласс: пироксены, минералогия. || Jadeite — pyroxene mineral. Formula: NaAlSi₂O₆. Subclass of: pyroxene, mineralogy.
+ванадинит; минерал ванадинит; vanadinite || Ванадинит — минерал. Формула: Pb₅(VO₄)₃Cl. || Vanadinite — apatite supergroup, vanadate mineral. Formula: Pb₅(VO₄)₃Cl. Subclass of: phosphate mineral, apatite mineral group.
+Нефелин; минерал Нефелин; nepheline || Нефелин — породообразующий минерал, алюмосиликат калия и натрия. Формула: Na₃K(Al₄Si₄O₁₆). || Nepheline — tectosilicate mineral. Formula: Na₃K(Al₄Si₄O₁₆). Subclass of: zeolite frameworks, nepheline mineral group.
+Родонит; минерал Родонит; rhodonite || Родонит — минерал, соединение марганца. Формула: CaMn₃Mn(Si₅O₁₅). || Rhodonite — single chain inosilicate mineral. Formula: CaMn₃Mn(Si₅O₁₅). Subclass of: inosilicate, rhodonite mineral group.
+хризоколла; минерал хризоколла; chrysocolla || Хризоколла — минерал класса силикатов. Формула: Cu₂₋ₓAlₓ(H₂₋ₓSi₂O₅)(OH)₄ · nH₂O. || Chrysocolla — phyllosilicate mineral. Formula: Cu₂₋ₓAlₓ(H₂₋ₓSi₂O₅)(OH)₄ · nH₂O. Subclass of: allophane group.
+сподумен; минерал сподумен; spodumene || Сподумен — минерал, силикат лития и алюминия из группы пироксенов. Формула: LiAlSi₂O₆. Подкласс: пироксены. || Spodumene — pyroxene, single chain inosilicate mineral. Formula: LiAlSi₂O₆. Subclass of: pyroxene.
+перовскит; минерал перовскит; perovskite || Перовскит — минерал титанат кальция. Формула: CaTiO₃. || Perovskite — medium hard oxide mineral. Formula: CaTiO₃. Subclass of: perovskite mineral group.
+сильвин; минерал сильвин; sylvite || Сильвин — минерал, хлорид калия. Формула: KCl. Подкласс: галитная минеральная группа, галогениды. || Sylvite — rocksalt group, halide mineral. Formula: KCl. Subclass of: halite mineral group, halide class of minerals.
+Гидраргиллит; минерал Гидраргиллит; gibbsite || Гидраргиллит — минерал, форма гидроксида алюминия. Формула: Al(OH)₃. Подкласс: гидроксидные минералы. || Gibbsite — form of aluminium hydroxide, mineral. Formula: Al(OH)₃. Subclass of: hydroxide auxiliary subclass of minerals.
+Шеелит; минерал Шеелит; scheelite || Шеелит — минерал. Формула: CaWO₄. || Scheelite — tungstate mineral. Formula: CaWO₄. Subclass of: phosphate mineral, scheelite group.
+акантит; минерал акантит; acanthite || Акантит — минерал серебра. Формула: Ag₂S. Подкласс: сульфиды. || Acanthite — mineral, silver sulfide. Formula: Ag₂S. Subclass of: sulfide class of minerals.
+силлиманит; минерал силлиманит; sillimanite || Силлиманит — минерал. Формула: Al₂OSiO₄. || Sillimanite — nesosilicate mineral. Formula: Al₂OSiO₄. Subclass of: cyclosilicates, andalusite mineral group.
+вивианит; минерал вивианит; vivianite || Вивианит — гидратированный железосодержащий фосфатный минерал. Формула: Fe²⁺₃(PO₄)₂·8H₂O. || Vivianite — phosphate mineral. Formula: Fe²⁺₃(PO₄)₂·8H₂O. Subclass of: phosphate mineral, vivianite mineral group.
+анатаз; минерал анатаз; anatase || Анатаз — минерал диоксида титана. Формула: TiO₂. Подкласс: класс оксидных минералов. || Anatase — oxide mineral. Formula: TiO₂. Subclass of: oxide class of minerals.
+Эгирин; минерал Эгирин; aegirine || Эгирин — минерал, силикат группы моноклинных пироксенов. Формула: NaFe³⁺Si₂O₆. Подкласс: пироксены. || Aegirine — pyroxene mineral. Formula: NaFe³⁺Si₂O₆. Subclass of: pyroxene.
+Энстатит; минерал Энстатит; enstatite || Энстатит — минерал группы пироксенов. Формула: Mg₂Si₂O₆. Подкласс: пироксены, минералогия. || Enstatite — pyroxene mineral. Formula: Mg₂Si₂O₆. Subclass of: pyroxene, mineralogy.
+атакамит; минерал атакамит; atacamite || Атакамит — минерал гидроксихлорида меди. Формула: Cu₂Cl(OH)₃. || Atacamite — halide mineral. Formula: Cu₂Cl(OH)₃. Subclass of: atacamite mineral group.
+Везувиан; минерал Везувиан; vesuvianite || Везувиан — прозрачный, полупрозрачный минерал. Формула: (Ca,Na)₁₉(Al,Mg,Fe)₁₃(SiO₄)₁₀(Si₂O₇)₄(OH,F,O)₁₀. || Vesuvianite — sorosilicate mineral. Formula: (Ca,Na)₁₉(Al,Mg,Fe)₁₃(SiO₄)₁₀(Si₂O₇)₄(OH,F,O)₁₀. Subclass of: cyclosilicates, vesuvianite mineral group.
+цоизит; минерал цоизит; zoisite || Цоизит — минерал. Формула: Ca₂Al₃(Si₂O₇)(SiO₄)O(OH). || Zoisite — sorosilicate mineral. Formula: Ca₂Al₃(Si₂O₇)(SiO₄)O(OH). Subclass of: epidote mineral group.
+карналлит; минерал карналлит; carnallite || Карналлит — минерал, двойная соль: водный хлорид калия и магния. Формула: KMgCl₃·6H₂O. Подкласс: галогениды. || Carnallite — halide mineral. Formula: KMgCl₃·6H₂O. Subclass of: halide class of minerals.
+Микроклин; минерал Микроклин; microcline || Микроклин — минерал класса силикатов. Формула: KAlSi₃O₈. || Microcline — feldspar, tectosilicate mineral. Formula: KAlSi₃O₈. Subclass of: alkali feldspar.
+кордиерит; минерал кордиерит; cordierite || Кордиерит — минерал, алюмосиликат магния и железа. Формула: Mg₂Al₄Si₅O₁₈. Подкласс: циклосиликаты. || Cordierite — Mg, Fe, Al cyclosilicate mineral. Formula: Mg₂Al₄Si₅O₁₈. Subclass of: cyclosilicates.
+ставролит; минерал ставролит; staurolite || Ставролит — минерал. Формула: Fe²⁺₂Al₉Si₄O₂₃(OH). || Staurolite — nesosilicate mineral. Formula: Fe²⁺₂Al₉Si₄O₂₃(OH). Subclass of: cyclosilicates, staurolite mineral group.
+пироп; минерал пироп; pyrope || Пироп — минерал, силикат из группы гранатов. Формула: Mg₃Al₂(SiO₄)₃. Подкласс: гранат. || Pyrope — mineral, nesosilicate garnet. Formula: Mg₃Al₂(SiO₄)₃. Subclass of: garnet group.
+Лейцит; минерал Лейцит; leucite || Лейцит — породообразующий минерал магматического происхождения. Формула: K(AlSi₂O₆). || Leucite — zeolite mineral. Formula: K(AlSi₂O₆). Subclass of: analcime framework (ANA).
+Санидин; минерал Санидин; sanidine || Санидин — минерал класса силикатов. Формула: KAlSi₃O₈. || Sanidine — feldspar, tectosilicate mineral. Formula: KAlSi₃O₈. Subclass of: alkali feldspar.
+фенакит; минерал фенакит; phenakite || Фенакит — минерал, силикат бериллия. Формула: Be₂SiO₄. || Phenakite — nesosilicate mineral. Formula: Be₂SiO₄. Subclass of: willemite mineral group.
+фаялит; минерал фаялит; fayalite || Фаялит — минерал, богатый железом крайний член группы оливина. Формула: Fe²⁺₂SiO₄. Подкласс: оливин. || Fayalite — olivine, nesosilicate mineral. Formula: Fe²⁺₂SiO₄. Subclass of: olivine.
+диоптаз; минерал диоптаз; dioptase || Диоптаз — минерал водного силиката меди. Формула: CuSiO₃·H₂O. Подкласс: циклосиликаты. || Dioptase — cyclosilicate mineral. Formula: CuSiO₃·H₂O. Subclass of: cyclosilicates.
+форстерит; минерал форстерит; forsterite || Форстерит — минерал, ортосиликат магния из группы оливина. Формула: Mg₂SiO₄. Подкласс: оливин, группа оливина. || Forsterite — Magnesium end-member of olivine, nesosilicate mineral. Formula: Mg₂SiO₄. Subclass of: olivine, olivine mineral group.
+Висмутин; минерал Висмутин; bismuthinite || Висмутин — минерал класса сульфидов. Формула: Bi₂S₃. || Bismuthinite — bismuth (III) sulfide mineral. Formula: Bi₂S₃. Subclass of: stibnite mineral group, sulfide class of minerals.
+Торит; минерал Торит; thorite || Торит — минерал. Формула: ThSiO₄. || Thorite — nesosilicate mineral. Formula: ThSiO₄. Subclass of: cyclosilicates, zircon mineral group.
+Сепиолит; минерал Сепиолит; sepiolite || Сепиолит — минерал. Формула: Mg₄Si₆O₁₅(OH)₂·6H₂O. || Sepiolite — soft and porous white magnesium silicate clay mineral. Formula: Mg₄Si₆O₁₅(OH)₂·6H₂O. Subclass of: sepiolite group, palygorskite.
+энаргит; минерал энаргит; enargite || Энаргит — минерал класса сложных сульфидов. Формула: Cu₃AsS₄. Подкласс: сульфосоль, сульфиды. || Enargite — copper arsenic sulfide (Cu₃AsS₄). Formula: Cu₃AsS₄. Subclass of: sulfosalt subclass of minerals, sulfide class of minerals.
+кераргирит; минерал кераргирит; chlorargyrite || Кераргирит — минерал, хлорид серебра. Формула: AgCl. Подкласс: галитная минеральная группа. || Chlorargyrite — halite mineral. Formula: AgCl. Subclass of: halite mineral group.
+петалит; минерал петалит; petalite || Петалит — минерал, алюмосиликат лития. Формула: LiAl(Si₄O₁₀). Подкласс: листовой силикат. || Petalite — phyllosilicate mineral. Formula: LiAl(Si₄O₁₀). Subclass of: phyllosilicates.
+спессартин; минерал спессартин; spessartine || Спессартин — распространённый минерал, силикат из группы гранатов. Формула: Mn²⁺₃Al₂(SiO₄)₃. Подкласс: гранат. || Spessartine — garnet, nesosilicate mineral. Formula: Mn²⁺₃Al₂(SiO₄)₃. Subclass of: garnet group.
+витерит; минерал витерит; witherite || Витерит — минерал группы карбонатов. Формула: BaCO₃. || Witherite — carbonate mineral. Formula: BaCO₃. Subclass of: aragonite mineral group.
+Палыгорскит; минерал Палыгорскит; palygorskite || Палыгорскит — минерал. Формула: (Mg,Al)₅(Si,Al)₈O₂₀(OH)₂·8H₂O. || Palygorskite — phyllosilicate mineral. Formula: (Mg,Al)₅(Si,Al)₈O₂₀(OH)₂·8H₂O. Subclass of: palygorskite mineral group, phyllosilicates.
+Брошантит; минерал Брошантит; brochantite || Брошантит — минерал класса сульфатов. Формула: Cu₄SO₄(OH)₆. Подкласс: класс сульфатов. || Brochantite — sulfate mineral. Formula: Cu₄SO₄(OH)₆. Subclass of: sulfate mineral.
+улексит; минерал улексит; ulexite || Улексит — редкий минерал из водных боратов. Формула: NaCaB₅O₆(OH)₆·5H₂O. || Ulexite — nesoborate mineral. Formula: NaCaB₅O₆(OH)₆·5H₂O. Subclass of: nesoborate mineral subclass, borate class of minerals.
+Амблигонит; минерал Амблигонит; amblygonite || Амблигонит — минерал класса фосфатов. Формула: LiAlPO₄F. || Amblygonite — phosphate mineral. Formula: LiAlPO₄F. Subclass of: amblygonite group.
+Пирофиллит; минерал Пирофиллит; pyrophyllite || Пирофиллит — минерал класса силикатов. Формула: Al₂Si₄O₁₀(OH)₂. || Pyrophyllite — phyllosilicate mineral. Formula: Al₂Si₄O₁₀(OH)₂. Subclass of: talc mineral group, phyllosilicates.
+каинит; минерал каинит; kainite || Каинит — минерал, двойная соль магния и калия. Формула: KMg(SO₄)Cl·3H₂O. Подкласс: класс сульфатов. || Kainite — sulfate-chloride mineral. Formula: KMg(SO₄)Cl·3H₂O. Subclass of: sulfate mineral.
+Эвклаз; минерал Эвклаз; euclase || Эвклаз — редкий минерал класса силикатов. Формула: BeAlSiO₄(OH). Подкласс: незосиликат. || Euclase — nesosilicate mineral. Formula: BeAlSiO₄(OH). Subclass of: nesosilicates.
+абелсонит; минерал абелсонит; abelsonite || Абелсонит — минерал. Формула: NiC₃₁H₃₂N₄. Подкласс: органические минералы. || Abelsonite — Organic mineral, a nickel porphyrine derivative. Formula: NiC₃₁H₃₂N₄. Subclass of: organic class of minerals.
+пираргирит; минерал пираргирит; pyrargyrite || Пираргирит — минерал подкласса сложных сульфидов. Формула: Ag₃SbS₃. Подкласс: сульфосоль. || Pyrargyrite — sulfosalt mineral of silver and antimony. Formula: Ag₃SbS₃. Subclass of: sulfosalt subclass of minerals.
+Арсенолит; минерал Арсенолит; arsenolite || Арсенолит — минерал. Формула: As₂O₃. Подкласс: класс оксидных минералов. || Arsenolite — oxide mineral. Formula: As₂O₃. Subclass of: oxide class of minerals.
+Эвдиалит; минерал Эвдиалит; eudialyte || Эвдиалит — минерал. Формула: Na₁₅Ca₆(Fe²⁺,Mn²⁺)₃Zr₃[Si₂₅O₇₃](O,OH,H₂O)₃(OH,Cl)₂. || Eudialyte — cyclosilicate, mineral. Formula: Na₁₅Ca₆(Fe²⁺,Mn²⁺)₃Zr₃[Si₂₅O₇₃](O,OH,H₂O)₃(OH,Cl)₂. Subclass of: cyclosilicates, eudialyte mineral group.
+Периклаз; минерал Периклаз; periclase || Периклаз — минерал. Формула: MgO. || Periclase — magnesium oxide mineral. Formula: MgO. Subclass of: periclase mineral group.
+чароит; минерал чароит; charoite || Чароит — минерал из силикатов и горная порода. Формула: (K,Sr)₁₅-₁₆(Ca,Na)₃₂[Si₆O₁₁(O,OH)₆]₂[Si₁₂O₁₈(O,OH)₁₂]₂[Si₁₇O₂₅(O,OH)₁₈]₂(OH,F)₄ * ~₃H₂O. Подкласс: иносиликат. || Charoite — inosilicate mineral. Formula: (K,Sr)₁₅-₁₆(Ca,Na)₃₂[Si₆O₁₁(O,OH)₆]₂[Si₁₂O₁₈(O,OH)₁₂]₂[Si₁₇O₂₅(O,OH)₁₈]₂(OH,F)₄ * ~₃H₂O. Subclass of: inosilicate.
+Тенорит; минерал Тенорит; tenorite || Тенорит — минерал. Формула: CuO. Подкласс: класс оксидных минералов. || Tenorite — oxide mineral. Formula: CuO. Subclass of: oxide class of minerals.
+рибекит; минерал рибекит; riebeckite || Рибекит — один из породообразующих минералов. Формула: ☐Na₂(Fe²⁺₃Fe³⁺₂)Si₂O₂₂(OH)₂. || Riebeckite — Na-amphibole, double chain inosilicate mineral. Formula: ☐Na₂(Fe²⁺₃Fe³⁺₂)Si₂O₂₂(OH)₂. Subclass of: riebeckite rootname series.
+вавеллит; минерал вавеллит; wavellite || Вавеллит — минерал. Формула: Al₃(PO₄)₂(OH)₃·5H₂O. Подкласс: минерал класса фосфатов. || Wavellite — aluminium phosphate basic hydrate mineral. Formula: Al₃(PO₄)₂(OH)₃·5H₂O. Subclass of: phosphate mineral.
+оливенит; минерал оливенит; olivenite || Оливенит — вторичный минерал из класса арсенатов. Формула: Cu₂(AsO₄)(OH). Подкласс: группа оливенита. || Olivenite — arsenate mineral. Formula: Cu₂(AsO₄)(OH). Subclass of: olivenite group.
+астрофиллит; минерал астрофиллит; astrophyllite || Астрофиллит — минерал класса силикатов. Формула: K₂NaFe²⁺₇Ti₂Si₈O₂₈(OH)₄F. || Astrophyllite — inosilicate mineral. Formula: K₂NaFe²⁺₇Ti₂Si₈O₂₈(OH)₄F. Subclass of: astrophyllite mineral group.
+мирабилит; минерал мирабилит; mirabilite || Мирабилит — минерал, десятиводный кристаллогидрат (декагидрат) сульфата натрия. Формула: Na₂SO₄·10H₂O. Подкласс: класс сульфатов. || Mirabilite — sulfate mineral. Formula: Na₂SO₄·10H₂O. Subclass of: sulfate mineral.
+грюнерит; минерал грюнерит; grunerite || Грюнерит — минерал из группы амфиболов. Формула: ☐Fe²⁺₂Fe²⁺₅Si₈O₂₂(OH)₂. || Grunerite — Mg-Fe-Mn-amphibole, double chain inosilicate mineral. Formula: ☐Fe²⁺₂Fe²⁺₅Si₈O₂₂(OH)₂. Subclass of: grunerite rootname series.
+алабандин; минерал алабандин; alabandite || Алабандин — минерал марганца. Формула: MnS. || Alabandite — rocksalt group, sulfide mineral. Formula: MnS. Subclass of: galena mineral group.
+Поллуцит; минерал Поллуцит; pollucite || Поллуцит — минерал. Формула: Cs(Si₂Al)O₆·nH₂O. || Pollucite — zeolite mineral. Formula: Cs(Si₂Al)O₆·nH₂O. Subclass of: analcime framework (ANA).
+Афганит; минерал Афганит; afghanite || Афганит — минерал. Формула: (Na,K)₂₂Ca₁₀(Si₂₄Al₂₄)O₉₆(SO₄)₆Cl₆. || Afghanite — tectosilicate mineral. Formula: (Na,K)₂₂Ca₁₀(Si₂₄Al₂₄)O₉₆(SO₄)₆Cl₆.
+Эльбаит; минерал Эльбаит; elbaite || Эльбаит — минерал из класса силикатов. Формула: Na(Li₁.₅Al₁.₅)Al₆(Si₆O₁₈)(BO₃)₃(OH)₃(OH). Подкласс: турмалины. || Elbaite — cyclosilicate, mineral. Formula: Na(Li₁.₅Al₁.₅)Al₆(Si₆O₁₈)(BO₃)₃(OH)₃(OH). Subclass of: tourmalines.
+пейнит; минерал пейнит; painite || Пейнит — минерал класса боратов. Формула: CaZrAl₉(BO₃)O₁₅. Подкласс: бораты. || Painite — borate mineral. Formula: CaZrAl₉(BO₃)O₁₅. Subclass of: borate class of minerals.
+шамозит; минерал шамозит; chamosite || Шамозит — минерал. Формула: (Fe²⁺,Mg,Al,Fe³⁺)₆(Si,Al)₄O₁₀(OH,O)₈. || Chamosite — Phyllosilicate mineral member of the chlorite group. Formula: (Fe²⁺,Mg,Al,Fe³⁺)₆(Si,Al)₄O₁₀(OH,O)₈. Subclass of: kaolinite-serpentine mineral group.
+армалколит; минерал армалколит; armalcolite || Армалколит — минерал. Формула: (Mg,Fe²⁺)Ti₂O₅. Подкласс: класс оксидных минералов. || Armalcolite — oxide mineral. Formula: (Mg,Fe²⁺)Ti₂O₅. Subclass of: oxide class of minerals.
+аргиродит; минерал аргиродит; argyrodite || Аргиродит — минерал. Формула: Ag₈GeS₆. || Argyrodite — sulfosalt mineral. Formula: Ag₈GeS₆.
+Куммингтонит; минерал Куммингтонит; cummingtonite || Куммингтонит — минерал, гидроксилсиликат магния и железа. Формула: ☐Mg₂Mg₅Si₈O₂₂(OH)₂. || Cummingtonite — Mg-Fe-Mn-amphibole, double chain inosilicate mineral. Formula: ☐Mg₂Mg₅Si₈O₂₂(OH)₂. Subclass of: cummingtonite rootname series.
+тааффеит; минерал тааффеит; magnesiotaaffeite-2N'2S || Тааффеит — редкий минерал класса окислов. Формула: Mg₃BeAl₈O₁₆. Подкласс: группа тааффеитов. || Magnesiotaaffeite-2N'2S — hydroxide mineral. Formula: Mg₃BeAl₈O₁₆. Subclass of: taaffeite series.
+муллит; минерал муллит; mullite || Муллит — минерал. Формула: 3Al₂O₃·2SiO₂. Подкласс: незосиликат. || Mullite — nesosilicate mineral. Formula: 3Al₂O₃·2SiO₂. Subclass of: nesosilicates.
+Тугтупит; минерал Тугтупит; tugtupite || Тугтупит — минерал. Формула: Na₄BeAlSi₄O₁₂Cl. || Tugtupite — tectosilicate mineral. Formula: Na₄BeAlSi₄O₁₂Cl. Subclass of: sodalite framework (SOD), sodalite group.
+Чёрный турмалин; минерал Чёрный турмалин; schorl || Чёрный турмалин — минерал подкласса кольцевых боросиликатов. Формула: Na(Fe²⁺₃)Al₆(Si₆O₁₈)(BO₃)₃(OH)₃(OH). Подкласс: турмалины. || Schorl — tourmaline, cyclosilicate mineral. Formula: Na(Fe²⁺₃)Al₆(Si₆O₁₈)(BO₃)₃(OH)₃(OH). Subclass of: tourmalines.
+Бертрандит; минерал Бертрандит; bertrandite || Бертрандит — минерал. Формула: Be₄Si₂O₇(OH)₂. Подкласс: соросиликат. || Bertrandite — sorosilicate mineral. Formula: Be₄Si₂O₇(OH)₂. Subclass of: sorosilicates.
+Сапонит; минерал Сапонит; saponite || Сапонит — минерал из подкласса слоистых силикатов, группы монтмориллонита. Формула: Ca₀.₂₅(Mg,Fe)₃((Si,Al)₄O₁₀)(OH)₂ * nH₂O. Подкласс: Смектиты. || Saponite — Trioctahedral (Mg2+, Fe2+) smectite, phyllosilicate mineral. Formula: Ca₀.₂₅(Mg,Fe)₃((Si,Al)₄O₁₀)(OH)₂ * nH₂O. Subclass of: smectite mineral group.
+Сколецит; минерал Сколецит; scolecite || Сколецит — минерал. Формула: Ca(Si₃Al₂)O₁₀·3H₂O. || Scolecite — zeolite mineral. Formula: Ca(Si₃Al₂)O₁₀·3H₂O. Subclass of: natrolite framework (NAT).
+гессит; минерал гессит; hessite || Гессит — минерал, теллурид серебра. Формула: Ag₂Te. Подкласс: Теллуриды (минералы), сульфиды. || Hessite — telluride mineral. Formula: Ag₂Te. Subclass of: telluride mineral, sulfide class of minerals.
+грейгит; минерал грейгит; greigite || Грейгит — минерал сульфида железа. Формула: Fe²⁺Fe³⁺₂S₄. || Greigite — iron(II,III) sulfide mineral of spinel structure. Formula: Fe²⁺Fe³⁺₂S₄. Subclass of: linnaeite mineral group.
+сперрилит; минерал сперрилит; sperrylite || Сперрилит — сульфидный минерал. Формула: PtAs₂. || Sperrylite — sulfide mineral. Formula: PtAs₂. Subclass of: pyrite structural group, pyrite mineral group.
+Бишофит; минерал Бишофит; bischofite || Бишофит — минерал. Формула: MgCl₂·6H₂O. Подкласс: галогениды. || Bischofite — halide mineral. Formula: MgCl₂·6H₂O. Subclass of: halide class of minerals.
+Клинохлор; минерал Клинохлор; clinochlore || Клинохлор — минерал, филлосиликат магния и алюминия с гидроксилом. Формула: Mg₅Al(AlSi₃O₁₀)(OH)₈. Подкласс: хлориты. || Clinochlore — phyllosilicate mineral. Formula: Mg₅Al(AlSi₃O₁₀)(OH)₈. Subclass of: chlorite group.
+минерал золото; native gold || Золото — минерал класса самородных элементов. Формула: Au. || Native gold — mineral (as opposed to the chemical element). Formula: Au. Subclass of: copper mineral group.
+Тюямунит; минерал Тюямунит; tyuyamunite || Тюямунит — радиоактивный минерал группы урановых слюдок. Формула: Ca(UO₂)₂(VO₄)₂·5-8H₂O. || Tyuyamunite — uranyl vanadate mineral. Formula: Ca(UO₂)₂(VO₄)₂·5-8H₂O. Subclass of: carnotite mineral group.
+Тефроит; минерал Тефроит; tephroite || Тефроит — минерал. Формула: Mn²⁺₂SiO₄. Подкласс: группа оливина. || Tephroite — olivine, nesosilicate mineral. Formula: Mn²⁺₂SiO₄. Subclass of: olivine mineral group.
+еремеевит; минерал еремеевит; jeremejevite || Еремеевит — минерал. Формула: Al₆(BO₃)₅F₃. Подкласс: бораты. || Jeremejevite — borate mineral. Formula: Al₆(BO₃)₅F₃. Subclass of: borate class of minerals.
+Шрейберзит; минерал Шрейберзит; schreibersite || Шрейберзит — минерал. Формула: (Fe,Ni,Cr)₃P. || Schreibersite — phosphide mineral. Formula: (Fe,Ni,Cr)₃P. Subclass of: phosphide family of minerals.
+стишовит; минерал стишовит; stishovite || Стишовит — минерал, модификация кремнезёма. Формула: SiO₂. || Stishovite — silica mineral, rutile mineral group. Formula: SiO₂.
+нитронатрит; минерал нитронатрит; nitratine || Нитронатрит — минерал. Формула: NaNO₃. || Nitratine — nitrate mineral. Formula: NaNO₃. Subclass of: calcite group.
+селадонит; минерал селадонит; celadonite || Селадонит — минерал группы слюд. || Celadonite — mica, potassium phyllosilicate mineral of green color (Fe-II). Subclass of: celadonite family.
+Транквиллитит; минерал Транквиллитит; tranquillityite || Транквиллитит — силикатный минерал. Формула: (Fe²⁺,Ca)₈(Zr,Y)₂Ti₃(SiO₄)₃O₁₂. Подкласс: незосиликат. || Tranquillityite — nesosilicate mineral. Formula: (Fe²⁺,Ca)₈(Zr,Y)₂Ti₃(SiO₄)₃O₁₂. Subclass of: nesosilicates.
+Серандит; минерал Серандит; serandite || Серандит — минерал. Формула: NaMn²⁺₂Si₃O₈(OH). || Serandite — inosilicate mineral. Formula: NaMn²⁺₂Si₃O₈(OH). Subclass of: pectolite group.
+Ульманнит; минерал Ульманнит; ullmannite || Ульманнит — никелевый антимонидно-сульфидный минерал. Формула: NiSbS. || Ullmannite — nickel antimonide-sulfide mineral. Formula: NiSbS. Subclass of: ullmannite structural group, cobaltite mineral group.
+Сапфирин; минерал Сапфирин; sapphirine || Сапфирин — минерал. Формула: Mg₄(Mg₃Al₉)O₄[Si₃Al₉O₃₆]. || Sapphirine — a rare mineral of the sapphirine supergroup, single chain inosilicate mineral with polytopes 1A, 2M, 3A, 4M, 5A, a silicate of magnesium and aluminium, (Mg,Al)₈(Al,Si)₆O₂₀ (with Fe as a major impurity), named after its sapphire-like colour. Formula: Mg₄(Mg₃Al₉)O₄[Si₃Al₉O₃₆]. Subclass of: sapphirine group.
+сервантит; минерал сервантит; cervantite || Сервантит — вторичный минерал, тетраоксид сурьмы. Формула: Sb³⁺Sb⁵⁺O₄. || Cervantite — antimony oxide mineral. Formula: Sb³⁺Sb⁵⁺O₄. Subclass of: cervantite mineral group.
+Лопарит; минерал Лопарит; loparite || Лопарит — минерал подкласса сложных оксидов. Формула: (Na₀.₅REE₀.₅)TiO₃. || Loparite — oxide mineral. Formula: (Na₀.₅REE₀.₅)TiO₃. Subclass of: perovskite mineral group.
+триплит; минерал триплит; triplite || Триплит — минерал. Формула: Mn²⁺₂PO₄F. || Triplite — phosphate mineral. Formula: Mn²⁺₂PO₄F. Subclass of: triplite - zwieselite mineral pair.
+Фатерит; минерал Фатерит; vaterite || Фатерит — минерал. Формула: Ca(CO₃). Подкласс: карбонаты. || Vaterite — carbonate mineral. Formula: Ca(CO₃). Subclass of: carbonate and nitrate class of minerals.
+железо самородное; минерал железо самородное; telluric iron || Железо самородное — минерал. Формула: Fe. || Telluric iron — mineral (as opposed to the chemical element), broad sense. Formula: Fe.
+Карлтонит; минерал Карлтонит; carletonite || Карлтонит — минерал. Формула: KNa₄Ca₄Si₈O₁₈(CO₃)₄(F,OH)·H₂O. Подкласс: листовой силикат. || Carletonite — phyllosilicate mineral. Formula: KNa₄Ca₄Si₈O₁₈(CO₃)₄(F,OH)·H₂O. Subclass of: phyllosilicates.
+Пироксмангит; минерал Пироксмангит; pyroxmangite || Пироксмангит — минерал класса силикатов. Формула: MnSiO₃. Подкласс: иносиликат. || Pyroxmangite — inosilicate mineral. Formula: MnSiO₃. Subclass of: inosilicate.
+бура; минерал бура; borax || Бура — минерал, борат. Формула: Na₂B₄O₅(OH)₄·8H₂O. || Borax — mineral (as opposed to the chemical compound). Formula: Na₂B₄O₅(OH)₄·8H₂O. Subclass of: nesoborate mineral subclass, borate class of minerals.
+Алакранит; минерал Алакранит; alacránite || Алакранит — минерал. Формула: As₈S₉. Подкласс: сульфиды. || Alacránite — mineral, arsenic sulfide. Formula: As₈S₉. Subclass of: sulfide class of minerals.
