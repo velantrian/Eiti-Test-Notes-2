@@ -1,4 +1,4 @@
-# 🏛️ Архитектура VELANTRIM EITI (v14.16.17)
+# 🏛️ Архитектура VELANTRIM EITI (v14.16.19)
 
 > Этот документ описывает, как устроено приложение изнутри: какие файлы за что отвечают, где лежат данные, как работает офлайн-режим, синхронизация, голос, кеширование и как выпускается релиз.
 > Краткая инструкция для агентов и разработчиков — в [AGENTS.md](../AGENTS.md); ограничения платформы PWA — в [docs/PWA_LIMITS.md](PWA_LIMITS.md).
@@ -254,8 +254,8 @@ flowchart TD
 
 | Кеш | Имя | Стратегия |
 |---|---|---|
-| CORE | `eiti-v14.16.17` | precache `index.html`, `local/eiti_*.js` (+ frames.json, drive_sync; без typo_vocab), иконки; лимит 24, trim не трогает allowlist |
-| Офлайн-пакеты | `eiti-offline-v14.16.17` | `offline/**`, `kb/**`: cache-first + фоновое обновление, без лимита |
+| CORE | `eiti-v14.16.19` | precache `index.html`, `local/eiti_*.js` (+ frames.json, drive_sync; без typo_vocab), иконки; лимит 24, trim не трогает allowlist |
+| Офлайн-пакеты | `eiti-offline-v14.16.19` | `offline/**`, `kb/**`: cache-first + фоновое обновление, без лимита |
 | `data/*.json` | — | stale-while-revalidate |
 
 При активации старые кеши удаляются, клиентам отправляется `SW_UPDATED` с версией — приложение предлагает перезагрузку.
