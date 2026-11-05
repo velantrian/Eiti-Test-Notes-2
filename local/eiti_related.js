@@ -228,7 +228,8 @@
     var rows = e.rd && e.rd.length ? e.rd : (related || []);
     var exact = [], similar = [];
     rows.forEach(function(n) {
-      if (!n || n.id === e.id) return;
+      // Only skip self when both sides carry an id — undefined===undefined was dropping all rd snapshots.
+      if (!n || (e.id != null && n.id != null && n.id === e.id)) return;
       var nt = lang !== 'ru' && n.en && !enPlaceholder(n.en) ? n.en : n.a;
       var np = parseFacts(nt), shared = sharedFactPairs(p.facts, np.facts);
       var row = { entry: n, parsed: np, shared: shared, text: nt };
