@@ -273,6 +273,22 @@ def lab(prefix, v, n=3):
     s = few(v, n)
     return (prefix + s + '.') if s else ''
 
+def book_date_parts(it):
+    """Return semantically labelled dates. Q7813 is an audited source exception.
+
+    Wikidata Q7813 has unreferenced P577=1940; that publication claim conflicts
+    with the UN's authoritative adoption date (resolution 217 A (III),
+    10 December 1948). Do not relabel adoption as publication or ingest 1940.
+    https://www.wikidata.org/wiki/Q7813
+    https://www.un.org/en/about-us/udhr/history-of-the-declaration
+    """
+    if it.get('qid') == 'Q7813':
+        return ('Принята: 10 декабря 1948 года.', 'Adopted: 10 December 1948.')
+    year_ru, year_en = yr(it.get('y') or []), yr_en(it.get('y') or [])
+    return (('Опубликовано: %s.' % year_ru) if year_ru else '',
+            ('Published: %s.' % year_en) if year_en else '')
+
+
 def main():
     which = set(sys.argv[1:])
     def want(k): return not which or k in which
@@ -445,12 +461,12 @@ def main():
     if want('books'):
         def fmt_book(it, l, d):
             ru = sent('«%s» — %s.' % (l, d), lab('Автор: ', it['a'], 2),
-                      ('Опубликовано: %s.' % yr(it['y'])) if yr(it['y']) else '',
+                      book_date_parts(it)[0],
                       lab('Жанр: ', it.get('g') or [], 2), lab('Язык: ', it.get('lang') or [], 2),
                       lab('Страна: ', it.get('c') or [], 1))
             le, de = it.get('en') or '', it.get('den') or ''
             en = sent('"%s" — %s.' % (le, de), lab_en('Author: ', en_vals(it, 'a'), 2),
-                      ('Published: %s.' % yr_en(it['y'])) if yr_en(it['y']) else '',
+                      book_date_parts(it)[1],
                       lab_en('Genre: ', en_vals(it, 'g'), 2), lab_en('Language: ', en_vals(it, 'lang'), 2),
                       lab_en('Country: ', en_vals(it, 'c'), 1)) if le and de else ''
             return maybe_pair(ru, en)
