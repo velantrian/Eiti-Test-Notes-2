@@ -39,7 +39,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.17"; // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.19"; // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -257,6 +257,21 @@
                     if (target && pending != null) {
                         try { target.textContent = pending; } catch (e) {}
                     }
+                });
+            };
+        }
+        // v14.16.19: one scroll-to-bottom per frame while streaming (avoids layout thrash per token)
+        function eitiCreateRafScroller(getEl) {
+            var pending = false;
+            var rafFn = (typeof requestAnimationFrame === 'function') ? requestAnimationFrame : function(cb) { return setTimeout(cb, 16); };
+            return function() {
+                if (pending || window._eitiScrollPaused) return;
+                pending = true;
+                rafFn(function() {
+                    pending = false;
+                    if (window._eitiScrollPaused) return;
+                    var ms = typeof getEl === 'function' ? getEl() : getEl;
+                    if (ms) ms.scrollTop = ms.scrollHeight;
                 });
             };
         }
@@ -4092,11 +4107,16 @@
                 buildRev();
             }
             // Throttled MutationObserver — translates dynamically inserted DOM nodes.
+            // v14.16.19: RU is the source locale (no walk); dedupe roots; skip chat stream characterData
+            // (token updates were scheduling applyDOM on every chunk and janking the UI).
             var _mutBuf = [];
+            var _mutSeen = null;
             var _mutTimer = null;
             function _flushMut() {
                 _mutTimer = null;
+                _mutSeen = null;
                 if (!_mutBuf.length) return;
+                if (state.locale === 'ru') { _mutBuf = []; return; }
                 var roots = _mutBuf.slice();
                 _mutBuf = [];
                 for (var i = 0; i < roots.length; i++) {
@@ -4104,14 +4124,27 @@
                 }
             }
             function _scheduleMut(target) {
+                if (!target || state.locale === 'ru') return;
+                if (!_mutSeen) _mutSeen = typeof WeakSet !== 'undefined' ? new WeakSet() : null;
+                if (_mutSeen) {
+                    if (_mutSeen.has(target)) return;
+                    _mutSeen.add(target);
+                }
                 _mutBuf.push(target);
                 if (_mutTimer == null) _mutTimer = setTimeout(_flushMut, 80);
+            }
+            function _inChatStream(node) {
+                try {
+                    if (window._eitiIsStreaming && node && node.closest && node.closest('#messages')) return true;
+                } catch (e) {}
+                return false;
             }
             var _observer = null;
             function _initObserver() {
                 if (typeof MutationObserver === 'undefined' || !document.body) return;
                 if (_observer) return;
                 _observer = new MutationObserver(function(muts) {
+                    if (state.locale === 'ru') return;
                     for (var i = 0; i < muts.length; i++) {
                         var m = muts[i];
                         if (m.addedNodes && m.addedNodes.length) {
@@ -4125,8 +4158,9 @@
                                 }
                             }
                         }
-                        // characterData changes (textContent reassignment without replacement)
+                        // characterData: skip live chat stream (RAF text updater) — translate on insert only
                         if (m.type === 'characterData' && m.target && m.target.parentNode) {
+                            if (_inChatStream(m.target.parentNode)) continue;
                             _scheduleMut(m.target.parentNode);
                         }
                     }
@@ -19667,16 +19701,20 @@
                             var nextFrom = Math.max(0, _eitiChatPageFrom - EITI_CHAT_PAGE);
                             var older = _eitiChatPageAll.slice(nextFrom, _eitiChatPageFrom);
                             var beforeEl = loadMoreBtn.nextSibling;
-                            older.forEach(function(m) {
-                                container.insertBefore(_eitiRenderMsgEl(m), beforeEl);
-                            });
+                            // v14.16.19: batch older messages into one insert
+                            var _olderFrag = document.createDocumentFragment();
+                            older.forEach(function(m) { _olderFrag.appendChild(_eitiRenderMsgEl(m)); });
+                            container.insertBefore(_olderFrag, beforeEl);
                             _eitiChatPageFrom = nextFrom;
                             ensureLoadMore();
                         };
                         if (!existing) container.insertBefore(loadMoreBtn, container.firstChild);
                     }
                     ensureLoadMore();
-                    msgs.slice(_eitiChatPageFrom).forEach(function(m) { container.appendChild(_eitiRenderMsgEl(m)); });
+                    // v14.16.19: one reflow for the page of messages (DocumentFragment)
+                    var _pageFrag = document.createDocumentFragment();
+                    msgs.slice(_eitiChatPageFrom).forEach(function(m) { _pageFrag.appendChild(_eitiRenderMsgEl(m)); });
+                    container.appendChild(_pageFrag);
                     container.scrollTop = container.scrollHeight;
                     return { total: msgs.length, shown: msgs.length - _eitiChatPageFrom };
                 });
@@ -24189,6 +24227,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                         var _orT0 = Date.now(), _orTFirst = 0, _orThinkBadged = false; // generation speed + real-reasoning badge
                         var textEl = document.getElementById(liveId + '-text');
                         var _orRafText = (typeof eitiCreateRafTextUpdater === 'function') ? eitiCreateRafTextUpdater(textEl) : null;
+                        var _orScroll = (typeof eitiCreateRafScroller === 'function') ? eitiCreateRafScroller(function(){ return document.getElementById('messages'); }) : null;
                         window._eitiIsStreaming = true;
                         function readOR() {
                             return reader.read().then(function(chunk) {
@@ -24222,7 +24261,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                         _eitiTrackTokens(_provider, _tokenEstimate.prompt || Math.round(sysContent.length/4), Math.round(result.length/4));
                                     }
                                     // scroll to end
-                                    requestAnimationFrame(function() { var ms = document.getElementById('messages'); if (ms && !window._eitiScrollPaused) ms.scrollTop = ms.scrollHeight; });
+                                    if (_orScroll) _orScroll(); else requestAnimationFrame(function() { var ms = document.getElementById('messages'); if (ms && !window._eitiScrollPaused) ms.scrollTop = ms.scrollHeight; });
                                     resolve(result); return;
                                 }
                                 _orSseBuffer += decoder.decode(chunk.value, {stream: true});
@@ -24230,7 +24269,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                 _orSseBuffer = _orLines.pop();
                                 _orLines.forEach(function(line) {
                                     if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-                                        try { var _orj = JSON.parse(line.slice(6)); var _ord = (_orj.choices && _orj.choices[0] && _orj.choices[0].delta) || {}; var _orrc = _ord.reasoning_content || _ord.reasoning; if (_orrc && eitiORThinkingActive(_orModel)) { _eitiThinkReasoning(liveId, _orrc); if (!_orThinkBadged) { _orThinkBadged = true; var _orSndEl = liveDiv.querySelector('.message-sender'); if (_orSndEl) _orSndEl.innerHTML = eitiORSenderHtml(_orModel, true); } } var delta = _ord.content; if (delta) { if (!_orTFirst) _orTFirst = Date.now(); result += delta; if (_orRafText) _orRafText(result); else if (textEl) textEl.textContent = result; var ms = document.getElementById('messages'); if (ms && !window._eitiScrollPaused) ms.scrollTop = ms.scrollHeight; } } catch(e) {}
+                                        try { var _orj = JSON.parse(line.slice(6)); var _ord = (_orj.choices && _orj.choices[0] && _orj.choices[0].delta) || {}; var _orrc = _ord.reasoning_content || _ord.reasoning; if (_orrc && eitiORThinkingActive(_orModel)) { _eitiThinkReasoning(liveId, _orrc); if (!_orThinkBadged) { _orThinkBadged = true; var _orSndEl = liveDiv.querySelector('.message-sender'); if (_orSndEl) _orSndEl.innerHTML = eitiORSenderHtml(_orModel, true); } } var delta = _ord.content; if (delta) { if (!_orTFirst) _orTFirst = Date.now(); result += delta; if (_orRafText) _orRafText(result); else if (textEl) textEl.textContent = result; if (_orScroll) _orScroll(); else { var ms = document.getElementById('messages'); if (ms && !window._eitiScrollPaused) ms.scrollTop = ms.scrollHeight; } } } catch(e) {}
                                     }
                                 });
                                 return readOR();
@@ -24272,6 +24311,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                         var _oaiSseBuffer = '';
                         var textEl = document.getElementById(liveId + '-text');
                         var _oaiRafText = (typeof eitiCreateRafTextUpdater === 'function') ? eitiCreateRafTextUpdater(textEl) : null;
+                        var _oaiScroll = (typeof eitiCreateRafScroller === 'function') ? eitiCreateRafScroller(function(){ return document.getElementById('messages'); }) : null;
                         window._eitiIsStreaming = true;
                         function readOAI() {
                             return reader.read().then(function(chunk) {
@@ -24300,7 +24340,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                     if (typeof _eitiTrackTokens === 'function' && window._tokenEstimate) {
                                         _eitiTrackTokens(_provider, _tokenEstimate.prompt || Math.round(sysContent.length/4), Math.round(result.length/4));
                                     }
-                                    requestAnimationFrame(function(){ var ms = document.getElementById('messages'); if (ms && !window._eitiScrollPaused) ms.scrollTop = ms.scrollHeight; });
+                                    if (_oaiScroll) _oaiScroll(); else requestAnimationFrame(function(){ var ms = document.getElementById('messages'); if (ms && !window._eitiScrollPaused) ms.scrollTop = ms.scrollHeight; });
                                     resolve(result); return;
                                 }
                                 _oaiSseBuffer += decoder.decode(chunk.value, {stream: true});
@@ -24315,8 +24355,11 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                             if (delta) {
                                                 result += delta;
                                                 if (_oaiRafText) _oaiRafText(result); else if (textEl) textEl.textContent = result;
+                                                if (_oaiScroll) _oaiScroll();
+                                                else {
                                                 var ms = document.getElementById('messages');
                                                 if (ms && !window._eitiScrollPaused) ms.scrollTop = ms.scrollHeight;
+                                                }
                                             }
                                         } catch(e) {}
                                     }
@@ -45895,22 +45938,49 @@ body.theme-light-clean .notes-ai-quick button.notes-ai-emoji-toggle.is-enabled {
         setTimeout(function() { nav.style.display = 'none'; }, 300);
     }
 
-    var observer = new MutationObserver(function() {
-        var overlay = document.querySelector('.note-editor-overlay');
-        if (!overlay) return;
-        var isFs = overlay.classList.contains('editor-fullscreen');
-        if (!isFs) {
-            _hideNav();
-        } else {
-            var body = document.getElementById('noteEditorBody');
-            if (body && !body._fsScrollWatched) {
-                body._fsScrollWatched = true;
-                _lastScrollY = body.scrollTop;
-                body.addEventListener('scroll', function() { _updateArrows(body); }, { passive: true });
+    // v14.16.19: watch only the note overlay (not every class flip under body)
+    var _fsAttrObs = null;
+    function _watchFsOverlay(overlay) {
+        if (!overlay || overlay._eitiFsWatched) return;
+        overlay._eitiFsWatched = true;
+        if (!_fsAttrObs) {
+            _fsAttrObs = new MutationObserver(function() {
+                var ov = document.querySelector('.note-editor-overlay');
+                if (!ov) return;
+                var isFs = ov.classList.contains('editor-fullscreen');
+                if (!isFs) {
+                    _hideNav();
+                } else {
+                    var body = document.getElementById('noteEditorBody');
+                    if (body && !body._fsScrollWatched) {
+                        body._fsScrollWatched = true;
+                        _lastScrollY = body.scrollTop;
+                        body.addEventListener('scroll', function() { _updateArrows(body); }, { passive: true });
+                    }
+                }
+            });
+        }
+        _fsAttrObs.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+    }
+    var observer = new MutationObserver(function(muts) {
+        for (var i = 0; i < muts.length; i++) {
+            var nodes = muts[i].addedNodes || [];
+            for (var j = 0; j < nodes.length; j++) {
+                var n = nodes[j];
+                if (!n || n.nodeType !== 1) continue;
+                if (n.classList && n.classList.contains('note-editor-overlay')) _watchFsOverlay(n);
+                else if (n.querySelector) {
+                    var ov = n.querySelector('.note-editor-overlay');
+                    if (ov) _watchFsOverlay(ov);
+                }
             }
         }
+        var existing = document.querySelector('.note-editor-overlay');
+        if (existing) _watchFsOverlay(existing);
     });
-    observer.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, { childList: true, subtree: true });
+    var _bootOv = document.querySelector('.note-editor-overlay');
+    if (_bootOv) _watchFsOverlay(_bootOv);
 })();
 
 // ════════════════════════════════════════════════════════════════
@@ -47046,7 +47116,9 @@ window.eitiApplyDesignTheme = function(theme, design) {
                 });
             });
 
-            observer.observe(document.body, { childList: true, subtree: true });
+            // v14.16.19: observe history view only (not every DOM mutation under body)
+            var _histRoot = document.getElementById('view-history') || document.getElementById('eiti-chat-list') || document.body;
+            observer.observe(_histRoot, { childList: true, subtree: true });
             window._eitiHistorySelection = { getSelected: function () { return Array.from(_selectedChatIds); } };
         })();
 

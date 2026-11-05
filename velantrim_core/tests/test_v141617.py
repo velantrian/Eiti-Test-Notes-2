@@ -13,10 +13,13 @@ REL = (ROOT / "local" / "eiti_related.js").read_text(encoding="utf-8")
 
 
 def test_version_sync():
+    # geo enrich remains; runtime version may advance past 14.16.17
     m = re.search(r'var EITI_VERSION = "(\d+\.\d+\.\d+)"', HTML)
-    assert m and m.group(1) == "14.16.17"
-    assert f"var CACHE = 'eiti-v{m.group(1)}'" in SW
-    assert "version: '14.16.17'" in SW
+    assert m, "missing runtime version"
+    version = m.group(1)
+    assert tuple(map(int, version.split("."))) >= (14, 16, 17)
+    assert f"var CACHE = 'eiti-v{version}'" in SW
+    assert f"version: '{version}'" in SW
 
 
 def test_kb_still_exactly_150k():
