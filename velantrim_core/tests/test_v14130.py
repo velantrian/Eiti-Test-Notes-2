@@ -156,5 +156,6 @@ def test_save_to_note_wiring():
     # 🔊/📋 у ответа в чате читают текст без кнопок и подписи
     assert "var plain = eitiPlainOf(d.querySelector('#' + msgId + '-text'));" in HTML
     assert "var plain2 = eitiPlainOf(d.querySelector('#'+rId+'-text'));" in HTML
-    assert "c.querySelectorAll('.eiti-rel-bar,.eiti-foot').forEach" in HTML
+    # v14.16.21+: also strip thinking / feedback bars from plain copy
+    assert "c.querySelectorAll('.eiti-rel-bar,.eiti-foot,.eiti-think-box,.eiti-fb-bar').forEach" in HTML
     assert ".eiti-rel-panel[hidden] { display: none !important; }" in HTML

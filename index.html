@@ -4211,6 +4211,31 @@
         // v14.13.0: Похожие / Рассуждение
         window.EITI_I18N.addDict('en', {"🔗 Похожие и рассуждение": "🔗 Related and reasoning", "📌 Сохранять ответы в заметку": "📌 Save answers to a note", "Показывать похожие": "Show related", "Подробное рассуждение": "Detailed reasoning", "Режим рассуждения": "Reasoning mode", "Только офлайн": "Offline only", "С ИИ (если включён и есть сеть)": "With AI (if enabled and online)", "Кнопки «Похожие» и «Рассуждение» — под ответами базы знаний, сказками и заметками. Офлайн показываются только данные самой записи. С ИИ объяснение идёт отдельным блоком, факты из источника — отдельно. Заметки уходят ИИ только при включённом Notes AI.": "“Related” and “Reasoning” buttons appear under knowledge-base answers, tales and notes. Offline, only the item's own data is shown. With AI, the explanation comes in a separate block, apart from the facts from source. Notes are sent to the AI only when Notes AI is on."});
         window.EITI_I18N.addDict('de', {"🔗 Похожие и рассуждение": "🔗 Ähnliche und Begründung", "📌 Сохранять ответы в заметку": "📌 Antworten in Notiz speichern", "Показывать похожие": "Ähnliche anzeigen", "Подробное рассуждение": "Ausführliche Begründung", "Режим рассуждения": "Begründungsmodus", "Только офлайн": "Nur offline", "С ИИ (если включён и есть сеть)": "Mit KI (wenn aktiviert und online)", "Кнопки «Похожие» и «Рассуждение» — под ответами базы знаний, сказками и заметками. Офлайн показываются только данные самой записи. С ИИ объяснение идёт отдельным блоком, факты из источника — отдельно. Заметки уходят ИИ только при включённом Notes AI.": "Die Schaltflächen „Ähnliche“ und „Begründung“ erscheinen unter Antworten der Wissensdatenbank, Märchen und Notizen. Offline werden nur die Daten des Eintrags selbst gezeigt. Mit KI steht die Erklärung in einem eigenen Block, getrennt von den Fakten aus der Quelle. Notizen gehen nur bei aktiviertem Notes AI an die KI."});
+        // v14.16.21: DeepSeek show-thinking toggle (+ dynamic note strings)
+        window.EITI_I18N.addDict('en', {
+            "🧠 Показывать размышления": "🧠 Show thinking",
+            "Вкл — свёрнутый блок · Выкл — не запрашивать reasoning": "On — collapsed panel · Off — do not request reasoning",
+            "Вкл — свёрнутый блок «Размышлял N сек» · Выкл — thinking:disabled": "On — collapsed “Thought for N s” · Off — thinking:disabled",
+            "Выкл — reasoning не запрашивается (thinking:disabled)": "Off — reasoning is not requested (thinking:disabled)",
+            "Неприменимо для Flash — API не отдаёт отдельное поле размышлений": "Not applicable to Flash — API has no separate thinking field",
+            "Flash не отдаёт отдельное поле размышлений": "Flash has no separate thinking field",
+            "🧠 DeepSeek Thinking вкл": "🧠 DeepSeek Thinking on",
+            "⚡ DeepSeek Thinking выкл": "⚡ DeepSeek Thinking off",
+            "Для этой модели reasoning обязателен": "Reasoning is mandatory for this model",
+            "Thinking неприменимо для этой модели": "Thinking is not applicable to this model"
+        });
+        window.EITI_I18N.addDict('de', {
+            "🧠 Показывать размышления": "🧠 Denken anzeigen",
+            "Вкл — свёрнутый блок · Выкл — не запрашивать reasoning": "An — eingeklapptes Feld · Aus — Reasoning nicht anfordern",
+            "Вкл — свёрнутый блок «Размышлял N сек» · Выкл — thinking:disabled": "An — eingeklappt „Nachgedacht N s“ · Aus — thinking:disabled",
+            "Выкл — reasoning не запрашивается (thinking:disabled)": "Aus — Reasoning wird nicht angefordert (thinking:disabled)",
+            "Неприменимо для Flash — API не отдаёт отдельное поле размышлений": "Nicht für Flash — API liefert kein separates Denkfeld",
+            "Flash не отдаёт отдельное поле размышлений": "Flash liefert kein separates Denkfeld",
+            "🧠 DeepSeek Thinking вкл": "🧠 DeepSeek Thinking an",
+            "⚡ DeepSeek Thinking выкл": "⚡ DeepSeek Thinking aus",
+            "Для этой модели reasoning обязателен": "Für dieses Modell ist Reasoning Pflicht",
+            "Thinking неприменимо для этой модели": "Thinking gilt nicht für dieses Modell"
+        });
 
         // ─────────────────────────────────────────────────────────────────
         // AI reply language — независимо от UI-локали.
@@ -8991,8 +9016,8 @@
                                 <label id="ds-thinking-row" onclick="eitiToggleDsShowThinking()" style="display:flex;align-items:center;gap:10px;padding:10px 12px;margin-top:10px;margin-bottom:2px;border-radius:12px;border:1px solid var(--border-color);background:var(--secondary-color);cursor:pointer;user-select:none;">
                                     <span id="ds-thinking-check" style="font-size:18px;line-height:1;">✅</span>
                                     <span style="flex:1;">
-                                        <span style="display:block;font-size:13px;font-weight:700;">🧠 Показывать размышления</span>
-                                        <span id="ds-thinking-note" style="display:block;font-size:11px;opacity:0.55;">Вкл — свёрнутый блок · Выкл — не запрашивать reasoning</span>
+                                        <span style="display:block;font-size:13px;font-weight:700;" data-i18n="🧠 Показывать размышления">🧠 Показывать размышления</span>
+                                        <span id="ds-thinking-note" style="display:block;font-size:11px;opacity:0.55;" data-i18n="Вкл — свёрнутый блок · Выкл — не запрашивать reasoning">Вкл — свёрнутый блок · Выкл — не запрашивать reasoning</span>
                                     </span>
                                 </label>
                             </div>
@@ -22590,11 +22615,12 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
         }
         function eitiToggleORThinking() {
             var kind = eitiORThinkingKind();
+            var _t = (typeof T === 'function') ? T : function(s) { return s; };
             // unsupported / mandatory: row is informative only — do not flip preference
             if (kind === 'unsupported' || kind === 'mandatory') {
-                showToast(kind === 'mandatory'
+                showToast(_t(kind === 'mandatory'
                     ? 'Для этой модели reasoning обязателен'
-                    : 'Thinking неприменимо для этой модели', 2000);
+                    : 'Thinking неприменимо для этой модели'), 2000);
                 return;
             }
             localStorage.setItem('eiti_or_thinking', eitiIsORThinking() ? '0' : '1');
@@ -37159,13 +37185,14 @@ window.eitiLLMClearAll = async function() {
         }
         function eitiToggleDsShowThinking() {
             // Flash has no separate reasoning field — ignore clicks while Flash is selected
+            var _t = (typeof T === 'function') ? T : function(s) { return s; };
             if (typeof eitiIsDsReasoningMode === 'function' && !eitiIsDsReasoningMode()) {
-                showToast('Flash не отдаёт отдельное поле размышлений', 2200);
+                showToast(_t('Flash не отдаёт отдельное поле размышлений'), 2200);
                 return;
             }
             localStorage.setItem('eiti_ds_show_thinking', eitiIsDsShowThinking() ? '0' : '1');
             eitiRenderDsThinking();
-            showToast(eitiIsDsShowThinking() ? '🧠 DeepSeek Thinking вкл' : '⚡ DeepSeek Thinking выкл', 1800);
+            showToast(_t(eitiIsDsShowThinking() ? '🧠 DeepSeek Thinking вкл' : '⚡ DeepSeek Thinking выкл'), 1800);
         }
         function eitiRenderDsThinking() {
             var pro = (typeof eitiIsDsReasoningMode === 'function') ? eitiIsDsReasoningMode() : false;
@@ -37173,6 +37200,7 @@ window.eitiLLMClearAll = async function() {
             var check = document.getElementById('ds-thinking-check');
             var row = document.getElementById('ds-thinking-row');
             var note = document.getElementById('ds-thinking-note');
+            var _t = (typeof T === 'function') ? T : function(s) { return s; };
             if (check) check.textContent = (pro && on) ? '✅' : '⬜';
             if (row) {
                 row.style.opacity = pro ? '1' : '0.55';
@@ -37181,11 +37209,13 @@ window.eitiLLMClearAll = async function() {
                 row.style.background = (pro && on) ? 'rgba(255,215,0,0.12)' : 'var(--secondary-color)';
             }
             if (note) {
-                note.textContent = pro
+                var key = pro
                     ? (on
                         ? 'Вкл — свёрнутый блок «Размышлял N сек» · Выкл — thinking:disabled'
                         : 'Выкл — reasoning не запрашивается (thinking:disabled)')
                     : 'Неприменимо для Flash — API не отдаёт отдельное поле размышлений';
+                note.setAttribute('data-i18n', key);
+                note.textContent = _t(key);
             }
         }
         window.eitiIsDsShowThinking = eitiIsDsShowThinking;
