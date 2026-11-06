@@ -17,9 +17,9 @@ function withLS(map, fn) {
 
 (function testStripAiCommands() {
   const s = loadFunctions(['eitiStripAiCommands', 'eitiStripMarkers']);
-  const raw = 'Ответ.\n[PKG_E:foo|bar]\n[MEM_ADD:name=X]\n[NOTE_WRITE:id=1]\n[TASK_ADD:do]\nКонец ✨';
+  const raw = 'Ответ.\n[PKG_E:foo|bar]\n[MEM_ADD:name=X]\n[NOTE_WRITE:id=1]\n[TASK_ADD:do]\n[MOSC_ADD:a|b|1]\n[KB_ADD:c|t|ans]\n[FL_SET:threshold=0.7]\nКонец ✨';
   const out = s.eitiStripAiCommands(raw);
-  assert.ok(!/PKG_E|MEM_ADD|NOTE_WRITE|TASK_ADD/.test(out), out);
+  assert.ok(!/PKG_E|MEM_ADD|NOTE_WRITE|TASK_ADD|MOSC_ADD|KB_ADD|FL_SET/.test(out), out);
   assert.ok(out.indexOf('Ответ') !== -1);
   assert.ok(out.indexOf('Конец') !== -1);
   assert.ok(out.indexOf('✨') !== -1);

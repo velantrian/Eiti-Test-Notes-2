@@ -28,6 +28,9 @@ def test_thinking_collapsed_by_default():
     assert "Thought for " in HTML
     assert "Размышлял " in HTML
     assert "body.style.display = 'none'" in HTML
+    # Gemini finalize must collapse the panel (was missing before v14.16.21)
+    assert "collapse thinking panel after Gemini stream" in HTML
+    assert HTML.count("try { _eitiThinkDone(liveId); }") >= 3
 
 
 def test_ds_show_thinking_toggle():
@@ -42,10 +45,17 @@ def test_ds_show_thinking_toggle():
     assert "body.thinking = { type: 'disabled' }" in HTML
 
 
+def test_or_thinking_row_locks_unsupported():
+    assert "kind === 'unsupported' || kind === 'mandatory'" in HTML
+    assert "aria-disabled" in HTML
+    assert "Thinking неприменимо для этой модели" in HTML
+
+
 def test_strip_ai_commands_before_render():
     assert "function eitiStripAiCommands" in HTML
     assert r"/\[PKG_E:[^\]]*\]/g" in HTML
     assert "NOTE_WRITE" in HTML and "TASK_ADD" in HTML
+    assert "MOSC_ADD" in HTML and "FL_SET" in HTML
     assert "strip service command tokens before markdown" in HTML
     assert "eitiStripAiCommands(text)" in HTML
     assert ".eiti-think-box" in HTML  # excluded from plain copy

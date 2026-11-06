@@ -13035,10 +13035,13 @@
                 .replace(/\[(?:TASK_ADD|TASK_MOVE|TASK_UPDATE|TASK_DEL)[^\]]*\]/g, '')
                 .replace(/\[REMIND:[^\]]*\]/g, '')
                 .replace(/\[KB_ADD_JSON\][\s\S]*?\[\/KB_ADD_JSON\]/g, '')
+                .replace(/\[(?:KB_ADD|KB_EDIT|KB_DEL):[^\]]*\]/g, '')
+                .replace(/\[(?:MOSC_ADD|MOSC_DEL|MOSC_DEL_EDGE|MOSC_SHOW):[^\]]*\]/g, '')
+                .replace(/\[FL_SET:[^\]]*\]/g, '')
+                .replace(/\[(?:FILE_EDIT|FILE_DELETE|FILE_RENAME):[^\]]*\]/g, '')
                 .replace(/\[NEW_INTENT:[^\]]*\]/g, '')
                 .replace(/\[EITI_LEARN:[^\]]*\]/g, '')
                 .replace(/\[EITI_READ:[^\]]*\]/g, '')
-                .replace(/\[FILE_EDIT:[^\]]*\]/g, '')
                 .replace(/\[\[⚠️ низкая уверенность\]\]/g, '')
                 .replace(/[ \t]+\n/g, '\n')
                 .replace(/\n{3,}/g, '\n\n')
@@ -22586,6 +22589,14 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
             return eitiIsORThinking() || eitiORThinkingKind(model) === 'mandatory';
         }
         function eitiToggleORThinking() {
+            var kind = eitiORThinkingKind();
+            // unsupported / mandatory: row is informative only — do not flip preference
+            if (kind === 'unsupported' || kind === 'mandatory') {
+                showToast(kind === 'mandatory'
+                    ? 'Для этой модели reasoning обязателен'
+                    : 'Thinking неприменимо для этой модели', 2000);
+                return;
+            }
             localStorage.setItem('eiti_or_thinking', eitiIsORThinking() ? '0' : '1');
             eitiRenderORThinking();
             showToast(eitiIsORThinking() ? '🧠 OpenRouter Thinking вкл' : '⚡ OpenRouter Thinking выкл', 1800);
@@ -22593,13 +22604,18 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
         function eitiRenderORThinking() {
             var on = eitiIsORThinking();
             var kind = eitiORThinkingKind();
+            var locked = (kind === 'mandatory' || kind === 'unsupported');
             var check = document.getElementById('or-thinking-check');
             var row = document.getElementById('or-thinking-row');
             var note = document.getElementById('or-thinking-note');
-            if (check) check.textContent = on ? '✅' : '⬜';
+            var showOn = locked ? (kind === 'mandatory') : on;
+            if (check) check.textContent = showOn ? '✅' : '⬜';
             if (row) {
-                row.style.borderColor = on ? 'var(--accent-color)' : 'var(--border-color)';
-                row.style.background = on ? 'rgba(255,215,0,0.12)' : 'var(--secondary-color)';
+                row.style.opacity = locked ? '0.55' : '1';
+                row.style.cursor = locked ? 'not-allowed' : 'pointer';
+                row.style.borderColor = showOn ? 'var(--accent-color)' : 'var(--border-color)';
+                row.style.background = showOn ? 'rgba(255,215,0,0.12)' : 'var(--secondary-color)';
+                row.setAttribute('aria-disabled', locked ? 'true' : 'false');
             }
             if (note) {
                 var txt = 'Вкл — режим модели по умолчанию · Выкл — reasoning отключается запросом';
@@ -24196,6 +24212,8 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                     if (le) {
                                         var t2 = le.querySelector('[id$="-text"]');
                                         if (t2) t2.innerHTML = eitiRenderMarkdown(gResult);
+                                        // v14.16.21: collapse thinking panel after Gemini stream (was missing → stayed expanded)
+                                        try { _eitiThinkDone(liveId); } catch (e) {}
                                         // v12.9.79 FIX: сбрасываем анимацию Think 🧠 — Gemini завершил ответ
                                         var _gmSenderEl = le.querySelector('.message-sender');
                                         if (_gmSenderEl) {
