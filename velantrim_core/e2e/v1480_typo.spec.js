@@ -8,7 +8,7 @@ async function boot(page, loc) {
     localStorage.setItem('eiti_locale', l); localStorage.setItem('eiti_ai_reply_lang', 'auto');
   }, loc);
   await page.goto('/index.html');
-  await page.waitForFunction(() => !!window.EitiTypo && !!window.EitiTypoHost && !!window.EitiDialogHost && typeof eitiDb !== 'undefined' && !!eitiDb);
+  await page.waitForFunction(() => !!window.EitiTypo && !!window.EitiTypoHost && !!window.EitiDialogHost && typeof eitiDb !== 'undefined' && !!eitiDb && window.eitiChatReady === true, null, { timeout: 30000 });
   await page.addStyleTag({ content: '#eiti-pin-modal{display:none!important}' });
   await page.evaluate(() => { document.querySelectorAll('#eiti-onboarding,#eiti-pin-modal,.toast').forEach((e) => e.remove()); localStorage.removeItem('eiti_ds_off'); });
 }
