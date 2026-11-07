@@ -14,7 +14,8 @@ def test_version_sync():
     m = re.search(r'var EITI_VERSION = "(\d+\.\d+\.\d+)"', HTML)
     assert m, "missing runtime version"
     version = m.group(1)
-    assert version == "14.16.21"
+    # Feature landed in 14.16.21; runtime may advance (e.g. seek-icons 14.16.22)
+    assert tuple(map(int, version.split("."))) >= (14, 16, 21)
     assert f"eiti-v{version}" in SW and f"eiti-offline-v{version}" in SW
     assert f"version: '{version}'" in SW
     assert f"v{version}" in MANIFEST
