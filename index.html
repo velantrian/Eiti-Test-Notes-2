@@ -39,7 +39,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.23"; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.24"; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -244,21 +244,38 @@
             };
         }
         function eitiCreateRafTextUpdater(el) {
+            // v14.16.24: cancel() before final markdown — otherwise a pending RAF can
+            // overwrite innerHTML with raw textContent (markers + unparsed markdown).
             var pending = null;
             var raf = 0;
             var target = el;
-            return function(text, nextEl) {
+            var finished = false;
+            function cancel() {
+                finished = true;
+                pending = null;
+                if (raf) {
+                    try {
+                        if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(raf);
+                        else clearTimeout(raf);
+                    } catch (e) {}
+                    raf = 0;
+                }
+            }
+            function update(text, nextEl) {
+                if (finished) return;
                 if (nextEl) target = nextEl;
-                pending = text;
+                // Strip service markers while streaming so they never flash in the bubble
+                pending = (typeof eitiStripAiCommands === 'function') ? eitiStripAiCommands(text) : text;
                 if (raf) return;
                 var rafFn = (typeof requestAnimationFrame === 'function') ? requestAnimationFrame : function(cb) { return setTimeout(cb, 16); };
                 raf = rafFn(function() {
                     raf = 0;
-                    if (target && pending != null) {
-                        try { target.textContent = pending; } catch (e) {}
-                    }
+                    if (finished || !target || pending == null) return;
+                    try { target.textContent = pending; } catch (e) {}
                 });
-            };
+            }
+            update.cancel = cancel;
+            return update;
         }
         // v14.16.19: one scroll-to-bottom per frame while streaming (avoids layout thrash per token)
         function eitiCreateRafScroller(getEl) {
@@ -24328,6 +24345,8 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                     var le = document.getElementById(liveId);
                                     if (le) {
                                         var t2 = le.querySelector('[id$="-text"]');
+                                        // v14.16.24: cancel pending stream RAF before markdown (else raw text wins)
+                                        try { if (_gmRafText && _gmRafText.cancel) _gmRafText.cancel(); } catch (e) {}
                                         if (t2) t2.innerHTML = eitiRenderMarkdown(gResult);
                                         // v14.16.21: collapse thinking panel after Gemini stream (was missing → stayed expanded)
                                         try { _eitiThinkDone(liveId); } catch (e) {}
@@ -24443,6 +24462,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                         if (textEl) textEl.innerHTML = '<span style="color:#f66">⚠️ Модель вернула системный промпт. Попробуй другую модель в Настройках → OpenRouter.</span>';
                                         window._eitiIsStreaming = false; reject(new Error('sys_prompt_leak')); return;
                                     }
+                                    try { if (_orRafText && _orRafText.cancel) _orRafText.cancel(); } catch (e) {} // v14.16.24
                                     if (textEl) textEl.innerHTML = eitiRenderMarkdown(result);
                                     try { _eitiThinkDone(liveId); } catch(e) {}
                                     // v12.9.78: убираем анимацию мышления — ответ готов
@@ -24527,6 +24547,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                         if (textEl) textEl.innerHTML = '<span style="color:#f66">⚠️ Модель вернула системный промпт.</span>';
                                         window._eitiIsStreaming = false; reject(new Error('sys_prompt_leak')); return;
                                     }
+                                    try { if (_oaiRafText && _oaiRafText.cancel) _oaiRafText.cancel(); } catch (e) {} // v14.16.24
                                     if (textEl) textEl.innerHTML = eitiRenderMarkdown(result);
                                     try { _eitiThinkDone(liveId); } catch(e) {}
                                     var _senderEl = liveDiv.querySelector('.message-sender');
@@ -24694,6 +24715,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                                     if (textEl) textEl.innerHTML = '<span style="color:#f66">⚠️ Модель вернула системный промпт. Попробуй сменить провайдера в Настройках.</span>';
                                     window._eitiIsStreaming = false; reject(new Error('sys_prompt_leak')); return;
                                 }
+                                try { if (_dsRafText && _dsRafText.cancel) _dsRafText.cancel(); } catch (e) {} // v14.16.24
                                 if (textEl) textEl.innerHTML = eitiRenderMarkdown(result);
                                 try { _eitiThinkDone(liveId); } catch(e) {}
                                 // v12.9.78: убираем анимацию мышления — ответ готов
