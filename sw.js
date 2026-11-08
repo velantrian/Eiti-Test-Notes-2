@@ -1,11 +1,11 @@
-// VELANTRIM EITI — Service Worker v14.16.22
+// VELANTRIM EITI — Service Worker v14.16.23
 // Fixes: LAZY_FILES await race, cross-origin CDN cache, updatefound wiring, SWR for data/*.json
-// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.22
+// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.23
 
-var CACHE = 'eiti-v14.16.22'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
+var CACHE = 'eiti-v14.16.23'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
 // v14.0.0: офлайн-движок и пакеты (offline/**) — отдельный кеш без лимита 24 записей (≈30 файлов),
 // cache-first + фоновое обновление; не попадает в swTrimCache.
-var OFFLINE_CACHE = 'eiti-offline-v14.16.22';
+var OFFLINE_CACHE = 'eiti-offline-v14.16.23';
 var CACHE_MAX_ENTRIES = 24;
 var BASE = self.location.pathname.replace(/sw\.js$/, '');
 
@@ -83,7 +83,7 @@ self.addEventListener('activate', function(e) {
                     }).then(function() {
                     return self.clients.matchAll().then(function(clients) {
                         clients.forEach(function(c) {
-                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.22' });
+                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.23' });
                         });
                     });
                     });

@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.22-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.23-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -65,6 +65,9 @@ python3 -m http.server 8080
 📐 Полная архитектура (для переноса в нативное приложение): **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ---
+
+## 🆕 Что нового в v14.16.23
+- ⬛ **Нижние табы** в меню «+» чата: выключатель справа скрывает Дневник / История / Плеер / Файлы / Заметки / Настройки — остаётся только Чат и больше места под переписку. Включить обратно тем же переключателем.
 
 ## 🆕 Что нового в v14.16.22
 - ⏪⏩ Плеер: точные иконки перемотки ±N сек (replay/forward); левая «−» назад, правая «+» вперёд.
