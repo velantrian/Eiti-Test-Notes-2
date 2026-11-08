@@ -40,12 +40,16 @@ test('ранний <head>: без ключа класс не ставится', 
 
 test('CSS: скрыты все табы кроме chat + компактный tab-bar', () => {
   assert.match(SRC, /html\.eiti-chat-only-tabs \.tab-bar \.tab-item:not\(\[data-view="chat"\]\)/);
-  assert.match(SRC, /html\.eiti-chat-only-tabs \.tab-bar\s*\{[^}]*height:\s*56px/s);
+  // v14.16.25: must beat eiti-compact-chrome's 96px !important
+  assert.match(SRC, /html\.eiti-chat-only-tabs\.eiti-compact-chrome \.tab-bar/);
+  assert.match(SRC, /height:\s*56px\s*!important/);
   assert.match(SRC, /cpi-tabs-pin/);
 });
 
-test('меню «+» рендерит пункт Нижние табы с переключателем', () => {
+test('меню «+» рендерит правую колонку Нижние табы с переключателем', () => {
   assert.match(SRC, /Нижние табы/);
+  assert.match(SRC, /chat-plus-tabs-rail/);
+  assert.match(SRC, /chat-plus-main/);
   assert.match(SRC, /eitiSetChatOnlyTabs\(!eitiIsChatOnlyTabs\(\)\)/);
   assert.match(SRC, /cpi-tabs-pin/);
   assert.match(SRC, /Показать или скрыть Дневник, История, Плеер, Файлы, Заметки, Настройки/);

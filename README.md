@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.24-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.26-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -65,6 +65,12 @@ python3 -m http.server 8080
 📐 Полная архитектура (для переноса в нативное приложение): **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ---
+
+## 🆕 Что нового в v14.16.26
+- ⬛ **Нижние табы** в меню «+» — переключатель в **правой колонке** (пустое место у «Скопировать / Сохранить»), чтобы было видно сразу; попап прокручивается, если пунктов много.
+
+## 🆕 Что нового в v14.16.25
+- ⬛ **Нижние табы / только чат:** высота полосы табов реально сжимается (~56px) даже при включённых компактных табах — раньше `eiti-compact-chrome` оставлял 96px и место не появлялось. Playwright e2e.
 
 ## 🆕 Что нового в v14.16.24
 - 🐛 **Стрим → markdown:** pending `requestAnimationFrame` больше не затирает финальный ответ сырым текстом (маркеры `[PKG_E:…]` и нераспарсенный Markdown). Issue #13 / DeepSeek·Gemini·OpenRouter.
