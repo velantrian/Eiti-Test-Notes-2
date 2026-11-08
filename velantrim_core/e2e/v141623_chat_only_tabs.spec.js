@@ -33,6 +33,7 @@ async function boot(page, storage) {
 async function openPlus(page) {
   await page.locator('#chat-plus-btn').click();
   await expect(page.locator('#chat-plus-popup.open')).toBeVisible();
+  await expect(page.locator('#chat-plus-popup .chat-plus-tabs-rail')).toBeVisible();
   await expect(page.locator('#chat-plus-popup .cpi-tabs-pin')).toBeVisible();
 }
 

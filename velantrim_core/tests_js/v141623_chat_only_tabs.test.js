@@ -46,8 +46,10 @@ test('CSS: скрыты все табы кроме chat + компактный t
   assert.match(SRC, /cpi-tabs-pin/);
 });
 
-test('меню «+» рендерит пункт Нижние табы с переключателем', () => {
+test('меню «+» рендерит правую колонку Нижние табы с переключателем', () => {
   assert.match(SRC, /Нижние табы/);
+  assert.match(SRC, /chat-plus-tabs-rail/);
+  assert.match(SRC, /chat-plus-main/);
   assert.match(SRC, /eitiSetChatOnlyTabs\(!eitiIsChatOnlyTabs\(\)\)/);
   assert.match(SRC, /cpi-tabs-pin/);
   assert.match(SRC, /Показать или скрыть Дневник, История, Плеер, Файлы, Заметки, Настройки/);
