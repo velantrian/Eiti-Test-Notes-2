@@ -1,5 +1,5 @@
 'use strict';
-// v14.16.23: «Нижние табы» — hide all bottom tabs except Chat from «+» menu.
+// v14.16.27: «icons» — hide entire bottom bar including Chat from «+» menu.
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -38,25 +38,24 @@ test('ранний <head>: без ключа класс не ставится', 
   assert.equal(cls.has('eiti-chat-only-tabs'), false);
 });
 
-test('CSS: скрыты все табы кроме chat + компактный tab-bar', () => {
-  assert.match(SRC, /html\.eiti-chat-only-tabs \.tab-bar \.tab-item:not\(\[data-view="chat"\]\)/);
-  // v14.16.25: must beat eiti-compact-chrome's 96px !important
-  assert.match(SRC, /html\.eiti-chat-only-tabs\.eiti-compact-chrome \.tab-bar/);
-  assert.match(SRC, /height:\s*56px\s*!important/);
+test('CSS: весь tab-bar скрыт (включая Чат)', () => {
+  assert.match(SRC, /html\.eiti-chat-only-tabs \.tab-bar/);
+  assert.match(SRC, /display:\s*none\s*!important/);
+  assert.doesNotMatch(SRC, /tab-item:not\(\[data-view="chat"\]\)/);
+  assert.doesNotMatch(SRC, /chat-plus-tabs-rail/);
   assert.match(SRC, /cpi-tabs-pin/);
 });
 
-test('меню «+» рендерит правую колонку Нижние табы с переключателем', () => {
-  assert.match(SRC, /Нижние табы/);
-  assert.match(SRC, /chat-plus-tabs-rail/);
-  assert.match(SRC, /chat-plus-main/);
+test('меню «+» рендерит inline icons с переключателем', () => {
+  assert.match(SRC, /_t\('icons'\)/);
   assert.match(SRC, /eitiSetChatOnlyTabs\(!eitiIsChatOnlyTabs\(\)\)/);
   assert.match(SRC, /cpi-tabs-pin/);
-  assert.match(SRC, /Показать или скрыть Дневник, История, Плеер, Файлы, Заметки, Настройки/);
+  assert.match(SRC, /Показать или скрыть нижний бар/);
+  assert.doesNotMatch(SRC, /writing-mode:\s*vertical-rl/);
 });
 
 test('API: eitiSetChatOnlyTabs пишет ключ и класс, возвращает на chat', () => {
-  const start = SRC.indexOf('// v14.16.23: «Нижние табы» — скрыть все табы кроме Чата');
+  const start = SRC.indexOf("// v14.16.27: «icons» — скрыть весь нижний бар включая Чат");
   assert.ok(start > 0, 'api block marker');
   const end = SRC.indexOf('// ═══ v14.15.2: «📱 Экран телефона»', start);
   assert.ok(end > start);
@@ -97,7 +96,6 @@ test('API: eitiSetChatOnlyTabs пишет ключ и класс, возвращ
     openView: (v) => { switched = v; },
   };
   ctx.window = ctx;
-  // pin element mutated by apply
   pins.push({
     classList: { toggle: () => {} },
     setAttribute: () => {},
