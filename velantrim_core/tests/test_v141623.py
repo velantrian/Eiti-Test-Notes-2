@@ -29,11 +29,13 @@ def test_chat_only_tabs_wiring():
     assert "function eitiIsChatOnlyTabs" in HTML
     assert "function eitiApplyChatOnlyTabs" in HTML
     assert "cpi-tabs-pin" in HTML
-    assert "Нижние табы" in HTML
-    # CSS hides every tab except chat
-    assert '.tab-item:not([data-view="chat"])' in HTML
+    assert "_t('icons')" in HTML
+    # v14.16.27: CSS hides the entire bottom bar (including Chat), not per-tab
+    assert "html.eiti-chat-only-tabs .tab-bar" in HTML
+    assert "display: none !important" in HTML
+    assert '.tab-item:not([data-view="chat"])' not in HTML
     # Early head apply before first paint
     assert "localStorage.getItem('eiti_chat_only_tabs')==='1'" in HTML
-    # i18n
-    assert '"Нижние табы": "Bottom tabs"' in HTML
-    assert '"Нижние табы": "Untere Tabs"' in HTML
+    # i18n (legacy key kept; primary label is «icons»)
+    assert '"icons": "icons"' in HTML
+    assert "Нижние табы" in HTML
