@@ -6320,7 +6320,7 @@
             padding: 0;
         }
         .chat-plus-popup.open {
-            display: flex;
+            display: flex !important; /* beat inline display:block from older open paths */
             flex-direction: row;
             align-items: stretch;
         }
@@ -54540,7 +54540,7 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
             if (btn) btn.classList.remove('open');
         } else {
             eitiChatPlusRender(popup);
-            popup.style.display = 'block';
+            popup.style.display = 'flex'; // v14.16.26: row layout — main list + right «Нижние табы» rail
             popup.classList.add('open');
             if (btn) btn.classList.add('open');
             setTimeout(function () {
@@ -54609,8 +54609,8 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
             html += '<div class="chat-plus-item" data-chat-save="' + r.fmt + '" onclick="eitiChatSavePick(\'' + r.fmt + '\')">' +
                 '<div class="cpi-icon">' + r.icon + '</div><span class="cpi-label">' + r.label + '</span></div>';
         });
-        popup.innerHTML = html;
-        popup.style.display = 'block';
+        popup.innerHTML = '<div class="chat-plus-main">' + html + '</div>';
+        popup.style.display = 'flex';
         popup.classList.add('open');
         var _pbtn = document.getElementById('chat-plus-btn');
         if (_pbtn) _pbtn.classList.add('open');

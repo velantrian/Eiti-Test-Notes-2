@@ -23,3 +23,5 @@ def test_plus_popup_tabs_rail():
     assert "cpi-tabs-rail-label" in HTML
     assert "правая колонка" in HTML or "пустом месте" in HTML
     assert "writing-mode: vertical-rl" in HTML
+    assert "popup.style.display = 'flex'" in HTML
+    assert "display: flex !important" in HTML
