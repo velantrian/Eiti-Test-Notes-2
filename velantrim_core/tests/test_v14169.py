@@ -13,6 +13,7 @@ def test_version_sync():
 def test_compact_bottom_only():
     assert "eiti-compact-chrome" in HTML
     assert 'id="eiti-compact-chrome-toggle"' in HTML
+    assert "function eitiSetCompactChrome" in HTML
     # must NOT shrink header/icons via compact class
     assert "html.eiti-compact-chrome .app-header" not in HTML
     assert "html.eiti-compact-chrome .tab-icon-wrapper" not in HTML

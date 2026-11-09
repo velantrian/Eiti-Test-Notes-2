@@ -39,7 +39,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.27"; // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.28"; // v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -7445,6 +7445,7 @@
         body.view-wallpaper .app-header,
         body.view-chat-style .app-header,
         body.view-tabs-mode .app-header,
+        body.view-phone-screen .app-header,
         body.view-drive .app-header { display: none !important; }
 
         /* Compact grids for sub-views */
@@ -8634,6 +8635,35 @@
             height: calc(88px + var(--eiti-top-inset)) !important;
             padding-top: var(--eiti-top-inset) !important;
             padding-left: var(--eiti-side-inset) !important; padding-right: var(--eiti-side-inset) !important;
+        }
+        /* v14.16.28: иначе margin-top:-14px у h1 затаскивает заголовок в зону чёлки — кажется, что пресет «не работает» */
+        html.eiti-phone .app-header h1 { margin-top: 0 !important; }
+        /* Видимый вырез на шапке (пресет) — иначе отступ того же цвета и незаметен */
+        html.eiti-phone .app-header::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            z-index: 4;
+            pointer-events: none;
+            background: #0a0a0c;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+        }
+        html.eiti-phone[data-eiti-phone="iphone-notch"] .app-header::before { width: 126px; height: 28px; border-radius: 0 0 18px 18px; }
+        html.eiti-phone[data-eiti-phone="iphone-island"] .app-header::before { width: 96px; height: 28px; top: 10px; border-radius: 16px; }
+        html.eiti-phone[data-eiti-phone="galaxy-s"] .app-header::before,
+        html.eiti-phone[data-eiti-phone="galaxy-fold"] .app-header::before,
+        html.eiti-phone[data-eiti-phone="pixel"] .app-header::before { width: 12px; height: 12px; top: 10px; border-radius: 50%; }
+        html.eiti-phone[data-eiti-phone="xiaomi"] .app-header::before { width: 18px; height: 14px; border-radius: 0 0 10px 10px; }
+        html.eiti-phone[data-eiti-phone="iphone-se"] .app-header::before,
+        html.eiti-phone[data-eiti-phone="none"] .app-header::before { display: none; }
+        /* Субвью настроек: свой header получает тот же верхний inset (глобальный app-header скрыт) */
+        html.eiti-phone .subview-header {
+            box-sizing: border-box !important;
+            padding-top: calc(14px + var(--eiti-top-inset)) !important;
+            padding-left: calc(16px + var(--eiti-side-inset)) !important;
+            padding-right: calc(16px + var(--eiti-side-inset)) !important;
         }
         html.eiti-phone.eiti-small-icons .app-header,
         html.eiti-phone.eiti-small-icons.is-ios .app-header {
@@ -11787,8 +11817,8 @@
                             </div>
                             <button id="eiti-header-toggle-btn" onclick="eitiToggleAppHeader()" style="padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;background:var(--accent-color);color:#000;">ВКЛ</button>
                         </div>
-                        <!-- v14.15.1: компактные табы и верхние панели (по умолчанию выкл) -->
-                        <label class="eiti-si-row" for="eiti-small-icons-toggle">
+                        <!-- v14.15.1 / v14.16.28: small icons + компактные табы (кнопки ВКЛ/ВЫКЛ — чекбокс раньше «молча» ломался) -->
+                        <div class="eiti-si-row" role="group" aria-label="Меньше иконки (small icons)">
                             <div style="display:flex;align-items:center;gap:12px;min-width:0;">
                                 <span style="font-size:22px;">🔍</span>
                                 <div style="min-width:0;">
@@ -11796,10 +11826,11 @@
                                     <div style="font-size:11px;opacity:0.55;margin-top:1px;" data-i18n="Компактные нижние табы и верхние панели — больше места на экране">Компактные нижние табы и верхние панели — больше места на экране</div>
                                 </div>
                             </div>
-                            <input type="checkbox" id="eiti-small-icons-toggle" onchange="eitiSetSmallIcons(this.checked)">
-                        </label>
+                            <button type="button" id="eiti-small-icons-toggle-btn" onclick="eitiSetSmallIcons(!eitiIsSmallIcons())" style="padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.1);color:var(--text-color);">ВЫКЛ</button>
+                            <input type="checkbox" id="eiti-small-icons-toggle" onchange="eitiSetSmallIcons(this.checked)" hidden aria-hidden="true">
+                        </div>
 
-                        <label class="eiti-si-row" for="eiti-compact-chrome-toggle">
+                        <div class="eiti-si-row" role="group" aria-label="Компактные табы">
                             <div style="display:flex;align-items:center;gap:12px;min-width:0;">
                                 <span style="font-size:22px;">📐</span>
                                 <div style="min-width:0;">
@@ -11807,8 +11838,9 @@
                                     <div style="font-size:11px;opacity:0.55;margin-top:1px;" data-i18n="Чуть ниже только нижняя полоса табов — больше места тексту. Шапка и иконки как были.">Чуть ниже только нижняя полоса табов — больше места тексту. Шапка и иконки как были.</div>
                                 </div>
                             </div>
-                            <input type="checkbox" id="eiti-compact-chrome-toggle" onchange="eitiSetCompactChrome(this.checked)" checked>
-                        </label>
+                            <button type="button" id="eiti-compact-chrome-toggle-btn" onclick="eitiSetCompactChrome(!eitiIsCompactChrome())" style="padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;background:var(--accent-color);color:#000;">ВКЛ</button>
+                            <input type="checkbox" id="eiti-compact-chrome-toggle" onchange="eitiSetCompactChrome(this.checked)" checked hidden aria-hidden="true">
+                        </div>
                     </div>
                 </div>
 
@@ -15532,6 +15564,7 @@
                 _renderTabsToggleList();
                 _renderTGTabToggle();
                 eitiApplySmallIcons(eitiIsSmallIcons());
+                if (typeof eitiApplyCompactChrome === 'function') eitiApplyCompactChrome(eitiIsCompactChrome());
             });
         }
 
@@ -15587,10 +15620,17 @@
             try { return localStorage.getItem('eiti_small_icons') === '1'; } catch (e) { return false; }
         }
         function eitiApplySmallIcons(on) {
-            document.documentElement.classList.toggle('eiti-small-icons', !!on);
-            if (document.body) document.body.classList.toggle('eiti-small-icons', !!on);
+            on = !!on;
+            document.documentElement.classList.toggle('eiti-small-icons', on);
+            if (document.body) document.body.classList.toggle('eiti-small-icons', on);
             var cb = document.getElementById('eiti-small-icons-toggle');
-            if (cb) cb.checked = !!on;
+            if (cb) cb.checked = on;
+            var btn = document.getElementById('eiti-small-icons-toggle-btn');
+            if (btn) {
+                btn.textContent = on ? 'ВКЛ' : 'ВЫКЛ';
+                btn.style.background = on ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)';
+                btn.style.color = on ? '#000' : 'var(--text-color)';
+            }
         }
         function eitiSetSmallIcons(on) {
             on = !!on;
@@ -15602,6 +15642,39 @@
         window.eitiSetSmallIcons = eitiSetSmallIcons;
         window.eitiIsSmallIcons = eitiIsSmallIcons;
         document.addEventListener('DOMContentLoaded', function () { eitiApplySmallIcons(eitiIsSmallIcons()); });
+
+        // v14.16.28: «Компактные табы» — API был в onchange HTML, но функции не было → чекбокс «мёртвый».
+        // Ключ eiti_compact_chrome: отсутствует/'1' = вкл (как early <head>), '0' = выкл.
+        function eitiIsCompactChrome() {
+            try { return localStorage.getItem('eiti_compact_chrome') !== '0'; } catch (e) { return true; }
+        }
+        function eitiApplyCompactChrome(on) {
+            on = !!on;
+            document.documentElement.classList.toggle('eiti-compact-chrome', on);
+            if (document.body) document.body.classList.toggle('eiti-compact-chrome', on);
+            var cb = document.getElementById('eiti-compact-chrome-toggle');
+            if (cb) cb.checked = on;
+            var btn = document.getElementById('eiti-compact-chrome-toggle-btn');
+            if (btn) {
+                btn.textContent = on ? 'ВКЛ' : 'ВЫКЛ';
+                btn.style.background = on ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)';
+                btn.style.color = on ? '#000' : 'var(--text-color)';
+            }
+        }
+        function eitiSetCompactChrome(on) {
+            on = !!on;
+            try {
+                if (on) localStorage.removeItem('eiti_compact_chrome');
+                else localStorage.setItem('eiti_compact_chrome', '0');
+            } catch (e) {}
+            eitiApplyCompactChrome(on);
+            var tr = function (x) { try { return window.EITI_I18N && EITI_I18N.tr ? EITI_I18N.tr(x) : x; } catch (e) { return x; } };
+            if (typeof showToast === 'function') showToast(on ? tr('📐 Компактные табы включены') : tr('📐 Обычная высота табов'));
+        }
+        window.eitiSetCompactChrome = eitiSetCompactChrome;
+        window.eitiIsCompactChrome = eitiIsCompactChrome;
+        window.eitiApplyCompactChrome = eitiApplyCompactChrome;
+        document.addEventListener('DOMContentLoaded', function () { eitiApplyCompactChrome(eitiIsCompactChrome()); });
 
         // v14.16.27: «icons» — скрыть весь нижний бар включая Чат (ключ eiti_chat_only_tabs='1').
         // Класс html.eiti-chat-only-tabs ставится ещё в <head>; переключатель — обычная строка в меню «+».
