@@ -18,7 +18,8 @@ def test_version_sync():
 
 
 def test_chat_only_beats_compact_chrome():
-    assert "eiti-compact-chrome (96px !important) не отдаёт место" in HTML or "beat eiti-compact-chrome" in HTML or "иначе eiti-compact-chrome" in HTML
+    # v14.16.27: bar is fully hidden (display:none), including under compact-chrome
     assert "html.eiti-chat-only-tabs.eiti-compact-chrome .tab-bar" in HTML
-    assert re.search(r"eiti-chat-only-tabs\.eiti-compact-chrome[\s\S]{0,200}height:\s*56px\s*!important", HTML)
+    assert "html.eiti-chat-only-tabs .tab-bar," in HTML
+    assert "display: none !important" in HTML
     assert (ROOT / "velantrim_core/e2e/v141623_chat_only_tabs.spec.js").is_file()

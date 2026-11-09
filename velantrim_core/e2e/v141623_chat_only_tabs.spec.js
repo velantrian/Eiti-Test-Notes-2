@@ -1,8 +1,6 @@
 // @ts-check
 /**
- * v14.16.23 / PR #17: «Нижние табы» in chat «+» menu — browser regression.
- * Unit tests cover CSS/API stubs only; this exercises the real mobile UI.
- * Not covered by Issue #13 / v141621_thinking_format.spec.js.
+ * v14.16.27: «icons» inline in chat «+» — hide entire bottom tab bar (incl. Chat).
  */
 const { test, expect } = require('@playwright/test');
 
@@ -33,8 +31,9 @@ async function boot(page, storage) {
 async function openPlus(page) {
   await page.locator('#chat-plus-btn').click();
   await expect(page.locator('#chat-plus-popup.open')).toBeVisible();
-  await expect(page.locator('#chat-plus-popup .chat-plus-tabs-rail')).toBeVisible();
   await expect(page.locator('#chat-plus-popup .cpi-tabs-pin')).toBeVisible();
+  await expect(page.locator('#chat-plus-popup .cpi-label', { hasText: 'icons' })).toBeVisible();
+  await expect(page.locator('#chat-plus-popup .chat-plus-tabs-rail')).toHaveCount(0);
 }
 
 async function visibleTabViews(page) {
@@ -46,25 +45,29 @@ async function visibleTabViews(page) {
   });
 }
 
-async function tabBarHeight(page) {
-  return page.locator('.tab-bar').evaluate((el) => el.getBoundingClientRect().height);
+async function tabBarVisible(page) {
+  return page.locator('.tab-bar').evaluate((el) => {
+    const s = getComputedStyle(el);
+    const r = el.getBoundingClientRect();
+    return s.display !== 'none' && r.height > 1;
+  });
 }
 
 async function messagesBottom(page) {
   return page.locator('#messages').evaluate((el) => el.getBoundingClientRect().bottom);
 }
 
-test.describe('PR #17 chat-only bottom tabs', () => {
+test.describe('chat-only / icons bottom bar', () => {
   test.use({ viewport: VIEW, serviceWorkers: 'block' });
 
-  test('«+» → Нижние табы OFF hides non-chat tabs and shrinks bar; ON restores', async ({ page }) => {
+  test('«+» → icons OFF hides entire tab bar; ON restores', async ({ page }) => {
     await boot(page);
     expect(await page.evaluate(() => document.documentElement.classList.contains('eiti-chat-only-tabs'))).toBe(false);
 
     const beforeTabs = await visibleTabViews(page);
     expect(beforeTabs).toContain('chat');
     expect(beforeTabs.filter((v) => v !== 'chat').length).toBeGreaterThan(3);
-    const hBefore = await tabBarHeight(page);
+    expect(await tabBarVisible(page)).toBe(true);
     const msgBefore = await messagesBottom(page);
 
     await openPlus(page);
@@ -75,20 +78,15 @@ test.describe('PR #17 chat-only bottom tabs', () => {
     await expect.poll(() => page.evaluate(() => localStorage.getItem('eiti_chat_only_tabs'))).toBe('1');
     await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('eiti-chat-only-tabs'))).toBe(true);
 
-    const only = await visibleTabViews(page);
-    expect(only).toEqual(['chat']);
-    for (const v of NON_CHAT) {
+    expect(await tabBarVisible(page)).toBe(false);
+    expect(await visibleTabViews(page)).toEqual([]);
+    for (const v of NON_CHAT.concat(['chat'])) {
       await expect(page.locator(`.tab-item[data-view="${v}"]`)).toBeHidden();
     }
 
-    const hAfter = await tabBarHeight(page);
-    expect(hAfter).toBeLessThan(hBefore);
-    expect(hAfter).toBeLessThanOrEqual(70); // ~56px (+ safe-area slack)
     const msgAfter = await messagesBottom(page);
-    // more room for chat: messages area extends further down when tab bar shrinks
     expect(msgAfter).toBeGreaterThan(msgBefore - 1);
 
-    // restore via same switch (popup may still be open after re-render — don't toggle «+» closed)
     const pop = page.locator('#chat-plus-popup');
     if (!(await pop.evaluate((el) => el.classList.contains('open')))) {
       await openPlus(page);
@@ -96,16 +94,17 @@ test.describe('PR #17 chat-only bottom tabs', () => {
     await expect(page.locator('#chat-plus-popup .cpi-tabs-pin')).not.toHaveClass(/on/);
     await page.locator('#chat-plus-popup .cpi-tabs-pin').click();
     await expect.poll(() => page.evaluate(() => localStorage.getItem('eiti_chat_only_tabs'))).toBe(null);
+    expect(await tabBarVisible(page)).toBe(true);
     const restored = await visibleTabViews(page);
     expect(restored).toContain('chat');
     expect(restored.filter((v) => v !== 'chat').length).toBeGreaterThan(3);
-    expect(await tabBarHeight(page)).toBeGreaterThanOrEqual(hBefore - 1);
   });
 
-  test('chat-only persists across reload (early <head> class)', async ({ page }) => {
+  test('icons-off persists across reload (early <head> class)', async ({ page }) => {
     await boot(page, { eiti_chat_only_tabs: '1' });
     expect(await page.evaluate(() => document.documentElement.classList.contains('eiti-chat-only-tabs'))).toBe(true);
-    expect(await visibleTabViews(page)).toEqual(['chat']);
+    expect(await tabBarVisible(page)).toBe(false);
+    expect(await visibleTabViews(page)).toEqual([]);
 
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.eitiChatReady === true, null, { timeout: 30_000 });
@@ -113,10 +112,10 @@ test.describe('PR #17 chat-only bottom tabs', () => {
 
     expect(await page.evaluate(() => localStorage.getItem('eiti_chat_only_tabs'))).toBe('1');
     expect(await page.evaluate(() => document.documentElement.classList.contains('eiti-chat-only-tabs'))).toBe(true);
-    expect(await visibleTabViews(page)).toEqual(['chat']);
+    expect(await tabBarVisible(page)).toBe(false);
   });
 
-  test('enabling chat-only from another view returns to Chat', async ({ page }) => {
+  test('enabling icons-off from another view returns to Chat', async ({ page }) => {
     await boot(page);
     await page.evaluate(() => {
       if (typeof openView === 'function') openView('notes');
@@ -125,14 +124,12 @@ test.describe('PR #17 chat-only bottom tabs', () => {
     await expect(page.locator('#view-notes')).toHaveClass(/active/);
     await expect(page.locator('.tab-item[data-view="notes"]')).toHaveClass(/active/);
 
-    // composer «+» lives on chat view — switch API still available; call toggle directly
     await page.evaluate(() => window.eitiSetChatOnlyTabs(true));
 
     await expect.poll(() => page.evaluate(() => {
       const v = document.querySelector('#view-chat');
       return !!(v && v.classList.contains('active'));
     })).toBe(true);
-    await expect(page.locator('.tab-item[data-view="chat"]')).toHaveClass(/active/);
-    expect(await visibleTabViews(page)).toEqual(['chat']);
+    expect(await tabBarVisible(page)).toBe(false);
   });
 });

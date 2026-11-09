@@ -17,11 +17,10 @@ def test_version_sync():
     assert "14.16.26" in README
 
 
-def test_plus_popup_tabs_rail():
-    assert "chat-plus-tabs-rail" in HTML
-    assert "chat-plus-main" in HTML
-    assert "cpi-tabs-rail-label" in HTML
-    assert "правая колонка" in HTML or "пустом месте" in HTML
-    assert "writing-mode: vertical-rl" in HTML
-    assert "popup.style.display = 'flex'" in HTML
-    assert "display: flex !important" in HTML
+def test_plus_popup_tabs_rail_removed_in_favor_of_inline_icons():
+    # v14.16.27 superseded the right-rail layout with an inline «icons» row
+    assert "chat-plus-tabs-rail" not in HTML
+    assert "cpi-tabs-rail-label" not in HTML
+    assert "writing-mode: vertical-rl" not in HTML
+    assert "cpi-tabs-pin" in HTML
+    assert "_t('icons')" in HTML
