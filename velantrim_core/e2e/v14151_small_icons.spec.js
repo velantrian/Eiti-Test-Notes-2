@@ -65,7 +65,8 @@ async function measureAll(page, mode) {
   await shot(page, 'files-' + mode);
 
   await page.evaluate(() => openTabsMode());
-  await expect(page.locator('#eiti-small-icons-toggle')).toBeVisible();
+  // v14.16.28: ВКЛ/ВЫКЛ button (checkbox hidden for a11y sync only)
+  await expect(page.locator('#eiti-small-icons-toggle-btn')).toBeVisible();
   m.subview = await box(page, '#view-tabs-mode .subview-header');
   await shot(page, 'settings-' + mode);
   await page.evaluate(() => openView('chat'));
@@ -82,7 +83,7 @@ test('по умолчанию: компактные табы (96) + шапка 8
   expect(Math.abs(m.input.bottom - m.tabbar.top)).toBeLessThanOrEqual(1);
   expect(Math.abs(m.tags.bottom - m.editorTab.top)).toBeLessThanOrEqual(2);
   await page.evaluate(() => openTabsMode());
-  await expect(page.locator('#eiti-small-icons-toggle')).not.toBeChecked();
+  await expect(page.locator('#eiti-small-icons-toggle-btn')).toHaveText(/^(ВЫКЛ|OFF|AUS)$/);
   test.info().annotations.push({ type: 'heights', description: JSON.stringify(m) });
 });
 
@@ -114,10 +115,12 @@ test('small icons: таб-бар и шапки ниже, таб ≥36px, без 
 test('галочка: мгновенно, без перезагрузки; сохраняется после reload; снятие возвращает 88 px', async ({ page }) => {
   await boot(page);
   await page.evaluate(() => openTabsMode());
-  const cb = page.locator('#eiti-small-icons-toggle');
-  await cb.check();
+  const btn = page.locator('#eiti-small-icons-toggle-btn');
+  await expect(btn).toHaveText(/^(ВЫКЛ|OFF|AUS)$/);
+  await btn.click();
   await expect.poll(() => box(page, '.tab-bar').then((b) => Math.round(b.h))).toBe(50);
   expect(await page.evaluate(() => localStorage.getItem('eiti_small_icons'))).toBe('1');
+  await expect(btn).toHaveText(/^(ВКЛ|ON|AN)$/);
 
   await page.reload();
   await page.waitForFunction(() => window.eitiChatReady === true, null, { timeout: 30000 });
@@ -125,8 +128,8 @@ test('галочка: мгновенно, без перезагрузки; со�
   expect(Math.round((await box(page, '.tab-bar')).h)).toBe(50);
   await clean(page);
   await page.evaluate(() => openTabsMode());
-  await expect(cb).toBeChecked();
-  await cb.uncheck();
+  await expect(page.locator('#eiti-small-icons-toggle-btn')).toHaveText(/^(ВКЛ|ON|AN)$/);
+  await page.locator('#eiti-small-icons-toggle-btn').click();
   await expect.poll(() => box(page, '.tab-bar').then((b) => Math.round(b.h))).toBe(96); // compact on
   expect(await page.evaluate(() => localStorage.getItem('eiti_small_icons'))).toBe(null);
   await page.evaluate(() => openView('chat'));
@@ -153,9 +156,12 @@ for (const [loc, label] of [['en', 'Small icons'], ['de', 'Kleine Symbole']]) {
     expect(Math.round((await box(page, '.tab-bar')).h)).toBe(50);
     expect(Math.round((await box(page, '.app-header')).h)).toBe(44);
     await page.evaluate(() => openTabsMode());
-    const row = page.locator('label.eiti-si-row').filter({ has: page.locator('#eiti-small-icons-toggle') });
+    const row = page.locator('.eiti-si-row').filter({ has: page.locator('#eiti-small-icons-toggle-btn') });
     await expect(row).toContainText(label);
-    expect(await row.innerText()).not.toMatch(CYR);
+    // label text only (button is ON/OFF/AN — no Cyrillic); ignore the toggle button itself
+    const labelText = await row.locator('div').nth(0).innerText();
+    expect(labelText).not.toMatch(CYR);
+    await expect(page.locator('#eiti-small-icons-toggle-btn')).toHaveText(/^(ON|AN|ВКЛ)$/);
     expect(await page.locator('#view-tabs-mode .subview-title').innerText()).not.toMatch(CYR);
     if (loc === 'en') await shot(page, 'settings-small-en-light');
   });

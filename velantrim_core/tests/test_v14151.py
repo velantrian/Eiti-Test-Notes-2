@@ -16,6 +16,8 @@ def test_small_icons_opt_in_and_early_apply():
     assert "localStorage.getItem('eiti_small_icons')==='1'" in head
     assert "function eitiSetSmallIcons(on)" in HTML
     assert 'id="eiti-small-icons-toggle" onchange="eitiSetSmallIcons(this.checked)"' in HTML
+    assert 'id="eiti-small-icons-toggle-btn"' in HTML
+    assert "eitiSetSmallIcons(!eitiIsSmallIcons())" in HTML
     # всё компактное — только под классом; дефолт 110/88 px не изменён
     assert re.search(r"\.tab-bar \{\n\s*height: 110px;", HTML)
     assert re.search(r"\.app-header \{\n\s*height: 88px;", HTML)
