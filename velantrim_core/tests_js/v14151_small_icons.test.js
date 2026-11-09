@@ -17,6 +17,7 @@ function makeEnv(initial) {
   const html = { classList: classes('html') };
   const body = { classList: classes('body') };
   const cb = { checked: false };
+  const btn = { textContent: 'ВЫКЛ', style: { background: '', color: '' } };
   const toasts = [];
   const env = loadFunctions(['eitiIsSmallIcons', 'eitiApplySmallIcons', 'eitiSetSmallIcons'], {
     localStorage: {
@@ -24,11 +25,19 @@ function makeEnv(initial) {
       setItem: (k, v) => { store[k] = String(v); },
       removeItem: (k) => { delete store[k]; },
     },
-    document: { documentElement: html, body, getElementById: (id) => (id === 'eiti-small-icons-toggle' ? cb : null) },
+    document: {
+      documentElement: html,
+      body,
+      getElementById: (id) => {
+        if (id === 'eiti-small-icons-toggle') return cb;
+        if (id === 'eiti-small-icons-toggle-btn') return btn;
+        return null;
+      },
+    },
     showToast: (m) => toasts.push(m),
     window: {},
   });
-  return { env, store, html, body, cb, toasts };
+  return { env, store, html, body, cb, btn, toasts };
 }
 
 test('по умолчанию выкл (вид как раньше)', () => {
@@ -44,6 +53,7 @@ test('вкл → ключ "1", класс на <html> и <body>, галочка 
   assert.ok(t.html.classList.contains('eiti-small-icons'));
   assert.ok(t.body.classList.contains('eiti-small-icons'));
   assert.equal(t.cb.checked, true);
+  assert.equal(t.btn.textContent, 'ВКЛ');
   assert.equal(t.toasts.length, 1);
 });
 
@@ -56,6 +66,7 @@ test('выкл → ключ удалён, классы сняты', () => {
   assert.equal(t.html.classList.contains('eiti-small-icons'), false);
   assert.equal(t.body.classList.contains('eiti-small-icons'), false);
   assert.equal(t.cb.checked, false);
+  assert.equal(t.btn.textContent, 'ВЫКЛ');
 });
 
 test('ранний скрипт в <head> ставит класс до первой отрисовки', () => {

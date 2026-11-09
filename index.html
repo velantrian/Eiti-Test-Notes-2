@@ -15627,7 +15627,8 @@
             if (cb) cb.checked = on;
             var btn = document.getElementById('eiti-small-icons-toggle-btn');
             if (btn) {
-                btn.textContent = on ? 'ВКЛ' : 'ВЫКЛ';
+                var tr = function (x) { try { return window.EITI_I18N && EITI_I18N.tr ? EITI_I18N.tr(x) : x; } catch (e) { return x; } };
+                btn.textContent = on ? tr('ВКЛ') : tr('ВЫКЛ');
                 btn.style.background = on ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)';
                 btn.style.color = on ? '#000' : 'var(--text-color)';
             }
@@ -15656,7 +15657,8 @@
             if (cb) cb.checked = on;
             var btn = document.getElementById('eiti-compact-chrome-toggle-btn');
             if (btn) {
-                btn.textContent = on ? 'ВКЛ' : 'ВЫКЛ';
+                var tr = function (x) { try { return window.EITI_I18N && EITI_I18N.tr ? EITI_I18N.tr(x) : x; } catch (e) { return x; } };
+                btn.textContent = on ? tr('ВКЛ') : tr('ВЫКЛ');
                 btn.style.background = on ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)';
                 btn.style.color = on ? '#000' : 'var(--text-color)';
             }
@@ -15675,6 +15677,15 @@
         window.eitiIsCompactChrome = eitiIsCompactChrome;
         window.eitiApplyCompactChrome = eitiApplyCompactChrome;
         document.addEventListener('DOMContentLoaded', function () { eitiApplyCompactChrome(eitiIsCompactChrome()); });
+        // После смены языка пересобрать подписи ВКЛ/ВЫКЛ → ON/OFF/AN/AUS
+        (function () {
+            var prev = window.eitiOnLocaleChanged;
+            window.eitiOnLocaleChanged = function (loc) {
+                try { if (typeof prev === 'function') prev(loc); } catch (e) {}
+                try { eitiApplySmallIcons(eitiIsSmallIcons()); } catch (e) {}
+                try { eitiApplyCompactChrome(eitiIsCompactChrome()); } catch (e) {}
+            };
+        })();
 
         // v14.16.27: «icons» — скрыть весь нижний бар включая Чат (ключ eiti_chat_only_tabs='1').
         // Класс html.eiti-chat-only-tabs ставится ещё в <head>; переключатель — обычная строка в меню «+».
