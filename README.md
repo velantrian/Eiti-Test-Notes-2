@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.28-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.29-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -65,6 +65,9 @@ python3 -m http.server 8080
 📐 Полная архитектура (для переноса в нативное приложение): **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ---
+
+## 🆕 Что нового в v14.16.29
+- 🔒 **Изоляция хранилищ (#26):** все GitHub Pages аккаунта живут на одном origin, поэтому копии EITI делили localStorage, IndexedDB (`eiti_v4`, `eiti_offline`), API-ключи и кэши. Теперь у каждого деплоя свой префикс из пути (`Eiti-Test-Notes-2@@…`, `window.EitiNS`); при первом запуске старые данные **копируются** (оригиналы не трогаются), а `sw.js` удаляет только свои старые кэши. В корне origin (свой домен, localhost) префикса нет.
 
 ## 🆕 Что нового в v14.16.28
 - 🐛 **Компактные табы:** вернул `eitiSetCompactChrome` (чекбокс кликался вхолостую) — теперь ВКЛ/ВЫКЛ как у остальных.

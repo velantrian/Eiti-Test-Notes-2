@@ -307,6 +307,8 @@ flowchart LR
 
 ## 12. Полная карта хранения данных
 
+> **v14.16.29 (#26) — изоляция по деплою.** Первый `<script>` в `index.html` (`window.EitiNS`) берёт префикс из первого сегмента пути (`/Eiti-Test-Notes-2/` → `Eiti-Test-Notes-2@@`) и прозрачно добавляет его к ключам localStorage (Proxy вместо `window.localStorage`), именам IndexedDB (`indexedDB.open/deleteDatabase/databases`) и Cache Storage (`caches.*`); `sw.js` делает то же для `CACHE`/`OFFLINE_CACHE` и при `activate` удаляет только кэши `<префикс>eiti-*`. Одноразовая миграция копирует ключи без префикса и БД `eiti_v4` / `eiti_offline` (версии — `EitiNS.IDB_MIGRATE`, сверяются тестом) в свой неймспейс, не удаляя оригиналы; пока она идёт, `indexedDB.open` возвращает отложенный запрос. В корне origin префикса нет — имена ниже остаются как есть. Тесты: `velantrim_core/tests/test_v141629.py`, `velantrim_core/e2e/v141629_ns_isolation.spec.js`.
+
 ### 12.1 Где что лежит
 
 | Слой | Технология | Источник истины? | Что хранит |

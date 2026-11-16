@@ -1,13 +1,27 @@
-// VELANTRIM EITI — Service Worker v14.16.28
+// VELANTRIM EITI — Service Worker v14.16.29
 // Fixes: LAZY_FILES await race, cross-origin CDN cache, updatefound wiring, SWR for data/*.json
-// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.28
+// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.29
 
-var CACHE = 'eiti-v14.16.28'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
+var CACHE = 'eiti-v14.16.29'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
 // v14.0.0: офлайн-движок и пакеты (offline/**) — отдельный кеш без лимита 24 записей (≈30 файлов),
 // cache-first + фоновое обновление; не попадает в swTrimCache.
-var OFFLINE_CACHE = 'eiti-offline-v14.16.28';
+var OFFLINE_CACHE = 'eiti-offline-v14.16.29';
 var CACHE_MAX_ENTRIES = 24;
 var BASE = self.location.pathname.replace(/sw\.js$/, '');
+// v14.16.29 (#26): префикс деплоя — как EitiNS в index.html (первый сегмент пути).
+// Все GitHub Pages аккаунта живут на одном origin: без префикса копии EITI
+// удаляли кэши друг друга при activate. В корне origin префикса нет.
+function swNsFromPath(p) {
+    var m = /^\/([^\/]+)\//.exec(String(p || '/'));
+    return m ? m[1].replace(/[^A-Za-z0-9._-]/g, '_') : '';
+}
+var NS_PREFIX = swNsFromPath(BASE) ? swNsFromPath(BASE) + '@@' : '';
+CACHE = NS_PREFIX + CACHE;
+OFFLINE_CACHE = NS_PREFIX + OFFLINE_CACHE;
+// Удаляем только свои старые кэши приложения (свой префикс + «eiti-»), чужие не трогаем.
+function swIsOwnStaleCache(k) {
+    return k !== CACHE && k !== OFFLINE_CACHE && k.indexOf(NS_PREFIX + 'eiti-') === 0;
+}
 
 // Критическое ядро — без них app не запустится
 // v14.16.16: eiti_typo_vocab.json (1.2 MiB) убран из CORE — грузится лениво, allowlist local/*
@@ -72,7 +86,7 @@ self.addEventListener('install', function(e) {
 self.addEventListener('activate', function(e) {
     e.waitUntil(
         caches.keys().then(function(keys) {
-            var old = keys.filter(function(k) { return k !== CACHE && k !== OFFLINE_CACHE; });
+            var old = keys.filter(swIsOwnStaleCache); // v14.16.29 (#26): только свой префикс
             var isUpdate = old.length > 0;
             return Promise.all(old.map(function(k) { return caches.delete(k); }))
                 .then(function() { return self.clients.claim(); })
@@ -83,7 +97,7 @@ self.addEventListener('activate', function(e) {
                     }).then(function() {
                     return self.clients.matchAll().then(function(clients) {
                         clients.forEach(function(c) {
-                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.28' });
+                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.29' });
                         });
                     });
                     });

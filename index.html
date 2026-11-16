@@ -21,6 +21,243 @@
     <link rel="shortcut icon" href="icon-192.png">
     <title>𓆩 VELANTRIM EITI 𓆪</title>
     <script>
+    /* v14.16.29 (#26): изоляция хранилищ браузера по префиксу деплоя.
+     * Все GitHub Pages аккаунта живут на одном origin (velantrian.github.io), поэтому
+     * localStorage / IndexedDB / Cache Storage у копий EITI были общими. Префикс берётся из
+     * первого сегмента пути (/Eiti-Test-Notes-2/ → «Eiti-Test-Notes-2@@»); в корне origin
+     * (localhost, свой домен) префикса нет и поведение прежнее.
+     * Одноразовая миграция КОПИРУЕТ старые данные без префикса (оригиналы не трогаем —
+     * их использует velantrim-eiti). Должен идти ПЕРВЫМ скриптом страницы. */
+    (function (w) {
+        'use strict';
+        function nsFromPath(p) {
+            var m = /^\/([^\/]+)\//.exec(String(p || '/'));
+            return m ? m[1].replace(/[^A-Za-z0-9._-]/g, '_') : '';
+        }
+        var NS = nsFromPath(w.location && w.location.pathname);
+        var P = NS ? NS + '@@' : '';
+        // Версии БД, которые открывает index.html (сверяются тестом test_v141629.py).
+        var IDB_MIGRATE = { eiti_v4: 18, eiti_offline: 1 };
+        var api = { ns: NS, prefix: P, active: !!NS, nsFromPath: nsFromPath, IDB_MIGRATE: IDB_MIGRATE, ready: Promise.resolve('none'), status: 'none' };
+        w.EitiNS = api;
+        if (!NS) return;
+        var MIG_LS = P + '__eiti_ns_ls_migrated_v1';
+        var MIG_IDB = P + '__eiti_ns_idb_migrated_v1';
+        var raw = null;
+        try { raw = w.localStorage; } catch (e) { raw = null; }
+
+        // ── localStorage: Proxy с префиксом ─────────────────────────────────────
+        if (raw) {
+            var ownKeys = function () {
+                var out = [];
+                for (var i = 0; i < raw.length; i++) { var k = raw.key(i); if (k && k.indexOf(P) === 0) out.push(k.slice(P.length)); }
+                return out;
+            };
+            var store = {
+                getItem: function (k) { return raw.getItem(P + k); },
+                setItem: function (k, v) { raw.setItem(P + k, v); },
+                removeItem: function (k) { raw.removeItem(P + k); },
+                key: function (i) { var ks = ownKeys(); i = Number(i) || 0; return i >= 0 && i < ks.length ? ks[i] : null; },
+                clear: function () { ownKeys().forEach(function (k) { raw.removeItem(P + k); }); }
+            };
+            var proxy = new Proxy(store, {
+                get: function (t, prop) {
+                    if (prop === 'length') return ownKeys().length;
+                    if (typeof prop === 'symbol' || prop in t) return t[prop];
+                    var v = raw.getItem(P + prop); return v === null ? undefined : v;
+                },
+                set: function (t, prop, v) { if (typeof prop === 'symbol') { t[prop] = v; return true; } raw.setItem(P + prop, String(v)); return true; },
+                deleteProperty: function (t, prop) { if (typeof prop !== 'symbol') raw.removeItem(P + prop); return true; },
+                has: function (t, prop) { return prop in t || prop === 'length' || (typeof prop === 'string' && raw.getItem(P + prop) !== null); },
+                ownKeys: function () { return ownKeys(); },
+                getOwnPropertyDescriptor: function (t, prop) {
+                    if (typeof prop !== 'string') return undefined;
+                    var v = raw.getItem(P + prop);
+                    return v === null ? undefined : { value: v, writable: true, enumerable: true, configurable: true };
+                }
+            });
+            // Одноразовая миграция: копируем ключи без префикса (и не чужих неймспейсов «…@@»).
+            try {
+                if (raw.getItem(MIG_LS) !== '1') {
+                    var legacy = [];
+                    for (var i = 0; i < raw.length; i++) { var k = raw.key(i); if (k && k.indexOf('@@') < 0) legacy.push(k); }
+                    legacy.forEach(function (k) { if (raw.getItem(P + k) === null) { try { raw.setItem(P + k, raw.getItem(k)); } catch (e) {} } });
+                    raw.setItem(MIG_LS, '1');
+                }
+            } catch (e) { try { console.warn('[EITI ns] LS migration:', e); } catch (_) {} }
+            try {
+                Object.defineProperty(w, 'localStorage', { configurable: true, enumerable: true, get: function () { return proxy; } });
+            } catch (e) { try { console.warn('[EITI ns] localStorage isolation unavailable:', e); } catch (_) {} }
+            // storage-события: чужие ключи не показываем, свои — без префикса.
+            try {
+                w.addEventListener('storage', function (ev) {
+                    if (!ev || ev.storageArea !== raw) return;
+                    if (ev.key === null) return;
+                    if (ev.key.indexOf(P) !== 0) { ev.stopImmediatePropagation(); return; }
+                    try { Object.defineProperty(ev, 'key', { value: ev.key.slice(P.length) }); } catch (e) {}
+                }, true);
+            } catch (e) {}
+        }
+
+        // ── Cache Storage (страница): имена кэшей с префиксом ───────────────────
+        try {
+            var cs = w.caches;
+            if (cs) {
+                var cOpen = cs.open.bind(cs), cHas = cs.has.bind(cs), cDel = cs.delete.bind(cs), cKeys = cs.keys.bind(cs);
+                var pc = function (n) { n = String(n); return n.indexOf(P) === 0 ? n : P + n; };
+                var ownCaches = function () { return cKeys().then(function (ks) { return ks.filter(function (k) { return k.indexOf(P) === 0; }); }); };
+                cs.open = function (n) { return cOpen(pc(n)); };
+                cs.has = function (n) { return cHas(pc(n)); };
+                cs.delete = function (n) { return cDel(pc(n)); };
+                cs.keys = function () { return ownCaches().then(function (ks) { return ks.map(function (k) { return k.slice(P.length); }); }); };
+                cs.match = function (req, opts) {
+                    if (opts && opts.cacheName) return cOpen(pc(opts.cacheName)).then(function (c) { return c.match(req, opts); });
+                    return ownCaches().then(function (ks) {
+                        var i = 0;
+                        var next = function () {
+                            if (i >= ks.length) return undefined;
+                            return cOpen(ks[i++]).then(function (c) { return c.match(req, opts); }).then(function (m) { return m || next(); });
+                        };
+                        return next();
+                    });
+                };
+            }
+        } catch (e) { try { console.warn('[EITI ns] caches isolation unavailable:', e); } catch (_) {} }
+
+        // ── IndexedDB: имена БД с префиксом + одноразовая копия старых БД ───────
+        var idb = null;
+        try { idb = w.indexedDB; } catch (e) { idb = null; }
+        if (!idb) return;
+        var F = Object.getPrototypeOf(idb);
+        var oOpen = F.open, oDel = F.deleteDatabase, oDbs = F.databases;
+        var pn = function (n) { n = String(n); return n.indexOf(P) === 0 ? n : P + n; };
+        var openArgs = function (args) { var a = [pn(args[0])]; if (args.length > 1 && args[1] !== undefined) a.push(args[1]); return a; };
+
+        function openExisting(name) { // null, если БД нет (создание отменяем)
+            return new Promise(function (res) {
+                var r;
+                try { r = oOpen.call(idb, name); } catch (e) { return res(null); }
+                r.onupgradeneeded = function () { try { r.transaction.abort(); } catch (e) {} };
+                r.onsuccess = function () { res(r.result); };
+                r.onerror = function (e) { try { e.preventDefault(); } catch (_) {} res(null); };
+            });
+        }
+        function reqP(r) { return new Promise(function (res, rej) { r.onsuccess = function () { res(r.result); }; r.onerror = function (e) { try { e.preventDefault(); } catch (_) {} rej(r.error); }; }); }
+        function copyStore(src, dst, s) {
+            return new Promise(function (res, rej) {
+                var st = src.transaction(s.name, 'readonly').objectStore(s.name);
+                Promise.all([reqP(st.getAll()), s.keyPath == null ? reqP(st.getAllKeys()) : Promise.resolve(null)]).then(function (vk) {
+                    var vals = vk[0], keys = vk[1];
+                    if (!vals.length) return res(0);
+                    var tx = dst.transaction(s.name, 'readwrite'), os = tx.objectStore(s.name);
+                    for (var i = 0; i < vals.length; i++) { if (keys) os.put(vals[i], keys[i]); else os.put(vals[i]); }
+                    tx.oncomplete = function () { res(vals.length); };
+                    tx.onerror = tx.onabort = function (e) { try { e.preventDefault(); } catch (_) {} rej(tx.error); };
+                }, rej);
+            });
+        }
+        function migrateDb(name, want) {
+            return openExisting(P + name).then(function (have) {
+                if (have) { have.close(); return 'exists'; }
+                return openExisting(name).then(function (src) {
+                    if (!src) return 'absent';
+                    var ver = Math.min(src.version, want || src.version);
+                    var names = Array.prototype.slice.call(src.objectStoreNames);
+                    var schema = [];
+                    if (names.length) {
+                        var tx = src.transaction(names, 'readonly');
+                        schema = names.map(function (sn) {
+                            var st = tx.objectStore(sn);
+                            return { name: sn, keyPath: st.keyPath, autoIncrement: st.autoIncrement,
+                                indexes: Array.prototype.slice.call(st.indexNames).map(function (iname) {
+                                    var ix = st.index(iname); return { name: iname, keyPath: ix.keyPath, unique: ix.unique, multiEntry: ix.multiEntry };
+                                }) };
+                        });
+                    }
+                    return new Promise(function (res, rej) {
+                        var r = oOpen.call(idb, P + name, ver);
+                        r.onupgradeneeded = function () {
+                            var db = r.result;
+                            schema.forEach(function (s) {
+                                var os = db.createObjectStore(s.name, s.keyPath == null ? { autoIncrement: s.autoIncrement } : { keyPath: s.keyPath, autoIncrement: s.autoIncrement });
+                                s.indexes.forEach(function (ix) { os.createIndex(ix.name, ix.keyPath, { unique: ix.unique, multiEntry: ix.multiEntry }); });
+                            });
+                        };
+                        r.onsuccess = function () { res(r.result); };
+                        r.onerror = function (e) { try { e.preventDefault(); } catch (_) {} rej(r.error); };
+                    }).then(function (dst) {
+                        return schema.reduce(function (p, s) { return p.then(function () { return copyStore(src, dst, s); }); }, Promise.resolve())
+                            .then(function () { src.close(); dst.close(); return 'copied'; }, function (err) {
+                                src.close(); dst.close();
+                                // частичная копия хуже пустой — удаляем, повторим при следующем запуске
+                                return new Promise(function (res) { var d = oDel.call(idb, P + name); d.onsuccess = d.onerror = d.onblocked = function () { res(); }; }).then(function () { throw err; });
+                            });
+                    }, function (err) { src.close(); throw err; });
+                });
+            });
+        }
+
+        var migrated = false;
+        try { migrated = !raw || raw.getItem(MIG_IDB) === '1'; } catch (e) { migrated = true; }
+        var gate = null;
+        if (!migrated) {
+            api.status = 'migrating';
+            gate = Object.keys(IDB_MIGRATE).reduce(function (p, n) {
+                return p.then(function (acc) { return migrateDb(n, IDB_MIGRATE[n]).then(function (r) { acc[n] = r; return acc; }); });
+            }, Promise.resolve({})).then(function (acc) {
+                try { raw.setItem(MIG_IDB, '1'); } catch (e) {}
+                api.status = 'done'; api.result = acc; gate = null; return acc;
+            }, function (err) {
+                try { console.warn('[EITI ns] IndexedDB migration failed (retry next start):', err); } catch (_) {}
+                api.status = 'failed'; api.error = String(err && err.message || err); gate = null; return null;
+            });
+            api.ready = gate;
+        } else { api.status = 'done'; api.ready = Promise.resolve('done'); }
+
+        // Пока идёт миграция, open() возвращает «отложенный» запрос, который
+        // пересылает события настоящего IDBOpenDBRequest (onsuccess/onupgradeneeded/…).
+        function deferredOpen(args) {
+            var fake = { result: undefined, error: null, readyState: 'pending', source: null, transaction: null,
+                onsuccess: null, onerror: null, onupgradeneeded: null, onblocked: null, _l: {} };
+            fake.addEventListener = function (t, fn) { (fake._l[t] = fake._l[t] || []).push(fn); };
+            fake.removeEventListener = function (t, fn) { var a = fake._l[t]; if (a) { var i = a.indexOf(fn); if (i >= 0) a.splice(i, 1); } };
+            var fire = function (t, ev, real) {
+                if (real) {
+                    try { fake.result = real.result; } catch (e) {}
+                    try { fake.error = real.error; } catch (e) {}
+                    fake.transaction = real.transaction; fake.readyState = real.readyState;
+                }
+                var evt = { type: t, target: fake, currentTarget: fake, oldVersion: ev && ev.oldVersion, newVersion: ev && ev.newVersion,
+                    preventDefault: function () { if (ev && ev.preventDefault) ev.preventDefault(); },
+                    stopPropagation: function () { if (ev && ev.stopPropagation) ev.stopPropagation(); } };
+                if (typeof fake['on' + t] === 'function') fake['on' + t].call(fake, evt);
+                (fake._l[t] || []).slice().forEach(function (fn) { fn.call(fake, evt); });
+            };
+            (gate || Promise.resolve()).then(function () {
+                var real;
+                try { real = oOpen.apply(idb, openArgs(args)); } catch (e) { fake.error = e; fake.readyState = 'done'; fire('error', null, null); return; }
+                ['success', 'error', 'upgradeneeded', 'blocked'].forEach(function (t) {
+                    real.addEventListener(t, function (ev) { fire(t, ev, real); });
+                });
+            });
+            return fake;
+        }
+        idb.open = function (name, version) {
+            if (gate) return deferredOpen(arguments);
+            return oOpen.apply(idb, openArgs(arguments));
+        };
+        idb.deleteDatabase = function (name) { return oDel.call(idb, pn(name)); };
+        if (typeof oDbs === 'function') {
+            idb.databases = function () {
+                return oDbs.call(idb).then(function (list) {
+                    return (list || []).filter(function (d) { return d && d.name && d.name.indexOf(P) === 0; })
+                        .map(function (d) { return { name: d.name.slice(P.length), version: d.version }; });
+                });
+            };
+        }
+    })(window);
+    </script>
+    <script>
         /* v13.4.0:
          * [P0] FTS5 incremental sync O(N²)→O(1)
          * [P0] DOMPurify XSS protection (offline-first)
@@ -39,7 +276,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.28"; // v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.29"; // v14.16.29: security #26 — изоляция localStorage/IndexedDB/Cache Storage по префиксу деплоя (EitiNS) + миграция-копия; v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
