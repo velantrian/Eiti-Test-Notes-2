@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <!-- v14.16.30 (#27): Content-Security-Policy. GitHub Pages не даёт ставить заголовки, поэтому meta.
-         script-src: свой origin + CDN с точными версиями (import() transformers.js / web-llm, mermaid, PDF.js) + Google Identity;
+         script-src: свой origin + CDN с точными версиями (import() transformers.js / web-llm, mermaid) + Google Identity; PDF.js — локально (v14.16.31);
          'unsafe-inline' пока нужен — в index.html сотни inline-обработчиков (onclick=…); 'wasm-unsafe-eval' — SQLite / ONNX / WebLLM.
          connect-src: только реально используемые API провайдеров, Google Drive/OAuth, Википедия, хосты моделей; wss: — для
          пользовательского голосового прокси (любой wss://, см. eitiVoiceProxyValid) и ws://localhost. Новые эндпоинты — добавлять сюда
          (проверяется tests/test_v141630.py). frame-ancestors в meta не работает. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://accounts.google.com/gsi/client; worker-src 'self' blob: https://cdn.jsdelivr.net; connect-src 'self' data: blob: https://api.deepseek.com https://generativelanguage.googleapis.com wss://generativelanguage.googleapis.com https://openrouter.ai https://api.openai.com https://api.x.ai wss://api.x.ai https://api.mistral.ai https://api.anthropic.com https://dashscope.aliyuncs.com https://dashscope-intl.aliyuncs.com https://api.tavily.com https://api.jina.ai https://api.voyageai.com https://api.elevenlabs.io https://texttospeech.googleapis.com https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com https://ru.wikipedia.org https://en.wikipedia.org https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://cdnjs.cloudflare.com https://huggingface.co https://*.huggingface.co https://*.hf.co https://raw.githubusercontent.com wss: ws://localhost:* ws://127.0.0.1:*; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; frame-src 'self' blob: data: https://accounts.google.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://accounts.google.com/gsi/client; worker-src 'self' blob: https://cdn.jsdelivr.net; connect-src 'self' data: blob: https://api.deepseek.com https://generativelanguage.googleapis.com wss://generativelanguage.googleapis.com https://openrouter.ai https://api.openai.com https://api.x.ai wss://api.x.ai https://api.mistral.ai https://api.anthropic.com https://dashscope.aliyuncs.com https://dashscope-intl.aliyuncs.com https://api.tavily.com https://api.jina.ai https://api.voyageai.com https://api.elevenlabs.io https://texttospeech.googleapis.com https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com https://ru.wikipedia.org https://en.wikipedia.org https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://huggingface.co https://*.huggingface.co https://*.hf.co https://raw.githubusercontent.com wss: ws://localhost:* ws://127.0.0.1:*; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; frame-src 'self' blob: data: https://accounts.google.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2b1e16">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -283,7 +283,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.30"; // v14.16.30: security #27 — точные версии CDN, SRI, vendor/ (DOMPurify 3.4.18, mammoth 1.13.0), CSP meta; v14.16.29: security #26 — изоляция localStorage/IndexedDB/Cache Storage по префиксу деплоя (EitiNS) + миграция-копия; v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.31"; // v14.16.31: security #28 — PDF.js 6.5.438 (vendor, ES-модуль) вместо 3.11.174 (CVE-2024-4367), isEvalSupported:false; v14.16.30: security #27 — точные версии CDN, SRI, vendor/ (DOMPurify 3.4.18, mammoth 1.13.0), CSP meta; v14.16.29: security #26 — изоляция localStorage/IndexedDB/Cache Storage по префиксу деплоя (EitiNS) + миграция-копия; v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -4662,8 +4662,18 @@
          до DOMContentLoaded, что соответствует guard-логике внутри _initSQL. -->
     <script src="./sql-wasm.js" defer></script>
     <!-- German translations are embedded in EITI_I18N; no external patch request. -->
-    <!-- PDF.js CDN — для парсинга PDF файлов в браузере (v12.9.50) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- v14.16.31 (#28): PDF.js 6.5.438 (legacy-сборка, ES-модуль) — локально в vendor/ вместо уязвимого 3.11.174 (CVE-2024-4367).
+         Целостность ES-модулей — через integrity в import map (Chrome 127+, Safari 18+, Firefox 138+; старые браузеры ключ игнорируют)
+         + modulepreload с integrity. Воркер — тот же origin, module worker. -->
+    <script type="importmap">{"integrity": {"./vendor/pdfjs/6.5.438/pdf.min.mjs": "sha384-8Nzt4NtLKsO5Ksqwrdc+JzLh0297H8590bi0lcBPKcMRxReio/DNZsRsiBMZydqe", "./vendor/pdfjs/6.5.438/pdf.worker.min.mjs": "sha384-h2OX4gf3I6e1sZFfB/7wpAKzqaygzUba1e7GWT5x1gZqWrNDRIrSERQHlEFPSfu+"}}</script>
+    <link rel="modulepreload" href="./vendor/pdfjs/6.5.438/pdf.min.mjs" integrity="sha384-8Nzt4NtLKsO5Ksqwrdc+JzLh0297H8590bi0lcBPKcMRxReio/DNZsRsiBMZydqe">
+    <script type="module">
+        // v14.16.31 (#28): window.pdfjsLib для импорта PDF (см. eitiParseFile → getDocument с isEvalSupported:false)
+        import * as pdfjs from './vendor/pdfjs/6.5.438/pdf.min.mjs';
+        pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdfjs/6.5.438/pdf.worker.min.mjs', document.baseURI).href;
+        window.pdfjsLib = pdfjs;
+        window.EITI_PDFJS_VERSION = pdfjs.version;
+    </script>
     <!-- v14.16.30 (#27): mammoth и DOMPurify — локальные vendor-копии (точная версия + SRI), без CDN -->
     <script src="./vendor/mammoth/1.13.0/mammoth.browser.min.js" integrity="sha384-8NWE3bZDrmRI4IePMoQaEoLhAQ1MmRMJkdNgnGiHRFanTqsFKr0TmK6aSZvFJ/PO"></script>
     <!-- v13.4.0 P0 #2: DOMPurify для санитизации HTML (offline-first через SW CORE) -->
@@ -4678,7 +4688,6 @@
     <script src="./local/eiti_care.js" defer></script>
     <script src="./local/eiti_voice.js" defer></script>
     <script src="./local/eiti_action_gate.js" defer></script>
-    <script>if(typeof pdfjsLib!=='undefined'){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}</script>
 <script>
 (function(){
   // v14.15.1: «Меньше иконки (small icons)» — класс на <html> до первой отрисовки (без мигания)
@@ -38096,7 +38105,12 @@ window.eitiLLMClearAll = async function() {
 
         // ══ v12.9.50: UNIVERSAL FILE PARSER + CHUNKED PROCESSOR ═════════════════
         // Работает полностью в браузере: TXT/MD/JSON/CSV — нативно;
-        // PDF — через PDF.js (CDN); DOCX — через mammoth.js (уже в EITI).
+        // PDF — через PDF.js (vendor/pdfjs, v14.16.31); DOCX — через mammoth.js (vendor/mammoth).
+        // v14.16.31 (#28): единые безопасные параметры открытия PDF (CVE-2024-4367).
+        function eitiPdfOpenOptions(data) {
+            return { data: data, isEvalSupported: false, enableXfa: false };
+        }
+        window.eitiPdfOpenOptions = eitiPdfOpenOptions;
         // Chunked processing: текст → чанки с overlap → AI суммаризирует каждый.
 
         // Определяем тип файла по расширению
@@ -38232,7 +38246,8 @@ window.eitiLLMClearAll = async function() {
             if (fileType === 'pdf') {
                 if (typeof pdfjsLib !== 'undefined') {
                     cb(5, 'PDF.js: открытие документа…');
-                    return pdfjsLib.getDocument({ data: arrayBuffer }).promise
+                    // v14.16.31 (#28): CVE-2024-4367 — без eval в шрифтах; XFA и скрипты PDF выключены
+                    return pdfjsLib.getDocument(eitiPdfOpenOptions(arrayBuffer)).promise
                         .then(function(pdf) {
                             var pages = [];
                             var total = pdf.numPages;

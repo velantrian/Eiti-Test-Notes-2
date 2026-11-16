@@ -1,11 +1,11 @@
-// VELANTRIM EITI — Service Worker v14.16.30
+// VELANTRIM EITI — Service Worker v14.16.31
 // Fixes: LAZY_FILES await race, cross-origin CDN cache, updatefound wiring, SWR for data/*.json
-// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.30
+// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.31
 
-var CACHE = 'eiti-v14.16.30'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
+var CACHE = 'eiti-v14.16.31'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
 // v14.0.0: офлайн-движок и пакеты (offline/**) — отдельный кеш без лимита 24 записей (≈30 файлов),
 // cache-first + фоновое обновление; не попадает в swTrimCache.
-var OFFLINE_CACHE = 'eiti-offline-v14.16.30';
+var OFFLINE_CACHE = 'eiti-offline-v14.16.31';
 var CACHE_MAX_ENTRIES = 24;
 var BASE = self.location.pathname.replace(/sw\.js$/, '');
 // v14.16.29 (#26): префикс деплоя — как EitiNS в index.html (первый сегмент пути).
@@ -53,7 +53,9 @@ var CORE = [
 var HEAVY = [
     BASE + 'sql-wasm.js',
     BASE + 'sql-wasm.wasm',
-    BASE + 'vendor/mammoth/1.13.0/mammoth.browser.min.js' // v14.16.30 (#27): DOCX → текст, локально (было cdnjs)
+    BASE + 'vendor/mammoth/1.13.0/mammoth.browser.min.js', // v14.16.30 (#27): DOCX → текст, локально (было cdnjs)
+    BASE + 'vendor/pdfjs/6.5.438/pdf.min.mjs', // v14.16.31 (#28): PDF.js 6.5.438 (legacy) вместо 3.11.174 с CVE-2024-4367
+    BASE + 'vendor/pdfjs/6.5.438/pdf.worker.min.mjs'
 ];
 
 // Данные KB — будут кешироваться по stale-while-revalidate при первом обращении
@@ -99,7 +101,7 @@ self.addEventListener('activate', function(e) {
                     }).then(function() {
                     return self.clients.matchAll().then(function(clients) {
                         clients.forEach(function(c) {
-                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.30' });
+                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.31' });
                         });
                     });
                     });

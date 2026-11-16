@@ -8,7 +8,10 @@ v14.16.30 (#27): библиотеки, которые раньше грузил�
 | Библиотека | Версия | Файл | Источник | Лицензия |
 |---|---|---|---|---|
 | DOMPurify | 3.4.18 | `dompurify/3.4.18/purify.min.js` | npm `dompurify@3.4.18` → `dist/purify.min.js` | Apache-2.0 / MPL-2.0 |
+| PDF.js (pdfjs-dist, legacy build) | 6.5.438 | `pdfjs/6.5.438/pdf.min.mjs`, `pdf.worker.min.mjs` | npm `pdfjs-dist@6.5.438` → `legacy/build/` | Apache-2.0 |
 | mammoth | 1.13.0 | `mammoth/1.13.0/mammoth.browser.min.js` | npm `mammoth@1.13.0` → `mammoth.browser.min.js` | BSD-2-Clause |
+
+PDF.js — ES-модули: `<script type="module">` в `index.html` импортирует `pdf.min.mjs` и ставит `window.pdfjsLib`; целостность модулей — через `integrity` в `<script type="importmap">` и `<link rel="modulepreload" integrity>` (браузеры без поддержки ключа его игнорируют). Legacy-сборка выбрана ради старых iOS Safari. Открытие PDF — только через `eitiPdfOpenOptions()` (`isEvalSupported:false`, `enableXfa:false`); в 6.x eval-путь шрифтов удалён полностью, флаг оставлен как защита при откате версии.
 
 Пересчитать SRI: `echo "sha384-$(openssl dgst -sha384 -binary FILE | base64 -w0)"`.
 

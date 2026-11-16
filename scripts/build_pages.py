@@ -32,6 +32,10 @@ REQUIRED_FILES = (
     'vendor/dompurify/3.4.18/LICENSE',
     'vendor/mammoth/1.13.0/mammoth.browser.min.js',
     'vendor/mammoth/1.13.0/LICENSE',
+    # v14.16.31 (#28): PDF.js 6.5.438 legacy ES modules (CVE-2024-4367 fix)
+    'vendor/pdfjs/6.5.438/pdf.min.mjs',
+    'vendor/pdfjs/6.5.438/pdf.worker.min.mjs',
+    'vendor/pdfjs/6.5.438/LICENSE',
 )
 
 # The explicit patterns reflect the currently documented browser runtime.
