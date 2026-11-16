@@ -27,6 +27,11 @@ REQUIRED_FILES = (
     'local/eiti_typo_vocab.json',
     'local/eiti_frames.json',
     'offline_manifest.json',
+    # v14.16.30 (#27): vendored third-party runtime (exact versions, SRI in index.html)
+    'vendor/dompurify/3.4.18/purify.min.js',
+    'vendor/dompurify/3.4.18/LICENSE',
+    'vendor/mammoth/1.13.0/mammoth.browser.min.js',
+    'vendor/mammoth/1.13.0/LICENSE',
 )
 
 # The explicit patterns reflect the currently documented browser runtime.

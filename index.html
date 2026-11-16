@@ -2,6 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <!-- v14.16.30 (#27): Content-Security-Policy. GitHub Pages не даёт ставить заголовки, поэтому meta.
+         script-src: свой origin + CDN с точными версиями (import() transformers.js / web-llm, mermaid, PDF.js) + Google Identity;
+         'unsafe-inline' пока нужен — в index.html сотни inline-обработчиков (onclick=…); 'wasm-unsafe-eval' — SQLite / ONNX / WebLLM.
+         connect-src: только реально используемые API провайдеров, Google Drive/OAuth, Википедия, хосты моделей; wss: — для
+         пользовательского голосового прокси (любой wss://, см. eitiVoiceProxyValid) и ws://localhost. Новые эндпоинты — добавлять сюда
+         (проверяется tests/test_v141630.py). frame-ancestors в meta не работает. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://accounts.google.com/gsi/client; worker-src 'self' blob: https://cdn.jsdelivr.net; connect-src 'self' data: blob: https://api.deepseek.com https://generativelanguage.googleapis.com wss://generativelanguage.googleapis.com https://openrouter.ai https://api.openai.com https://api.x.ai wss://api.x.ai https://api.mistral.ai https://api.anthropic.com https://dashscope.aliyuncs.com https://dashscope-intl.aliyuncs.com https://api.tavily.com https://api.jina.ai https://api.voyageai.com https://api.elevenlabs.io https://texttospeech.googleapis.com https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com https://ru.wikipedia.org https://en.wikipedia.org https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://cdnjs.cloudflare.com https://huggingface.co https://*.huggingface.co https://*.hf.co https://raw.githubusercontent.com wss: ws://localhost:* ws://127.0.0.1:*; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; frame-src 'self' blob: data: https://accounts.google.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2b1e16">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -276,7 +283,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.29"; // v14.16.29: security #26 — изоляция localStorage/IndexedDB/Cache Storage по префиксу деплоя (EitiNS) + миграция-копия; v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.30"; // v14.16.30: security #27 — точные версии CDN, SRI, vendor/ (DOMPurify 3.4.18, mammoth 1.13.0), CSP meta; v14.16.29: security #26 — изоляция localStorage/IndexedDB/Cache Storage по префиксу деплоя (EitiNS) + миграция-копия; v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -4656,10 +4663,11 @@
     <script src="./sql-wasm.js" defer></script>
     <!-- German translations are embedded in EITI_I18N; no external patch request. -->
     <!-- PDF.js CDN — для парсинга PDF файлов в браузере (v12.9.50) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- v14.16.30 (#27): mammoth и DOMPurify — локальные vendor-копии (точная версия + SRI), без CDN -->
+    <script src="./vendor/mammoth/1.13.0/mammoth.browser.min.js" integrity="sha384-8NWE3bZDrmRI4IePMoQaEoLhAQ1MmRMJkdNgnGiHRFanTqsFKr0TmK6aSZvFJ/PO"></script>
     <!-- v13.4.0 P0 #2: DOMPurify для санитизации HTML (offline-first через SW CORE) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.4/purify.min.js" defer></script>
+    <script src="./vendor/dompurify/3.4.18/purify.min.js" integrity="sha384-lkArbWjiZKuE+bzKbj1vOEF7DKYBDNvgwZMCt5OH8bdRB92zpzyNska9Q/XKPHQD" defer></script>
     <!-- v14.2.0: «простой интеллект» на устройстве — калькулятор и ответы по своим заметкам/файлам (≈20 КБ, без сети) -->
     <script src="./local/eiti_local.js" defer></script>
     <script src="./local/eiti_dstate.js" defer></script>
@@ -29645,10 +29653,10 @@ async function eitiActivateAIOffline() {
         // FIX: кэшируем модуль глобально — избегаем 4x повторного CDN-импорта
         if (!window._eitiTransformersModule) {
             try {
-                window._eitiTransformersModule = await _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                window._eitiTransformersModule = await _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             } catch(cdnError) {
                 try {
-                    window._eitiTransformersModule = await _eitiImportWithTimeout('https://unpkg.com/@huggingface/transformers@3', 30000);
+                    window._eitiTransformersModule = await _eitiImportWithTimeout('https://unpkg.com/@huggingface/transformers@3.8.1', 30000);
                 } catch(e2) {
                     console.warn('[EITI] Transformers.js недоступен:', e2.message);
                     showToast('⚠️ AI-офлайн недоступен — продолжаем без него');
@@ -29881,7 +29889,7 @@ window.eitiToggleAIOffline = function() {
             eitiUpdateAIStatus('⏳ Включение…', cfg.model);
             var _toggleImport = window._eitiTransformersModule
                 ? Promise.resolve(window._eitiTransformersModule)
-                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             _toggleImport.then(function(m){
                 window._eitiTransformersModule = m;
                 m.env.useBrowserCache = true;
@@ -29928,7 +29936,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 90000);
             var _restoreImport = window._eitiTransformersModule
                 ? Promise.resolve(window._eitiTransformersModule)
-                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             _restoreImport
                 .then(function(m) {
                     window._eitiTransformersModule = m;
@@ -29956,7 +29964,7 @@ document.addEventListener('DOMContentLoaded', function() {
             eitiUpdateAIStatus('⏳ Загружается…', cfg.model);
             var _fallbackImport = window._eitiTransformersModule
                 ? Promise.resolve(window._eitiTransformersModule)
-                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             _fallbackImport
                 .then(function(m) { window._eitiTransformersModule = m; m.env.useBrowserCache=true; return m.pipeline('feature-extraction','Xenova/'+cfg.model); })
                 .then(function(model) { eitiSemanticModel=model; eitiUpdateAIStatus('✅ Готов',cfg.model); })
@@ -30445,7 +30453,7 @@ window.eitiActivateLLM = async function() {
             if (progText) progText.textContent = 'Загрузка Transformers.js…';
             if (!window._eitiTransformersModule) {
                 window._eitiTransformersModule = await _eitiImportWithTimeout(
-                    'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000
+                    'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000
                 );
             }
             var _tm = window._eitiTransformersModule;
@@ -30497,9 +30505,10 @@ window.eitiActivateLLM = async function() {
             // jsdelivr лучше работает с COEP заголовками чем esm.run
             var mod = null;
             var cdnList = [
-                'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm/+esm',
-                'https://esm.run/@mlc-ai/web-llm',
-                'https://unpkg.com/@mlc-ai/web-llm?module'
+                // v14.16.30 (#27): точная версия на всех CDN (import() не поддерживает SRI)
+                'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.88/+esm',
+                'https://esm.run/@mlc-ai/web-llm@0.2.88',
+                'https://unpkg.com/@mlc-ai/web-llm@0.2.88?module'
             ];
             for (var ci = 0; ci < cdnList.length; ci++) {
                 try { mod = await import(cdnList[ci]); if (mod) break; } catch(e2) { console.warn('[EITI LLM] CDN fallback:', cdnList[ci], e2.message); }
@@ -55671,6 +55680,7 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
             return /^[ \t]*(`{3,}|~{3,})[ \t]*mermaid\b/im.test(String(src || ''));
         }
         var EITI_MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js';
+        var EITI_MERMAID_SRI = 'sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I'; // v14.16.30 (#27)
         var _eitiMermaidPromise = null;
         function eitiMermaidEnsure() {
             if (window.mermaid && window.mermaid.render) return Promise.resolve(window.mermaid);
@@ -55681,6 +55691,7 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
                 s.src = EITI_MERMAID_URL;
                 s.async = true;
                 s.crossOrigin = 'anonymous';
+                s.integrity = EITI_MERMAID_SRI; // v14.16.30 (#27)
                 s.onload = function() { window.mermaid ? resolve(window.mermaid) : reject(new Error('mermaid missing')); };
                 s.onerror = function() { reject(new Error('load failed')); };
                 document.head.appendChild(s);

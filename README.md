@@ -7,7 +7,7 @@
 **Персональный AI-ассистент с многослойной памятью**  
 _Клиентское PWA без backend и build step. Основной интерфейс — один HTML-файл._
 
-[![Version](https://img.shields.io/badge/version-14.16.29-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
+[![Version](https://img.shields.io/badge/version-14.16.30-gold?style=flat-square)](https://github.com/velantrian/Eiti-Test-Notes-2/commits/main)
 [![No Build Step](https://img.shields.io/badge/build-none-brightgreen?style=flat-square)](#)
 [![PWA](https://img.shields.io/badge/PWA-ready-blue?style=flat-square)](#)
 [![Offline Core](https://img.shields.io/badge/offline-core-orange?style=flat-square)](#)
@@ -65,6 +65,9 @@ python3 -m http.server 8080
 📐 Полная архитектура (для переноса в нативное приложение): **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ---
+
+## 🆕 Что нового в v14.16.30
+- 🔐 **Безопасная загрузка стороннего кода (#27):** DOMPurify 3.4.18 и mammoth 1.13.0 теперь лежат в `vendor/` (точная версия + `integrity`), CDN-скрипты подключаются с SRI; transformers.js закреплён на 3.8.1, web-llm — на 0.2.88 на всех резервных CDN; mermaid грузится с `integrity`. Добавлена **Content-Security-Policy** (meta): скрипты только со своего origin и перечисленных CDN, сеть — только к используемым AI-провайдерам, Google Drive/OAuth, Википедии и хостам моделей. Подробности — [vendor/README.md](vendor/README.md).
 
 ## 🆕 Что нового в v14.16.29
 - 🔒 **Изоляция хранилищ (#26):** все GitHub Pages аккаунта живут на одном origin, поэтому копии EITI делили localStorage, IndexedDB (`eiti_v4`, `eiti_offline`), API-ключи и кэши. Теперь у каждого деплоя свой префикс из пути (`Eiti-Test-Notes-2@@…`, `window.EitiNS`); при первом запуске старые данные **копируются** (оригиналы не трогаются), а `sw.js` удаляет только свои старые кэши. В корне origin (свой домен, localhost) префикса нет.

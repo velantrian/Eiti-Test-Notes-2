@@ -1,11 +1,11 @@
-// VELANTRIM EITI — Service Worker v14.16.29
+// VELANTRIM EITI — Service Worker v14.16.30
 // Fixes: LAZY_FILES await race, cross-origin CDN cache, updatefound wiring, SWR for data/*.json
-// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.29
+// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.30
 
-var CACHE = 'eiti-v14.16.29'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
+var CACHE = 'eiti-v14.16.30'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
 // v14.0.0: офлайн-движок и пакеты (offline/**) — отдельный кеш без лимита 24 записей (≈30 файлов),
 // cache-first + фоновое обновление; не попадает в swTrimCache.
-var OFFLINE_CACHE = 'eiti-offline-v14.16.29';
+var OFFLINE_CACHE = 'eiti-offline-v14.16.30';
 var CACHE_MAX_ENTRIES = 24;
 var BASE = self.location.pathname.replace(/sw\.js$/, '');
 // v14.16.29 (#26): префикс деплоя — как EitiNS в index.html (первый сегмент пути).
@@ -40,6 +40,7 @@ var CORE = [
     BASE + 'local/eiti_drive_sync.js', // v14.16.16: merge-движок Drive (ленивый script, но offline в precache)
     BASE + 'local/eiti_frames.js', // v14.14.0: EITI Frames — офлайн-понимание формулировок («расскажи / поясни / а зачем?»)
     BASE + 'local/eiti_care.js', // v14.14.0 intents+: EITI Care — кризис (112 + телефон доверия) и поддержка, первым в офлайн-цепочке
+    BASE + 'vendor/dompurify/3.4.18/purify.min.js', // v14.16.30 (#27): санитайзер HTML — локально (было cdnjs)
     BASE + 'local/eiti_frames.json', // v14.14.0: пакет фреймов (правится без кода; грузится лениво при первом офлайн-запросе)
     BASE + 'offline_manifest.json', // v14.14.0: хеши пакетов базы на момент установки — сверка для «🔄 Обновить базу офлайн-ответов»
     BASE + 'icon-192.png',
@@ -51,7 +52,8 @@ var CORE = [
 // Тяжёлые файлы — кешируем в той же install цепочке, но не блокируем
 var HEAVY = [
     BASE + 'sql-wasm.js',
-    BASE + 'sql-wasm.wasm'
+    BASE + 'sql-wasm.wasm',
+    BASE + 'vendor/mammoth/1.13.0/mammoth.browser.min.js' // v14.16.30 (#27): DOCX → текст, локально (было cdnjs)
 ];
 
 // Данные KB — будут кешироваться по stale-while-revalidate при первом обращении
@@ -97,7 +99,7 @@ self.addEventListener('activate', function(e) {
                     }).then(function() {
                     return self.clients.matchAll().then(function(clients) {
                         clients.forEach(function(c) {
-                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.29' });
+                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.30' });
                         });
                     });
                     });
@@ -116,6 +118,8 @@ function swIsAllowlisted(url) {
     // v14.16.16: local/* и offline eiti_*.js не вытеснять и возвращать cache-first
     if (/\/local\/eiti_[^/]+\.(js|json)$/.test(path)) return true;
     if (/\/offline\/eiti_[^/]+\.js$/.test(path)) return true;
+    // v14.16.30 (#27): локальные vendor-библиотеки с точной версией в пути — cache-first, не вытеснять
+    if (path.indexOf(BASE + 'vendor/') === 0 && /\.(m?js)$/.test(path)) return true;
     if (/\/(data|kb)\/[^/]+\.json$/i.test(path)
         || path.endsWith('_kb_v3.json')
         || path.endsWith('lemma.json')
