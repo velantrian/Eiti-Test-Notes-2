@@ -4461,6 +4461,8 @@
         window.EITI_I18N.addDict('en', {"Отправить сообщение": "Send message", "Прикрепить файл": "Attach file"}); // v14.16.x: кнопки внутри поля ввода
         window.EITI_I18N.addDict('de', {"Отправить сообщение": "Nachricht senden", "Прикрепить файл": "Datei anhängen"});
         window.EITI_I18N.addDict('en', {"📌 Настройка табов": "📌 Tab settings", "Меньше иконки (small icons)": "Small icons", "Компактные нижние табы и верхние панели — больше места на экране": "Compact bottom tabs and top bars — more room on screen", "🔍 Маленькие иконки включены": "🔍 Small icons on", "🔍 Обычные иконки": "🔍 Regular icons"}); // v14.15.1
+        window.EITI_I18N.addDict('en', {"📚 База знаний на устройстве": "📚 Knowledge base on device", "Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.": "Base sections (~460 MB) are downloaded as needed. To use everything offline, download it all over Wi-Fi.", "📥 Скачать всё по Wi-Fi": "📥 Download all over Wi-Fi"});
+        window.EITI_I18N.addDict('de', {"📚 База знаний на устройстве": "📚 Wissensbasis auf dem Gerät", "Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.": "Abschnitte (~460 MB) werden bei Bedarf geladen. Für vollen Offline-Betrieb alles per WLAN laden.", "📥 Скачать всё по Wi-Fi": "📥 Alles per WLAN laden"});
         window.EITI_I18N.addDict('en', {"Объёмный стиль": "3D depth style", "Тени, градиенты и блики на полях и кнопках": "Shadows, gradients and highlights on inputs and buttons", "3D-иконки табов": "3D tab icons", "Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах": "Fluent Emoji 3D (Microsoft, MIT) — same on every phone"}); // v14.16.32
         window.EITI_I18N.addDict('de', {"Объёмный стиль": "3D-Tiefe", "Тени, градиенты и блики на полях и кнопках": "Schatten, Verläufe und Glanz auf Feldern und Tasten", "3D-иконки табов": "3D-Tab-Symbole", "Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах": "Fluent Emoji 3D (Microsoft, MIT) — auf jedem Handy gleich"}); // v14.16.32
         window.EITI_I18N.addDict('en', {"Большая золотая шапка": "Large gold header", "Выкл — компактная шапка, больше места для текста": "Off — compact header, more room for text"}); // v14.16.32
@@ -6373,9 +6375,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: eiti-wing-shimmer 3s ease-in-out infinite;
+            animation: eiti-wing-shimmer 3s ease-in-out 3;
             margin: 0 5px;
         }
+        /* v14.16.32: анимированный filter перерисовывал шапку 60 к/с бесконечно → на сайте 3 вспышки и стоп, в APK — статично */
+        html.eiti-native .eiti-wing-char { animation: none; filter: brightness(1.12) drop-shadow(0 1px 5px rgba(0,0,0,0.55)); }
+        @media (prefers-reduced-motion: reduce) { .eiti-wing-char { animation: none; } }
 
         /* === splash animations === */
         @keyframes splash-metal-shine {
@@ -7269,8 +7274,9 @@
             background: var(--accent-color);
             opacity: 0;
             transition: opacity 0.3s;
-            animation: pulse 2s ease-in-out infinite;
+            /* v14.16.32: пульс только у активной вкладки (раньше 7–8 невидимых точек анимировались всегда) */
         }
+        .tab-item.active .tab-indicator { animation: pulse 2s ease-in-out infinite; }
         
         .tab-item.active .tab-indicator {
             opacity: 1;
@@ -9042,6 +9048,7 @@
            установка PWA там не нужна */
         html.eiti-phone[data-eiti-phone="native"] .app-header::before { display: none; }
         html.eiti-native #btn-pwa-install, html.eiti-native #pwa-install-banner { display: none !important; }
+        html:not(.eiti-native) .eiti-native-only { display: none !important; } /* v14.16.32: разделы только для APK */
         /* v14.16.32: вкладки со своей шапкой (Заметки, Дневник, Лента) — глобальная шапка скрыта, поэтому верхний
            системный отступ берёт контент; иначе кнопки уходили под статус-бар в APK (edge-to-edge) */
         html.eiti-phone body.view-notes:not(.notes-fullscreen) .app-content,
@@ -10129,6 +10136,15 @@
                                 <option value="fun">😄 С юмором</option>
                             </select>
                             <div style="font-size:11px;opacity:0.45;line-height:1.5;text-align:center;">Без сети, без ключа или при сбое ИИ EITI отвечает офлайн: диалоги, шутки, пословицы, загадки, сказки и предания («сказку на ночь», «дальше», «кто такой Кухулин»).</div>
+                        </div>
+                    </div>
+                    <!-- v14.16.32: APK — база знаний по требованию + «Скачать всё по Wi-Fi» -->
+                    <div class="settings-group eiti-native-only" id="eiti-kb-dl-settings">
+                        <div class="settings-title" data-i18n="📚 База знаний на устройстве">📚 База знаний на устройстве</div>
+                        <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
+                            <div style="font-size:12px;opacity:0.7;line-height:1.5;" data-i18n="Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.">Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.</div>
+                            <button type="button" id="eiti-kb-dl-btn" onclick="eitiKbDownloadAll()" style="padding:12px;border-radius:12px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:15px;font-weight:600;cursor:pointer;" data-i18n="📥 Скачать всё по Wi-Fi">📥 Скачать всё по Wi-Fi</button>
+                            <div id="eiti-kb-dl-status" style="font-size:12px;opacity:0.8;text-align:center;" aria-live="polite"></div>
                         </div>
                     </div>
                     <!-- v14.14.0: 🔄 БАЗА ОФЛАЙН-ОТВЕТОВ (EitiBaseHost) — обновление только по кнопке, без фоновой сети -->
@@ -17907,7 +17923,14 @@
                         window._eitiEqAnimId = requestAnimationFrame(window._eitiDrawEq);
                         // v13.4.0 P1 FIX #10: в фоне или на паузе — плоская линия, без FFT-рендера.
                         var _audioEl = document.querySelector('#playerAudio') || window._eitiCurrentAudio;
-                        if (document.hidden || (_audioEl && _audioEl.paused)) {
+                        // v14.16.32: в простое рисуем одну плоскую линию и ОСТАНАВЛИВАЕМ цикл (раньше rAF крутился 60 к/с
+                        // всегда, даже без музыки и на других вкладках). Перезапуск — play / возврат во вкладку / показ плеера.
+                        var _cvVis = _getCanvas();
+                        if (!document.hidden && _audioEl && !_audioEl.paused && (!_cvVis || _cvVis.offsetParent === null)) {
+                            cancelAnimationFrame(window._eitiEqAnimId); window._eitiEqAnimId = null; return;
+                        }
+                        if (document.hidden || !_audioEl || (_audioEl && _audioEl.paused)) {
+                            cancelAnimationFrame(window._eitiEqAnimId); window._eitiEqAnimId = null;
                             var _cIdle = _getCanvas();
                             if (_cIdle) {
                                 var _ctxIdle = _cIdle._eitiCtx || (_cIdle._eitiCtx = _cIdle.getContext('2d'));
@@ -18020,7 +18043,9 @@
                             _vizAnimId = requestAnimationFrame(draw);
                             // v13.4.0 P1 FIX #10: пропускаем кадр в фоне или на паузе.
                             var _drawAudio = document.getElementById('audio') || window._eitiCurrentAudio;
-                            if (document.hidden || (_drawAudio && _drawAudio.paused)) {
+                            // v14.16.32: пауза / фон / плеер не виден → цикл останавливается (перезапуск — play)
+                            if (document.hidden || !_drawAudio || _drawAudio.paused || cv.offsetParent === null) {
+                                cancelAnimationFrame(_vizAnimId); _vizAnimId = null;
                                 return;
                             }
                             var W = cv.offsetWidth * (window.devicePixelRatio || 1);
@@ -18088,7 +18113,10 @@
                         if (artEl && !artEl.querySelector('img.art-cover')) _startViz();
                     });
                     audio.addEventListener('pause', function() {
-                        // Не останавливаем — показываем idle
+                        // v14.16.32: цикл сам остановится в draw() (без лишних кадров на паузе)
+                    });
+                    document.addEventListener('visibilitychange', function() {
+                        if (!document.hidden && !audio.paused && !_vizAnimId) { var a2 = document.getElementById('albumArtEl'); if (a2 && !a2.querySelector('img.art-cover')) _startViz(); }
                     });
                     audio.addEventListener('loadstart', function() {
                         // При смене трека перезапускаем
@@ -34230,7 +34258,46 @@ window.eitiLLMClearAll = async function() {
             };
             EitiOffline._kbWrapped = true;
         })();
-        window.addEventListener('load', function() { setTimeout(function() { EitiKBHost.prewarm(); }, 6000); });
+        // v14.16.32: в APK база знаний лежит на сайте (~460 МБ) → индекс НЕ грузится при запуске (было 70+ запросов),
+        // а по требованию: при первом фокусе поля ввода / первом офлайн-вопросе. Сайт/PWA — как раньше (прогрев через 6 с).
+        window.addEventListener('load', function() {
+            if (!window.EITI_NATIVE) { setTimeout(function() { EitiKBHost.prewarm(); }, 6000); return; }
+            var warm = function() { document.removeEventListener('focusin', onF, true); setTimeout(function() { EitiKBHost.prewarm(); }, 400); };
+            var onF = function(e) { var t = e.target; if (t && (t.id === 'input' || t.id === 'notesAiInput')) warm(); };
+            document.addEventListener('focusin', onF, true);
+        });
+        // v14.16.32: «📥 Скачать всю базу знаний (Wi-Fi)» — все шарды и пакеты в кэш устройства (в APK — Cache Storage моста).
+        window.eitiKbDownloadAll = function(opts) {
+            opts = opts || {};
+            var st = document.getElementById('eiti-kb-dl-status'), btn = document.getElementById('eiti-kb-dl-btn');
+            var say = function(t) { if (st) st.textContent = t; };
+            var c = navigator.connection || {};
+            if (!opts.force && (c.type === 'cellular' || c.saveData)) {
+                if (!confirm('📶 Сейчас мобильная сеть. База знаний ~460 МБ. Скачать всё равно?')) return Promise.resolve({ cancelled: true });
+            }
+            if (window._eitiKbDl) return window._eitiKbDl;
+            if (btn) btn.disabled = true;
+            var done = 0, failed = 0, bytes = 0, files = [];
+            window._eitiKbDl = fetch('kb/index.json', { cache: 'no-store' }).then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function(d) {
+                Object.keys(d.domains || {}).forEach(function(k) { var m = d.domains[k]; if (m.shard) files.push(m.shard); (m.packs || []).forEach(function(p) { files.push(p); }); });
+                var total = files.length, i = 0;
+                say('📥 0 / ' + total);
+                function worker() {
+                    if (i >= files.length) return Promise.resolve();
+                    var f = files[i++];
+                    return fetch('kb/' + f).then(function(r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+                        .then(function(b) { bytes += b.size; }, function() { failed++; })
+                        .then(function() { done++; if (done % 5 === 0 || done === total) say('📥 ' + done + ' / ' + total + ' · ' + Math.round(bytes / 1048576) + ' МБ'); return worker(); });
+                }
+                return Promise.all([worker(), worker(), worker()]).then(function() {
+                    try { localStorage.setItem('eiti_kb_all_downloaded', JSON.stringify({ at: Date.now(), files: total, failed: failed, bytes: bytes })); } catch (e) {}
+                    say(failed ? ('⚠️ Скачано ' + (total - failed) + ' из ' + total + ' — повтори позже') : ('✅ База знаний на устройстве: ' + total + ' файлов · ' + Math.round(bytes / 1048576) + ' МБ'));
+                    return { files: total, failed: failed, bytes: bytes };
+                });
+            }).catch(function(e) { say('📴 Не удалось: ' + (e && e.message || e)); return { error: String(e && e.message || e) }; })
+              .then(function(r) { window._eitiKbDl = null; if (btn) btn.disabled = false; return r; });
+            return window._eitiKbDl;
+        };
         // ── v14.13.0: «Похожие / Related / Ähnliche» + «Рассуждение / Reasoning / Begründung» (local/eiti_related.js) ──
         // Кнопки под ответами KB, офлайн-сказками и заметками (в т.ч. Notes Ask AI). Похожие KB/сказок — предвычислены при сборке
         // (поле «r» в kb/packs, «rel» в offline/packs/tales_*), похожие заметки — TF-IDF на устройстве, без сети.
