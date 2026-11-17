@@ -89,8 +89,11 @@ test('темы окна файла: контраст названия и кно�
   assert.equal(s.eitiFvThemeGet(), 'light');
 });
 
-const DOC = ['eitiDocAILongWarning', 'eitiDocAIOutputBudget', 'eitiDocAILongRule', 'eitiDocAIBuildMessages', 'eitiDocAITruncationNote', 'eitiDocAIApplyText', 'eitiDocAIChangedRange', 'eitiDocAIParseCompletion'];
-const d = () => loadFunctions(DOC, { EITI_DOCAI_LONG_CHARS: 30000, EITI_DOCAI_HISTORY_TURNS: 10 });
+const DOC = ['target0', 'eitiDocAILongWarning', 'eitiDocAIOutputBudget', 'eitiDocAILongRule', 'eitiDocAIBuildMessages', 'eitiDocAITruncationNote', 'eitiDocAIApplyText', 'eitiDocAIChangedRange', 'eitiDocAIParseCompletion'];
+const d = () => loadFunctions(DOC, { EITI_DOCAI_LONG_CHARS: 30000, EITI_DOCAI_HISTORY_TURNS: 10,
+  // v14.16.32: потолки вывода по провайдерам и размер контекста
+  EITI_DOCAI_OUT_CAP: { deepseek: 131072, gemini: 65536, openai: 128000, grok: 131072, openrouter: 65536 },
+  EITI_DOCAI_CTX: { deepseek: 1000000, gemini: 1000000, openai: 1000000, grok: 2000000, openrouter: 200000 } });
 
 test('история окна уходит в запрос, лимит — последние 10 пар', () => {
   const s = d();
@@ -106,10 +109,11 @@ test('история окна уходит в запрос, лимит — по�
 test('длинный текст: больший лимит ответа и предупреждение', () => {
   const s = d();
   assert.equal(s.eitiDocAILongWarning(1000), '');
-  assert.match(s.eitiDocAILongWarning(45000), /Длинный текст/);
+  // v14.16.32: вместо предупреждения — доля контекста модели; потолки вывода подняты (DeepSeek V4 — до 384K)
+  assert.match(s.eitiDocAILongWarning(45000), /контекста deepseek/);
   assert.ok(s.eitiDocAIOutputBudget(40000, 'openrouter') > 12000);
-  assert.ok(s.eitiDocAIOutputBudget(40000, 'deepseek') <= 16000);
-  assert.equal(s.eitiDocAIOutputBudget(100, 'openai'), 4000);
+  assert.ok(s.eitiDocAIOutputBudget(400000, 'deepseek') === 131072);
+  assert.equal(s.eitiDocAIOutputBudget(100, 'openai'), 8000);
   assert.match(s.eitiDocAILongRule(40000), /replace_text/);
 });
 
@@ -150,7 +154,7 @@ test('«как в чате» с ChatGPT и Grok — выбранная моде�
 });
 
 test('eitiDocAIRequest не подставляет другую модель, если нет ключа выбранной', async () => {
-  const s = loadFunctions(['eitiDocAIKey', 'eitiDocAIRequest', 'eitiDocAIParseCompletion'], {
+  const s = loadFunctions(['eitiDocAIKey', 'eitiDocAIRequest', '_eitiDocAIRequestOnce', '_eitiDocAISSE', 'eitiDocAIParseCompletion'], { EITI_DOCAI_MAX_PARTS: 4,
     localStorage: { getItem: (k) => (k === 'deepseek_api_key' ? 'ds' : null) },
     fetch: () => { throw new Error('fetch must not be called'); },
   });
@@ -159,7 +163,7 @@ test('eitiDocAIRequest не подставляет другую модель, е
 
 test('eitiDocAIRequest шлёт историю и модель Grok в api.x.ai', async () => {
   let seen = null;
-  const s = loadFunctions(['eitiDocAIKey', 'eitiDocAIRequest', 'eitiDocAIParseCompletion'], {
+  const s = loadFunctions(['eitiDocAIKey', 'eitiDocAIRequest', '_eitiDocAIRequestOnce', '_eitiDocAISSE', 'eitiDocAIParseCompletion'], { EITI_DOCAI_MAX_PARTS: 4,
     localStorage: { getItem: (k) => (k === 'eiti_grok_key' ? 'xai-k' : null) },
     fetch: (url, opts) => { seen = { url, body: JSON.parse(opts.body) }; return Promise.resolve({ json: () => Promise.resolve({ choices: [{ message: { content: 'ответ' }, finish_reason: 'stop' }] }) }); },
   });
@@ -171,6 +175,22 @@ test('eitiDocAIRequest шлёт историю и модель Grok в api.x.ai'
   assert.equal(seen.body.messages.length, 4);
   assert.equal(res.text, 'ответ');
   assert.equal(res.truncated, false);
+  assert.equal(seen.body.stream, true); // v14.16.32: потоковая передача
+});
+
+test('v14.16.32: обрыв по лимиту → автопродолжение, части склеиваются', async () => {
+  const calls = [];
+  const parts = [{ content: 'A'.repeat(300), finish_reason: 'length' }, { content: 'B'.repeat(10), finish_reason: 'stop' }];
+  const s = loadFunctions(['eitiDocAIKey', 'eitiDocAIRequest', '_eitiDocAIRequestOnce', '_eitiDocAISSE', 'eitiDocAIParseCompletion'], { EITI_DOCAI_MAX_PARTS: 4,
+    localStorage: { getItem: (k) => (k === 'eiti_grok_key' ? 'xai-k' : null) },
+    fetch: (url, opts) => { const b = JSON.parse(opts.body); calls.push(b.messages.length); const p = parts[calls.length - 1];
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({ choices: [{ message: { content: p.content }, finish_reason: p.finish_reason }] }) }); },
+  });
+  const res = await s.eitiDocAIRequest({ provider: 'grok', model: 'grok-4.7' }, [{ role: 'user', content: 'q' }], 9000);
+  assert.equal(res.text, 'A'.repeat(300) + 'B'.repeat(10));
+  assert.equal(res.parts, 2);
+  assert.equal(res.truncated, false);
+  assert.deepEqual(calls, [1, 3]);
 });
 
 test('✨ Оформить: обрезка, потеря текста и обрамление ``` обрабатываются', () => {

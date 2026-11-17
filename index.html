@@ -4694,6 +4694,7 @@
     <script src="./local/eiti_care.js" defer></script>
     <script src="./local/eiti_voice.js" defer></script>
     <script src="./local/eiti_action_gate.js" defer></script>
+    <script src="./local/eiti_doc_edits.js" defer></script>
 <script>
 (function(){
   // v14.16.32: нативное приложение (Capacitor APK) — флаг до первой отрисовки. Мост Capacitor внедряется
@@ -9876,6 +9877,11 @@
                                                style="width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--panel-bg);color:var(--text-color);font-size:13px;"
                                                onchange="if(this.value.trim())eitiNotesAISetModel(this.value.trim())">
                                         <div id="notes-ai-model-label" style="font-size:11px;opacity:0.6;display:flex;align-items:center;min-width:0;"></div>
+                                        <!-- v14.16.32: правки длинных текстов — по умолчанию через просмотр изменений -->
+                                        <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;">
+                                            <input type="checkbox" id="notes-ai-apply-now" onchange="eitiNotesAISetApplyNow(this.checked)" style="margin-top:2px;">
+                                            <span><b data-i18n="⚡ Применять сразу">⚡ Применять сразу</b><br><span style="font-size:11px;opacity:0.6;" data-i18n="Небольшие правки (до 5 абзацев) — без просмотра; большие всё равно с просмотром изменений. Отмена ↩️ всегда.">Небольшие правки (до 5 абзацев) — без просмотра; большие всё равно с просмотром изменений. Отмена ↩️ всегда.</span></span>
+                                        </label>
                                         <div style="font-size:13px;font-weight:600;" data-i18n="Размер панели">Размер панели</div>
                                         <div style="display:flex;gap:6px;">
                                             <button type="button" id="notes-ai-size-small" onclick="eitiNotesAISetSize('small')" style="flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:600;cursor:pointer;" data-i18n="Малый">Малый</button>
@@ -41752,6 +41758,8 @@ window.eitiLLMClearAll = async function() {
                 'Допустимые action: replace_note (поле body — полный новый текст, title и tags необязательны), ' +
                 'append (text — дописываемый фрагмент), replace_selection (text — замена выделенного фрагмента, только если selectedText не пуст), ' +
                 'replace_text (find — точный уникальный фрагмент из body, text — замена; пустой text удаляет фрагмент), ' +
+                'edits (edits — массив точечных правок [{"find":"точный фрагмент из body","text":"замена"}], до 50 штук; find копируй дословно и делай его уникальным; ' +
+                'для дописывания в конец {"position":"end","text":"..."}; замена целого раздела без повтора старого текста: {"from":"первые слова раздела","to":"последние слова раздела","text":"новый раздел"}) — ПРЕДПОЧИТАЙ edits для любых правок длинного текста вместо replace_note, ' +
                 'set_title (title), set_tags (tags — массив строк), delete_note (без данных). ' +
                 'Не отправляй mutation, если пользователь не просил редактирование. Удаляй заметку только по прямой просьбе пользователя; ' +
                 'для замены всего текста сохрани смысл и все нужные детали, если пользователь не просил их убрать. ' +
@@ -42037,7 +42045,7 @@ window.eitiLLMClearAll = async function() {
             }
             if (!data || typeof data !== 'object' || Array.isArray(data)) return { reply: rawText, mutation: null };
             var mutation = data.mutation || (data.action ? data : null);
-            var allowed = { replace_note: true, append: true, replace_selection: true, replace_text: true, set_title: true, set_tags: true, delete_note: true };
+            var allowed = { replace_note: true, append: true, replace_selection: true, replace_text: true, edits: true, set_title: true, set_tags: true, delete_note: true }; // v14.16.32: + edits
             if (!mutation || !allowed[mutation.action]) {
                 return { reply: (typeof data.reply === 'string' ? data.reply : rawText), mutation: null };
             }
@@ -42112,6 +42120,11 @@ window.eitiLLMClearAll = async function() {
                 if (foundAt < 0) return { ok: false, message: 'Исходный фрагмент не найден в текущей заметке.' };
                 if (body.indexOf(find, foundAt + find.length) !== -1) return { ok: false, message: 'Фрагмент встречается несколько раз. Выделите нужное место в заметке и повторите просьбу.' };
                 nextBody = body.slice(0, foundAt) + String(mutation.text || '') + body.slice(foundAt + find.length);
+            } else if (action === 'edits') { // v14.16.32: пакет точечных правок (атомарно)
+                if (!window.EitiDocEdits) return { ok: false, message: 'Модуль правок не загружен.' };
+                var er = EitiDocEdits.applyEdits(body, mutation.edits);
+                if (!er.ok) return { ok: false, message: er.message };
+                nextBody = er.body;
             } else if (action === 'set_title') {
                 if (typeof mutation.title !== 'string') return { ok: false, message: 'Не задан новый заголовок.' };
                 titleEl.value = mutation.title;
@@ -42141,6 +42154,96 @@ window.eitiLLMClearAll = async function() {
             if (typeof showToast === 'function') showToast(saved ? '✨ ИИ изменил и сохранил заметку' : '✨ ИИ изменил черновик — сохраните его вручную', 2200);
             return { ok: true, saved: saved, action: action };
         }
+        // ── v14.16.32: просмотр изменений (как suggested edits в Notion) ──
+        function eitiNotesAIIsApplyNow() { try { return localStorage.getItem('eiti_notes_ai_apply_now') === '1'; } catch (e) { return false; } }
+        function eitiNotesAISetApplyNow(on) {
+            try { localStorage.setItem('eiti_notes_ai_apply_now', on ? '1' : '0'); } catch (e) {}
+            var cb = document.getElementById('notes-ai-apply-now'); if (cb) cb.checked = !!on;
+        }
+        window.eitiNotesAISetApplyNow = eitiNotesAISetApplyNow; window.eitiNotesAIIsApplyNow = eitiNotesAIIsApplyNow;
+        document.addEventListener('DOMContentLoaded', function() { var cb = document.getElementById('notes-ai-apply-now'); if (cb) cb.checked = eitiNotesAIIsApplyNow(); });
+        var EITI_NOTES_AI_APPLY_NOW_PARAS = 5;
+        // → null (применить как раньше) | { error } | { mutation } (сразу) | { preview, hunks, base, mutation }
+        function eitiNotesAIPlanEdit(mutation, snapshot, userMessage) {
+            if (!mutation || !window.EitiDocEdits || !snapshot) return null;
+            var a = String(mutation.action || '');
+            if (['replace_note', 'append', 'replace_selection', 'replace_text', 'edits'].indexOf(a) === -1) return null;
+            if (!eitiNotesAIUserRequestedEdit(userMessage)) return null; // откажет eitiNotesAIApplyMutation
+            var base = String(snapshot.body || ''), next;
+            if (a === 'edits') {
+                var er = EitiDocEdits.applyEdits(base, mutation.edits);
+                if (!er.ok) return { error: er.message };
+                next = er.body;
+            } else {
+                var r = eitiDocAIApplyText(base, mutation, { start: snapshot.selectionStart, end: snapshot.selectionEnd, text: snapshot.selectionText });
+                if (!r.ok) return null;
+                next = r.body;
+            }
+            var full = { action: 'replace_note', body: next };
+            if (typeof mutation.title === 'string') full.title = mutation.title;
+            if (Array.isArray(mutation.tags)) full.tags = mutation.tags;
+            if (next === base) return { mutation: full };
+            var hunks = EitiDocEdits.diffHunks(base, next);
+            if (eitiNotesAIIsApplyNow() && EitiDocEdits.changedParagraphs(hunks) <= EITI_NOTES_AI_APPLY_NOW_PARAS) return { mutation: full };
+            return { preview: true, hunks: hunks, base: base, mutation: full };
+        }
+        function eitiNotesAIRenderPreview(host, plan, snapshot, userMessage) {
+            var esc = function(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+            var acc = plan.hunks.map(function() { return true; });
+            var card = document.createElement('div');
+            card.className = 'notes-ai-diff';
+            card.style.cssText = 'margin-top:8px;border:1px solid var(--border-color);border-radius:12px;overflow:hidden;font-size:13px;';
+            var list = plan.hunks.map(function(hk, i) {
+                return '<div class="nad-hunk" data-i="' + i + '" style="padding:8px 10px;border-bottom:1px solid var(--border-color);">' +
+                    (hk.old ? '<div class="nad-old" style="background:rgba(255,80,80,0.12);color:inherit;text-decoration:line-through;opacity:.75;white-space:pre-wrap;overflow-wrap:anywhere;max-height:140px;overflow:auto;border-radius:6px;padding:4px 6px;">' + esc(hk.old.slice(0, 4000)) + '</div>' : '') +
+                    (hk.text ? '<div class="nad-new" style="background:rgba(80,200,120,0.14);white-space:pre-wrap;overflow-wrap:anywhere;max-height:200px;overflow:auto;border-radius:6px;padding:4px 6px;margin-top:4px;">' + esc(hk.text.slice(0, 6000)) + '</div>' : '<div style="font-size:11px;opacity:.6;margin-top:4px;">(удаление)</div>') +
+                    '<div style="display:flex;gap:6px;margin-top:6px;justify-content:flex-end;">' +
+                    '<button type="button" class="nad-yes" style="padding:3px 10px;border-radius:8px;border:1px solid rgba(80,200,120,.6);background:rgba(80,200,120,.25);color:inherit;cursor:pointer;">✔</button>' +
+                    '<button type="button" class="nad-no" style="padding:3px 10px;border-radius:8px;border:1px solid var(--border-color);background:transparent;color:inherit;cursor:pointer;">✖</button></div></div>';
+            }).join('');
+            card.innerHTML = '<div style="padding:8px 10px;font-weight:600;background:rgba(255,215,0,0.08);">📝 Изменения (' + plan.hunks.length + ')</div>' + list +
+                '<div class="nad-actions" style="display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;">' +
+                '<button type="button" class="nad-all" style="padding:6px 12px;border-radius:10px;border:none;background:var(--accent-color);color:#000;font-weight:700;cursor:pointer;">✅ Принять всё</button>' +
+                '<button type="button" class="nad-sel" style="padding:6px 12px;border-radius:10px;border:1px solid var(--border-color);background:transparent;color:inherit;cursor:pointer;">Применить выбранное</button>' +
+                '<button type="button" class="nad-none" style="padding:6px 12px;border-radius:10px;border:1px solid var(--border-color);background:transparent;color:inherit;cursor:pointer;">✖ Отклонить всё</button></div>' +
+                '<div class="nad-status" style="padding:0 10px 8px;font-size:12px;opacity:.8;"></div>';
+            function paint() {
+                card.querySelectorAll('.nad-hunk').forEach(function(el) {
+                    var i = +el.getAttribute('data-i');
+                    el.style.opacity = acc[i] ? '1' : '0.45';
+                    el.querySelector('.nad-yes').style.fontWeight = acc[i] ? '700' : '400';
+                    el.setAttribute('data-accepted', acc[i] ? '1' : '0');
+                });
+                var n = acc.filter(Boolean).length;
+                card.querySelector('.nad-sel').textContent = 'Применить выбранное (' + n + ')';
+            }
+            function finish(text) {
+                card.querySelectorAll('button').forEach(function(b) { b.disabled = true; });
+                card.querySelector('.nad-status').textContent = text;
+                card.setAttribute('data-done', '1');
+            }
+            function apply(mask) {
+                var n = mask.filter(Boolean).length;
+                if (!n) { finish('✖ Изменения отклонены — текст не изменён.'); return; }
+                var body = EitiDocEdits.applyHunks(plan.base, plan.hunks, function(hk) { return mask[hk.id]; });
+                var m = Object.assign({}, plan.mutation, { body: body });
+                var res = eitiNotesAIApplyMutation(m, snapshot, userMessage);
+                if (res && res.ok) finish('✅ Применено ' + n + ' из ' + plan.hunks.length + ' · ↩️ отменить — кнопка «Отменить правку ИИ»');
+                else card.querySelector('.nad-status').textContent = (res && res.message) || '⚠️ Не удалось применить';
+            }
+            card.addEventListener('click', function(e) {
+                var t = e.target, hEl = t.closest && t.closest('.nad-hunk');
+                if (hEl && t.classList.contains('nad-yes')) { acc[+hEl.getAttribute('data-i')] = true; paint(); }
+                else if (hEl && t.classList.contains('nad-no')) { acc[+hEl.getAttribute('data-i')] = false; paint(); }
+                else if (t.classList.contains('nad-all')) apply(plan.hunks.map(function() { return true; }));
+                else if (t.classList.contains('nad-sel')) apply(acc.slice());
+                else if (t.classList.contains('nad-none')) apply(plan.hunks.map(function() { return false; }));
+            });
+            host.appendChild(card);
+            paint();
+            return card;
+        }
+        window.eitiNotesAIPlanEdit = eitiNotesAIPlanEdit; window.eitiNotesAIRenderPreview = eitiNotesAIRenderPreview;
         function eitiNotesAIPresetModels() {
             return [
                 { id: 'same', label: 'Как в чате' },
@@ -42494,13 +42597,28 @@ window.eitiLLMClearAll = async function() {
             _eitiNotesAIBusy = true;
             var longWarn = (typeof eitiDocAILongWarning === 'function') ? eitiDocAILongWarning(body.length) : '';
             if (longWarn && box) eitiNotesAIPaintMsg(box, 'assistant', longWarn, true);
+            // v14.16.32: прогресс длинного ответа (потоковая передача: символы / части)
+            window._eitiDocAIProgress = function(p) {
+                if (!live || !p) return;
+                live.textContent = '✍️ ИИ пишет… ' + (p.chars ? Math.round(p.chars / 100) / 10 + ' тыс. символов' : '') + (p.part > 1 ? ' · часть ' + p.part : '') + (p.sec ? ' · ' + p.sec + ' с' : '');
+            };
+            var _gate = eitiDocAICostGate(target0(), body.length, msg);
+            if (!_gate) { _eitiNotesAIBusy = false; if (live) live.textContent = '⏸ Отменено — большая правка не отправлена.'; if (_eitiNotesAIChats[key].length) _eitiNotesAIChats[key].pop(); return Promise.resolve(); }
             return eitiNotesAICall(msg, title, body, selectionText, tags, priorHistory).then(function(res) {
                 var reply = (res && typeof res === 'object') ? res.text : res;
                 var trunc = (typeof eitiDocAITruncationNote === 'function') ? eitiDocAITruncationNote(reply, !!(res && res.truncated)) : { blockMutation: false, note: '' };
                 var parsed = eitiNotesAIParseResponse(reply);
                 if (trunc.blockMutation) parsed = { reply: trunc.note, mutation: null }; // v13.8.0: обрезанная правка не применяется молча
-                var mutationResult = parsed.mutation ? eitiNotesAIApplyMutation(parsed.mutation, snapshot, msg) : null;
+                // v14.16.32: правки текста — сначала просмотр изменений (✔/✖ по кускам), «⚡ Применять сразу» — для мелких
+                var mutationResult = null, previewPlan = null;
+                if (parsed.mutation) {
+                    var plan = eitiNotesAIPlanEdit(parsed.mutation, snapshot, msg);
+                    if (plan && plan.error) mutationResult = { ok: false, message: plan.error };
+                    else if (plan && plan.preview) { previewPlan = plan; mutationResult = { ok: true, preview: true }; }
+                    else mutationResult = eitiNotesAIApplyMutation((plan && plan.mutation) || parsed.mutation, snapshot, msg);
+                }
                 var out = String(parsed.reply || '').trim();
+                if (previewPlan) out = (out ? out + '\n\n' : '') + '👀 Проверьте изменения ниже: ' + previewPlan.hunks.length + ' ' + (previewPlan.hunks.length === 1 ? 'правка' : 'правок') + '.';
                 if (!trunc.blockMutation && trunc.note) out += trunc.note;
                 if (mutationResult && mutationResult.ok && mutationResult.deleted) {
                     out = out || (mutationResult.pendingConfirmation ? 'ИИ запросил удаление этой заметки. Подтвердите удаление в окне приложения.' : 'Заметка удалена.');
@@ -42519,7 +42637,8 @@ window.eitiLLMClearAll = async function() {
                     ins.textContent = 'Добавить в конец';
                     ins.style.cssText = 'display:block;margin-top:6px;padding:4px 8px;border-radius:8px;border:1px solid var(--border-color);background:transparent;color:inherit;font-size:11px;cursor:pointer;';
                     ins.onclick = function() { eitiNotesAIInsertIntoNote(out); };
-                    live.appendChild(ins);
+                    if (!previewPlan) live.appendChild(ins);
+                    if (previewPlan) eitiNotesAIRenderPreview(live, previewPlan, snapshot, msg);
                     eitiNotesAIRelBar(live);
                 }
                 var input = document.getElementById('notesAiInput');
@@ -56126,19 +56245,41 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
         // ── v13.8.0: общий AI-слой для Notes AI и AI Docs в файлах ───────────
         var EITI_DOCAI_LONG_CHARS = 30000;
         var EITI_DOCAI_HISTORY_TURNS = 10;
+        // v14.16.32: потолки вывода по провайдерам (официальные лимиты 11.2026: DeepSeek V4 — до 384K, Gemini 4 — 64K,
+        // GPT-6.x — 128K, Grok 4.7 — 128K; OpenRouter — по модели, берём осторожно 64K). Правка длинного текста идёт патчем
+        // edits, поэтому обычно нужно намного меньше; потолок важен для полного переписывания.
+        var EITI_DOCAI_OUT_CAP = { deepseek: 131072, gemini: 65536, openai: 128000, grok: 131072, openrouter: 65536 };
+        var EITI_DOCAI_CTX = { deepseek: 1000000, gemini: 1000000, openai: 1000000, grok: 2000000, openrouter: 200000 };
+        // оценка цены вывода, $ за 1M токенов (для подтверждения больших правок; правится здесь)
+        var EITI_DOCAI_OUT_PRICE = { deepseek: 2.19, gemini: 2.5, openai: 10, grok: 15, openrouter: 10 };
+        var EITI_DOCAI_CONFIRM_TOKENS = 50000;
+        function target0() { try { return (typeof eitiNotesAIResolveTarget === 'function' && eitiNotesAIResolveTarget()) || {}; } catch (e) { return {}; } }
+        // Подтверждение перед правкой, которая может выдать > 50K токенов (полное переписывание длинного текста)
+        function eitiDocAICostGate(target, len, userMsg) {
+            var p = (target && target.provider) || 'deepseek';
+            if (!/(перепиш|rewrite|переведи|translate|übersetz|umschreib|переделай всё|весь текст|целиком)/i.test(String(userMsg || ''))) return true;
+            var tok = window.EitiDocEdits ? EitiDocEdits.estimateTokens(len) : Math.ceil(len / 2.6);
+            if (tok < EITI_DOCAI_CONFIRM_TOKENS) return true;
+            var usd = tok / 1e6 * (EITI_DOCAI_OUT_PRICE[p] || 10);
+            var q = '✍️ Полное переписывание ≈ ' + Math.round(tok / 1000) + ' тыс. токенов ответа (≈ $' + usd.toFixed(2) + ', оценка для ' + p + ').\n\nТочечные правки обычно в 10–50 раз дешевле. Отправить?';
+            try { return window.confirm(q); } catch (e) { return true; }
+        }
         function eitiDocAILongWarning(len) {
             var n = Number(len) || 0;
             if (n < EITI_DOCAI_LONG_CHARS) return '';
-            return '⚠️ Длинный текст (' + n.toLocaleString('ru') + ' символов). ИИ видит его целиком, но полностью переписать такой текст за один ответ может не получиться — лучше просить точечные правки (раздел, абзац, фраза).';
+            // v14.16.32: вместо предупреждения — сколько занимает текст в контексте модели
+            var t = target0(), p = (t && t.provider) || 'deepseek', ctx = EITI_DOCAI_CTX[p] || 128000;
+            var tok = Math.ceil(n / 2.6);
+            return '📏 Текст ' + n.toLocaleString('ru') + ' символов ≈ ' + Math.round(tok / 1000) + ' тыс. токенов — ' + Math.max(1, Math.round(tok / ctx * 100)) + '% контекста ' + p + '. ИИ видит его целиком; правки придут точечно (просмотр изменений).';
         }
         function eitiDocAIOutputBudget(len, provider) {
             var need = Math.ceil((Number(len) || 0) / 2.5) + 2500;
-            var cap = (provider === 'deepseek') ? 16000 : 32000;
-            return Math.min(cap, Math.max(4000, need));
+            var cap = EITI_DOCAI_OUT_CAP[provider] || 32000; // v14.16.32: было 16K/32K → обрезка длинных правок
+            return Math.min(cap, Math.max(8000, need));
         }
         function eitiDocAILongRule(len) {
             if ((Number(len) || 0) < EITI_DOCAI_LONG_CHARS) return '';
-            return '\n\nТекст очень длинный: для правок предпочитай точечные действия replace_text / append / replace_selection вместо полного переписывания, чтобы ответ не обрезался.';
+            return '\n\nТекст очень длинный: используй action "edits" (точечные правки по разделам). Для перевода/переписывания всего текста — тоже edits по разделам : {"from":"первые слова раздела","to":"последние слова раздела","text":"новый раздел"} — не повторяй старый текст целиком), а не replace_note. Для правок предпочитай точечные действия replace_text / append / replace_selection вместо полного переписывания, чтобы ответ не обрезался.';
         }
         function eitiDocAIBuildMessages(system, history, userMsg) {
             var msgs = [];
@@ -56189,7 +56330,52 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
             if (Array.isArray(txt)) txt = txt.map(function(p) { return p && p.text ? p.text : ''; }).join('');
             return { text: String(txt || ''), truncated: !!(ch && (ch.finish_reason === 'length' || ch.finish_reason === 'max_tokens')) };
         }
+        // v14.16.32: длинные ответы — потоковая передача (прогресс) + автопродолжение, если модель упёрлась в лимит вывода
+        var EITI_DOCAI_MAX_PARTS = 4;
         function eitiDocAIRequest(target, messages, maxTok) {
+            var t0 = Date.now(), acc = '', part = 0;
+            function round(msgs) {
+                part++;
+                return _eitiDocAIRequestOnce(target, msgs, maxTok, function(chars) {
+                    if (typeof window._eitiDocAIProgress === 'function') window._eitiDocAIProgress({ chars: acc.length + chars, part: part, sec: Math.round((Date.now() - t0) / 1000) });
+                }).then(function(res) {
+                    acc += res.text || '';
+                    if (res.truncated && part < EITI_DOCAI_MAX_PARTS && (res.text || '').length > 200) {
+                        return round(messages.concat([{ role: 'assistant', content: acc },
+                            { role: 'user', content: 'Ответ оборвался на лимите длины. Продолжи РОВНО с места обрыва (с того же символа), без повторов, без вступления и без Markdown-обёртки — только продолжение.' }]));
+                    }
+                    res.text = acc; res.parts = part;
+                    return res;
+                });
+            }
+            return round(messages);
+        }
+        function _eitiDocAISSE(r, onChars) {
+            // OpenAI-совместимый SSE → { choices: [{ message: { content }, finish_reason }] }
+            var reader = r.body.getReader(), dec = new TextDecoder(), buf = '', text = '', fin = null, err = null, last = 0;
+            function pump() {
+                return reader.read().then(function(x) {
+                    if (x.done) return;
+                    buf += dec.decode(x.value, { stream: true });
+                    var lines = buf.split('\n'); buf = lines.pop();
+                    lines.forEach(function(l) {
+                        l = l.trim(); if (l.indexOf('data:') !== 0) return;
+                        var p = l.slice(5).trim(); if (!p || p === '[DONE]') return;
+                        try {
+                            var j = JSON.parse(p);
+                            if (j.error) { err = j.error; return; }
+                            var c = j.choices && j.choices[0];
+                            if (c && c.delta && typeof c.delta.content === 'string') text += c.delta.content;
+                            if (c && c.finish_reason) fin = c.finish_reason;
+                        } catch (e) {}
+                    });
+                    if (onChars && text.length - last > 400) { last = text.length; onChars(text.length); }
+                    return pump();
+                });
+            }
+            return pump().then(function() { return err ? { error: err } : { choices: [{ message: { content: text }, finish_reason: fin }] }; });
+        }
+        function _eitiDocAIRequestOnce(target, messages, maxTok, onChars) {
             var provider = target && target.provider ? target.provider : '';
             var model = target && target.model ? target.model : '';
             if (!provider) return Promise.reject(new Error('❌ Не удалось определить модель. Выбери провайдера в Настройках.'));
@@ -56218,7 +56404,12 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
                 }
             }
             var send = function(b) {
-                return fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(b) }).then(function(r) { return r.json(); });
+                if (provider !== 'gemini') b.stream = true; // v14.16.32: поток — видно прогресс, нет таймаута на длинном ответе
+                return fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(b) }).then(function(r) {
+                    var ct = (r.headers && r.headers.get && r.headers.get('content-type')) || '';
+                    if (r.ok && /event-stream/i.test(ct) && r.body && r.body.getReader) return _eitiDocAISSE(r, onChars);
+                    return r.json();
+                });
             };
             return send(body).then(function(d) {
                 var errTxt = d && d.error ? JSON.stringify(d.error) : '';
