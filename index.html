@@ -2,6 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <!-- v14.16.30 (#27): Content-Security-Policy. GitHub Pages не даёт ставить заголовки, поэтому meta.
+         script-src: свой origin + CDN с точными версиями (import() transformers.js / web-llm, mermaid) + Google Identity; PDF.js — локально (v14.16.31);
+         'unsafe-inline' пока нужен — в index.html сотни inline-обработчиков (onclick=…); 'wasm-unsafe-eval' — SQLite / ONNX / WebLLM.
+         connect-src: только реально используемые API провайдеров, Google Drive/OAuth, Википедия, хосты моделей; wss: — для
+         пользовательского голосового прокси (любой wss://, см. eitiVoiceProxyValid) и ws://localhost. Новые эндпоинты — добавлять сюда
+         (проверяется tests/test_v141630.py). frame-ancestors в meta не работает. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://accounts.google.com/gsi/client; worker-src 'self' blob: https://cdn.jsdelivr.net; connect-src 'self' data: blob: https://api.deepseek.com https://generativelanguage.googleapis.com wss://generativelanguage.googleapis.com https://openrouter.ai https://api.openai.com https://api.x.ai wss://api.x.ai https://api.mistral.ai https://api.anthropic.com https://dashscope.aliyuncs.com https://dashscope-intl.aliyuncs.com https://api.tavily.com https://api.jina.ai https://api.voyageai.com https://api.elevenlabs.io https://texttospeech.googleapis.com https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com https://ru.wikipedia.org https://en.wikipedia.org https://cdn.jsdelivr.net https://esm.run https://unpkg.com https://huggingface.co https://*.huggingface.co https://*.hf.co https://raw.githubusercontent.com wss: ws://localhost:* ws://127.0.0.1:*; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; frame-src 'self' blob: data: https://accounts.google.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2b1e16">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,6 +28,243 @@
     <link rel="shortcut icon" href="icon-192.png">
     <title>𓆩 VELANTRIM EITI 𓆪</title>
     <script>
+    /* v14.16.29 (#26): изоляция хранилищ браузера по префиксу деплоя.
+     * Все GitHub Pages аккаунта живут на одном origin (velantrian.github.io), поэтому
+     * localStorage / IndexedDB / Cache Storage у копий EITI были общими. Префикс берётся из
+     * первого сегмента пути (/Eiti-Test-Notes-2/ → «Eiti-Test-Notes-2@@»); в корне origin
+     * (localhost, свой домен) префикса нет и поведение прежнее.
+     * Одноразовая миграция КОПИРУЕТ старые данные без префикса (оригиналы не трогаем —
+     * их использует velantrim-eiti). Должен идти ПЕРВЫМ скриптом страницы. */
+    (function (w) {
+        'use strict';
+        function nsFromPath(p) {
+            var m = /^\/([^\/]+)\//.exec(String(p || '/'));
+            return m ? m[1].replace(/[^A-Za-z0-9._-]/g, '_') : '';
+        }
+        var NS = nsFromPath(w.location && w.location.pathname);
+        var P = NS ? NS + '@@' : '';
+        // Версии БД, которые открывает index.html (сверяются тестом test_v141629.py).
+        var IDB_MIGRATE = { eiti_v4: 18, eiti_offline: 1 };
+        var api = { ns: NS, prefix: P, active: !!NS, nsFromPath: nsFromPath, IDB_MIGRATE: IDB_MIGRATE, ready: Promise.resolve('none'), status: 'none' };
+        w.EitiNS = api;
+        if (!NS) return;
+        var MIG_LS = P + '__eiti_ns_ls_migrated_v1';
+        var MIG_IDB = P + '__eiti_ns_idb_migrated_v1';
+        var raw = null;
+        try { raw = w.localStorage; } catch (e) { raw = null; }
+
+        // ── localStorage: Proxy с префиксом ─────────────────────────────────────
+        if (raw) {
+            var ownKeys = function () {
+                var out = [];
+                for (var i = 0; i < raw.length; i++) { var k = raw.key(i); if (k && k.indexOf(P) === 0) out.push(k.slice(P.length)); }
+                return out;
+            };
+            var store = {
+                getItem: function (k) { return raw.getItem(P + k); },
+                setItem: function (k, v) { raw.setItem(P + k, v); },
+                removeItem: function (k) { raw.removeItem(P + k); },
+                key: function (i) { var ks = ownKeys(); i = Number(i) || 0; return i >= 0 && i < ks.length ? ks[i] : null; },
+                clear: function () { ownKeys().forEach(function (k) { raw.removeItem(P + k); }); }
+            };
+            var proxy = new Proxy(store, {
+                get: function (t, prop) {
+                    if (prop === 'length') return ownKeys().length;
+                    if (typeof prop === 'symbol' || prop in t) return t[prop];
+                    var v = raw.getItem(P + prop); return v === null ? undefined : v;
+                },
+                set: function (t, prop, v) { if (typeof prop === 'symbol') { t[prop] = v; return true; } raw.setItem(P + prop, String(v)); return true; },
+                deleteProperty: function (t, prop) { if (typeof prop !== 'symbol') raw.removeItem(P + prop); return true; },
+                has: function (t, prop) { return prop in t || prop === 'length' || (typeof prop === 'string' && raw.getItem(P + prop) !== null); },
+                ownKeys: function () { return ownKeys(); },
+                getOwnPropertyDescriptor: function (t, prop) {
+                    if (typeof prop !== 'string') return undefined;
+                    var v = raw.getItem(P + prop);
+                    return v === null ? undefined : { value: v, writable: true, enumerable: true, configurable: true };
+                }
+            });
+            // Одноразовая миграция: копируем ключи без префикса (и не чужих неймспейсов «…@@»).
+            try {
+                if (raw.getItem(MIG_LS) !== '1') {
+                    var legacy = [];
+                    for (var i = 0; i < raw.length; i++) { var k = raw.key(i); if (k && k.indexOf('@@') < 0) legacy.push(k); }
+                    legacy.forEach(function (k) { if (raw.getItem(P + k) === null) { try { raw.setItem(P + k, raw.getItem(k)); } catch (e) {} } });
+                    raw.setItem(MIG_LS, '1');
+                }
+            } catch (e) { try { console.warn('[EITI ns] LS migration:', e); } catch (_) {} }
+            try {
+                Object.defineProperty(w, 'localStorage', { configurable: true, enumerable: true, get: function () { return proxy; } });
+            } catch (e) { try { console.warn('[EITI ns] localStorage isolation unavailable:', e); } catch (_) {} }
+            // storage-события: чужие ключи не показываем, свои — без префикса.
+            try {
+                w.addEventListener('storage', function (ev) {
+                    if (!ev || ev.storageArea !== raw) return;
+                    if (ev.key === null) return;
+                    if (ev.key.indexOf(P) !== 0) { ev.stopImmediatePropagation(); return; }
+                    try { Object.defineProperty(ev, 'key', { value: ev.key.slice(P.length) }); } catch (e) {}
+                }, true);
+            } catch (e) {}
+        }
+
+        // ── Cache Storage (страница): имена кэшей с префиксом ───────────────────
+        try {
+            var cs = w.caches;
+            if (cs) {
+                var cOpen = cs.open.bind(cs), cHas = cs.has.bind(cs), cDel = cs.delete.bind(cs), cKeys = cs.keys.bind(cs);
+                var pc = function (n) { n = String(n); return n.indexOf(P) === 0 ? n : P + n; };
+                var ownCaches = function () { return cKeys().then(function (ks) { return ks.filter(function (k) { return k.indexOf(P) === 0; }); }); };
+                cs.open = function (n) { return cOpen(pc(n)); };
+                cs.has = function (n) { return cHas(pc(n)); };
+                cs.delete = function (n) { return cDel(pc(n)); };
+                cs.keys = function () { return ownCaches().then(function (ks) { return ks.map(function (k) { return k.slice(P.length); }); }); };
+                cs.match = function (req, opts) {
+                    if (opts && opts.cacheName) return cOpen(pc(opts.cacheName)).then(function (c) { return c.match(req, opts); });
+                    return ownCaches().then(function (ks) {
+                        var i = 0;
+                        var next = function () {
+                            if (i >= ks.length) return undefined;
+                            return cOpen(ks[i++]).then(function (c) { return c.match(req, opts); }).then(function (m) { return m || next(); });
+                        };
+                        return next();
+                    });
+                };
+            }
+        } catch (e) { try { console.warn('[EITI ns] caches isolation unavailable:', e); } catch (_) {} }
+
+        // ── IndexedDB: имена БД с префиксом + одноразовая копия старых БД ───────
+        var idb = null;
+        try { idb = w.indexedDB; } catch (e) { idb = null; }
+        if (!idb) return;
+        var F = Object.getPrototypeOf(idb);
+        var oOpen = F.open, oDel = F.deleteDatabase, oDbs = F.databases;
+        var pn = function (n) { n = String(n); return n.indexOf(P) === 0 ? n : P + n; };
+        var openArgs = function (args) { var a = [pn(args[0])]; if (args.length > 1 && args[1] !== undefined) a.push(args[1]); return a; };
+
+        function openExisting(name) { // null, если БД нет (создание отменяем)
+            return new Promise(function (res) {
+                var r;
+                try { r = oOpen.call(idb, name); } catch (e) { return res(null); }
+                r.onupgradeneeded = function () { try { r.transaction.abort(); } catch (e) {} };
+                r.onsuccess = function () { res(r.result); };
+                r.onerror = function (e) { try { e.preventDefault(); } catch (_) {} res(null); };
+            });
+        }
+        function reqP(r) { return new Promise(function (res, rej) { r.onsuccess = function () { res(r.result); }; r.onerror = function (e) { try { e.preventDefault(); } catch (_) {} rej(r.error); }; }); }
+        function copyStore(src, dst, s) {
+            return new Promise(function (res, rej) {
+                var st = src.transaction(s.name, 'readonly').objectStore(s.name);
+                Promise.all([reqP(st.getAll()), s.keyPath == null ? reqP(st.getAllKeys()) : Promise.resolve(null)]).then(function (vk) {
+                    var vals = vk[0], keys = vk[1];
+                    if (!vals.length) return res(0);
+                    var tx = dst.transaction(s.name, 'readwrite'), os = tx.objectStore(s.name);
+                    for (var i = 0; i < vals.length; i++) { if (keys) os.put(vals[i], keys[i]); else os.put(vals[i]); }
+                    tx.oncomplete = function () { res(vals.length); };
+                    tx.onerror = tx.onabort = function (e) { try { e.preventDefault(); } catch (_) {} rej(tx.error); };
+                }, rej);
+            });
+        }
+        function migrateDb(name, want) {
+            return openExisting(P + name).then(function (have) {
+                if (have) { have.close(); return 'exists'; }
+                return openExisting(name).then(function (src) {
+                    if (!src) return 'absent';
+                    var ver = Math.min(src.version, want || src.version);
+                    var names = Array.prototype.slice.call(src.objectStoreNames);
+                    var schema = [];
+                    if (names.length) {
+                        var tx = src.transaction(names, 'readonly');
+                        schema = names.map(function (sn) {
+                            var st = tx.objectStore(sn);
+                            return { name: sn, keyPath: st.keyPath, autoIncrement: st.autoIncrement,
+                                indexes: Array.prototype.slice.call(st.indexNames).map(function (iname) {
+                                    var ix = st.index(iname); return { name: iname, keyPath: ix.keyPath, unique: ix.unique, multiEntry: ix.multiEntry };
+                                }) };
+                        });
+                    }
+                    return new Promise(function (res, rej) {
+                        var r = oOpen.call(idb, P + name, ver);
+                        r.onupgradeneeded = function () {
+                            var db = r.result;
+                            schema.forEach(function (s) {
+                                var os = db.createObjectStore(s.name, s.keyPath == null ? { autoIncrement: s.autoIncrement } : { keyPath: s.keyPath, autoIncrement: s.autoIncrement });
+                                s.indexes.forEach(function (ix) { os.createIndex(ix.name, ix.keyPath, { unique: ix.unique, multiEntry: ix.multiEntry }); });
+                            });
+                        };
+                        r.onsuccess = function () { res(r.result); };
+                        r.onerror = function (e) { try { e.preventDefault(); } catch (_) {} rej(r.error); };
+                    }).then(function (dst) {
+                        return schema.reduce(function (p, s) { return p.then(function () { return copyStore(src, dst, s); }); }, Promise.resolve())
+                            .then(function () { src.close(); dst.close(); return 'copied'; }, function (err) {
+                                src.close(); dst.close();
+                                // частичная копия хуже пустой — удаляем, повторим при следующем запуске
+                                return new Promise(function (res) { var d = oDel.call(idb, P + name); d.onsuccess = d.onerror = d.onblocked = function () { res(); }; }).then(function () { throw err; });
+                            });
+                    }, function (err) { src.close(); throw err; });
+                });
+            });
+        }
+
+        var migrated = false;
+        try { migrated = !raw || raw.getItem(MIG_IDB) === '1'; } catch (e) { migrated = true; }
+        var gate = null;
+        if (!migrated) {
+            api.status = 'migrating';
+            gate = Object.keys(IDB_MIGRATE).reduce(function (p, n) {
+                return p.then(function (acc) { return migrateDb(n, IDB_MIGRATE[n]).then(function (r) { acc[n] = r; return acc; }); });
+            }, Promise.resolve({})).then(function (acc) {
+                try { raw.setItem(MIG_IDB, '1'); } catch (e) {}
+                api.status = 'done'; api.result = acc; gate = null; return acc;
+            }, function (err) {
+                try { console.warn('[EITI ns] IndexedDB migration failed (retry next start):', err); } catch (_) {}
+                api.status = 'failed'; api.error = String(err && err.message || err); gate = null; return null;
+            });
+            api.ready = gate;
+        } else { api.status = 'done'; api.ready = Promise.resolve('done'); }
+
+        // Пока идёт миграция, open() возвращает «отложенный» запрос, который
+        // пересылает события настоящего IDBOpenDBRequest (onsuccess/onupgradeneeded/…).
+        function deferredOpen(args) {
+            var fake = { result: undefined, error: null, readyState: 'pending', source: null, transaction: null,
+                onsuccess: null, onerror: null, onupgradeneeded: null, onblocked: null, _l: {} };
+            fake.addEventListener = function (t, fn) { (fake._l[t] = fake._l[t] || []).push(fn); };
+            fake.removeEventListener = function (t, fn) { var a = fake._l[t]; if (a) { var i = a.indexOf(fn); if (i >= 0) a.splice(i, 1); } };
+            var fire = function (t, ev, real) {
+                if (real) {
+                    try { fake.result = real.result; } catch (e) {}
+                    try { fake.error = real.error; } catch (e) {}
+                    fake.transaction = real.transaction; fake.readyState = real.readyState;
+                }
+                var evt = { type: t, target: fake, currentTarget: fake, oldVersion: ev && ev.oldVersion, newVersion: ev && ev.newVersion,
+                    preventDefault: function () { if (ev && ev.preventDefault) ev.preventDefault(); },
+                    stopPropagation: function () { if (ev && ev.stopPropagation) ev.stopPropagation(); } };
+                if (typeof fake['on' + t] === 'function') fake['on' + t].call(fake, evt);
+                (fake._l[t] || []).slice().forEach(function (fn) { fn.call(fake, evt); });
+            };
+            (gate || Promise.resolve()).then(function () {
+                var real;
+                try { real = oOpen.apply(idb, openArgs(args)); } catch (e) { fake.error = e; fake.readyState = 'done'; fire('error', null, null); return; }
+                ['success', 'error', 'upgradeneeded', 'blocked'].forEach(function (t) {
+                    real.addEventListener(t, function (ev) { fire(t, ev, real); });
+                });
+            });
+            return fake;
+        }
+        idb.open = function (name, version) {
+            if (gate) return deferredOpen(arguments);
+            return oOpen.apply(idb, openArgs(arguments));
+        };
+        idb.deleteDatabase = function (name) { return oDel.call(idb, pn(name)); };
+        if (typeof oDbs === 'function') {
+            idb.databases = function () {
+                return oDbs.call(idb).then(function (list) {
+                    return (list || []).filter(function (d) { return d && d.name && d.name.indexOf(P) === 0; })
+                        .map(function (d) { return { name: d.name.slice(P.length), version: d.version }; });
+                });
+            };
+        }
+    })(window);
+    </script>
+    <script>
         /* v13.4.0:
          * [P0] FTS5 incremental sync O(N²)→O(1)
          * [P0] DOMPurify XSS protection (offline-first)
@@ -39,7 +283,7 @@
          * [P2] Blob URL auto-revoke 5 min
          * [P2] SW cache → eiti-v13.4.0
          */
-        var EITI_VERSION = "14.16.28"; // v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
+        var EITI_VERSION = "14.16.32"; // v14.16.32: Android APK (Capacitor): safe-area/шапка, компактная шапка, без PWA-установки, Заметки AI без зазора, объём + 3D-иконки Fluent, карточка подтверждения сворачивается, вёрстка markdown, производительность (rAF/анимации/KB по требованию), длинные правки патчами с diff, фон/уведомления, модели 11.2026, офлайн-модели по мощности устройства, экспорт/импорт; v14.16.31: security #28 — PDF.js 6.5.438 (vendor, ES-модуль) вместо 3.11.174 (CVE-2024-4367), isEvalSupported:false; v14.16.30: security #27 — точные версии CDN, SRI, vendor/ (DOMPurify 3.4.18, mammoth 1.13.0), CSP meta; v14.16.29: security #26 — изоляция localStorage/IndexedDB/Cache Storage по префиксу деплоя (EitiNS) + миграция-копия; v14.16.28: fix Компактные табы (пропавший eitiSetCompactChrome) + чёлка/пресет экрана (subview inset, h1 не ест safe-area, видимый вырез); // v14.16.27: «icons» inline в меню «+» (без rail/полосы); скрывать весь нижний бар вкл. Чат; чуть объёма иконкам; // v14.16.26: «Нижние табы» — правая колонка в меню «+» (видимое место у Скопировать/Сохранить); // v14.16.25: chat-only tabs reclaim height over compact-chrome (!important); e2e; // v14.16.24: fix stream RAF race — final markdown/markers no longer overwritten; Issue #13 e2e; // v14.16.23: «Нижние табы» в меню «+» — режим только чат (остальные табы скрыты, больше места); // v14.16.22: precise ±10s seek icons + correct back/fwd; // v14.16.21: thinking collapse + DS toggle + strip AI cmds + mobile readability // v14.16.19: UI perf — i18n observer RU skip/dedupe, chat DocumentFragment, RAF stream scroll, narrower MutationObservers // v14.16.14: compact tabs (Настройки → Настройка табов); v14.16.8: offline gold typing dots; v14.16.7: composer undo/redo; v14.16.6: ChatGPT text-top toolbar-bottom; v14.16.5: композер на всю ширину; v14.16.4: одна пилюля ChatGPT; v14.16.3: композер как ChatGPT (flex, текст на всю ширину); v14.16.2: двухуровневое офлайн-рассуждение для всех 150 000 записей; v14.16.1: офлайн-КБ до 150 000 записей, ленивый точный longtail fallback; v14.16.0: шлюз AI-действий (удаления/правки только после подтверждения, MEM_DEL больше не стирает всю память) + EITI Care (личная опасность важнее слов «фильм/там», номера помощи по региону); v14.15.2: «📱 Экран телефона» — пресеты выреза (iPhone чёлка/Dynamic Island/SE, Galaxy, Xiaomi, Pixel; по умолчанию «Авто» = как раньше); v14.15.1: «Меньше иконки (small icons)» — компактные табы и верхние панели (Настройки → 📌 Настройка табов); v14.15.0: офлайн-интенты — чей / с кем / насколько / до каких пор / который из, составные реплики, числа словами, Doweria; v14.14.0: EITI Frames — офлайн-понимание формулировок, карточки понятий kn_*, Википедия без ключа; v14.13.1: EitiVoice P1-1 — запасной провайдер, ограниченное переподключение, текстовый режим; v14.13.0: «Похожие / Рассуждение» под ответами KB, сказками и заметками; v14.12.0: голосовые ассистенты OpenAI Realtime / Qwen Omni / Алиса (Яндекс) / Mistral Voxtral + Mistral AI в чате; v14.11.0: голосовой набор 🎤 (Web Speech, онлайн→на устройстве), ассистент в «+»; v14.10.0: офлайн-калькулятор EN/DE, поиск KB (алиасы/леммы/транслит), компактные действия сообщений, однострочный ввод, полный перевод UI EN/DE, стабильный e2e v1440; // v14.9.0: дневник — запись на пункт (IDB journal/contexts v17, привязка к чатам/темам, синхронизация с Drive) + выбор голоса Grok Voice / Gemini Live; // v14.8.0: терпимость к опечаткам (ё/е, ш/щ, соседние клавиши, раскладка ghbdtn→привет, пропущенные пробелы; RU/EN/DE) до всех офлайн-слоёв; // v14.7.0: Google Drive — вход один раз и автосинхронизация; // v14.5.0: память диалога (там/тогда/он…, стек тем, уточнения) + Настройки → размер чата; // v14.4.0: офлайн-ответы на языке приложения/сообщения (RU/EN/DE); // v14.3.0: библиотека знаний ~29 тыс. статей (27 новых разделов, компактные шарды v3); v14.2.0: EITI Local (local/): калькулятор + ответы по своим данным; + v14.1.0 библиотека знаний KB, v14.0.0 офлайн-диалоги и сказки
         function eitiModelCatalog() {
             return {
                 deepseek: {
@@ -48,24 +292,24 @@
                     selections: ['deepseek-flash', 'deepseek-v4-pro-low', 'deepseek-v4-pro-high', 'deepseek-v4-pro-max']
                 },
                 gemini: {
-                    defaultId: 'gemini-3.8-flash',
-                    ids: ['gemini-3.8-flash', 'gemini-4-argon', 'gemini-3.6-flash', 'gemini-3.5-flash-lite']
+                    defaultId: 'gemini-4-hydrogen', // v14.16.32: Gemini 4 (ai.google.dev/gemini-api/docs/models, 11.2026)
+                    ids: ['gemini-4-hydrogen', 'gemini-4-carbon', 'gemini-4-argon', 'gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite']
                 },
                 openrouter: {
                     defaultId: 'openrouter/auto',
-                    presets: ['openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'meta-llama/llama-4-maverick']
+                    presets: ['openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'qwen/qwen4-max']
                 },
                 notesAI: {
                     defaultId: 'same',
-                    ids: ['same', 'deepseek', 'gemini', 'openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'meta-llama/llama-4-maverick']
+                    ids: ['same', 'deepseek', 'gemini', 'openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'qwen/qwen4-max']
                 },
                 openai: {
                     defaultId: 'gpt-6.1-sol',
-                    ids: ['gpt-6-astra', 'gpt-6.1-sol', 'gpt-6-luna', 'gpt-5.5']
+                    ids: ['gpt-6-astra', 'gpt-6.1-sol', 'gpt-6.1-terra', 'gpt-6-luna', 'gpt-5.5']
                 },
                 anthropic: {
                     defaultId: 'claude-sonnet-5-5',
-                    ids: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5']
+                    ids: ['claude-fable-5-2', 'claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5']
                 },
                 grokVision: {
                     defaultId: 'grok-4.7',
@@ -73,7 +317,7 @@
                 },
                 qwen: {
                     defaultId: 'qwen-plus-latest',
-                    ids: ['qwen3.8-max', 'qwen3.8-flash', 'qwen-plus-latest', 'qwen-max', 'qwen-turbo-latest', 'qwen-long']
+                    ids: ['qwen4-max', 'qwen3.8-max', 'qwen3.8-flash', 'qwen-plus-latest', 'qwen-max', 'qwen-turbo-latest', 'qwen-long']
                 },
                 embeddings: {
                     defaultId: 'offline-minilm',
@@ -3049,7 +3293,7 @@
                 'Медицина': 'Medicine',
                 'Роли': 'Roles',
                 'Вдохновение': 'Inspiration',
-                'Авто': 'Cars',
+                'Авто': 'Auto', // v14.16.32: было 'Cars' — перебивало «Авто» (язык ответа ИИ) в Настройках
                 'Финансы': 'Finance',
                 'Отношения': 'Relationships',
                 'Кулинария': 'Cooking',
@@ -4217,6 +4461,18 @@
         window.EITI_I18N.addDict('en', {"Отправить сообщение": "Send message", "Прикрепить файл": "Attach file"}); // v14.16.x: кнопки внутри поля ввода
         window.EITI_I18N.addDict('de', {"Отправить сообщение": "Nachricht senden", "Прикрепить файл": "Datei anhängen"});
         window.EITI_I18N.addDict('en', {"📌 Настройка табов": "📌 Tab settings", "Меньше иконки (small icons)": "Small icons", "Компактные нижние табы и верхние панели — больше места на экране": "Compact bottom tabs and top bars — more room on screen", "🔍 Маленькие иконки включены": "🔍 Small icons on", "🔍 Обычные иконки": "🔍 Regular icons"}); // v14.15.1
+        window.EITI_I18N.addDict('en', {"📲 Под ваше устройство": "📲 For your device"});
+        window.EITI_I18N.addDict('en', {"новый · быстро": "new · fast", "флагман": "flagship", "прошлый Flash": "previous Flash", "reasoning · дешевле Carbon": "reasoning · cheaper than Carbon", "4 Hydrogen: новое поколение · быстро, 1M контекст": "4 Hydrogen: new generation · fast, 1M context", "4 Carbon: флагман · код, наука, сложные задачи": "4 Carbon: flagship · code, science, hard tasks", "3.8 Flash: прошлое поколение Flash": "3.8 Flash: previous Flash generation", "4 Argon: reasoning · дешевле Carbon": "4 Argon: reasoning · cheaper than Carbon", "Новый флагман": "New flagship", "📲 Перенос сайт ⇄ приложение": "📲 Transfer site ⇄ app", "Все настройки и данные этой копии EITI одним файлом: заметки, чаты, дневник, память, задачи, плейлист-настройки. На другом устройстве — «Загрузить файл переноса».": "All settings and data of this EITI copy in one file: notes, chats, journal, memory, tasks, player settings. On the other device use «Load transfer file».", "🔑 Включить API-ключи (файл хранить как пароль)": "🔑 Include API keys (keep the file like a password)", "📤 Сохранить файл переноса": "📤 Save transfer file", "📥 Загрузить файл переноса": "📥 Load transfer file", "☁️ Google Drive · скоро": "☁️ Google Drive · soon", "📦 Dropbox · скоро": "📦 Dropbox · soon", "Нужно: OAuth-клиент Google (Android: com.velantrim.eiti + SHA-1 подписи релиза; веб: origin сайта)": "Needs: Google OAuth client (Android: com.velantrim.eiti + release signing SHA-1; web: site origin)", "Нужно: Dropbox App key (PKCE, redirect velantrim-eiti://)": "Needs: Dropbox App key (PKCE, redirect velantrim-eiti://)", "🔍 Определяю возможности устройства…": "🔍 Detecting device capabilities…"});
+        window.EITI_I18N.addDict('de', {"новый · быстро": "neu · schnell", "флагман": "Flaggschiff", "прошлый Flash": "vorheriges Flash", "reasoning · дешевле Carbon": "Reasoning · günstiger als Carbon", "4 Hydrogen: новое поколение · быстро, 1M контекст": "4 Hydrogen: neue Generation · schnell, 1M Kontext", "4 Carbon: флагман · код, наука, сложные задачи": "4 Carbon: Flaggschiff · Code, Wissenschaft, schwere Aufgaben", "3.8 Flash: прошлое поколение Flash": "3.8 Flash: vorherige Flash-Generation", "4 Argon: reasoning · дешевле Carbon": "4 Argon: Reasoning · günstiger als Carbon", "Новый флагман": "Neues Flaggschiff", "📲 Перенос сайт ⇄ приложение": "📲 Übertragung Website ⇄ App", "Все настройки и данные этой копии EITI одним файлом: заметки, чаты, дневник, память, задачи, плейлист-настройки. На другом устройстве — «Загрузить файл переноса».": "Alle Einstellungen und Daten dieser EITI-Kopie in einer Datei: Notizen, Chats, Tagebuch, Gedächtnis, Aufgaben, Player-Einstellungen. Auf dem anderen Gerät «Übertragungsdatei laden».", "🔑 Включить API-ключи (файл хранить как пароль)": "🔑 API-Schlüssel einschließen (Datei wie ein Passwort aufbewahren)", "📤 Сохранить файл переноса": "📤 Übertragungsdatei speichern", "📥 Загрузить файл переноса": "📥 Übertragungsdatei laden", "☁️ Google Drive · скоро": "☁️ Google Drive · bald", "📦 Dropbox · скоро": "📦 Dropbox · bald", "Нужно: OAuth-клиент Google (Android: com.velantrim.eiti + SHA-1 подписи релиза; веб: origin сайта)": "Benötigt: Google-OAuth-Client (Android: com.velantrim.eiti + SHA-1 der Release-Signatur; Web: Website-Origin)", "Нужно: Dropbox App key (PKCE, redirect velantrim-eiti://)": "Benötigt: Dropbox App key (PKCE, Redirect velantrim-eiti://)", "🔍 Определяю возможности устройства…": "🔍 Gerätefähigkeiten werden ermittelt…"});
+        window.EITI_I18N.addDict('de', {"📲 Под ваше устройство": "📲 Für Ihr Gerät"});
+        window.EITI_I18N.addDict('en', {"🔋 Фон и батарея": "🔋 Background & battery", "🔔 Уведомление «EITI работает в фоне»": "🔔 «EITI is running in the background» notification", "🔋 Батарея без ограничений": "🔋 Unrestricted battery", "🪫 Вернуть ограничения (экономия батареи)": "🪫 Restore restrictions (save battery)", "🎵 Вернуть треки по умолчанию": "🎵 Restore default tracks"});
+        window.EITI_I18N.addDict('de', {"🔋 Фон и батарея": "🔋 Hintergrund & Akku", "🔔 Уведомление «EITI работает в фоне»": "🔔 Hinweis «EITI läuft im Hintergrund»", "🔋 Батарея без ограничений": "🔋 Akku ohne Einschränkungen", "🪫 Вернуть ограничения (экономия батареи)": "🪫 Einschränkungen wiederherstellen (Akku sparen)", "🎵 Вернуть треки по умолчанию": "🎵 Standard-Titel wiederherstellen"});
+        window.EITI_I18N.addDict('en', {"📚 База знаний на устройстве": "📚 Knowledge base on device", "Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.": "Base sections (~460 MB) are downloaded as needed. To use everything offline, download it all over Wi-Fi.", "📥 Скачать всё по Wi-Fi": "📥 Download all over Wi-Fi"});
+        window.EITI_I18N.addDict('de', {"📚 База знаний на устройстве": "📚 Wissensbasis auf dem Gerät", "Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.": "Abschnitte (~460 MB) werden bei Bedarf geladen. Für vollen Offline-Betrieb alles per WLAN laden.", "📥 Скачать всё по Wi-Fi": "📥 Alles per WLAN laden"});
+        window.EITI_I18N.addDict('en', {"Объёмный стиль": "3D depth style", "Тени, градиенты и блики на полях и кнопках": "Shadows, gradients and highlights on inputs and buttons", "3D-иконки табов": "3D tab icons", "Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах": "Fluent Emoji 3D (Microsoft, MIT) — same on every phone"}); // v14.16.32
+        window.EITI_I18N.addDict('de', {"Объёмный стиль": "3D-Tiefe", "Тени, градиенты и блики на полях и кнопках": "Schatten, Verläufe und Glanz auf Feldern und Tasten", "3D-иконки табов": "3D-Tab-Symbole", "Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах": "Fluent Emoji 3D (Microsoft, MIT) — auf jedem Handy gleich"}); // v14.16.32
+        window.EITI_I18N.addDict('en', {"Большая золотая шапка": "Large gold header", "Выкл — компактная шапка, больше места для текста": "Off — compact header, more room for text"}); // v14.16.32
+        window.EITI_I18N.addDict('de', {"Большая золотая шапка": "Große goldene Kopfzeile", "Выкл — компактная шапка, больше места для текста": "Aus — kompakte Kopfzeile, mehr Platz für Text"}); // v14.16.32
         window.EITI_I18N.addDict('en', {"Компактные табы": "Compact tabs", "Чуть ниже только нижняя полоса табов — больше места тексту. Шапка и иконки как были.": "Slightly shorter bottom tab bar only — more room for text. Header and icons unchanged.", "📐 Компактные табы включены": "📐 Compact tabs on", "📐 Обычные табы": "📐 Regular tabs"}); // v14.16.14 compact tabs
         window.EITI_I18N.addDict('de', {"📌 Настройка табов": "📌 Tab-Einstellungen", "Меньше иконки (small icons)": "Kleine Symbole", "Компактные нижние табы и верхние панели — больше места на экране": "Kompakte untere Tabs und obere Leisten — mehr Platz auf dem Bildschirm", "🔍 Маленькие иконки включены": "🔍 Kleine Symbole an", "🔍 Обычные иконки": "🔍 Normale Symbole"}); // v14.15.1
         window.EITI_I18N.addDict('de', {"Компактные табы": "Kompakte Tabs", "Чуть ниже только нижняя полоса табов — больше места тексту. Шапка и иконки как были.": "Nur die untere Tab-Leiste etwas niedriger — mehr Platz für Text. Kopfzeile und Symbole unverändert.", "📐 Компактные табы включены": "📐 Kompakte Tabs an", "📐 Обычные табы": "📐 Normale Tabs"}); // v14.16.14 compact tabs
@@ -4418,11 +4674,22 @@
          до DOMContentLoaded, что соответствует guard-логике внутри _initSQL. -->
     <script src="./sql-wasm.js" defer></script>
     <!-- German translations are embedded in EITI_I18N; no external patch request. -->
-    <!-- PDF.js CDN — для парсинга PDF файлов в браузере (v12.9.50) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <!-- v14.16.31 (#28): PDF.js 6.5.438 (legacy-сборка, ES-модуль) — локально в vendor/ вместо уязвимого 3.11.174 (CVE-2024-4367).
+         Целостность ES-модулей — через integrity в import map (Chrome 127+, Safari 18+, Firefox 138+; старые браузеры ключ игнорируют)
+         + modulepreload с integrity. Воркер — тот же origin, module worker. -->
+    <script type="importmap">{"integrity": {"./vendor/pdfjs/6.5.438/pdf.min.mjs": "sha384-8Nzt4NtLKsO5Ksqwrdc+JzLh0297H8590bi0lcBPKcMRxReio/DNZsRsiBMZydqe", "./vendor/pdfjs/6.5.438/pdf.worker.min.mjs": "sha384-h2OX4gf3I6e1sZFfB/7wpAKzqaygzUba1e7GWT5x1gZqWrNDRIrSERQHlEFPSfu+"}}</script>
+    <link rel="modulepreload" href="./vendor/pdfjs/6.5.438/pdf.min.mjs" integrity="sha384-8Nzt4NtLKsO5Ksqwrdc+JzLh0297H8590bi0lcBPKcMRxReio/DNZsRsiBMZydqe">
+    <script type="module">
+        // v14.16.31 (#28): window.pdfjsLib для импорта PDF (см. eitiParseFile → getDocument с isEvalSupported:false)
+        import * as pdfjs from './vendor/pdfjs/6.5.438/pdf.min.mjs';
+        pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdfjs/6.5.438/pdf.worker.min.mjs', document.baseURI).href;
+        window.pdfjsLib = pdfjs;
+        window.EITI_PDFJS_VERSION = pdfjs.version;
+    </script>
+    <!-- v14.16.30 (#27): mammoth и DOMPurify — локальные vendor-копии (точная версия + SRI), без CDN -->
+    <script src="./vendor/mammoth/1.13.0/mammoth.browser.min.js" integrity="sha384-8NWE3bZDrmRI4IePMoQaEoLhAQ1MmRMJkdNgnGiHRFanTqsFKr0TmK6aSZvFJ/PO"></script>
     <!-- v13.4.0 P0 #2: DOMPurify для санитизации HTML (offline-first через SW CORE) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.4/purify.min.js" defer></script>
+    <script src="./vendor/dompurify/3.4.18/purify.min.js" integrity="sha384-lkArbWjiZKuE+bzKbj1vOEF7DKYBDNvgwZMCt5OH8bdRB92zpzyNska9Q/XKPHQD" defer></script>
     <!-- v14.2.0: «простой интеллект» на устройстве — калькулятор и ответы по своим заметкам/файлам (≈20 КБ, без сети) -->
     <script src="./local/eiti_local.js" defer></script>
     <script src="./local/eiti_dstate.js" defer></script>
@@ -4433,9 +4700,20 @@
     <script src="./local/eiti_care.js" defer></script>
     <script src="./local/eiti_voice.js" defer></script>
     <script src="./local/eiti_action_gate.js" defer></script>
-    <script>if(typeof pdfjsLib!=='undefined'){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}</script>
+    <script src="./local/eiti_doc_edits.js" defer></script>
+    <script src="./local/eiti_device_fit.js" defer></script>
+    <script src="./local/eiti_transfer.js" defer></script>
 <script>
 (function(){
+  // v14.16.32: нативное приложение (Capacitor APK) — флаг до первой отрисовки. Мост Capacitor внедряется
+  // в начало документа, поэтому window.Capacitor уже есть. В обычном браузере/PWA EITI_NATIVE = false.
+  var EN=false;try{var CAP=window.Capacitor;EN=!!(CAP&&typeof CAP.isNativePlatform==='function'&&CAP.isNativePlatform());}catch(e){}
+  window.EITI_NATIVE=EN;window.eitiIsNative=function(){return !!window.EITI_NATIVE;};
+  if(EN)document.documentElement.classList.add('eiti-native');
+  // v14.16.32: шапка — компактная по умолчанию в APK, «👑 Большая золотая» — опция (eiti_header_size: compact|large)
+  // v14.16.32: «🧊 Объёмный стиль» (тени/градиенты/блики как на iOS-скриншотах) — по умолчанию только в APK; ключ eiti_depth '1'|'0'
+  try{var DP=localStorage.getItem('eiti_depth');if(DP==='1'||(DP!=='0'&&EN))document.documentElement.classList.add('eiti-depth');}catch(e){}
+  try{var HS=localStorage.getItem('eiti_header_size');if(HS==='compact'||(HS!=='large'&&EN))document.documentElement.classList.add('eiti-compact-header');}catch(e){}
   // v14.15.1: «Меньше иконки (small icons)» — класс на <html> до первой отрисовки (без мигания)
   try{if(localStorage.getItem('eiti_small_icons')==='1')document.documentElement.classList.add('eiti-small-icons');}catch(e){}
   try{if(localStorage.getItem('eiti_compact_chrome')!=='0')document.documentElement.classList.add('eiti-compact-chrome');}catch(e){}
@@ -4444,6 +4722,7 @@
   // v14.15.2: «📱 Экран телефона» — пресет выреза до первой отрисовки. [сверху, снизу, сбоку (альбомная), снизу (альбомная), вырез]
   window.EITI_PHONE_PRESETS={'iphone-notch':[47,34,47,21,'notch'],'iphone-island':[59,34,59,21,'island'],'iphone-se':[20,0,0,0,'none'],'galaxy-s':[32,16,32,16,'punch'],'galaxy-fold':[28,16,28,16,'punch'],'xiaomi':[34,16,34,16,'drop'],'pixel':[36,20,36,20,'punch'],'none':[0,0,0,0,'none']};
   window.eitiPhoneScreenApply=function(id){var d=document.documentElement,P=window.EITI_PHONE_PRESETS,v=(id!=null&&Object.prototype.hasOwnProperty.call(P,id))?P[id]:null,k=['--eiti-pt','--eiti-pb','--eiti-ps','--eiti-pbl'];
+    if(!v&&window.EITI_NATIVE){d.classList.add('eiti-phone');d.setAttribute('data-eiti-phone','native');k.forEach(function(n){d.style.setProperty(n,'0px');});return 'auto';} /* v14.16.32: APK — «Авто» = системные отступы (safe-area) */
     if(!v){d.classList.remove('eiti-phone');d.removeAttribute('data-eiti-phone');k.forEach(function(n){d.style.removeProperty(n);});return 'auto';}
     d.classList.add('eiti-phone');d.setAttribute('data-eiti-phone',id);k.forEach(function(n,i){d.style.setProperty(n,v[i]+'px');});return id;};
   try{window.eitiPhoneScreenApply(localStorage.getItem('eiti_phone_screen'));}catch(e){}
@@ -5624,7 +5903,10 @@
         @supports (height: 100dvh) { body.notes-fullscreen .notes-list { max-height: 100dvh !important; height: calc(100dvh - 20px) !important; } } /* v13.8.1: iOS Safari — учитываем панели браузера */
 
         body {
-            font-family: 'Helvetica Neue', 'Roboto', sans-serif;
+            /* v14.16.32: системный шрифт телефона первым (MiSans / One UI Sans / Roboto) — чётче на Android, iOS без изменений */
+            font-family: 'Helvetica Neue', system-ui, 'Roboto', 'Noto Sans', sans-serif;
+            -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+            text-rendering: optimizeLegibility;
             background: var(--bg-color);
             overflow: hidden;
             position: fixed;
@@ -5706,6 +5988,10 @@
             border-radius: 18px;
             animation: messageAppear 0.3s ease-out;
             word-wrap: break-word;
+            /* v14.16.32: длинные слова/ссылки не вылезают за пузырь, русские переносы по слогам */
+            overflow-wrap: anywhere;
+            hyphens: auto; -webkit-hyphens: auto;
+            min-width: 0;
             user-select: text;
             -webkit-user-select: text;
         }
@@ -6098,9 +6384,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: eiti-wing-shimmer 3s ease-in-out infinite;
+            animation: eiti-wing-shimmer 3s ease-in-out 3;
             margin: 0 5px;
         }
+        /* v14.16.32: анимированный filter перерисовывал шапку 60 к/с бесконечно → на сайте 3 вспышки и стоп, в APK — статично */
+        html.eiti-native .eiti-wing-char { animation: none; filter: brightness(1.12) drop-shadow(0 1px 5px rgba(0,0,0,0.55)); }
+        @media (prefers-reduced-motion: reduce) { .eiti-wing-char { animation: none; } }
 
         /* === splash animations === */
         @keyframes splash-metal-shine {
@@ -6994,8 +7283,9 @@
             background: var(--accent-color);
             opacity: 0;
             transition: opacity 0.3s;
-            animation: pulse 2s ease-in-out infinite;
+            /* v14.16.32: пульс только у активной вкладки (раньше 7–8 невидимых точек анимировались всегда) */
         }
+        .tab-item.active .tab-indicator { animation: pulse 2s ease-in-out infinite; }
         
         .tab-item.active .tab-indicator {
             opacity: 1;
@@ -8099,7 +8389,7 @@
             display: none;
             position: absolute;
             left: 10px; right: 10px;
-            bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(10px + var(--eiti-nai-sb, 0px)); /* v14.16.32: safe-area — у таб-бара */
             z-index: 16;
             align-items: center;
             flex-wrap: wrap;
@@ -8136,16 +8426,28 @@
         /* v13.7.23: без Notes AI нижней панели нет — теги прижаты к нижней навигации (раньше 52px пустоты) */
         .note-editor-overlay.active .note-editor-body,
         .note-editor-overlay.active .note-editor-hl { padding-bottom: 16px; }
-        .note-editor-overlay.active .note-tags-row { padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
+        .note-editor-overlay.active .note-tags-row { padding-bottom: 6px; } /* v14.16.32: safe-area — у таб-бара */
         /* с Notes AI — место ровно под плавающую панель 🔍 / Ask AI / ✎ (44px + 10px отступ) */
         .note-editor-overlay.notes-ai-on .note-editor-body,
         .note-editor-overlay.notes-ai-on .note-editor-hl { padding-bottom: 78px; }
-        .note-editor-overlay.notes-ai-on .note-tags-row { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
+        .note-editor-overlay.notes-ai-on .note-tags-row { padding-bottom: 60px; }
+        /* v14.16.32: таб-бара под редактором нет (полный экран / «табы скрыты») → системный отступ возвращается */
+        .note-editor-overlay.editor-fullscreen, body.notes-fullscreen .note-editor-overlay,
+        html.eiti-chat-only-tabs .note-editor-overlay { --eiti-nai-sb: var(--eiti-bottom-inset, var(--eiti-env-bottom)); }
+        .note-editor-overlay.editor-fullscreen .notes-ai-panel,
+        body.notes-fullscreen .notes-ai-panel,
+        html.eiti-chat-only-tabs .notes-ai-panel { padding-bottom: var(--eiti-bottom-inset, var(--eiti-env-bottom)); }
+        .note-editor-overlay.editor-fullscreen.active .note-tags-row,
+        body.notes-fullscreen .note-editor-overlay.active .note-tags-row,
+        html.eiti-chat-only-tabs .note-editor-overlay.active .note-tags-row { padding-bottom: calc(6px + var(--eiti-bottom-inset, var(--eiti-env-bottom))); }
+        .note-editor-overlay.editor-fullscreen.notes-ai-on .note-tags-row,
+        body.notes-fullscreen .note-editor-overlay.notes-ai-on .note-tags-row,
+        html.eiti-chat-only-tabs .note-editor-overlay.notes-ai-on .note-tags-row { padding-bottom: calc(60px + var(--eiti-bottom-inset, var(--eiti-env-bottom))); }
         .notes-ai-find {
             display: none;
             position: absolute;
             left: 10px; right: 10px;
-            bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(62px + var(--eiti-nai-sb, 0px));
             z-index: 17;
             align-items: center; gap: 6px;
             background: var(--secondary-color);
@@ -8170,7 +8472,9 @@
             border-top: 1px solid var(--border-color);
             border-radius: 18px 18px 0 0;
             box-shadow: 0 -8px 28px rgba(0,0,0,0.35);
-            padding-bottom: env(safe-area-inset-bottom, 0px);
+            /* v14.16.32: системный отступ снизу уже забирает нижний таб-бар → здесь 0 (был зазор ~48px над табами
+               на Android с кнопочной навигацией). Отступ нужен, только когда табов под панелью нет — см. ниже. */
+            padding-bottom: 0;
             max-height: min(72vh, calc(100% - 8px));
             transition: height .18s ease;
         }
@@ -8607,10 +8911,11 @@
            всё как раньше. Значения пресета (--eiti-pt/pb/ps/pbl) ставит ранний скрипт в <head> до первой отрисовки.
            --eiti-env-* — точка подмены для тестов (в браузере env() не эмулируется). */
         :root {
-            --eiti-env-top: env(safe-area-inset-top, 0px);
-            --eiti-env-bottom: env(safe-area-inset-bottom, 0px);
-            --eiti-env-left: env(safe-area-inset-left, 0px);
-            --eiti-env-right: env(safe-area-inset-right, 0px);
+            /* v14.16.32: в APK Capacitor (SystemBars) кладёт реальные отступы в --safe-area-inset-*; в браузере их нет → env() */
+            --eiti-env-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+            --eiti-env-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+            --eiti-env-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+            --eiti-env-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
         }
         html.eiti-phone {
             --eiti-top-inset: max(var(--eiti-env-top), var(--eiti-pt, 0px));
@@ -8746,6 +9051,85 @@
         /* Кнопки шапки — по центру безопасной части. Для small icons × iOS то же делает правило v14.15.1 (через --eiti-si-safe-top),
            здесь — для остальных случаев (пресет без iOS, обычная высота шапки) и боковой отступ в альбомной. Не дубль: значения совпадают. */
         html.eiti-phone .app-header .header-actions{top:calc(50% + var(--eiti-top-inset) / 2) !important;right:calc(14px + var(--eiti-side-inset)) !important;}
+</style>
+<style id="eiti-v141632-style">
+        /* v14.16.32: нативное приложение (APK) — пресет «native» = только системные отступы, без нарисованного выреза;
+           установка PWA там не нужна */
+        html.eiti-phone[data-eiti-phone="native"] .app-header::before { display: none; }
+        html.eiti-native #btn-pwa-install, html.eiti-native #pwa-install-banner { display: none !important; }
+        html:not(.eiti-native) .eiti-native-only { display: none !important; } /* v14.16.32: разделы только для APK */
+        /* v14.16.32: вкладки со своей шапкой (Заметки, Дневник, Лента) — глобальная шапка скрыта, поэтому верхний
+           системный отступ берёт контент; иначе кнопки уходили под статус-бар в APK (edge-to-edge) */
+        html.eiti-phone body.view-notes:not(.notes-fullscreen) .app-content,
+        html.eiti-phone body.view-journal:not(.journal-fullscreen) .app-content,
+        html.eiti-phone body.view-timeline .app-content { padding-top: var(--eiti-top-inset); box-sizing: border-box; }
+        html.eiti-phone body.journal-fullscreen #view-journal { top: var(--eiti-top-inset); height: calc(100% - var(--eiti-top-inset)); }
+        /* v14.16.32: 🧊 Объёмный стиль (html.eiti-depth; по умолчанию в APK, на сайте — опция). Раскладка та же,
+           возвращается только объём: градиент + внутренняя тень + блик (ориентир — iOS-скриншоты). */
+        html.eiti-depth .chat-composer-shell {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.015) 45%, rgba(0,0,0,0.16) 100%), var(--panel-bg) !important;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.05), 0 1px 0 rgba(255,255,255,0.08), 0 6px 16px rgba(0,0,0,0.38) !important;
+        }
+        html.eiti-depth .chat-composer-shell #send, html.eiti-depth .notes-ai-send {
+            background: radial-gradient(circle at 35% 28%, #fff3a6 0%, #ffd700 38%, #c99a00 100%) !important;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.75), inset 0 -2px 3px rgba(120,80,0,0.45), 0 3px 8px rgba(0,0,0,0.45) !important;
+        }
+        html.eiti-depth .chat-composer-shell .chat-left-col > button:first-child, html.eiti-depth #chat-attach-proxy {
+            background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.20)) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 2px 5px rgba(0,0,0,0.4) !important;
+        }
+        html.eiti-depth .message.incoming, html.eiti-depth .message.outgoing {
+            box-shadow: 0 1px 0 rgba(255,255,255,0.10) inset, 0 4px 12px rgba(0,0,0,0.30), 0 1px 2px rgba(0,0,0,0.35);
+        }
+        html.eiti-depth .settings-group {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.10));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 18px rgba(0,0,0,0.35);
+        }
+        html.eiti-depth .notes-ai-compose-box {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.14));
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.42), 0 1px 0 rgba(255,255,255,0.07), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        html.eiti-depth .notes-ai-quick button, html.eiti-depth .header-btn {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.16));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 5px rgba(0,0,0,0.38);
+        }
+        html.eiti-depth .tab-bar {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(0,0,0,0.18));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 -4px 14px rgba(0,0,0,0.35);
+        }
+        /* v14.16.32: 3D-иконки таб-бара — Fluent Emoji 3D (MIT, Microsoft), локально vendor/fluent-emoji-3d/.
+           Класс html.eiti-3d-icons ставится JS только после загрузки всех картинок → иначе остаётся текстовый эмодзи. */
+        html.eiti-3d-icons .tab-icon[data-icon^="tab_"] {
+            color: transparent !important; text-shadow: none !important;
+            width: 1.15em; height: 1.15em; line-height: 1.15em; overflow: hidden;
+            background: center / contain no-repeat;
+        }
+        html.eiti-3d-icons .tab-item[data-view="chat"] .tab-icon[data-icon="tab_chat"] { background-image: url("vendor/fluent-emoji-3d/speech_balloon.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="journal"] .tab-icon[data-icon="tab_journal"] { background-image: url("vendor/fluent-emoji-3d/notebook.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="history"] .tab-icon[data-icon="tab_history"] { background-image: url("vendor/fluent-emoji-3d/books.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="player"] .tab-icon[data-icon="tab_player"] { background-image: url("vendor/fluent-emoji-3d/musical_note.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="files"] .tab-icon[data-icon="tab_files"] { background-image: url("vendor/fluent-emoji-3d/file_folder.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="notes"] .tab-icon[data-icon="tab_notes"] { background-image: url("vendor/fluent-emoji-3d/memo.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="timeline"] .tab-icon[data-icon="tab_timeline"] { background-image: url("vendor/fluent-emoji-3d/calendar.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="settings"] .tab-icon[data-icon="tab_settings"] { background-image: url("vendor/fluent-emoji-3d/gear.webp"); }
+        html.eiti-3d-icons .tab-item:not(.active) .tab-icon[data-icon^="tab_"] {
+            filter: saturate(0.85) drop-shadow(0 3px 3px rgba(0,0,0,0.5)) !important; opacity: 0.8;
+        }
+        html.eiti-3d-icons .tab-item.active .tab-icon[data-icon^="tab_"] {
+            filter: drop-shadow(0 0 6px var(--accent-color)) drop-shadow(0 4px 6px rgba(0,0,0,0.6)) !important; opacity: 1;
+        }
+        /* v14.16.32: компактная шапка (по умолчанию в APK; «👑 Большая золотая шапка» — в Настройке табов) */
+        html.eiti-compact-header:not(.eiti-small-icons) { --eiti-hdr-top: var(--eiti-top-inset, var(--eiti-env-top)); }
+        html.eiti-compact-header:not(.eiti-small-icons) .app-header,
+        html.eiti-compact-header.eiti-phone:not(.eiti-small-icons) .app-header,
+        html.eiti-compact-header.eiti-phone.is-ios:not(.eiti-small-icons) .app-header {
+            box-sizing: border-box !important;
+            height: calc(54px + var(--eiti-hdr-top)) !important;
+            padding-top: var(--eiti-hdr-top) !important;
+        }
+        html.eiti-compact-header:not(.eiti-small-icons) .app-header h1 { font-size: 21px !important; margin-top: 0 !important; letter-spacing: 1.2px !important; }
+        html.eiti-compact-header:not(.eiti-small-icons) .app-header .header-actions { top: calc(50% + var(--eiti-hdr-top) / 2) !important; }
+        html.eiti-compact-header:not(.eiti-small-icons) .app-header .header-btn { width: 34px; height: 34px; }
 </style>
 </head>
 <body class="theme-ios6-leather">
@@ -9137,13 +9521,21 @@
                                 <div style="font-size:13px;font-weight:600;margin-bottom:8px;">⚡ Google Gemini</div>
                                 <!-- Выбор модели Gemini -->
                                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+                                    <button id="gm-model-4hydrogen" onclick="eitiSetGeminiModel('gemini-4-hydrogen')"
+                                        style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
+                                        4 Hydrogen ⭐<br><span style="font-size:9px;opacity:0.6;font-weight:400;">новый · быстро</span>
+                                    </button>
+                                    <button id="gm-model-4carbon" onclick="eitiSetGeminiModel('gemini-4-carbon')"
+                                        style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
+                                        4 Carbon<br><span style="font-size:9px;opacity:0.6;font-weight:400;">флагман</span>
+                                    </button>
                                     <button id="gm-model-38flash" onclick="eitiSetGeminiModel('gemini-3.8-flash')"
                                         style="padding:8px 4px;border-radius:10px;border:2px solid var(--accent-color);background:rgba(255,215,0,0.12);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
-                                        3.8 Flash ⭐<br><span style="font-size:9px;opacity:0.6;font-weight:400;">актуальный Flash</span>
+                                        3.8 Flash<br><span style="font-size:9px;opacity:0.6;font-weight:400;">прошлый Flash</span>
                                     </button>
                                     <button id="gm-model-4argon" onclick="eitiSetGeminiModel('gemini-4-argon')"
                                         style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
-                                        4 Argon<br><span style="font-size:9px;opacity:0.6;font-weight:400;">флагман · reasoning</span>
+                                        4 Argon<br><span style="font-size:9px;opacity:0.6;font-weight:400;">reasoning · дешевле Carbon</span>
                                     </button>
                                     <button id="gm-model-36flash" onclick="eitiSetGeminiModel('gemini-3.6-flash')"
                                         style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
@@ -9426,11 +9818,12 @@
                                             style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">Claude</button>
                                         <button id="or-model-gpt" onclick="eitiSetORModel('openai/gpt-6.1-sol')"
                                             style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">GPT</button>
-                                        <button id="or-model-llama" onclick="eitiSetORModel('meta-llama/llama-4-maverick')"
-                                            style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">Llama</button>
+                                        <button id="or-model-qwen" onclick="eitiSetORModel('qwen/qwen4-max')"
+                                            style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">Qwen 4</button>
                                     </div>
                                     <div style="display:flex;gap:6px;align-items:center;">
-                                        <input type="text" id="openrouter-model-custom" placeholder="provider/model-name"
+                                        <datalist id="eiti-or-models-dl"></datalist>
+                                        <input type="text" id="openrouter-model-custom" list="eiti-or-models-dl" onfocus="if (typeof eitiLoadORModelMeta === 'function') eitiLoadORModelMeta()" placeholder="provider/model-name"
                                                style="flex:1;padding:9px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--panel-bg);color:var(--text-color);font-size:13px;"
                                                oninput="eitiSetORModel(this.value.trim()||'openrouter/auto')">
                                         <button onclick="window.open('https://openrouter.ai/models','_blank')"
@@ -9495,12 +9888,17 @@
                                             <button type="button" id="notes-ai-model-or-free" onclick="eitiNotesAISetModel('openrouter/free')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Free</button>
                                             <button type="button" id="notes-ai-model-or-claude" onclick="eitiNotesAISetModel('anthropic/claude-sonnet-5.5')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Claude</button>
                                             <button type="button" id="notes-ai-model-or-gpt" onclick="eitiNotesAISetModel('openai/gpt-6.1-sol')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">GPT</button>
-                                            <button type="button" id="notes-ai-model-or-llama" onclick="eitiNotesAISetModel('meta-llama/llama-4-maverick')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Llama</button>
+                                            <button type="button" id="notes-ai-model-or-qwen" onclick="eitiNotesAISetModel('qwen/qwen4-max')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Qwen 4</button>
                                         </div>
                                         <input type="text" id="notes-ai-model-custom" placeholder="provider/model (OpenRouter)"
                                                style="width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--panel-bg);color:var(--text-color);font-size:13px;"
                                                onchange="if(this.value.trim())eitiNotesAISetModel(this.value.trim())">
                                         <div id="notes-ai-model-label" style="font-size:11px;opacity:0.6;display:flex;align-items:center;min-width:0;"></div>
+                                        <!-- v14.16.32: правки длинных текстов — по умолчанию через просмотр изменений -->
+                                        <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;">
+                                            <input type="checkbox" id="notes-ai-apply-now" onchange="eitiNotesAISetApplyNow(this.checked)" style="margin-top:2px;">
+                                            <span><b data-i18n="⚡ Применять сразу">⚡ Применять сразу</b><br><span style="font-size:11px;opacity:0.6;" data-i18n="Небольшие правки (до 5 абзацев) — без просмотра; большие всё равно с просмотром изменений. Отмена ↩️ всегда.">Небольшие правки (до 5 абзацев) — без просмотра; большие всё равно с просмотром изменений. Отмена ↩️ всегда.</span></span>
+                                        </label>
                                         <div style="font-size:13px;font-weight:600;" data-i18n="Размер панели">Размер панели</div>
                                         <div style="display:flex;gap:6px;">
                                             <button type="button" id="notes-ai-size-small" onclick="eitiNotesAISetSize('small')" style="flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:600;cursor:pointer;" data-i18n="Малый">Малый</button>
@@ -9682,6 +10080,9 @@
                                 <button id="qwen-model-qwen-max" onclick="eitiQwenSetModel('qwen-max')" style="flex:1;min-width:80px;padding:8px 4px;border-radius:9px;font-size:11px;cursor:pointer;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);">
                                     <div>Qwen Max</div><div style="font-size:9px;opacity:0.5;">Умнейший</div>
                                 </button>
+                                <button id="qwen-model-qwen4-max" onclick="eitiQwenSetModel('qwen4-max')" style="flex:1;min-width:80px;padding:8px 4px;border-radius:9px;font-size:11px;cursor:pointer;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);">
+                                    <div>Qwen4 Max</div><div style="font-size:9px;opacity:0.5;">Новый флагман</div>
+                                </button>
                                 <button id="qwen-model-qwen3-8-max" onclick="eitiQwenSetModel('qwen3.8-max')" style="flex:1;min-width:80px;padding:8px 4px;border-radius:9px;font-size:11px;cursor:pointer;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);">
                                     <div>Qwen3.8 Max</div><div style="font-size:9px;opacity:0.5;">Флагман</div>
                                 </button>
@@ -9761,6 +10162,30 @@
                                 <option value="fun">😄 С юмором</option>
                             </select>
                             <div style="font-size:11px;opacity:0.45;line-height:1.5;text-align:center;">Без сети, без ключа или при сбое ИИ EITI отвечает офлайн: диалоги, шутки, пословицы, загадки, сказки и предания («сказку на ночь», «дальше», «кто такой Кухулин»).</div>
+                        </div>
+                    </div>
+                    <!-- v14.16.32: APK — работа в фоне, батарея, треки по умолчанию -->
+                    <div class="settings-group eiti-native-only" id="eiti-bg-settings">
+                        <div class="settings-title" data-i18n="🔋 Фон и батарея">🔋 Фон и батарея</div>
+                        <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
+                            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer;">
+                                <input type="checkbox" id="eiti-bg-notify" onchange="eitiBgSetEnabled(this.checked)" style="margin-top:3px;">
+                                <span><b data-i18n="🔔 Уведомление «EITI работает в фоне»">🔔 Уведомление «EITI работает в фоне»</b><br><span style="font-size:11px;opacity:0.6;" data-i18n="Держит приложение живым, когда оно свёрнуто: напоминания, ответы ИИ, музыка. Выкл — Android может выгрузить EITI.">Держит приложение живым, когда оно свёрнуто: напоминания, ответы ИИ, музыка. Выкл — Android может выгрузить EITI.</span></span>
+                            </label>
+                            <button type="button" id="eiti-bg-battery-btn" onclick="eitiBgBattery(true)" style="padding:12px;border-radius:12px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:15px;font-weight:600;cursor:pointer;" data-i18n="🔋 Батарея без ограничений">🔋 Батарея без ограничений</button>
+                            <button type="button" id="eiti-bg-battery-restrict" onclick="eitiBgBattery(false)" style="padding:10px;border-radius:12px;border:1px solid var(--border-color);background:transparent;color:var(--text-color);font-size:13px;cursor:pointer;" data-i18n="🪫 Вернуть ограничения (экономия батареи)">🪫 Вернуть ограничения (экономия батареи)</button>
+                            <div id="eiti-bg-status" style="font-size:12px;opacity:0.75;text-align:center;" aria-live="polite"></div>
+                            <div style="font-size:11px;opacity:0.5;line-height:1.5;" data-i18n="Xiaomi / HyperOS: дополнительно «Настройки → Приложения → EITI → Автозапуск» и «Контроль активности → Нет ограничений».">Xiaomi / HyperOS: дополнительно «Настройки → Приложения → EITI → Автозапуск» и «Контроль активности → Нет ограничений».</div>
+                            <button type="button" id="eiti-default-tracks-restore" onclick="eitiRestoreDefaultTracks()" style="padding:10px;border-radius:12px;border:1px solid var(--border-color);background:transparent;color:var(--text-color);font-size:13px;cursor:pointer;" data-i18n="🎵 Вернуть треки по умолчанию">🎵 Вернуть треки по умолчанию</button>
+                        </div>
+                    </div>
+                    <!-- v14.16.32: APK — база знаний по требованию + «Скачать всё по Wi-Fi» -->
+                    <div class="settings-group eiti-native-only" id="eiti-kb-dl-settings">
+                        <div class="settings-title" data-i18n="📚 База знаний на устройстве">📚 База знаний на устройстве</div>
+                        <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
+                            <div style="font-size:12px;opacity:0.7;line-height:1.5;" data-i18n="Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.">Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.</div>
+                            <button type="button" id="eiti-kb-dl-btn" onclick="eitiKbDownloadAll()" style="padding:12px;border-radius:12px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:15px;font-weight:600;cursor:pointer;" data-i18n="📥 Скачать всё по Wi-Fi">📥 Скачать всё по Wi-Fi</button>
+                            <div id="eiti-kb-dl-status" style="font-size:12px;opacity:0.8;text-align:center;" aria-live="polite"></div>
                         </div>
                     </div>
                     <!-- v14.14.0: 🔄 БАЗА ОФЛАЙН-ОТВЕТОВ (EitiBaseHost) — обновление только по кнопке, без фоновой сети -->
@@ -10808,6 +11233,22 @@
                                 <input type="file" id="eiti-import-all-file" accept=".json" style="display:none;" onchange="eitiImportAllFile(this)">
                             </div>
 
+                            <!-- v14.16.32: перенос всего (настройки, заметки, чаты, дневник, память…) между сайтом и APK -->
+                            <div id="eiti-transfer" style="padding-bottom:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
+                                <div style="font-size:13px;font-weight:600;margin-bottom:6px;" data-i18n="📲 Перенос сайт ⇄ приложение">📲 Перенос сайт ⇄ приложение</div>
+                                <div style="font-size:12px;opacity:0.6;margin-bottom:10px;line-height:1.45;" data-i18n="Все настройки и данные этой копии EITI одним файлом: заметки, чаты, дневник, память, задачи, плейлист-настройки. На другом устройстве — «Загрузить файл переноса».">Все настройки и данные этой копии EITI одним файлом: заметки, чаты, дневник, память, задачи, плейлист-настройки. На другом устройстве — «Загрузить файл переноса».</div>
+                                <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:10px;cursor:pointer;">
+                                    <input type="checkbox" id="eiti-transfer-secrets"> <span data-i18n="🔑 Включить API-ключи (файл хранить как пароль)">🔑 Включить API-ключи (файл хранить как пароль)</span>
+                                </label>
+                                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                                    <button type="button" id="eiti-transfer-export" onclick="eitiTransferExport()" class="settings-btn" data-i18n="📤 Сохранить файл переноса">📤 Сохранить файл переноса</button>
+                                    <button type="button" id="eiti-transfer-import" onclick="document.getElementById('eiti-transfer-file').click()" class="settings-btn" data-i18n="📥 Загрузить файл переноса">📥 Загрузить файл переноса</button>
+                                </div>
+                                <input type="file" id="eiti-transfer-file" accept=".json,application/json" style="display:none;" onchange="eitiTransferImportFile(this)">
+                                <div id="eiti-transfer-providers" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
+                                <div id="eiti-transfer-status" style="font-size:12px;opacity:0.8;margin-top:8px;" aria-live="polite"></div>
+                            </div>
+
                             <!-- AI Check -->
                             <div style="border-top:1px solid rgba(255,255,255,0.08);padding:16px 0;">
                                 <div style="font-size:13px;opacity:0.6;margin-bottom:10px;line-height:1.4;">Проверка KB · MOSC · VB — только предлагает, не меняет без подтверждения</div>
@@ -11263,6 +11704,13 @@
                             <div id="llm-offline-status" style="padding:8px 12px;background:var(--secondary-color);border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;">
                                 <span id="llm-status-text">❌ Не загружена</span>
                                 <span id="llm-status-model" style="opacity:0.6;font-size:12px;"></span>
+                            </div>
+                            <!-- v14.16.32: модели по мощности устройства (WebLLM 0.2.88) -->
+                            <div id="eiti-llm-fit" style="display:flex;flex-direction:column;gap:8px;">
+                                <div style="font-size:13px;font-weight:600;" data-i18n="📲 Под ваше устройство">📲 Под ваше устройство</div>
+                                <div id="eiti-llm-fit-dev" style="font-size:12px;opacity:0.75;padding:8px 10px;background:var(--secondary-color);border-radius:10px;line-height:1.5;">🔍 Определяю возможности устройства…</div>
+                                <div id="eiti-llm-fit-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+                                <div style="font-size:11px;opacity:0.5;line-height:1.5;">✅ подходит · ⚠️ впритык (может тормозить или выгрузиться) · ⛔ не потянет. Крупные 8–9B — для телефонов с ~12 ГБ ОЗУ (Galaxy S21 Ultra, Xiaomi 13/14, Note 13 Pro+ 12 ГБ). Модель скачивается один раз (Wi-Fi) и работает без интернета.</div>
                             </div>
                             <!-- Выбор модели -->
                             <div style="font-size:13px;font-weight:600;margin-bottom:2px;">Выберите LLM модель:</div>
@@ -11828,6 +12276,40 @@
                             </div>
                             <button type="button" id="eiti-small-icons-toggle-btn" onclick="eitiSetSmallIcons(!eitiIsSmallIcons())" style="padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.1);color:var(--text-color);">ВЫКЛ</button>
                             <input type="checkbox" id="eiti-small-icons-toggle" onchange="eitiSetSmallIcons(this.checked)" hidden aria-hidden="true">
+                        </div>
+
+                        <!-- v14.16.32: объём и 3D-иконки -->
+                        <div class="eiti-si-row" role="group" aria-label="Объёмный стиль">
+                            <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                                <span style="font-size:22px;">🧊</span>
+                                <div style="min-width:0;">
+                                    <div style="font-size:15px;font-weight:600;" data-i18n="Объёмный стиль">Объёмный стиль</div>
+                                    <div style="font-size:11px;opacity:0.55;margin-top:1px;" data-i18n="Тени, градиенты и блики на полях и кнопках">Тени, градиенты и блики на полях и кнопках</div>
+                                </div>
+                            </div>
+                            <button type="button" id="eiti-depth-btn" class="eiti-pref-btn" onclick="eitiSetPref('depth', !eitiGetPref('depth'))">ВЫКЛ</button>
+                        </div>
+                        <div class="eiti-si-row" role="group" aria-label="3D-иконки">
+                            <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                                <span style="font-size:22px;">✨</span>
+                                <div style="min-width:0;">
+                                    <div style="font-size:15px;font-weight:600;" data-i18n="3D-иконки табов">3D-иконки табов</div>
+                                    <div style="font-size:11px;opacity:0.55;margin-top:1px;" data-i18n="Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах">Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах</div>
+                                </div>
+                            </div>
+                            <button type="button" id="eiti-icons3d-btn" class="eiti-pref-btn" onclick="eitiSetPref('icons3d', !eitiGetPref('icons3d'))">ВЫКЛ</button>
+                        </div>
+
+                        <!-- v14.16.32: размер шапки — компактная (по умолчанию в APK) / большая золотая -->
+                        <div class="eiti-si-row" role="group" aria-label="Большая золотая шапка">
+                            <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                                <span style="font-size:22px;">👑</span>
+                                <div style="min-width:0;">
+                                    <div style="font-size:15px;font-weight:600;" data-i18n="Большая золотая шапка">Большая золотая шапка</div>
+                                    <div style="font-size:11px;opacity:0.55;margin-top:1px;" data-i18n="Выкл — компактная шапка, больше места для текста">Выкл — компактная шапка, больше места для текста</div>
+                                </div>
+                            </div>
+                            <button type="button" id="eiti-header-size-btn" onclick="eitiSetHeaderLarge(!eitiIsHeaderLarge())" style="padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.1);color:var(--text-color);">ВЫКЛ</button>
                         </div>
 
                         <div class="eiti-si-row" role="group" aria-label="Компактные табы">
@@ -12817,6 +13299,8 @@
         function eitiRenderGeminiModel() {
             var cur = eitiGetGeminiModel();
             var map = {
+                'gemini-4-hydrogen': 'gm-model-4hydrogen',
+                'gemini-4-carbon': 'gm-model-4carbon',
                 'gemini-3.8-flash': 'gm-model-38flash',
                 'gemini-4-argon': 'gm-model-4argon',
                 'gemini-3.6-flash': 'gm-model-36flash',
@@ -12831,8 +13315,10 @@
             });
             var desc = document.getElementById('gm-model-desc');
             var descs = {
-                'gemini-3.8-flash': '3.8 Flash: актуальный Flash · быстро и сильно',
-                'gemini-4-argon': '4 Argon: флагман reasoning · сложные задачи',
+                'gemini-4-hydrogen': '4 Hydrogen: новое поколение · быстро, 1M контекст',
+                'gemini-4-carbon': '4 Carbon: флагман · код, наука, сложные задачи',
+                'gemini-3.8-flash': '3.8 Flash: прошлое поколение Flash',
+                'gemini-4-argon': '4 Argon: reasoning · дешевле Carbon',
                 'gemini-3.6-flash': '3.6 Flash: замена 3.5 Flash · баланс',
                 'gemini-3.5-flash-lite': '3.5 Lite: максимум скорости · минимум цены'
             };
@@ -15101,6 +15587,7 @@
                 }
             });
             if (!silent) showToast('Иконки: ' + packId);
+            if (typeof eitiApply3dIcons === 'function') eitiApply3dIcons(eitiGetPref('icons3d')); // v14.16.32
         }
 
         function applyDesign(designId) {
@@ -15643,6 +16130,99 @@
         window.eitiSetSmallIcons = eitiSetSmallIcons;
         window.eitiIsSmallIcons = eitiIsSmallIcons;
         document.addEventListener('DOMContentLoaded', function () { eitiApplySmallIcons(eitiIsSmallIcons()); });
+
+        // v14.16.32: «👑 Большая золотая шапка». Ключ eiti_header_size: 'large' | 'compact'; нет ключа → компактная в APK, большая на сайте.
+        function eitiIsHeaderLarge() {
+            var v = null; try { v = localStorage.getItem('eiti_header_size'); } catch (e) {}
+            if (v === 'large') return true;
+            if (v === 'compact') return false;
+            return !window.EITI_NATIVE;
+        }
+        function eitiApplyHeaderSize(large) {
+            document.documentElement.classList.toggle('eiti-compact-header', !large);
+            var btn = document.getElementById('eiti-header-size-btn');
+            if (btn) {
+                var tr = function (x) { try { return window.EITI_I18N && EITI_I18N.tr ? EITI_I18N.tr(x) : x; } catch (e) { return x; } };
+                btn.textContent = large ? tr('ВКЛ') : tr('ВЫКЛ');
+                btn.style.background = large ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)';
+                btn.style.color = large ? '#000' : 'var(--text-color)';
+            }
+        }
+        function eitiSetHeaderLarge(large) {
+            large = !!large;
+            try { localStorage.setItem('eiti_header_size', large ? 'large' : 'compact'); } catch (e) {}
+            eitiApplyHeaderSize(large);
+            if (typeof showToast === 'function') showToast(large ? '👑 Большая золотая шапка' : '📏 Компактная шапка');
+        }
+        window.eitiIsHeaderLarge = eitiIsHeaderLarge;
+
+        // v14.16.32: флаги вида — 🧊 объём (eiti_depth) и ✨ 3D-иконки (eiti_3d_icons). '1'/'0'; нет ключа → по умолчанию.
+        // Объём: по умолчанию только в APK. 3D-иконки: по умолчанию везде, кроме iPhone/iPad/Mac (там системные эмодзи
+        // и так объёмные — вид на iOS не меняем).
+        var EITI_PREFS = {
+            depth: { key: 'eiti_depth', def: function () { return !!window.EITI_NATIVE; }, btn: 'eiti-depth-btn',
+                     apply: function (on) { document.documentElement.classList.toggle('eiti-depth', on); } },
+            icons3d: { key: 'eiti_3d_icons', def: function () { return !eitiIsApplePlatform(); }, btn: 'eiti-icons3d-btn',
+                       apply: function (on) { eitiApply3dIcons(on); } }
+        };
+        function eitiIsApplePlatform() {
+            try {
+                if (document.documentElement.classList.contains('is-ios')) return true;
+                var ua = navigator.userAgent || '', pf = navigator.platform || '';
+                return /iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua) || /^(Mac|iPhone|iPad)/.test(pf);
+            } catch (e) { return false; }
+        }
+        function eitiGetPref(name) {
+            var p = EITI_PREFS[name]; if (!p) return false;
+            var v = null; try { v = localStorage.getItem(p.key); } catch (e) {}
+            return v === '1' ? true : v === '0' ? false : p.def();
+        }
+        function eitiPaintPrefBtn(btn, on) {
+            if (!btn) return;
+            var tr = function (x) { try { return window.EITI_I18N && EITI_I18N.tr ? EITI_I18N.tr(x) : x; } catch (e) { return x; } };
+            btn.textContent = on ? tr('ВКЛ') : tr('ВЫКЛ');
+            btn.style.cssText = 'padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;'
+                + (on ? 'background:var(--accent-color);color:#000;' : 'background:rgba(255,255,255,0.1);color:var(--text-color);');
+        }
+        function eitiSetPref(name, on) {
+            var p = EITI_PREFS[name]; if (!p) return;
+            on = !!on;
+            try { localStorage.setItem(p.key, on ? '1' : '0'); } catch (e) {}
+            p.apply(on); eitiPaintPrefBtn(document.getElementById(p.btn), on);
+        }
+        // Таб-иконки Fluent 3D: только для стандартного набора эмодзи (другие наборы иконок не трогаем).
+        // Класс ставится после загрузки всех 8 картинок → если файл недоступен, остаётся текстовый эмодзи.
+        var EITI_3D_TAB_ICONS = ['speech_balloon', 'notebook', 'books', 'musical_note', 'file_folder', 'memo', 'calendar', 'gear'];
+        var eiti3dIconsReady = null;
+        function eitiApply3dIcons(on) {
+            var de = document.documentElement;
+            var pack = 'emoji_classic';
+            try { pack = (getUIState().iconPack) || (getUIState().design === 'kim3-metal' ? 'kim3' : 'emoji_classic'); } catch (e) {}
+            if (!on || pack !== 'emoji_classic') { de.classList.remove('eiti-3d-icons'); return; }
+            if (!eiti3dIconsReady) {
+                eiti3dIconsReady = Promise.all(EITI_3D_TAB_ICONS.map(function (n) {
+                    return new Promise(function (res, rej) {
+                        var im = new Image(); im.onload = res; im.onerror = rej;
+                        im.src = 'vendor/fluent-emoji-3d/' + n + '.webp';
+                    });
+                })).then(function () { return true; }, function () { return false; });
+            }
+            eiti3dIconsReady.then(function (ok) {
+                if (ok && eitiGetPref('icons3d')) {
+                    var p2 = 'emoji_classic';
+                    try { p2 = getUIState().iconPack || (getUIState().design === 'kim3-metal' ? 'kim3' : 'emoji_classic'); } catch (e) {}
+                    de.classList.toggle('eiti-3d-icons', p2 === 'emoji_classic');
+                }
+            });
+        }
+        window.eitiGetPref = eitiGetPref; window.eitiSetPref = eitiSetPref; window.eitiApply3dIcons = eitiApply3dIcons;
+        document.addEventListener('DOMContentLoaded', function () {
+            Object.keys(EITI_PREFS).forEach(function (n) {
+                var on = eitiGetPref(n); EITI_PREFS[n].apply(on); eitiPaintPrefBtn(document.getElementById(EITI_PREFS[n].btn), on);
+            });
+        });
+        window.eitiSetHeaderLarge = eitiSetHeaderLarge;
+        document.addEventListener('DOMContentLoaded', function () { eitiApplyHeaderSize(eitiIsHeaderLarge()); });
 
         // v14.16.28: «Компактные табы» — API был в onchange HTML, но функции не было → чекбокс «мёртвый».
         // Ключ eiti_compact_chrome: отсутствует/'1' = вкл (как early <head>), '0' = выкл.
@@ -16861,6 +17441,7 @@
                         var delBtn = document.createElement('div');
                         delBtn.style.cssText = 'position:absolute;right:0;top:0;bottom:0;width:' + DELETE_W + 'px;background:#e53935;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transform:translateX(100%);z-index:2;';
                         delBtn.textContent = 'Удалить';
+                        delBtn.className = 'eiti-track-del'; // v14.16.32: браузер переписывает style в rgb(...) — селектор по цвету не срабатывал
                         wrapper.appendChild(row);
                         wrapper.appendChild(delBtn);
                         list.appendChild(wrapper);
@@ -16913,13 +17494,14 @@
                             list.__swipeState = {};
                         }, { passive: true });
                         list.addEventListener('click', function(e) {
-                            var delBtn = e.target.closest('[style*="background:#e53935"]');
+                            var delBtn = e.target.closest('.eiti-track-del, [style*="background:#e53935"]');
                             var row = delBtn ? delBtn.previousElementSibling : e.target.closest('[data-track-idx]');
                             if (!row) return;
                             if (delBtn) {
                                 e.stopPropagation();
                                 var idx = parseInt(row.getAttribute('data-track-idx'), 10);
                                 var wasActive = (idx === currentTrack);
+                                if (tracks[idx] && tracks[idx]._eitiDefaultId && typeof eitiDefaultTrackRemoved === 'function') eitiDefaultTrackRemoved(tracks[idx]._eitiDefaultId); // v14.16.32
                                 tracks.splice(idx, 1);
                                 if (currentTrack > idx) currentTrack--;
                                 else if (currentTrack >= tracks.length) currentTrack = Math.max(0, tracks.length - 1);
@@ -17159,6 +17741,94 @@
                     });
                 }, 200);
 
+                // ── v14.16.32: треки по умолчанию (только в APK: www/media/default/, в репозитории их нет) ──
+                // Названия правятся здесь. Удалённый трек по умолчанию больше не возвращается (eiti_default_tracks_removed);
+                // «🎵 Вернуть треки по умолчанию» в Настройках — вернуть.
+                window.EITI_DEFAULT_TRACKS = [
+                    { id: 'velan-seul', file: 'media/default/track1.mp3', title: 'Seul', artist: 'Velan', duration: '3:02' },
+                    { id: 'native-lands', file: 'media/default/track2.mp3', title: 'Native Lands', artist: '', duration: '3:19' }
+                ];
+                var EITI_DT_KEY = 'eiti_default_tracks_removed';
+                function _dtRemoved() { try { return JSON.parse(localStorage.getItem(EITI_DT_KEY) || '[]') || []; } catch (e) { return []; } }
+                window.eitiDefaultTrackRemoved = function(id) {
+                    var l = _dtRemoved(); if (l.indexOf(id) === -1) l.push(id);
+                    try { localStorage.setItem(EITI_DT_KEY, JSON.stringify(l)); } catch (e) {}
+                };
+                window.eitiSeedDefaultTracks = function(opts) {
+                    opts = opts || {};
+                    if (!window.EITI_NATIVE && !opts.force) return Promise.resolve(0); // на сайте файлов нет — не запрашиваем
+                    if (window._eitiSeedBusy) return window._eitiSeedBusy;
+                    var p = window._eitiSeedDo().then(function(n) { window._eitiSeedBusy = null; return n; }, function() { window._eitiSeedBusy = null; return 0; });
+                    window._eitiSeedBusy = p;
+                    return p;
+                };
+                window._eitiSeedDo = function() {
+                    var removed = _dtRemoved();
+                    var want = window.EITI_DEFAULT_TRACKS.filter(function(d) {
+                        return removed.indexOf(d.id) === -1 && !tracks.some(function(t) { return t && t._eitiDefaultId === d.id; });
+                    });
+                    if (!want.length) return Promise.resolve(0);
+                    return Promise.all(want.map(function(d) {
+                        return fetch(d.file).then(function(r) { if (!r.ok) throw new Error(r.status); return r.blob(); }).then(function(b) {
+                            var label = d.artist ? d.artist + ' – ' + d.title : d.title;
+                            var f = new File([b], label + '.mp3', { type: 'audio/mpeg' });
+                            f._eitiDefaultId = d.id; f._eitiTitle = d.title; f._eitiArtist = d.artist;
+                            return f;
+                        }).catch(function() { return null; });
+                    })).then(function(files) {
+                        files = files.filter(Boolean);
+                        if (!files.length) return 0;
+                        var wasEmpty = tracks.length === 0;
+                        // порядок как в EITI_DEFAULT_TRACKS, перед пользовательскими не ставим — в конец
+                        tracks = tracks.concat(files);
+                        storage.music = tracks;
+                        if (typeof updateCount === 'function') updateCount('music', tracks.length);
+                        if (wasEmpty) { currentTrack = 0; window._eitiLoadTrack(0); } else window.renderPlayerTrackList();
+                        return files.length;
+                    });
+                };
+                window.eitiRestoreDefaultTracks = function() {
+                    try { localStorage.removeItem(EITI_DT_KEY); } catch (e) {}
+                    return window.eitiSeedDefaultTracks().then(function(n) {
+                        if (typeof showToast === 'function') showToast(n ? '🎵 Треки по умолчанию возвращены: ' + n : '🎵 Треки по умолчанию уже в плейлисте');
+                        return n;
+                    });
+                };
+                setTimeout(function() { window.eitiSeedDefaultTracks(); }, 1200);
+
+                // ── v14.16.32: кнопки плеера в шторке Android (APK). WebView не показывает Media Session сам —
+                // нативный плагин EitiBackground рисует MediaStyle-уведомление и шлёт нажатия сюда.
+                (function() {
+                    function nb() { return window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null; }
+                    var pushT = null;
+                    function push() {
+                        clearTimeout(pushT);
+                        pushT = setTimeout(function() {
+                            var b = nb(); if (!b) return;
+                            var t = tracks[currentTrack];
+                            if (!t) { b.clearMedia(); return; }
+                            var name = t.name.replace(/\.[^/.]+$/, '');
+                            b.media({ title: t._eitiTitle || name, artist: t._eitiDefaultId ? (t._eitiArtist || 'VELANTRIM') : 'VELANTRIM EITI',
+                                      playing: !audio.paused, position: Math.round((audio.currentTime || 0) * 1000), duration: isFinite(audio.duration) ? Math.round(audio.duration * 1000) : 0,
+                                      hasPrev: tracks.length > 1, hasNext: tracks.length > 1 });
+                        }, 120);
+                    }
+                    ['play', 'pause', 'ended', 'loadedmetadata', 'emptied'].forEach(function(ev) { audio.addEventListener(ev, push); });
+                    window._eitiMediaPush = push;
+                    if (window._eitiMediaActionBound) return; // bind-функция вызывается при каждой смене раскладки плеера
+                    window._eitiMediaActionBound = true;
+                    window.addEventListener('eiti-media-action', function(e) {
+                        var a = e && e.detail && e.detail.action;
+                        var audio = document.getElementById('audio'); if (!audio) return;
+                        if (a === 'play') audio.play().catch(function() {});
+                        else if (a === 'pause') audio.pause();
+                        else if (a === 'toggle') { if (audio.paused) audio.play().catch(function() {}); else audio.pause(); }
+                        else if (a === 'next') { var n = document.getElementById('next'); if (n) n.click(); }
+                        else if (a === 'prev') { var p = document.getElementById('prev'); if (p) p.click(); }
+                        else if (a === 'stop') { audio.pause(); }
+                    });
+                })();
+
                 // ── Bind: musicInput ───────────────────────────
                 musicInput.onchange = function(e) {
                     var newFiles = Array.from(e.target.files);
@@ -17290,7 +17960,8 @@
 
                     // Обновляем метаданные при каждой смене трека
                     window._eitiUpdateMediaSession = function(trackName, artwork) {
-                        var meta = { title: trackName || 'VELANTRIM Player', artist: 'VELANTRIM EITI', album: 'Плейлист' };
+                        var _ct = (typeof tracks !== 'undefined' && tracks[currentTrack]) || null; // v14.16.32: название/исполнитель трека по умолчанию
+                        var meta = { title: (_ct && _ct._eitiTitle) || trackName || 'VELANTRIM Player', artist: (_ct && _ct._eitiDefaultId) ? (_ct._eitiArtist || 'VELANTRIM') : 'VELANTRIM EITI', album: 'Плейлист' };
                         if (artwork && artwork.length) meta.artwork = artwork;
                         try { navigator.mediaSession.metadata = new MediaMetadata(meta); } catch(e) {}
                     };
@@ -17411,7 +18082,14 @@
                         window._eitiEqAnimId = requestAnimationFrame(window._eitiDrawEq);
                         // v13.4.0 P1 FIX #10: в фоне или на паузе — плоская линия, без FFT-рендера.
                         var _audioEl = document.querySelector('#playerAudio') || window._eitiCurrentAudio;
-                        if (document.hidden || (_audioEl && _audioEl.paused)) {
+                        // v14.16.32: в простое рисуем одну плоскую линию и ОСТАНАВЛИВАЕМ цикл (раньше rAF крутился 60 к/с
+                        // всегда, даже без музыки и на других вкладках). Перезапуск — play / возврат во вкладку / показ плеера.
+                        var _cvVis = _getCanvas();
+                        if (!document.hidden && _audioEl && !_audioEl.paused && (!_cvVis || _cvVis.offsetParent === null)) {
+                            cancelAnimationFrame(window._eitiEqAnimId); window._eitiEqAnimId = null; return;
+                        }
+                        if (document.hidden || !_audioEl || (_audioEl && _audioEl.paused)) {
+                            cancelAnimationFrame(window._eitiEqAnimId); window._eitiEqAnimId = null;
                             var _cIdle = _getCanvas();
                             if (_cIdle) {
                                 var _ctxIdle = _cIdle._eitiCtx || (_cIdle._eitiCtx = _cIdle.getContext('2d'));
@@ -17524,7 +18202,9 @@
                             _vizAnimId = requestAnimationFrame(draw);
                             // v13.4.0 P1 FIX #10: пропускаем кадр в фоне или на паузе.
                             var _drawAudio = document.getElementById('audio') || window._eitiCurrentAudio;
-                            if (document.hidden || (_drawAudio && _drawAudio.paused)) {
+                            // v14.16.32: пауза / фон / плеер не виден → цикл останавливается (перезапуск — play)
+                            if (document.hidden || !_drawAudio || _drawAudio.paused || cv.offsetParent === null) {
+                                cancelAnimationFrame(_vizAnimId); _vizAnimId = null;
                                 return;
                             }
                             var W = cv.offsetWidth * (window.devicePixelRatio || 1);
@@ -17592,7 +18272,10 @@
                         if (artEl && !artEl.querySelector('img.art-cover')) _startViz();
                     });
                     audio.addEventListener('pause', function() {
-                        // Не останавливаем — показываем idle
+                        // v14.16.32: цикл сам остановится в draw() (без лишних кадров на паузе)
+                    });
+                    document.addEventListener('visibilitychange', function() {
+                        if (!document.hidden && !audio.paused && !_vizAnimId) { var a2 = document.getElementById('albumArtEl'); if (a2 && !a2.querySelector('img.art-cover')) _startViz(); }
                     });
                     audio.addEventListener('loadstart', function() {
                         // При смене трека перезапускаем
@@ -17834,6 +18517,7 @@
         }
 
         function installPWA() {
+            if (window.EITI_NATIVE) { if (typeof showToast === 'function') showToast('✅ EITI уже установлено как приложение'); return; }
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choice) => {
@@ -19117,16 +19801,27 @@
             t = t.replace(/^[\-*•·]\s+\[([ xX])\]\s+(.+)$/gm, function(_m, mark, txt) {
                 return '<div style="padding-left:12px;margin:2px 0;">' + (mark === ' ' ? '☐' : '☑') + ' ' + txt + '</div>';
             });
-            // Bullet list
-            t = t.replace(/^[\-*•·]\s+(.+)$/gm, '<div style="padding-left:12px;margin:2px 0;">· $1</div>');
+            // Bullet list (v14.16.32: висячий отступ — перенос строки пункта встаёт под текст, а не под «·»)
+            t = t.replace(/^[\-*•·]\s+(.+)$/gm, '<div class="md-li" style="padding-left:22px;text-indent:-10px;margin:2px 0;">· $1</div>');
             // Numbered list
-            t = t.replace(/^(\d+)\.\s+(.+)$/gm, '<div style="padding-left:12px;margin:2px 0;">$1. $2</div>');
+            t = t.replace(/^(\d+)\.\s+(.+)$/gm, '<div class="md-li" style="padding-left:26px;text-indent:-14px;margin:2px 0;">$1. $2</div>');
             // Bold **text** or __text__
             t = t.replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>');
             t = t.replace(/__([^_\n]+)__/g, '<b>$1</b>');
             // Italic *text* (v13.7.21: одиночные * больше не удаляются — «2 * 3» остаётся как есть)
             t = t.replace(/(?<![*\w])\*([^*\s\n](?:[^*\n]*[^*\s\n])?)\*(?![*\w])/g, '<i>$1</i>');
             t = t.replace(/(?<![_\w])_([^_\n]+)_(?![_\w])/g, '<i>$1</i>');
+            // v14.16.32: пустые строки вокруг блоков (пункты, заголовки, цитаты, таблицы, <hr>) давали двойные/тройные
+            // зазоры: «</div>\n\n<div>» → </div><br><br><div>. Теперь: 3+ переводов → 2; перевод сразу после блока
+            // съедается; пустая строка рядом с блоком → небольшой отступ 6px вместо пустой строки.
+            t = t.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+            var _mdGap = '<div class="md-gap" style="height:6px;"></div>';
+            t = t.replace(/(<\/div>|<hr[^>]*>)\n\n(?=<div|<hr)/g, '$1' + _mdGap);
+            t = t.replace(/(<\/div>|<hr[^>]*>)\n\n/g, '$1' + _mdGap);
+            t = t.replace(/\n\n(?=<div|<hr)/g, _mdGap);
+            t = t.replace(/(<\/div>|<hr[^>]*>)\n/g, '$1');
+            t = t.replace(/\n(?=<div|<hr)/g, '');
+            t = t.replace(/^\n+|\n+$/g, '');
             // Double newline → paragraph break
             t = t.replace(/\n\n/g, '<br><br>');
             // Single newline → <br>
@@ -19203,7 +19898,7 @@
                                 localStorage.setItem('eiti_storage_persistent', '1');
                             } else {
                                 // Не granted — показываем подсказку один раз
-                                if (!localStorage.getItem('eiti_storage_persistent_warned')) {
+                                if (!window.EITI_NATIVE && !localStorage.getItem('eiti_storage_persistent_warned')) { // v14.16.32: в APK данные в хранилище приложения
                                     localStorage.setItem('eiti_storage_persistent_warned', '1');
                                     setTimeout(function() {
                                         if (typeof showToast === 'function') {
@@ -22619,7 +23314,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                 'or-model-free-auto':'openrouter/free',
                 'or-model-claude':'anthropic/claude-sonnet-5.5',
                 'or-model-gpt':'openai/gpt-6.1-sol',
-                'or-model-llama':'meta-llama/llama-4-maverick'
+                'or-model-qwen':'qwen/qwen4-max'
             };
             Object.keys(presetMap).forEach(function(id) {
                 var btn = document.getElementById(id);
@@ -22781,13 +23476,42 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                 };
             });
         }
+        // v14.16.32: живой каталог OpenRouter (GET /api/v1/models, без ключа) с кэшем на 24 ч — подсказки в поле «provider/model-name»
+        var EITI_OR_CAT_KEY = 'eiti_or_catalog_v1', EITI_OR_CAT_TTL = 24 * 3600e3;
+        function eitiORCatalogFill() {
+            var dl = document.getElementById('eiti-or-models-dl');
+            if (!dl) return;
+            var ids = Object.keys(_eitiORModelMeta).filter(function(id) { return !/:batch$/.test(id); });
+            if (dl.childElementCount === ids.length) return;
+            var frag = document.createDocumentFragment();
+            ids.forEach(function(id) { var o = document.createElement('option'); o.value = id; if (_eitiORModelMeta[id].name) o.label = _eitiORModelMeta[id].name; frag.appendChild(o); });
+            dl.innerHTML = ''; dl.appendChild(frag);
+        }
+        function eitiORCatalogFromCache() {
+            try {
+                var c = JSON.parse(localStorage.getItem(EITI_OR_CAT_KEY) || 'null');
+                if (!c || !Array.isArray(c.m)) return false;
+                c.m.forEach(function(x) { _eitiORModelMeta[x[0]] = { name: x[1] || '', supported: x[2], mandatory: !!x[3] }; });
+                eitiORCatalogFill();
+                return Date.now() - (c.ts || 0) < EITI_OR_CAT_TTL;
+            } catch (e) { return false; }
+        }
+        function eitiORCatalogSave() {
+            try {
+                var m = Object.keys(_eitiORModelMeta).map(function(id) { var v = _eitiORModelMeta[id]; return [id, v.name, v.supported, v.mandatory ? 1 : 0]; });
+                localStorage.setItem(EITI_OR_CAT_KEY, JSON.stringify({ ts: Date.now(), m: m }));
+            } catch (e) {}
+        }
+        window.eitiORCatalogIds = function() { return Object.keys(_eitiORModelMeta); };
         function eitiLoadORModelMeta() {
-            if (_eitiORMetaLoading || Object.keys(_eitiORModelMeta).length) return;
+            if (_eitiORMetaLoading) return;
+            if (!Object.keys(_eitiORModelMeta).length && eitiORCatalogFromCache()) return;
+            if (Object.keys(_eitiORModelMeta).length && window._eitiORCatFresh) return;
             _eitiORMetaLoading = true;
             eitiFetchWithTimeout('https://openrouter.ai/api/v1/models', {}, 12000)
                 .then(function(r) { return r.ok ? r.json() : null; })
                 .then(function(p) {
-                    if (p && Array.isArray(p.data)) eitiORCacheModelMeta(p.data);
+                    if (p && Array.isArray(p.data)) { eitiORCacheModelMeta(p.data); window._eitiORCatFresh = true; eitiORCatalogSave(); eitiORCatalogFill(); }
                     _eitiORMetaLoading = false;
                     try { eitiRenderORThinking(); } catch (e) {}
                 })
@@ -29408,10 +30132,10 @@ async function eitiActivateAIOffline() {
         // FIX: кэшируем модуль глобально — избегаем 4x повторного CDN-импорта
         if (!window._eitiTransformersModule) {
             try {
-                window._eitiTransformersModule = await _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                window._eitiTransformersModule = await _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             } catch(cdnError) {
                 try {
-                    window._eitiTransformersModule = await _eitiImportWithTimeout('https://unpkg.com/@huggingface/transformers@3', 30000);
+                    window._eitiTransformersModule = await _eitiImportWithTimeout('https://unpkg.com/@huggingface/transformers@3.8.1', 30000);
                 } catch(e2) {
                     console.warn('[EITI] Transformers.js недоступен:', e2.message);
                     showToast('⚠️ AI-офлайн недоступен — продолжаем без него');
@@ -29644,7 +30368,7 @@ window.eitiToggleAIOffline = function() {
             eitiUpdateAIStatus('⏳ Включение…', cfg.model);
             var _toggleImport = window._eitiTransformersModule
                 ? Promise.resolve(window._eitiTransformersModule)
-                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             _toggleImport.then(function(m){
                 window._eitiTransformersModule = m;
                 m.env.useBrowserCache = true;
@@ -29691,7 +30415,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 90000);
             var _restoreImport = window._eitiTransformersModule
                 ? Promise.resolve(window._eitiTransformersModule)
-                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             _restoreImport
                 .then(function(m) {
                     window._eitiTransformersModule = m;
@@ -29719,7 +30443,7 @@ document.addEventListener('DOMContentLoaded', function() {
             eitiUpdateAIStatus('⏳ Загружается…', cfg.model);
             var _fallbackImport = window._eitiTransformersModule
                 ? Promise.resolve(window._eitiTransformersModule)
-                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000);
+                : _eitiImportWithTimeout('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000);
             _fallbackImport
                 .then(function(m) { window._eitiTransformersModule = m; m.env.useBrowserCache=true; return m.pipeline('feature-extraction','Xenova/'+cfg.model); })
                 .then(function(model) { eitiSemanticModel=model; eitiUpdateAIStatus('✅ Готов',cfg.model); })
@@ -30187,6 +30911,46 @@ window.eitiToggleLLM = function() {
     }
 })();
 
+// v14.16.32: список офлайн-моделей с оценкой «потянет ли устройство» (local/eiti_device_fit.js)
+window.eitiLLMFitRender = function(force) {
+    var box = document.getElementById('eiti-llm-fit-list'), devEl = document.getElementById('eiti-llm-fit-dev');
+    if (!box || !window.EitiDeviceFit) return Promise.resolve(null);
+    if (box.getAttribute('data-done') === '1' && !force) return Promise.resolve(window._eitiDeviceFit || null);
+    box.setAttribute('data-done', '1');
+    var F = window.EitiDeviceFit;
+    return F.probe().then(function(dev) {
+        window._eitiDeviceFit = dev;
+        if (devEl) devEl.textContent = F.summary(dev) + (dev.ramCapped && !dev.ramExact ? ' (браузер не сообщает ОЗУ больше 8 ГБ)' : '');
+        var rec = F.recommend(dev);
+        var cur = (document.querySelector('input[name="llm-model"]:checked') || {}).value;
+        try { var saved = typeof _eitiLLMGetConfig === 'function' ? (_eitiLLMGetConfig() || {}).model : ''; if (saved && F.CATALOG.some(function(m) { return m.id === saved; })) cur = saved; } catch (e) {}
+        var html = '';
+        ['fast', 'smart', 'large'].forEach(function(tier) {
+            html += '<div style="font-size:11px;font-weight:700;opacity:0.6;letter-spacing:0.5px;margin-top:4px;">' + F.TIERS[tier] + '</div>';
+            F.CATALOG.filter(function(m) { return m.tier === tier; }).forEach(function(m) {
+                var r = F.rate(m, dev);
+                var badge = r.level === 'ok' ? '✅' : r.level === 'tight' ? '⚠️' : r.level === 'no' ? '⛔' : '❔';
+                var isRec = rec && rec.id === m.id;
+                html += '<label class="eiti-llm-fit-item" data-fit="' + r.level + '"' + (isRec ? ' data-rec="1"' : '') + ' style="display:block;padding:9px 10px;border-radius:10px;cursor:pointer;background:' + (isRec ? 'rgba(255,215,0,0.08)' : 'var(--secondary-color)') + ';border:2px solid ' + (isRec ? 'var(--accent-color)' : 'transparent') + ';' + (r.level === 'no' ? 'opacity:0.55;' : '') + '">'
+                    + '<input type="radio" name="llm-model" value="' + m.id + '"' + (cur === m.id ? ' checked' : '') + ' onchange="eitiLLMRenderBtn()" style="margin-right:8px;">'
+                    + badge + ' <b>' + m.name + '</b>' + (isRec ? ' <span style="color:var(--accent-color);font-size:12px;">★ рекомендуем</span>' : '')
+                    + '<br><span style="font-size:11px;opacity:0.65;margin-left:22px;">≈' + m.dlGB + ' ГБ · ' + m.langs + ' · ' + m.note + (r.reason ? ' · ' + r.reason : '') + '</span></label>';
+            });
+        });
+        box.innerHTML = html;
+        return dev;
+    }).catch(function() { if (devEl) devEl.textContent = '❔ Не удалось определить возможности устройства'; return null; });
+};
+(function() {
+    function arm() {
+        var el = document.getElementById('eiti-llm-fit');
+        if (!el) return;
+        if (!('IntersectionObserver' in window)) { setTimeout(function() { window.eitiLLMFitRender(); }, 4000); return; }
+        var io = new IntersectionObserver(function(es) { if (es.some(function(e) { return e.isIntersecting; })) { io.disconnect(); window.eitiLLMFitRender(); } });
+        io.observe(el);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+})();
 window.eitiActivateLLM = async function() {
     var sel = document.querySelector('input[name="llm-model"]:checked');
     if (!sel) { if (typeof showToast === 'function') showToast('⚠️ Выберите LLM модель', 3000); return; }
@@ -30208,7 +30972,7 @@ window.eitiActivateLLM = async function() {
             if (progText) progText.textContent = 'Загрузка Transformers.js…';
             if (!window._eitiTransformersModule) {
                 window._eitiTransformersModule = await _eitiImportWithTimeout(
-                    'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3', 30000
+                    'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1', 30000
                 );
             }
             var _tm = window._eitiTransformersModule;
@@ -30260,9 +31024,10 @@ window.eitiActivateLLM = async function() {
             // jsdelivr лучше работает с COEP заголовками чем esm.run
             var mod = null;
             var cdnList = [
-                'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm/+esm',
-                'https://esm.run/@mlc-ai/web-llm',
-                'https://unpkg.com/@mlc-ai/web-llm?module'
+                // v14.16.30 (#27): точная версия на всех CDN (import() не поддерживает SRI)
+                'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.88/+esm',
+                'https://esm.run/@mlc-ai/web-llm@0.2.88',
+                'https://unpkg.com/@mlc-ai/web-llm@0.2.88?module'
             ];
             for (var ci = 0; ci < cdnList.length; ci++) {
                 try { mod = await import(cdnList[ci]); if (mod) break; } catch(e2) { console.warn('[EITI LLM] CDN fallback:', cdnList[ci], e2.message); }
@@ -33721,7 +34486,72 @@ window.eitiLLMClearAll = async function() {
             };
             EitiOffline._kbWrapped = true;
         })();
-        window.addEventListener('load', function() { setTimeout(function() { EitiKBHost.prewarm(); }, 6000); });
+        // v14.16.32: в APK база знаний лежит на сайте (~460 МБ) → индекс НЕ грузится при запуске (было 70+ запросов),
+        // а по требованию: при первом фокусе поля ввода / первом офлайн-вопросе. Сайт/PWA — как раньше (прогрев через 6 с).
+        window.addEventListener('load', function() {
+            if (!window.EITI_NATIVE) { setTimeout(function() { EitiKBHost.prewarm(); }, 6000); return; }
+            var warm = function() { document.removeEventListener('focusin', onF, true); setTimeout(function() { EitiKBHost.prewarm(); }, 400); };
+            var onF = function(e) { var t = e.target; if (t && (t.id === 'input' || t.id === 'notesAiInput')) warm(); };
+            document.addEventListener('focusin', onF, true);
+        });
+        // v14.16.32: 🔋 фон и батарея (APK). Ключ eiti_bg_notify: '0' — выкл, иначе вкл (по умолчанию вкл).
+        function eitiBgIsEnabled() { try { return localStorage.getItem('eiti_bg_notify') !== '0'; } catch (e) { return true; } }
+        function eitiBgStatusPaint() {
+            var st = document.getElementById('eiti-bg-status'), cb = document.getElementById('eiti-bg-notify');
+            if (cb) cb.checked = eitiBgIsEnabled();
+            var b = window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null;
+            if (!b) { if (st) st.textContent = ''; return; }
+            b.status().then(function(s) {
+                if (!st || !s) return;
+                st.textContent = (s.running ? '🟢 Работает в фоне' : '⚪ Фоновое уведомление выключено') + ' · ' + (s.ignoringBattery ? '🔋 без ограничений' : '🪫 батарея ограничена системой');
+            }, function() {});
+        }
+        window.eitiBgSetEnabled = function(on) {
+            try { localStorage.setItem('eiti_bg_notify', on ? '1' : '0'); } catch (e) {}
+            var b = window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null;
+            if (b) (on ? b.start() : b.stop()).then(eitiBgStatusPaint, eitiBgStatusPaint);
+            if (typeof showToast === 'function') showToast(on ? '🔔 EITI работает в фоне' : '🔕 Фоновое уведомление выключено');
+        };
+        window.eitiBgBattery = function(unrestricted) {
+            var b = window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null;
+            if (!b) return;
+            (unrestricted ? b.requestIgnoreBattery() : b.openBatterySettings()).then(function() { setTimeout(eitiBgStatusPaint, 1500); }, function() {});
+        };
+        window.eitiBgStatusPaint = eitiBgStatusPaint;
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(eitiBgStatusPaint, 1500); });
+        document.addEventListener('visibilitychange', function() { if (!document.hidden) eitiBgStatusPaint(); });
+        // v14.16.32: «📥 Скачать всю базу знаний (Wi-Fi)» — все шарды и пакеты в кэш устройства (в APK — Cache Storage моста).
+        window.eitiKbDownloadAll = function(opts) {
+            opts = opts || {};
+            var st = document.getElementById('eiti-kb-dl-status'), btn = document.getElementById('eiti-kb-dl-btn');
+            var say = function(t) { if (st) st.textContent = t; };
+            var c = navigator.connection || {};
+            if (!opts.force && (c.type === 'cellular' || c.saveData)) {
+                if (!confirm('📶 Сейчас мобильная сеть. База знаний ~460 МБ. Скачать всё равно?')) return Promise.resolve({ cancelled: true });
+            }
+            if (window._eitiKbDl) return window._eitiKbDl;
+            if (btn) btn.disabled = true;
+            var done = 0, failed = 0, bytes = 0, files = [];
+            window._eitiKbDl = fetch('kb/index.json', { cache: 'no-store' }).then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function(d) {
+                Object.keys(d.domains || {}).forEach(function(k) { var m = d.domains[k]; if (m.shard) files.push(m.shard); (m.packs || []).forEach(function(p) { files.push(p); }); });
+                var total = files.length, i = 0;
+                say('📥 0 / ' + total);
+                function worker() {
+                    if (i >= files.length) return Promise.resolve();
+                    var f = files[i++];
+                    return fetch('kb/' + f).then(function(r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+                        .then(function(b) { bytes += b.size; }, function() { failed++; })
+                        .then(function() { done++; if (done % 5 === 0 || done === total) say('📥 ' + done + ' / ' + total + ' · ' + Math.round(bytes / 1048576) + ' МБ'); return worker(); });
+                }
+                return Promise.all([worker(), worker(), worker()]).then(function() {
+                    try { localStorage.setItem('eiti_kb_all_downloaded', JSON.stringify({ at: Date.now(), files: total, failed: failed, bytes: bytes })); } catch (e) {}
+                    say(failed ? ('⚠️ Скачано ' + (total - failed) + ' из ' + total + ' — повтори позже') : ('✅ База знаний на устройстве: ' + total + ' файлов · ' + Math.round(bytes / 1048576) + ' МБ'));
+                    return { files: total, failed: failed, bytes: bytes };
+                });
+            }).catch(function(e) { say('📴 Не удалось: ' + (e && e.message || e)); return { error: String(e && e.message || e) }; })
+              .then(function(r) { window._eitiKbDl = null; if (btn) btn.disabled = false; return r; });
+            return window._eitiKbDl;
+        };
         // ── v14.13.0: «Похожие / Related / Ähnliche» + «Рассуждение / Reasoning / Begründung» (local/eiti_related.js) ──
         // Кнопки под ответами KB, офлайн-сказками и заметками (в т.ч. Notes Ask AI). Похожие KB/сказок — предвычислены при сборке
         // (поле «r» в kb/packs, «rel» в offline/packs/tales_*), похожие заметки — TF-IDF на устройстве, без сети.
@@ -35244,6 +36074,61 @@ window.eitiLLMClearAll = async function() {
             ['eiti-kb-add-triggers','eiti-kb-add-answer'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
             eitiKBRenderStats();
         }
+
+        // ── v14.16.32: перенос сайт ⇄ APK (local/eiti_transfer.js) ─────────────
+        function _eitiTransferStatus(t) { var s = document.getElementById('eiti-transfer-status'); if (s) s.textContent = t; }
+        window.eitiTransferExport = function() {
+            if (!window.EitiTransfer) return Promise.resolve(null);
+            var secrets = !!(document.getElementById('eiti-transfer-secrets') || {}).checked;
+            _eitiTransferStatus('⏳ Собираю данные…');
+            return EitiTransfer.collect({ includeSecrets: secrets }).then(function(b) {
+                var blob = EitiTransfer.toBlob(b), name = EitiTransfer.fileName();
+                var url = URL.createObjectURL(blob), a = document.createElement('a');
+                a.href = url; a.download = name; document.body.appendChild(a); a.click();
+                setTimeout(function() { a.remove(); URL.revokeObjectURL(url); }, 1500);
+                var nStores = 0, nRows = 0;
+                Object.keys(b.idb).forEach(function(d) { Object.keys(b.idb[d]).forEach(function(s) { nStores++; nRows += (b.idb[d][s].rows || []).length; }); });
+                _eitiTransferStatus('✅ ' + name + ' · ' + Math.round(blob.size / 1024) + ' КБ · настроек ' + Object.keys(b.ls).length + ' · записей ' + nRows + (b.skippedSecrets ? ' · ключи не включены (' + b.skippedSecrets + ')' : ''));
+                window._eitiLastTransfer = b;
+                return b;
+            }).catch(function(e) { _eitiTransferStatus('❌ ' + e.message); return null; });
+        };
+        window.eitiTransferImportFile = function(input) {
+            var f = input && input.files && input.files[0];
+            if (!f || !window.EitiTransfer) return Promise.resolve(null);
+            input.value = '';
+            return f.text().then(function(txt) {
+                var b; try { b = JSON.parse(txt); } catch (e) { throw new Error('Неверный JSON'); }
+                var err = EitiTransfer.validate(b); if (err) throw new Error(err);
+                var msg = 'Загрузить данные из файла переноса (' + (b.from === 'apk' ? 'приложение' : 'сайт') + ', v' + b.version + ', ' + String(b.created).slice(0, 10) + ')?\n\nСовпадающие заметки, чаты и настройки будут заменены версиями из файла. Уже введённые здесь API-ключи сохранятся.';
+                if (!window.__eitiTransferNoConfirm && !confirm(msg)) return null;
+                _eitiTransferStatus('⏳ Загружаю…');
+                return EitiTransfer.apply(b, { mode: 'merge', keepLocalSecrets: true }).then(function(r) {
+                    var n = 0; Object.keys(r.idb).forEach(function(d) { Object.keys(r.idb[d]).forEach(function(s) { n += r.idb[d][s]; }); });
+                    _eitiTransferStatus('✅ Перенесено: настроек ' + r.ls + ', записей ' + n + '. Перезапускаю…');
+                    if (!window.__eitiTransferNoReload) setTimeout(function() { location.reload(); }, 1200);
+                    return r;
+                });
+            }).catch(function(e) { _eitiTransferStatus('❌ ' + e.message); return null; });
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+            var box = document.getElementById('eiti-transfer-providers');
+            if (!box || !window.EitiTransfer) return;
+            Object.keys(EitiTransfer.providers).forEach(function(id) {
+                if (id === 'file') return;
+                var p = EitiTransfer.providers[id], b = document.createElement('button');
+                b.type = 'button'; b.className = 'settings-btn'; b.disabled = !p.available();
+                b.setAttribute('data-provider', id);
+                b.textContent = p.label + (p.available() ? '' : ' · скоро');
+                if (!p.available()) {
+                    var _tt = 'Нужно: ' + p.needs;
+                    b.setAttribute('data-i18n-title', _tt);
+                    try { b.title = window.EITI_I18N && EITI_I18N.tr ? EITI_I18N.tr(_tt) : _tt; } catch (e) { b.title = _tt; }
+                }
+                b.style.opacity = p.available() ? '1' : '0.5';
+                box.appendChild(b);
+            });
+        });
 
         // ── Единый экспорт / импорт (eiti.v5) ────────────────────────────────────
         function eitiExportAll() {
@@ -37850,7 +38735,12 @@ window.eitiLLMClearAll = async function() {
 
         // ══ v12.9.50: UNIVERSAL FILE PARSER + CHUNKED PROCESSOR ═════════════════
         // Работает полностью в браузере: TXT/MD/JSON/CSV — нативно;
-        // PDF — через PDF.js (CDN); DOCX — через mammoth.js (уже в EITI).
+        // PDF — через PDF.js (vendor/pdfjs, v14.16.31); DOCX — через mammoth.js (vendor/mammoth).
+        // v14.16.31 (#28): единые безопасные параметры открытия PDF (CVE-2024-4367).
+        function eitiPdfOpenOptions(data) {
+            return { data: data, isEvalSupported: false, enableXfa: false };
+        }
+        window.eitiPdfOpenOptions = eitiPdfOpenOptions;
         // Chunked processing: текст → чанки с overlap → AI суммаризирует каждый.
 
         // Определяем тип файла по расширению
@@ -37986,7 +38876,8 @@ window.eitiLLMClearAll = async function() {
             if (fileType === 'pdf') {
                 if (typeof pdfjsLib !== 'undefined') {
                     cb(5, 'PDF.js: открытие документа…');
-                    return pdfjsLib.getDocument({ data: arrayBuffer }).promise
+                    // v14.16.31 (#28): CVE-2024-4367 — без eval в шрифтах; XFA и скрипты PDF выключены
+                    return pdfjsLib.getDocument(eitiPdfOpenOptions(arrayBuffer)).promise
                         .then(function(pdf) {
                             var pages = [];
                             var total = pdf.numPages;
@@ -39028,6 +39919,7 @@ window.eitiLLMClearAll = async function() {
         // PWA Install banner — v8.86: кросс-браузерная поддержка
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
+            if (window.EITI_NATIVE) return; // v14.16.32: в APK установка PWA не нужна
             deferredPrompt = e;
             window._deferredPromptFired = true;
             // FIX v13.2.0: не показываем если уже установлено
@@ -39073,6 +39965,7 @@ window.eitiLLMClearAll = async function() {
             return h ? (h + 8) + 'px' : 'calc(12px + env(safe-area-inset-bottom, 0px))';
         }
         function eitiShowInstallBanner(customMsg, force) {
+            if (window.EITI_NATIVE) return; // v14.16.32: APK — уже приложение
             var banner = document.getElementById('pwa-install-banner');
             if (banner) {
                 if (force) banner.remove();
@@ -39103,6 +39996,7 @@ window.eitiLLMClearAll = async function() {
             }, EITI_INSTALL_BANNER_MS);
         }
         (function() {
+            if (window.EITI_NATIVE) return; // v14.16.32: APK — кнопка и подсказка установки не нужны
             // Не показываем если уже установлено
             if (window.matchMedia('(display-mode: standalone)').matches) return;
             if (navigator.standalone === true) return; // iOS Safari: приложение открыто с экрана
@@ -41167,6 +42061,8 @@ window.eitiLLMClearAll = async function() {
                 'Допустимые action: replace_note (поле body — полный новый текст, title и tags необязательны), ' +
                 'append (text — дописываемый фрагмент), replace_selection (text — замена выделенного фрагмента, только если selectedText не пуст), ' +
                 'replace_text (find — точный уникальный фрагмент из body, text — замена; пустой text удаляет фрагмент), ' +
+                'edits (edits — массив точечных правок [{"find":"точный фрагмент из body","text":"замена"}], до 50 штук; find копируй дословно и делай его уникальным; ' +
+                'для дописывания в конец {"position":"end","text":"..."}; замена целого раздела без повтора старого текста: {"from":"первые слова раздела","to":"последние слова раздела","text":"новый раздел"}) — ПРЕДПОЧИТАЙ edits для любых правок длинного текста вместо replace_note, ' +
                 'set_title (title), set_tags (tags — массив строк), delete_note (без данных). ' +
                 'Не отправляй mutation, если пользователь не просил редактирование. Удаляй заметку только по прямой просьбе пользователя; ' +
                 'для замены всего текста сохрани смысл и все нужные детали, если пользователь не просил их убрать. ' +
@@ -41452,7 +42348,7 @@ window.eitiLLMClearAll = async function() {
             }
             if (!data || typeof data !== 'object' || Array.isArray(data)) return { reply: rawText, mutation: null };
             var mutation = data.mutation || (data.action ? data : null);
-            var allowed = { replace_note: true, append: true, replace_selection: true, replace_text: true, set_title: true, set_tags: true, delete_note: true };
+            var allowed = { replace_note: true, append: true, replace_selection: true, replace_text: true, edits: true, set_title: true, set_tags: true, delete_note: true }; // v14.16.32: + edits
             if (!mutation || !allowed[mutation.action]) {
                 return { reply: (typeof data.reply === 'string' ? data.reply : rawText), mutation: null };
             }
@@ -41527,6 +42423,11 @@ window.eitiLLMClearAll = async function() {
                 if (foundAt < 0) return { ok: false, message: 'Исходный фрагмент не найден в текущей заметке.' };
                 if (body.indexOf(find, foundAt + find.length) !== -1) return { ok: false, message: 'Фрагмент встречается несколько раз. Выделите нужное место в заметке и повторите просьбу.' };
                 nextBody = body.slice(0, foundAt) + String(mutation.text || '') + body.slice(foundAt + find.length);
+            } else if (action === 'edits') { // v14.16.32: пакет точечных правок (атомарно)
+                if (!window.EitiDocEdits) return { ok: false, message: 'Модуль правок не загружен.' };
+                var er = EitiDocEdits.applyEdits(body, mutation.edits);
+                if (!er.ok) return { ok: false, message: er.message };
+                nextBody = er.body;
             } else if (action === 'set_title') {
                 if (typeof mutation.title !== 'string') return { ok: false, message: 'Не задан новый заголовок.' };
                 titleEl.value = mutation.title;
@@ -41556,6 +42457,96 @@ window.eitiLLMClearAll = async function() {
             if (typeof showToast === 'function') showToast(saved ? '✨ ИИ изменил и сохранил заметку' : '✨ ИИ изменил черновик — сохраните его вручную', 2200);
             return { ok: true, saved: saved, action: action };
         }
+        // ── v14.16.32: просмотр изменений (как suggested edits в Notion) ──
+        function eitiNotesAIIsApplyNow() { try { return localStorage.getItem('eiti_notes_ai_apply_now') === '1'; } catch (e) { return false; } }
+        function eitiNotesAISetApplyNow(on) {
+            try { localStorage.setItem('eiti_notes_ai_apply_now', on ? '1' : '0'); } catch (e) {}
+            var cb = document.getElementById('notes-ai-apply-now'); if (cb) cb.checked = !!on;
+        }
+        window.eitiNotesAISetApplyNow = eitiNotesAISetApplyNow; window.eitiNotesAIIsApplyNow = eitiNotesAIIsApplyNow;
+        document.addEventListener('DOMContentLoaded', function() { var cb = document.getElementById('notes-ai-apply-now'); if (cb) cb.checked = eitiNotesAIIsApplyNow(); });
+        var EITI_NOTES_AI_APPLY_NOW_PARAS = 5;
+        // → null (применить как раньше) | { error } | { mutation } (сразу) | { preview, hunks, base, mutation }
+        function eitiNotesAIPlanEdit(mutation, snapshot, userMessage) {
+            if (!mutation || !window.EitiDocEdits || !snapshot) return null;
+            var a = String(mutation.action || '');
+            if (['replace_note', 'append', 'replace_selection', 'replace_text', 'edits'].indexOf(a) === -1) return null;
+            if (!eitiNotesAIUserRequestedEdit(userMessage)) return null; // откажет eitiNotesAIApplyMutation
+            var base = String(snapshot.body || ''), next;
+            if (a === 'edits') {
+                var er = EitiDocEdits.applyEdits(base, mutation.edits);
+                if (!er.ok) return { error: er.message };
+                next = er.body;
+            } else {
+                var r = eitiDocAIApplyText(base, mutation, { start: snapshot.selectionStart, end: snapshot.selectionEnd, text: snapshot.selectionText });
+                if (!r.ok) return null;
+                next = r.body;
+            }
+            var full = { action: 'replace_note', body: next };
+            if (typeof mutation.title === 'string') full.title = mutation.title;
+            if (Array.isArray(mutation.tags)) full.tags = mutation.tags;
+            if (next === base) return { mutation: full };
+            var hunks = EitiDocEdits.diffHunks(base, next);
+            if (eitiNotesAIIsApplyNow() && EitiDocEdits.changedParagraphs(hunks) <= EITI_NOTES_AI_APPLY_NOW_PARAS) return { mutation: full };
+            return { preview: true, hunks: hunks, base: base, mutation: full };
+        }
+        function eitiNotesAIRenderPreview(host, plan, snapshot, userMessage) {
+            var esc = function(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+            var acc = plan.hunks.map(function() { return true; });
+            var card = document.createElement('div');
+            card.className = 'notes-ai-diff';
+            card.style.cssText = 'margin-top:8px;border:1px solid var(--border-color);border-radius:12px;overflow:hidden;font-size:13px;';
+            var list = plan.hunks.map(function(hk, i) {
+                return '<div class="nad-hunk" data-i="' + i + '" style="padding:8px 10px;border-bottom:1px solid var(--border-color);">' +
+                    (hk.old ? '<div class="nad-old" style="background:rgba(255,80,80,0.12);color:inherit;text-decoration:line-through;opacity:.75;white-space:pre-wrap;overflow-wrap:anywhere;max-height:140px;overflow:auto;border-radius:6px;padding:4px 6px;">' + esc(hk.old.slice(0, 4000)) + '</div>' : '') +
+                    (hk.text ? '<div class="nad-new" style="background:rgba(80,200,120,0.14);white-space:pre-wrap;overflow-wrap:anywhere;max-height:200px;overflow:auto;border-radius:6px;padding:4px 6px;margin-top:4px;">' + esc(hk.text.slice(0, 6000)) + '</div>' : '<div style="font-size:11px;opacity:.6;margin-top:4px;">(удаление)</div>') +
+                    '<div style="display:flex;gap:6px;margin-top:6px;justify-content:flex-end;">' +
+                    '<button type="button" class="nad-yes" style="padding:3px 10px;border-radius:8px;border:1px solid rgba(80,200,120,.6);background:rgba(80,200,120,.25);color:inherit;cursor:pointer;">✔</button>' +
+                    '<button type="button" class="nad-no" style="padding:3px 10px;border-radius:8px;border:1px solid var(--border-color);background:transparent;color:inherit;cursor:pointer;">✖</button></div></div>';
+            }).join('');
+            card.innerHTML = '<div style="padding:8px 10px;font-weight:600;background:rgba(255,215,0,0.08);">📝 Изменения (' + plan.hunks.length + ')</div>' + list +
+                '<div class="nad-actions" style="display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;">' +
+                '<button type="button" class="nad-all" style="padding:6px 12px;border-radius:10px;border:none;background:var(--accent-color);color:#000;font-weight:700;cursor:pointer;">✅ Принять всё</button>' +
+                '<button type="button" class="nad-sel" style="padding:6px 12px;border-radius:10px;border:1px solid var(--border-color);background:transparent;color:inherit;cursor:pointer;">Применить выбранное</button>' +
+                '<button type="button" class="nad-none" style="padding:6px 12px;border-radius:10px;border:1px solid var(--border-color);background:transparent;color:inherit;cursor:pointer;">✖ Отклонить всё</button></div>' +
+                '<div class="nad-status" style="padding:0 10px 8px;font-size:12px;opacity:.8;"></div>';
+            function paint() {
+                card.querySelectorAll('.nad-hunk').forEach(function(el) {
+                    var i = +el.getAttribute('data-i');
+                    el.style.opacity = acc[i] ? '1' : '0.45';
+                    el.querySelector('.nad-yes').style.fontWeight = acc[i] ? '700' : '400';
+                    el.setAttribute('data-accepted', acc[i] ? '1' : '0');
+                });
+                var n = acc.filter(Boolean).length;
+                card.querySelector('.nad-sel').textContent = 'Применить выбранное (' + n + ')';
+            }
+            function finish(text) {
+                card.querySelectorAll('button').forEach(function(b) { b.disabled = true; });
+                card.querySelector('.nad-status').textContent = text;
+                card.setAttribute('data-done', '1');
+            }
+            function apply(mask) {
+                var n = mask.filter(Boolean).length;
+                if (!n) { finish('✖ Изменения отклонены — текст не изменён.'); return; }
+                var body = EitiDocEdits.applyHunks(plan.base, plan.hunks, function(hk) { return mask[hk.id]; });
+                var m = Object.assign({}, plan.mutation, { body: body });
+                var res = eitiNotesAIApplyMutation(m, snapshot, userMessage);
+                if (res && res.ok) finish('✅ Применено ' + n + ' из ' + plan.hunks.length + ' · ↩️ отменить — кнопка «Отменить правку ИИ»');
+                else card.querySelector('.nad-status').textContent = (res && res.message) || '⚠️ Не удалось применить';
+            }
+            card.addEventListener('click', function(e) {
+                var t = e.target, hEl = t.closest && t.closest('.nad-hunk');
+                if (hEl && t.classList.contains('nad-yes')) { acc[+hEl.getAttribute('data-i')] = true; paint(); }
+                else if (hEl && t.classList.contains('nad-no')) { acc[+hEl.getAttribute('data-i')] = false; paint(); }
+                else if (t.classList.contains('nad-all')) apply(plan.hunks.map(function() { return true; }));
+                else if (t.classList.contains('nad-sel')) apply(acc.slice());
+                else if (t.classList.contains('nad-none')) apply(plan.hunks.map(function() { return false; }));
+            });
+            host.appendChild(card);
+            paint();
+            return card;
+        }
+        window.eitiNotesAIPlanEdit = eitiNotesAIPlanEdit; window.eitiNotesAIRenderPreview = eitiNotesAIRenderPreview;
         function eitiNotesAIPresetModels() {
             return [
                 { id: 'same', label: 'Как в чате' },
@@ -41565,7 +42556,7 @@ window.eitiLLMClearAll = async function() {
                 { id: 'openrouter/free', label: 'OpenRouter Free' },
                 { id: 'anthropic/claude-sonnet-5.5', label: 'Claude' },
                 { id: 'openai/gpt-6.1-sol', label: 'GPT' },
-                { id: 'meta-llama/llama-4-maverick', label: 'Llama' }
+                { id: 'qwen/qwen4-max', label: 'Qwen 4' }
             ];
         }
         function eitiNotesAIModelButtonMap() {
@@ -41577,7 +42568,7 @@ window.eitiLLMClearAll = async function() {
                 'openrouter/free': 'notes-ai-model-or-free',
                 'anthropic/claude-sonnet-5.5': 'notes-ai-model-or-claude',
                 'openai/gpt-6.1-sol': 'notes-ai-model-or-gpt',
-                'meta-llama/llama-4-maverick': 'notes-ai-model-or-llama'
+                'qwen/qwen4-max': 'notes-ai-model-or-qwen'
             };
         }
         function eitiSettingsFindGroupByKey(key) {
@@ -41909,13 +42900,28 @@ window.eitiLLMClearAll = async function() {
             _eitiNotesAIBusy = true;
             var longWarn = (typeof eitiDocAILongWarning === 'function') ? eitiDocAILongWarning(body.length) : '';
             if (longWarn && box) eitiNotesAIPaintMsg(box, 'assistant', longWarn, true);
+            // v14.16.32: прогресс длинного ответа (потоковая передача: символы / части)
+            window._eitiDocAIProgress = function(p) {
+                if (!live || !p) return;
+                live.textContent = '✍️ ИИ пишет… ' + (p.chars ? Math.round(p.chars / 100) / 10 + ' тыс. символов' : '') + (p.part > 1 ? ' · часть ' + p.part : '') + (p.sec ? ' · ' + p.sec + ' с' : '');
+            };
+            var _gate = eitiDocAICostGate(target0(), body.length, msg);
+            if (!_gate) { _eitiNotesAIBusy = false; if (live) live.textContent = '⏸ Отменено — большая правка не отправлена.'; if (_eitiNotesAIChats[key].length) _eitiNotesAIChats[key].pop(); return Promise.resolve(); }
             return eitiNotesAICall(msg, title, body, selectionText, tags, priorHistory).then(function(res) {
                 var reply = (res && typeof res === 'object') ? res.text : res;
                 var trunc = (typeof eitiDocAITruncationNote === 'function') ? eitiDocAITruncationNote(reply, !!(res && res.truncated)) : { blockMutation: false, note: '' };
                 var parsed = eitiNotesAIParseResponse(reply);
                 if (trunc.blockMutation) parsed = { reply: trunc.note, mutation: null }; // v13.8.0: обрезанная правка не применяется молча
-                var mutationResult = parsed.mutation ? eitiNotesAIApplyMutation(parsed.mutation, snapshot, msg) : null;
+                // v14.16.32: правки текста — сначала просмотр изменений (✔/✖ по кускам), «⚡ Применять сразу» — для мелких
+                var mutationResult = null, previewPlan = null;
+                if (parsed.mutation) {
+                    var plan = eitiNotesAIPlanEdit(parsed.mutation, snapshot, msg);
+                    if (plan && plan.error) mutationResult = { ok: false, message: plan.error };
+                    else if (plan && plan.preview) { previewPlan = plan; mutationResult = { ok: true, preview: true }; }
+                    else mutationResult = eitiNotesAIApplyMutation((plan && plan.mutation) || parsed.mutation, snapshot, msg);
+                }
                 var out = String(parsed.reply || '').trim();
+                if (previewPlan) out = (out ? out + '\n\n' : '') + '👀 Проверьте изменения ниже: ' + previewPlan.hunks.length + ' ' + (previewPlan.hunks.length === 1 ? 'правка' : 'правок') + '.';
                 if (!trunc.blockMutation && trunc.note) out += trunc.note;
                 if (mutationResult && mutationResult.ok && mutationResult.deleted) {
                     out = out || (mutationResult.pendingConfirmation ? 'ИИ запросил удаление этой заметки. Подтвердите удаление в окне приложения.' : 'Заметка удалена.');
@@ -41934,7 +42940,8 @@ window.eitiLLMClearAll = async function() {
                     ins.textContent = 'Добавить в конец';
                     ins.style.cssText = 'display:block;margin-top:6px;padding:4px 8px;border-radius:8px;border:1px solid var(--border-color);background:transparent;color:inherit;font-size:11px;cursor:pointer;';
                     ins.onclick = function() { eitiNotesAIInsertIntoNote(out); };
-                    live.appendChild(ins);
+                    if (!previewPlan) live.appendChild(ins);
+                    if (previewPlan) eitiNotesAIRenderPreview(live, previewPlan, snapshot, msg);
                     eitiNotesAIRelBar(live);
                 }
                 var input = document.getElementById('notesAiInput');
@@ -49114,7 +50121,8 @@ window._eitiInitSQL = _initSQL;
             defs: [
                 { id: 'gpt-6.1-sol',   label: 'GPT-6.1 Sol', desc: 'Баланс ✓' },
                 { id: 'gpt-6-astra',   label: 'GPT-6 Astra', desc: 'Флагман' },
-                { id: 'gpt-6-luna',    label: 'GPT-6 Luna',  desc: 'Быстро' },
+                { id: 'gpt-6.1-terra', label: 'GPT-6.1 Terra', desc: 'Быстро · зрение' },
+                { id: 'gpt-6-luna',    label: 'GPT-6 Luna',  desc: 'Дёшево' },
                 { id: 'gpt-5.5',       label: 'GPT-5.5',     desc: 'Legacy' },
             ]
         },
@@ -49122,6 +50130,7 @@ window._eitiInitSQL = _initSQL;
             title: '🟠 Модель Claude',
             key: 'eiti_anthropic_model',
             defs: [
+                { id: 'claude-fable-5-2',  label: 'Fable 5.2',  desc: 'Макс. reasoning' },
                 { id: 'claude-opus-5-5',   label: 'Opus 5.5',   desc: 'Флагман' },
                 { id: 'claude-sonnet-5-5', label: 'Sonnet 5.5', desc: 'Баланс ✓' },
                 { id: 'claude-haiku-5-5',  label: 'Haiku 5.5',  desc: 'Быстро' },
@@ -51572,6 +52581,7 @@ var QWEN = {
     // Поиск через специальную модель
     SEARCH_MODEL: 'qwen-plus-latest',
     MODELS: [
+        { id: 'qwen4-max',          label: 'Qwen4 Max',       desc: 'Новый флагман' },
         { id: 'qwen3.8-max',        label: 'Qwen3.8 Max',     desc: 'Флагман' },
         { id: 'qwen3.8-flash',      label: 'Qwen3.8 Flash',   desc: 'Быстрый' },
         { id: 'qwen-plus-latest',   label: 'Qwen Plus',       desc: 'Баланс' },
@@ -52693,7 +53703,7 @@ function _eitiOpenAIVision(userText, images, history) {
     var _dk = function(k) { return (typeof _deobfKey === 'function') ? _deobfKey(localStorage.getItem(k) || '') : (localStorage.getItem(k) || ''); };
     var key = _dk('eiti_openai_key') || _dk('eiti_apikey_openai');
     if (!key) return Promise.reject(new Error('Нет OpenAI ключа'));
-    var model = localStorage.getItem('eiti_openai_model') || 'gpt-5.5';
+    var model = localStorage.getItem('eiti_openai_model') || 'gpt-6.1-sol';
     var sysMsg = history.find(function(m) { return m.role === 'system'; });
     var apiMsgs = [];
     if (sysMsg) apiMsgs.push({ role: 'system', content: sysMsg.content });
@@ -55434,6 +56444,7 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
             return /^[ \t]*(`{3,}|~{3,})[ \t]*mermaid\b/im.test(String(src || ''));
         }
         var EITI_MERMAID_URL = 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js';
+        var EITI_MERMAID_SRI = 'sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I'; // v14.16.30 (#27)
         var _eitiMermaidPromise = null;
         function eitiMermaidEnsure() {
             if (window.mermaid && window.mermaid.render) return Promise.resolve(window.mermaid);
@@ -55444,6 +56455,7 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
                 s.src = EITI_MERMAID_URL;
                 s.async = true;
                 s.crossOrigin = 'anonymous';
+                s.integrity = EITI_MERMAID_SRI; // v14.16.30 (#27)
                 s.onload = function() { window.mermaid ? resolve(window.mermaid) : reject(new Error('mermaid missing')); };
                 s.onerror = function() { reject(new Error('load failed')); };
                 document.head.appendChild(s);
@@ -55539,19 +56551,41 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
         // ── v13.8.0: общий AI-слой для Notes AI и AI Docs в файлах ───────────
         var EITI_DOCAI_LONG_CHARS = 30000;
         var EITI_DOCAI_HISTORY_TURNS = 10;
+        // v14.16.32: потолки вывода по провайдерам (официальные лимиты 11.2026: DeepSeek V4 — до 384K, Gemini 4 — 64K,
+        // GPT-6.x — 128K, Grok 4.7 — 128K; OpenRouter — по модели, берём осторожно 64K). Правка длинного текста идёт патчем
+        // edits, поэтому обычно нужно намного меньше; потолок важен для полного переписывания.
+        var EITI_DOCAI_OUT_CAP = { deepseek: 131072, gemini: 65536, openai: 128000, grok: 131072, openrouter: 65536 };
+        var EITI_DOCAI_CTX = { deepseek: 1000000, gemini: 1000000, openai: 1000000, grok: 2000000, openrouter: 200000 };
+        // оценка цены вывода, $ за 1M токенов (для подтверждения больших правок; правится здесь)
+        var EITI_DOCAI_OUT_PRICE = { deepseek: 3.96, gemini: 2.5, openai: 10, grok: 15, openrouter: 10 }; // $/1M вых. токенов, верхняя граница (DeepSeek V4 Pro peak, GPT-6.1 Sol)
+        var EITI_DOCAI_CONFIRM_TOKENS = 50000;
+        function target0() { try { return (typeof eitiNotesAIResolveTarget === 'function' && eitiNotesAIResolveTarget()) || {}; } catch (e) { return {}; } }
+        // Подтверждение перед правкой, которая может выдать > 50K токенов (полное переписывание длинного текста)
+        function eitiDocAICostGate(target, len, userMsg) {
+            var p = (target && target.provider) || 'deepseek';
+            if (!/(перепиш|rewrite|переведи|translate|übersetz|umschreib|переделай всё|весь текст|целиком)/i.test(String(userMsg || ''))) return true;
+            var tok = window.EitiDocEdits ? EitiDocEdits.estimateTokens(len) : Math.ceil(len / 2.6);
+            if (tok < EITI_DOCAI_CONFIRM_TOKENS) return true;
+            var usd = tok / 1e6 * (EITI_DOCAI_OUT_PRICE[p] || 10);
+            var q = '✍️ Полное переписывание ≈ ' + Math.round(tok / 1000) + ' тыс. токенов ответа (≈ $' + usd.toFixed(2) + ', оценка для ' + p + ').\n\nТочечные правки обычно в 10–50 раз дешевле. Отправить?';
+            try { return window.confirm(q); } catch (e) { return true; }
+        }
         function eitiDocAILongWarning(len) {
             var n = Number(len) || 0;
             if (n < EITI_DOCAI_LONG_CHARS) return '';
-            return '⚠️ Длинный текст (' + n.toLocaleString('ru') + ' символов). ИИ видит его целиком, но полностью переписать такой текст за один ответ может не получиться — лучше просить точечные правки (раздел, абзац, фраза).';
+            // v14.16.32: вместо предупреждения — сколько занимает текст в контексте модели
+            var t = target0(), p = (t && t.provider) || 'deepseek', ctx = EITI_DOCAI_CTX[p] || 128000;
+            var tok = Math.ceil(n / 2.6);
+            return '📏 Текст ' + n.toLocaleString('ru') + ' символов ≈ ' + Math.round(tok / 1000) + ' тыс. токенов — ' + Math.max(1, Math.round(tok / ctx * 100)) + '% контекста ' + p + '. ИИ видит его целиком; правки придут точечно (просмотр изменений).';
         }
         function eitiDocAIOutputBudget(len, provider) {
             var need = Math.ceil((Number(len) || 0) / 2.5) + 2500;
-            var cap = (provider === 'deepseek') ? 16000 : 32000;
-            return Math.min(cap, Math.max(4000, need));
+            var cap = EITI_DOCAI_OUT_CAP[provider] || 32000; // v14.16.32: было 16K/32K → обрезка длинных правок
+            return Math.min(cap, Math.max(8000, need));
         }
         function eitiDocAILongRule(len) {
             if ((Number(len) || 0) < EITI_DOCAI_LONG_CHARS) return '';
-            return '\n\nТекст очень длинный: для правок предпочитай точечные действия replace_text / append / replace_selection вместо полного переписывания, чтобы ответ не обрезался.';
+            return '\n\nТекст очень длинный: используй action "edits" (точечные правки по разделам). Для перевода/переписывания всего текста — тоже edits по разделам : {"from":"первые слова раздела","to":"последние слова раздела","text":"новый раздел"} — не повторяй старый текст целиком), а не replace_note. Для правок предпочитай точечные действия replace_text / append / replace_selection вместо полного переписывания, чтобы ответ не обрезался.';
         }
         function eitiDocAIBuildMessages(system, history, userMsg) {
             var msgs = [];
@@ -55602,7 +56636,52 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
             if (Array.isArray(txt)) txt = txt.map(function(p) { return p && p.text ? p.text : ''; }).join('');
             return { text: String(txt || ''), truncated: !!(ch && (ch.finish_reason === 'length' || ch.finish_reason === 'max_tokens')) };
         }
+        // v14.16.32: длинные ответы — потоковая передача (прогресс) + автопродолжение, если модель упёрлась в лимит вывода
+        var EITI_DOCAI_MAX_PARTS = 4;
         function eitiDocAIRequest(target, messages, maxTok) {
+            var t0 = Date.now(), acc = '', part = 0;
+            function round(msgs) {
+                part++;
+                return _eitiDocAIRequestOnce(target, msgs, maxTok, function(chars) {
+                    if (typeof window._eitiDocAIProgress === 'function') window._eitiDocAIProgress({ chars: acc.length + chars, part: part, sec: Math.round((Date.now() - t0) / 1000) });
+                }).then(function(res) {
+                    acc += res.text || '';
+                    if (res.truncated && part < EITI_DOCAI_MAX_PARTS && (res.text || '').length > 200) {
+                        return round(messages.concat([{ role: 'assistant', content: acc },
+                            { role: 'user', content: 'Ответ оборвался на лимите длины. Продолжи РОВНО с места обрыва (с того же символа), без повторов, без вступления и без Markdown-обёртки — только продолжение.' }]));
+                    }
+                    res.text = acc; res.parts = part;
+                    return res;
+                });
+            }
+            return round(messages);
+        }
+        function _eitiDocAISSE(r, onChars) {
+            // OpenAI-совместимый SSE → { choices: [{ message: { content }, finish_reason }] }
+            var reader = r.body.getReader(), dec = new TextDecoder(), buf = '', text = '', fin = null, err = null, last = 0;
+            function pump() {
+                return reader.read().then(function(x) {
+                    if (x.done) return;
+                    buf += dec.decode(x.value, { stream: true });
+                    var lines = buf.split('\n'); buf = lines.pop();
+                    lines.forEach(function(l) {
+                        l = l.trim(); if (l.indexOf('data:') !== 0) return;
+                        var p = l.slice(5).trim(); if (!p || p === '[DONE]') return;
+                        try {
+                            var j = JSON.parse(p);
+                            if (j.error) { err = j.error; return; }
+                            var c = j.choices && j.choices[0];
+                            if (c && c.delta && typeof c.delta.content === 'string') text += c.delta.content;
+                            if (c && c.finish_reason) fin = c.finish_reason;
+                        } catch (e) {}
+                    });
+                    if (onChars && text.length - last > 400) { last = text.length; onChars(text.length); }
+                    return pump();
+                });
+            }
+            return pump().then(function() { return err ? { error: err } : { choices: [{ message: { content: text }, finish_reason: fin }] }; });
+        }
+        function _eitiDocAIRequestOnce(target, messages, maxTok, onChars) {
             var provider = target && target.provider ? target.provider : '';
             var model = target && target.model ? target.model : '';
             if (!provider) return Promise.reject(new Error('❌ Не удалось определить модель. Выбери провайдера в Настройках.'));
@@ -55631,7 +56710,12 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
                 }
             }
             var send = function(b) {
-                return fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(b) }).then(function(r) { return r.json(); });
+                if (provider !== 'gemini') b.stream = true; // v14.16.32: поток — видно прогресс, нет таймаута на длинном ответе
+                return fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(b) }).then(function(r) {
+                    var ct = (r.headers && r.headers.get && r.headers.get('content-type')) || '';
+                    if (r.ok && /event-stream/i.test(ct) && r.body && r.body.getReader) return _eitiDocAISSE(r, onChars);
+                    return r.json();
+                });
             };
             return send(body).then(function(d) {
                 var errTxt = d && d.error ? JSON.stringify(d.error) : '';

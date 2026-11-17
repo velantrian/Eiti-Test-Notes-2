@@ -161,7 +161,7 @@ test('getters сохраняют мигрированный ID в localStorage',
   const empty = loadCatalog({});
   assert.equal(empty.eitiGetORModel(), 'openrouter/auto');
   assert.equal(empty.eitiGetOpenAIModel(), 'gpt-6.1-sol');
-  assert.equal(empty.eitiGetGeminiModel(), 'gemini-3.8-flash');
+  assert.equal(empty.eitiGetGeminiModel(), 'gemini-4-hydrogen');
 });
 
 test('eitiFetchWithTimeout прерывает зависший fetch', async () => {
@@ -207,4 +207,15 @@ test('нет дампа outerHTML монолита и есть watchdog TTS / т
   assert.match(INDEX, /function eitiFetchWithTimeout\(/);
   assert.equal(INDEX.includes('_OR_DEFAULT_KEY'), false);
   assert.match(INDEX, /eitiFetchWithTimeout\('https:\/\/openrouter\.ai\/api\/v1\/models'/);
+});
+
+test('v14.16.32: модели 11.2026 из официальных списков (Gemini 4, Claude Fable 5.2, GPT-6.1 Terra, Qwen4 Max)', () => {
+  const cat = loadCatalog().eitiModelCatalog();
+  assert.equal(cat.gemini.defaultId, 'gemini-4-hydrogen');
+  ['gemini-4-hydrogen', 'gemini-4-carbon', 'gemini-4-argon'].forEach((id) => assert.ok(cat.gemini.ids.includes(id), id));
+  assert.ok(cat.anthropic.ids.includes('claude-fable-5-2'));
+  assert.ok(cat.openai.ids.includes('gpt-6.1-terra'));
+  assert.ok(cat.qwen.ids.includes('qwen4-max'));
+  assert.ok(cat.openrouter.presets.includes('qwen/qwen4-max'));
+  assert.ok(!cat.openrouter.presets.includes('meta-llama/llama-4-maverick'), 'Llama 4 Maverick (04.2025) больше не пресет');
 });

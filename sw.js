@@ -1,13 +1,27 @@
-// VELANTRIM EITI — Service Worker v14.16.28
+// VELANTRIM EITI — Service Worker v14.16.32
 // Fixes: LAZY_FILES await race, cross-origin CDN cache, updatefound wiring, SWR for data/*.json
-// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.28
+// Sync: CACHE + SW_UPDATED now match EITI_VERSION 14.16.32
 
-var CACHE = 'eiti-v14.16.28'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
+var CACHE = 'eiti-v14.16.32'; // v14.16.16: audit — notes IDB delete, SW protect local/*, typo_vocab out of CORE, drive_sync in CORE; v14.16.2: KB 150k; v14.16.0: action gate + Care
 // v14.0.0: офлайн-движок и пакеты (offline/**) — отдельный кеш без лимита 24 записей (≈30 файлов),
 // cache-first + фоновое обновление; не попадает в swTrimCache.
-var OFFLINE_CACHE = 'eiti-offline-v14.16.28';
+var OFFLINE_CACHE = 'eiti-offline-v14.16.32';
 var CACHE_MAX_ENTRIES = 24;
 var BASE = self.location.pathname.replace(/sw\.js$/, '');
+// v14.16.29 (#26): префикс деплоя — как EitiNS в index.html (первый сегмент пути).
+// Все GitHub Pages аккаунта живут на одном origin: без префикса копии EITI
+// удаляли кэши друг друга при activate. В корне origin префикса нет.
+function swNsFromPath(p) {
+    var m = /^\/([^\/]+)\//.exec(String(p || '/'));
+    return m ? m[1].replace(/[^A-Za-z0-9._-]/g, '_') : '';
+}
+var NS_PREFIX = swNsFromPath(BASE) ? swNsFromPath(BASE) + '@@' : '';
+CACHE = NS_PREFIX + CACHE;
+OFFLINE_CACHE = NS_PREFIX + OFFLINE_CACHE;
+// Удаляем только свои старые кэши приложения (свой префикс + «eiti-»), чужие не трогаем.
+function swIsOwnStaleCache(k) {
+    return k !== CACHE && k !== OFFLINE_CACHE && k.indexOf(NS_PREFIX + 'eiti-') === 0;
+}
 
 // Критическое ядро — без них app не запустится
 // v14.16.16: eiti_typo_vocab.json (1.2 MiB) убран из CORE — грузится лениво, allowlist local/*
@@ -20,24 +34,40 @@ var CORE = [
     BASE + 'local/eiti_dstate.js', // v14.5.0: память диалога (слоты, стек тем, отсылки)
     BASE + 'local/eiti_journal.js', // v14.9.0: движок дневника (записи, дедуп, миграция)
     BASE + 'local/eiti_action_gate.js', // P0: шлюз AI-действий (propose→validate→authorize→commit→ack)
+    BASE + 'local/eiti_doc_edits.js', // v14.16.32: точечные правки длинных текстов + просмотр изменений
+    BASE + 'local/eiti_device_fit.js', // v14.16.32: какие офлайн-модели потянет устройство
+    BASE + 'local/eiti_transfer.js', // v14.16.32: перенос сайт ⇄ APK
     BASE + 'local/eiti_voice.js', // EitiVoice P0: единый голосовой контроллер EitiVoice (состояния, ошибки, адаптеры)
     BASE + 'local/eiti_related.js', // v14.13.0: «Похожие / Рассуждение» (похожие заметки, карточки, настройки)
     BASE + 'local/eiti_typo.js', // v14.8.0: опечатки (нормализация + нечёткое сопоставление)
     BASE + 'local/eiti_drive_sync.js', // v14.16.16: merge-движок Drive (ленивый script, но offline в precache)
     BASE + 'local/eiti_frames.js', // v14.14.0: EITI Frames — офлайн-понимание формулировок («расскажи / поясни / а зачем?»)
     BASE + 'local/eiti_care.js', // v14.14.0 intents+: EITI Care — кризис (112 + телефон доверия) и поддержка, первым в офлайн-цепочке
+    BASE + 'vendor/dompurify/3.4.18/purify.min.js', // v14.16.30 (#27): санитайзер HTML — локально (было cdnjs)
     BASE + 'local/eiti_frames.json', // v14.14.0: пакет фреймов (правится без кода; грузится лениво при первом офлайн-запросе)
     BASE + 'offline_manifest.json', // v14.14.0: хеши пакетов базы на момент установки — сверка для «🔄 Обновить базу офлайн-ответов»
     BASE + 'icon-192.png',
     BASE + 'icon-192-maskable.png',
     BASE + 'icon-512.png',
-    BASE + 'icon-512-maskable.png'
+    BASE + 'icon-512-maskable.png',
+    // v14.16.32: Fluent Emoji 3D (MIT) — иконки таб-бара, ~18 КБ всего; офлайн без CDN
+    BASE + 'vendor/fluent-emoji-3d/speech_balloon.webp',
+    BASE + 'vendor/fluent-emoji-3d/notebook.webp',
+    BASE + 'vendor/fluent-emoji-3d/books.webp',
+    BASE + 'vendor/fluent-emoji-3d/musical_note.webp',
+    BASE + 'vendor/fluent-emoji-3d/file_folder.webp',
+    BASE + 'vendor/fluent-emoji-3d/memo.webp',
+    BASE + 'vendor/fluent-emoji-3d/calendar.webp',
+    BASE + 'vendor/fluent-emoji-3d/gear.webp'
 ];
 
 // Тяжёлые файлы — кешируем в той же install цепочке, но не блокируем
 var HEAVY = [
     BASE + 'sql-wasm.js',
-    BASE + 'sql-wasm.wasm'
+    BASE + 'sql-wasm.wasm',
+    BASE + 'vendor/mammoth/1.13.0/mammoth.browser.min.js', // v14.16.30 (#27): DOCX → текст, локально (было cdnjs)
+    BASE + 'vendor/pdfjs/6.5.438/pdf.min.mjs', // v14.16.31 (#28): PDF.js 6.5.438 (legacy) вместо 3.11.174 с CVE-2024-4367
+    BASE + 'vendor/pdfjs/6.5.438/pdf.worker.min.mjs'
 ];
 
 // Данные KB — будут кешироваться по stale-while-revalidate при первом обращении
@@ -72,7 +102,7 @@ self.addEventListener('install', function(e) {
 self.addEventListener('activate', function(e) {
     e.waitUntil(
         caches.keys().then(function(keys) {
-            var old = keys.filter(function(k) { return k !== CACHE && k !== OFFLINE_CACHE; });
+            var old = keys.filter(swIsOwnStaleCache); // v14.16.29 (#26): только свой префикс
             var isUpdate = old.length > 0;
             return Promise.all(old.map(function(k) { return caches.delete(k); }))
                 .then(function() { return self.clients.claim(); })
@@ -83,7 +113,7 @@ self.addEventListener('activate', function(e) {
                     }).then(function() {
                     return self.clients.matchAll().then(function(clients) {
                         clients.forEach(function(c) {
-                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.28' });
+                            c.postMessage({ type: 'SW_UPDATED', version: '14.16.32' });
                         });
                     });
                     });
@@ -102,6 +132,8 @@ function swIsAllowlisted(url) {
     // v14.16.16: local/* и offline eiti_*.js не вытеснять и возвращать cache-first
     if (/\/local\/eiti_[^/]+\.(js|json)$/.test(path)) return true;
     if (/\/offline\/eiti_[^/]+\.js$/.test(path)) return true;
+    // v14.16.30 (#27): локальные vendor-библиотеки с точной версией в пути — cache-first, не вытеснять
+    if (path.indexOf(BASE + 'vendor/') === 0 && /\.(m?js|webp)$/.test(path)) return true; // v14.16.32: + 3D-иконки
     if (/\/(data|kb)\/[^/]+\.json$/i.test(path)
         || path.endsWith('_kb_v3.json')
         || path.endsWith('lemma.json')

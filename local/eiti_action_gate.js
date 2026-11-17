@@ -154,11 +154,14 @@
 
     var I18N = {
         ru: { title: '🛡 EITI просит подтверждения', ok: 'Подтвердить', no: 'Отклонить', done: '✅ Выполнено', denied: '⛔ Отклонено — данные не изменены',
-              failed: '❌ Не удалось выполнить — данные не изменены', nomatch: '⚠️ Ничего не найдено — ничего не удалено', rejected: '🛡 Отклонено небезопасное действие AI' },
+              failed: '❌ Не удалось выполнить — данные не изменены', nomatch: '⚠️ Ничего не найдено — ничего не удалено', rejected: '🛡 Отклонено небезопасное действие AI',
+              more: 'подробнее', less: 'свернуть' },
         en: { title: '🛡 EITI asks for confirmation', ok: 'Confirm', no: 'Deny', done: '✅ Done', denied: '⛔ Denied — data unchanged',
-              failed: '❌ Could not complete — data unchanged', nomatch: '⚠️ Nothing matched — nothing deleted', rejected: '🛡 Unsafe AI action rejected' },
+              failed: '❌ Could not complete — data unchanged', nomatch: '⚠️ Nothing matched — nothing deleted', rejected: '🛡 Unsafe AI action rejected',
+              more: 'details', less: 'collapse' },
         de: { title: '🛡 EITI bittet um Bestätigung', ok: 'Bestätigen', no: 'Ablehnen', done: '✅ Erledigt', denied: '⛔ Abgelehnt — Daten unverändert',
-              failed: '❌ Fehlgeschlagen — Daten unverändert', nomatch: '⚠️ Kein Treffer — nichts gelöscht', rejected: '🛡 Unsichere KI-Aktion abgelehnt' }
+              failed: '❌ Fehlgeschlagen — Daten unverändert', nomatch: '⚠️ Kein Treffer — nichts gelöscht', rejected: '🛡 Unsichere KI-Aktion abgelehnt',
+              more: 'Details', less: 'einklappen' }
     };
     var LABELS = {
         ru: { MEM_DEL: 'Удалить из личной памяти', MEM_UPDATE: 'Перезаписать запись памяти', KB_ADD: 'Добавить факт в KB', KB_ADD_JSON: 'Добавить факты в KB',
@@ -306,6 +309,45 @@
             var ops = w._eitiMemOps || []; w._eitiMemOps = null;
             return Promise.all(ops);
         }
+        // v14.16.32: читаемый предпросмотр — «kb|триггеры|текст» → текст крупно, категория/триггеры мелко;
+        // сырая команда только в «подробнее».
+        function preview(a) {
+            var b = a.body == null ? '' : String(a.body);
+            if (a.type === 'KB_ADD_JSON') return { main: b.slice(0, 160), meta: '' };
+            var parts = b.split('|');
+            if (parts.length >= 3) return { main: parts.slice(2).join('|').trim().slice(0, 240), meta: (parts[0].trim() + ' · ' + parts[1].split(',').map(function (s) { return s.trim(); }).filter(Boolean).slice(0, 4).join(', ')).slice(0, 120) };
+            if (parts.length === 2) return { main: parts[1].trim().slice(0, 240), meta: parts[0].trim().slice(0, 80) };
+            return { main: b.slice(0, 240), meta: '' };
+        }
+        // v14.16.32: после «✅ Выполнено» / «⛔ Отклонено» / «❌» карточка сворачивается в одну строку (не висит в ленте)
+        function collapse(el) {
+            if (!el || el.getAttribute('data-gate-collapsed') === '1') return;
+            el.setAttribute('data-gate-collapsed', '1');
+            var body = el.querySelector('.eiti-action-body'); if (body) body.style.display = 'none';
+            var t = el.querySelector('.eiti-action-title'); if (t) t.style.display = 'none';
+            var wh = el.querySelector('.eiti-action-what'); if (wh) wh.style.display = 'none';
+            el.style.padding = '6px 12px'; el.style.background = 'rgba(255,215,0,0.03)'; el.style.borderWidth = '1px';
+            var row = el.querySelector('.eiti-action-sum');
+            if (!row) {
+                var L = loc(); row = w.document.createElement('div'); row.className = 'eiti-action-sum';
+                row.style.cssText = 'display:flex;align-items:center;gap:8px;min-width:0;';
+                var st = el.querySelector('.eiti-action-status'), what = el.querySelector('.eiti-action-what');
+                row.innerHTML = '<span class="eiti-action-sum-text" style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' +
+                    esc((st ? st.textContent : '') + ' · ' + (what ? what.textContent : '')) + '</span>' +
+                    '<button type="button" class="eiti-action-more" style="background:none;border:none;color:var(--accent-color,#ffd700);font-size:12px;cursor:pointer;padding:2px 4px;" data-i18n="' + esc(I18N.ru.more) + '">' + esc(msg(L, 'more')) + '</button>';
+                el.insertBefore(row, el.firstChild);
+                var btn = row.querySelector('.eiti-action-more');
+                btn.onclick = function () {
+                    var open = body && body.style.display === 'none';
+                    if (body) body.style.display = open ? '' : 'none';
+                    if (t) t.style.display = open ? '' : 'none';
+                    if (wh) wh.style.display = open ? '' : 'none';
+                    if (st) st.style.display = open ? '' : 'none';
+                    btn.setAttribute('data-i18n', open ? I18N.ru.less : I18N.ru.more); btn.textContent = msg(loc(), open ? 'less' : 'more');
+                };
+            }
+            var s2 = el.querySelector('.eiti-action-status'); if (s2) s2.style.display = 'none';
+        }
         function card(a, d) {
             return new Promise(function (res) {
                 var msgs = w.document.getElementById('messages');
@@ -315,16 +357,22 @@
                 el.setAttribute('data-gate-id', a.id); el.setAttribute('data-gate-type', a.type);
                 el.style.cssText = 'margin:6px 12px 10px;padding:10px 12px;border:1.5px solid var(--accent-color,#ffd700);border-radius:12px;background:rgba(255,215,0,0.06);font-size:13px;';
                 var shown = a.type === 'KB_ADD_JSON' ? (a.body || '').slice(0, 160) : (a.body == null ? '' : a.body.slice(0, 240));
-                el.innerHTML = '<div style="font-weight:700;margin-bottom:4px;" data-i18n="' + esc(I18N.ru.title) + '">' + esc(msg(L, 'title')) + '</div>' +
-                    '<div class="eiti-action-what" data-i18n="' + esc(label('ru', a.type)) + '">' + esc(label(L, a.type)) + '</div>' +
-                    '<div class="eiti-action-args" style="opacity:.8;margin:4px 0 8px;word-break:break-word;"><code>' + esc(a.type) + '</code> ' + esc(shown) + '</div>' +
-                    '<div style="display:flex;gap:8px;"><button type="button" class="eiti-action-ok" data-i18n="' + esc(I18N.ru.ok) + '">' + esc(msg(L, 'ok')) + '</button>' +
-                    '<button type="button" class="eiti-action-no" data-i18n="' + esc(I18N.ru.no) + '">' + esc(msg(L, 'no')) + '</button></div>' +
+                var pv = preview(a);
+                el.innerHTML = '<div class="eiti-action-title" style="font-weight:700;margin-bottom:4px;" data-i18n="' + esc(I18N.ru.title) + '">' + esc(msg(L, 'title')) + '</div>' +
+                    '<div class="eiti-action-what" style="font-weight:600;" data-i18n="' + esc(label('ru', a.type)) + '">' + esc(label(L, a.type)) + '</div>' +
+                    '<div class="eiti-action-body">' +
+                    '<div class="eiti-action-preview" style="margin:6px 0 2px;line-height:1.4;overflow-wrap:anywhere;">' + esc(pv.main) + '</div>' +
+                    (pv.meta ? '<div class="eiti-action-meta" style="font-size:11px;opacity:.6;margin-bottom:4px;overflow-wrap:anywhere;">' + esc(pv.meta) + '</div>' : '') +
+                    '<details class="eiti-action-raw" style="font-size:11px;opacity:.6;margin:2px 0 8px;"><summary style="cursor:pointer;">' + esc(a.type) + '</summary>' +
+                    '<div class="eiti-action-args" style="word-break:break-word;"><code>' + esc(a.type) + '</code> ' + esc(shown) + '</div></details>' +
+                    '<div class="eiti-action-btns" style="display:flex;gap:8px;"><button type="button" class="eiti-action-ok" data-i18n="' + esc(I18N.ru.ok) + '">' + esc(msg(L, 'ok')) + '</button>' +
+                    '<button type="button" class="eiti-action-no" data-i18n="' + esc(I18N.ru.no) + '">' + esc(msg(L, 'no')) + '</button></div></div>' +
                     '<div class="eiti-action-status" style="margin-top:6px;"></div>';
                 msgs.appendChild(el); msgs.scrollTop = msgs.scrollHeight;
                 function done(yes) {
                     el.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
-                    if (!yes) { var s = el.querySelector('.eiti-action-status'); s.setAttribute('data-i18n', I18N.ru.denied); s.textContent = msg(L, 'denied'); el.setAttribute('data-gate-state', 'denied'); }
+                    if (!yes) { var s = el.querySelector('.eiti-action-status'); s.setAttribute('data-i18n', I18N.ru.denied); s.textContent = msg(L, 'denied'); el.setAttribute('data-gate-state', 'denied'); collapse(el); }
+                    else { var bt = el.querySelector('.eiti-action-btns'); if (bt) bt.style.display = 'none'; }
                     res(yes);
                 }
                 el.querySelector('.eiti-action-ok').onclick = function () { done(true); };
@@ -333,7 +381,8 @@
         }
         function setStatus(a, key) {
             try { var el = w.document.querySelector('.eiti-action-card[data-gate-id="' + a.id + '"]'); if (!el) return;
-                var s = el.querySelector('.eiti-action-status'); s.setAttribute('data-i18n', I18N.ru[key]); s.textContent = msg(loc(), key); el.setAttribute('data-gate-state', key); } catch (e) {}
+                var s = el.querySelector('.eiti-action-status'); s.setAttribute('data-i18n', I18N.ru[key]); s.textContent = msg(loc(), key); el.setAttribute('data-gate-state', key);
+                if (key === 'done' || key === 'failed' || key === 'nomatch') collapse(el); } catch (e) {}
         }
         var gate = createGate({
             resolve: resolve, commit: commit, confirm: card, log: persist,

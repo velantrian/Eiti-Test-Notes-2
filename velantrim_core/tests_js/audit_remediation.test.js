@@ -256,6 +256,20 @@ test('every inline script in index.html compiles', () => {
   while ((match = re.exec(INDEX))) {
     if (/\bsrc\s*=/.test(match[1])) continue;
     count += 1;
+    // v14.16.31 (#28): import map — JSON; ES-модуль (PDF.js) проверяем как модуль через node --check
+    if (/type\s*=\s*"importmap"/.test(match[1])) {
+      assert.doesNotThrow(() => JSON.parse(match[2]), `import map ${count} must be valid JSON`);
+      continue;
+    }
+    if (/type\s*=\s*"module"/.test(match[1])) {
+      const os = require('node:os');
+      const { spawnSync } = require('node:child_process');
+      const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'eiti-mod-')), `index-inline-${count}.mjs`);
+      fs.writeFileSync(tmp, match[2]);
+      const r = spawnSync(process.execPath, ['--check', tmp], { encoding: 'utf8' });
+      assert.equal(r.status, 0, `inline module ${count} must parse: ${r.stderr}`);
+      continue;
+    }
     assert.doesNotThrow(
       () => new vm.Script(match[2], { filename: `index-inline-${count}.js` }),
       `inline script ${count} must parse`

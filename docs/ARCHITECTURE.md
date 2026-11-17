@@ -307,6 +307,8 @@ flowchart LR
 
 ## 12. Полная карта хранения данных
 
+> **v14.16.29 (#26) — изоляция по деплою.** Первый `<script>` в `index.html` (`window.EitiNS`) берёт префикс из первого сегмента пути (`/Eiti-Test-Notes-2/` → `Eiti-Test-Notes-2@@`) и прозрачно добавляет его к ключам localStorage (Proxy вместо `window.localStorage`), именам IndexedDB (`indexedDB.open/deleteDatabase/databases`) и Cache Storage (`caches.*`); `sw.js` делает то же для `CACHE`/`OFFLINE_CACHE` и при `activate` удаляет только кэши `<префикс>eiti-*`. Одноразовая миграция копирует ключи без префикса и БД `eiti_v4` / `eiti_offline` (версии — `EitiNS.IDB_MIGRATE`, сверяются тестом) в свой неймспейс, не удаляя оригиналы; пока она идёт, `indexedDB.open` возвращает отложенный запрос. В корне origin префикса нет — имена ниже остаются как есть. Тесты: `velantrim_core/tests/test_v141629.py`, `velantrim_core/e2e/v141629_ns_isolation.spec.js`.
+
 ### 12.1 Где что лежит
 
 | Слой | Технология | Источник истины? | Что хранит |
@@ -475,3 +477,12 @@ flowchart LR
 ### L3 reliability after PR #46
 
 `l3` transactional success and `_l3Pending` RAM retry are different states. The former survives tab reload; the latter does not. The volatile queue is not a backup, not synchronized to Drive, and no longer reapplies deleted entries on later flush (per-key revision invalidation from PR #57). See `docs/l3_memory_inventory.md` §6 and negative reproduction `velantrim_core/e2e/l3_pending_durability.spec.js`. Durable staging awaits an explicit privacy/retention policy decision; the audit itself changes no runtime behavior; the deletion/acknowledgement fix comes from PR #57.
+
+## 20. Android-приложение и перенос (v14.16.32)
+
+- **Нативный режим:** `window.EITI_NATIVE` / `html.eiti-native` из `Capacitor.isNativePlatform()` в первом скрипте; отступы — `--safe-area-inset-*` от SystemBars (Capacitor 8, `insetsHandling: css`). Нативные блоки Настроек помечены `.eiti-native-only` (на сайте скрыты).
+- **Мост APK** (`velantrim-eiti-android/src/capacitor-eiti.js`, в репозитории сайта его нет): `EitiCap.bg` → плагин `EitiBackground` (foreground service «EITI работает в фоне», батарея, MediaStyle-шторка плеера, `deviceInfo`), ярлыки `velantrim-eiti://open/<tab>`. Нажатия в шторке приходят событием `eiti-media-action`.
+- **Треки по умолчанию:** константа `window.EITI_DEFAULT_TRACKS` (названия правятся там), файлы `media/default/*.mp3` есть только в сборке APK; удалённые id — `eiti_default_tracks_removed`.
+- **Офлайн-модели:** `local/eiti_device_fit.js` — `probe()` (ОЗУ/ядра/WebGPU/память; в APK — точные данные плагина), `rate()` ✅/⚠️/⛔, `recommend()`; каталог — WebLLM 0.2.88. Тесты: `tests_js/device_fit.test.js`, `e2e/v141632_device_fit.spec.js`.
+- **Перенос:** `local/eiti_transfer.js` — пакет `eiti.transfer.v1` (localStorage своей копии через EitiNS + IndexedDB `eiti_v4` без `tts_cache`/`backups`; Blob/Date/typed arrays кодируются). Ключи API — только по галочке, при загрузке локальные ключи не затираются. Каналы — `EitiTransfer.registerProvider({id, label, available, save, load})`: `file` работает; `gdrive`/`dropbox` зарегистрированы как недоступные, пока нет OAuth-клиентов (Google: Android-клиент `com.velantrim.eiti` + SHA-1 релизной подписи; Dropbox: App key, PKCE, redirect `velantrim-eiti://`).
+

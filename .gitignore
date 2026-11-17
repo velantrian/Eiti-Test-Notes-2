@@ -1,2 +1,4 @@
 kb/gen/cache/
 __pycache__/
+# v14.16.32: треки плеера по умолчанию лежат только в APK (velantrim-eiti-android/media/default), не в репозитории
+media/default/*.mp3

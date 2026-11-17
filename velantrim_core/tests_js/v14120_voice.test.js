@@ -7,7 +7,7 @@ const vm = require('vm');
 const HTML = fs.readFileSync(path.join(__dirname, '../../index.html'), 'utf8');
 
 test('all inline scripts parse', () => {
-  const re = /<script(?![^>]*\bsrc=)(?![^>]*type="(?:application\/ld\+json|module)")[^>]*>([\s\S]*?)<\/script>/g;
+  const re = /<script(?![^>]*\bsrc=)(?![^>]*type="(?:application\/ld\+json|module|importmap)")[^>]*>([\s\S]*?)<\/script>/g;
   let m, n = 0;
   while ((m = re.exec(HTML))) { new vm.Script(m[1]); n++; }
   assert.ok(n > 0);

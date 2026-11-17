@@ -127,7 +127,9 @@ test('разметка: ↶↷ в шапке перед 📋, нижний ря�
   assert.equal(INDEX.includes('id="noteAiTools"'), false);
   assert.equal(INDEX.includes('id="noteAiUndoBtn"'), false);
   assert.match(INDEX, /id="noteHlToggle" class="note-hl-menu-item"[^>]*>.*Подсветка правок ИИ/);
-  assert.match(INDEX, /\.note-editor-overlay\.active \.note-tags-row \{ padding-bottom: calc\(6px \+ env\(safe-area-inset-bottom, 0px\)\); \}/);
+  // v14.16.32: safe-area снизу уже учтён таб-баром — у тегов только 6px; inset добавляется, когда таб-бара нет (полноэкранный редактор)
+  assert.match(INDEX, /\.note-editor-overlay\.active \.note-tags-row \{ padding-bottom: 6px; \}/);
+  assert.match(INDEX, /\.note-editor-overlay\.editor-fullscreen\.active \.note-tags-row,[\s\S]{0,200}padding-bottom: calc\(6px \+ var\(--eiti-bottom-inset/);
   assert.equal(INDEX.includes('.note-editor-overlay.active .note-tags-row { padding-bottom: 52px; }'), false);
   assert.match(INDEX, /\.note-editor-topbar \.note-editor-title:not\(:focus\) \{ text-overflow: ellipsis; \}/);
   assert.match(INDEX, /\.note-undo-btn:disabled \{ opacity: 0\.38;/);

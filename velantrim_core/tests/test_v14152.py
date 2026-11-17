@@ -25,7 +25,8 @@ def test_presets_early_apply_and_scoped_css():
     assert "eitiPhoneScreenApply(localStorage.getItem('eiti_phone_screen'))" in head
     for pid in ("iphone-notch", "iphone-island", "iphone-se", "galaxy-s", "galaxy-fold", "xiaomi", "pixel", "none"):
         assert f"'{pid}':[" in head, pid
-    block = HTML[HTML.index("/* v14.15.2: «📱 Экран телефона»"): HTML.index("</head>")]
+    # v14.16.32: правила APK (native/компактная шапка/объём) — в отдельном <style id="eiti-v141632-style"> после блока пресетов
+    block = HTML[HTML.index("/* v14.15.2: «📱 Экран телефона»"): HTML.index('<style id="eiti-v141632-style">')]
     assert "max(var(--eiti-env-top),var(--eiti-pt,0px))" in block.replace(" ", "")
     for line in block.splitlines():
         s = line.strip()
