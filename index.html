@@ -4461,6 +4461,8 @@
         window.EITI_I18N.addDict('en', {"Отправить сообщение": "Send message", "Прикрепить файл": "Attach file"}); // v14.16.x: кнопки внутри поля ввода
         window.EITI_I18N.addDict('de', {"Отправить сообщение": "Nachricht senden", "Прикрепить файл": "Datei anhängen"});
         window.EITI_I18N.addDict('en', {"📌 Настройка табов": "📌 Tab settings", "Меньше иконки (small icons)": "Small icons", "Компактные нижние табы и верхние панели — больше места на экране": "Compact bottom tabs and top bars — more room on screen", "🔍 Маленькие иконки включены": "🔍 Small icons on", "🔍 Обычные иконки": "🔍 Regular icons"}); // v14.15.1
+        window.EITI_I18N.addDict('en', {"Объёмный стиль": "3D depth style", "Тени, градиенты и блики на полях и кнопках": "Shadows, gradients and highlights on inputs and buttons", "3D-иконки табов": "3D tab icons", "Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах": "Fluent Emoji 3D (Microsoft, MIT) — same on every phone"}); // v14.16.32
+        window.EITI_I18N.addDict('de', {"Объёмный стиль": "3D-Tiefe", "Тени, градиенты и блики на полях и кнопках": "Schatten, Verläufe und Glanz auf Feldern und Tasten", "3D-иконки табов": "3D-Tab-Symbole", "Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах": "Fluent Emoji 3D (Microsoft, MIT) — auf jedem Handy gleich"}); // v14.16.32
         window.EITI_I18N.addDict('en', {"Большая золотая шапка": "Large gold header", "Выкл — компактная шапка, больше места для текста": "Off — compact header, more room for text"}); // v14.16.32
         window.EITI_I18N.addDict('de', {"Большая золотая шапка": "Große goldene Kopfzeile", "Выкл — компактная шапка, больше места для текста": "Aus — kompakte Kopfzeile, mehr Platz für Text"}); // v14.16.32
         window.EITI_I18N.addDict('en', {"Компактные табы": "Compact tabs", "Чуть ниже только нижняя полоса табов — больше места тексту. Шапка и иконки как были.": "Slightly shorter bottom tab bar only — more room for text. Header and icons unchanged.", "📐 Компактные табы включены": "📐 Compact tabs on", "📐 Обычные табы": "📐 Regular tabs"}); // v14.16.14 compact tabs
@@ -4698,6 +4700,8 @@
   window.EITI_NATIVE=EN;window.eitiIsNative=function(){return !!window.EITI_NATIVE;};
   if(EN)document.documentElement.classList.add('eiti-native');
   // v14.16.32: шапка — компактная по умолчанию в APK, «👑 Большая золотая» — опция (eiti_header_size: compact|large)
+  // v14.16.32: «🧊 Объёмный стиль» (тени/градиенты/блики как на iOS-скриншотах) — по умолчанию только в APK; ключ eiti_depth '1'|'0'
+  try{var DP=localStorage.getItem('eiti_depth');if(DP==='1'||(DP!=='0'&&EN))document.documentElement.classList.add('eiti-depth');}catch(e){}
   try{var HS=localStorage.getItem('eiti_header_size');if(HS==='compact'||(HS!=='large'&&EN))document.documentElement.classList.add('eiti-compact-header');}catch(e){}
   // v14.15.1: «Меньше иконки (small icons)» — класс на <html> до первой отрисовки (без мигания)
   try{if(localStorage.getItem('eiti_small_icons')==='1')document.documentElement.classList.add('eiti-small-icons');}catch(e){}
@@ -9025,10 +9029,66 @@
         /* Кнопки шапки — по центру безопасной части. Для small icons × iOS то же делает правило v14.15.1 (через --eiti-si-safe-top),
            здесь — для остальных случаев (пресет без iOS, обычная высота шапки) и боковой отступ в альбомной. Не дубль: значения совпадают. */
         html.eiti-phone .app-header .header-actions{top:calc(50% + var(--eiti-top-inset) / 2) !important;right:calc(14px + var(--eiti-side-inset)) !important;}
+</style>
+<style id="eiti-v141632-style">
         /* v14.16.32: нативное приложение (APK) — пресет «native» = только системные отступы, без нарисованного выреза;
            установка PWA там не нужна */
         html.eiti-phone[data-eiti-phone="native"] .app-header::before { display: none; }
         html.eiti-native #btn-pwa-install, html.eiti-native #pwa-install-banner { display: none !important; }
+        /* v14.16.32: 🧊 Объёмный стиль (html.eiti-depth; по умолчанию в APK, на сайте — опция). Раскладка та же,
+           возвращается только объём: градиент + внутренняя тень + блик (ориентир — iOS-скриншоты). */
+        html.eiti-depth .chat-composer-shell {
+            background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.015) 45%, rgba(0,0,0,0.16) 100%), var(--panel-bg) !important;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.05), 0 1px 0 rgba(255,255,255,0.08), 0 6px 16px rgba(0,0,0,0.38) !important;
+        }
+        html.eiti-depth .chat-composer-shell #send, html.eiti-depth .notes-ai-send {
+            background: radial-gradient(circle at 35% 28%, #fff3a6 0%, #ffd700 38%, #c99a00 100%) !important;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.75), inset 0 -2px 3px rgba(120,80,0,0.45), 0 3px 8px rgba(0,0,0,0.45) !important;
+        }
+        html.eiti-depth .chat-composer-shell .chat-left-col > button:first-child, html.eiti-depth #chat-attach-proxy {
+            background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.20)) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 2px 5px rgba(0,0,0,0.4) !important;
+        }
+        html.eiti-depth .message.incoming, html.eiti-depth .message.outgoing {
+            box-shadow: 0 1px 0 rgba(255,255,255,0.10) inset, 0 4px 12px rgba(0,0,0,0.30), 0 1px 2px rgba(0,0,0,0.35);
+        }
+        html.eiti-depth .settings-group {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.10));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 18px rgba(0,0,0,0.35);
+        }
+        html.eiti-depth .notes-ai-compose-box {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.14));
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.42), 0 1px 0 rgba(255,255,255,0.07), 0 4px 12px rgba(0,0,0,0.3);
+        }
+        html.eiti-depth .notes-ai-quick button, html.eiti-depth .header-btn {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.16));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 5px rgba(0,0,0,0.38);
+        }
+        html.eiti-depth .tab-bar {
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(0,0,0,0.18));
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 -4px 14px rgba(0,0,0,0.35);
+        }
+        /* v14.16.32: 3D-иконки таб-бара — Fluent Emoji 3D (MIT, Microsoft), локально vendor/fluent-emoji-3d/.
+           Класс html.eiti-3d-icons ставится JS только после загрузки всех картинок → иначе остаётся текстовый эмодзи. */
+        html.eiti-3d-icons .tab-icon[data-icon^="tab_"] {
+            color: transparent !important; text-shadow: none !important;
+            width: 1.15em; height: 1.15em; line-height: 1.15em; overflow: hidden;
+            background: center / contain no-repeat;
+        }
+        html.eiti-3d-icons .tab-item[data-view="chat"] .tab-icon[data-icon="tab_chat"] { background-image: url("vendor/fluent-emoji-3d/speech_balloon.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="journal"] .tab-icon[data-icon="tab_journal"] { background-image: url("vendor/fluent-emoji-3d/notebook.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="history"] .tab-icon[data-icon="tab_history"] { background-image: url("vendor/fluent-emoji-3d/books.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="player"] .tab-icon[data-icon="tab_player"] { background-image: url("vendor/fluent-emoji-3d/musical_note.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="files"] .tab-icon[data-icon="tab_files"] { background-image: url("vendor/fluent-emoji-3d/file_folder.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="notes"] .tab-icon[data-icon="tab_notes"] { background-image: url("vendor/fluent-emoji-3d/memo.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="timeline"] .tab-icon[data-icon="tab_timeline"] { background-image: url("vendor/fluent-emoji-3d/calendar.webp"); }
+        html.eiti-3d-icons .tab-item[data-view="settings"] .tab-icon[data-icon="tab_settings"] { background-image: url("vendor/fluent-emoji-3d/gear.webp"); }
+        html.eiti-3d-icons .tab-item:not(.active) .tab-icon[data-icon^="tab_"] {
+            filter: saturate(0.85) drop-shadow(0 3px 3px rgba(0,0,0,0.5)) !important; opacity: 0.8;
+        }
+        html.eiti-3d-icons .tab-item.active .tab-icon[data-icon^="tab_"] {
+            filter: drop-shadow(0 0 6px var(--accent-color)) drop-shadow(0 4px 6px rgba(0,0,0,0.6)) !important; opacity: 1;
+        }
         /* v14.16.32: компактная шапка (по умолчанию в APK; «👑 Большая золотая шапка» — в Настройке табов) */
         html.eiti-compact-header:not(.eiti-small-icons) { --eiti-hdr-top: var(--eiti-top-inset, var(--eiti-env-top)); }
         html.eiti-compact-header:not(.eiti-small-icons) .app-header,
@@ -12123,6 +12183,28 @@
                             </div>
                             <button type="button" id="eiti-small-icons-toggle-btn" onclick="eitiSetSmallIcons(!eitiIsSmallIcons())" style="padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;background:rgba(255,255,255,0.1);color:var(--text-color);">ВЫКЛ</button>
                             <input type="checkbox" id="eiti-small-icons-toggle" onchange="eitiSetSmallIcons(this.checked)" hidden aria-hidden="true">
+                        </div>
+
+                        <!-- v14.16.32: объём и 3D-иконки -->
+                        <div class="eiti-si-row" role="group" aria-label="Объёмный стиль">
+                            <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                                <span style="font-size:22px;">🧊</span>
+                                <div style="min-width:0;">
+                                    <div style="font-size:15px;font-weight:600;" data-i18n="Объёмный стиль">Объёмный стиль</div>
+                                    <div style="font-size:11px;opacity:0.55;margin-top:1px;" data-i18n="Тени, градиенты и блики на полях и кнопках">Тени, градиенты и блики на полях и кнопках</div>
+                                </div>
+                            </div>
+                            <button type="button" id="eiti-depth-btn" class="eiti-pref-btn" onclick="eitiSetPref('depth', !eitiGetPref('depth'))">ВЫКЛ</button>
+                        </div>
+                        <div class="eiti-si-row" role="group" aria-label="3D-иконки">
+                            <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                                <span style="font-size:22px;">✨</span>
+                                <div style="min-width:0;">
+                                    <div style="font-size:15px;font-weight:600;" data-i18n="3D-иконки табов">3D-иконки табов</div>
+                                    <div style="font-size:11px;opacity:0.55;margin-top:1px;" data-i18n="Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах">Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах</div>
+                                </div>
+                            </div>
+                            <button type="button" id="eiti-icons3d-btn" class="eiti-pref-btn" onclick="eitiSetPref('icons3d', !eitiGetPref('icons3d'))">ВЫКЛ</button>
                         </div>
 
                         <!-- v14.16.32: размер шапки — компактная (по умолчанию в APK) / большая золотая -->
@@ -15408,6 +15490,7 @@
                 }
             });
             if (!silent) showToast('Иконки: ' + packId);
+            if (typeof eitiApply3dIcons === 'function') eitiApply3dIcons(eitiGetPref('icons3d')); // v14.16.32
         }
 
         function applyDesign(designId) {
@@ -15975,6 +16058,72 @@
             if (typeof showToast === 'function') showToast(large ? '👑 Большая золотая шапка' : '📏 Компактная шапка');
         }
         window.eitiIsHeaderLarge = eitiIsHeaderLarge;
+
+        // v14.16.32: флаги вида — 🧊 объём (eiti_depth) и ✨ 3D-иконки (eiti_3d_icons). '1'/'0'; нет ключа → по умолчанию.
+        // Объём: по умолчанию только в APK. 3D-иконки: по умолчанию везде, кроме iPhone/iPad/Mac (там системные эмодзи
+        // и так объёмные — вид на iOS не меняем).
+        var EITI_PREFS = {
+            depth: { key: 'eiti_depth', def: function () { return !!window.EITI_NATIVE; }, btn: 'eiti-depth-btn',
+                     apply: function (on) { document.documentElement.classList.toggle('eiti-depth', on); } },
+            icons3d: { key: 'eiti_3d_icons', def: function () { return !eitiIsApplePlatform(); }, btn: 'eiti-icons3d-btn',
+                       apply: function (on) { eitiApply3dIcons(on); } }
+        };
+        function eitiIsApplePlatform() {
+            try {
+                if (document.documentElement.classList.contains('is-ios')) return true;
+                var ua = navigator.userAgent || '', pf = navigator.platform || '';
+                return /iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua) || /^(Mac|iPhone|iPad)/.test(pf);
+            } catch (e) { return false; }
+        }
+        function eitiGetPref(name) {
+            var p = EITI_PREFS[name]; if (!p) return false;
+            var v = null; try { v = localStorage.getItem(p.key); } catch (e) {}
+            return v === '1' ? true : v === '0' ? false : p.def();
+        }
+        function eitiPaintPrefBtn(btn, on) {
+            if (!btn) return;
+            var tr = function (x) { try { return window.EITI_I18N && EITI_I18N.tr ? EITI_I18N.tr(x) : x; } catch (e) { return x; } };
+            btn.textContent = on ? tr('ВКЛ') : tr('ВЫКЛ');
+            btn.style.cssText = 'padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;'
+                + (on ? 'background:var(--accent-color);color:#000;' : 'background:rgba(255,255,255,0.1);color:var(--text-color);');
+        }
+        function eitiSetPref(name, on) {
+            var p = EITI_PREFS[name]; if (!p) return;
+            on = !!on;
+            try { localStorage.setItem(p.key, on ? '1' : '0'); } catch (e) {}
+            p.apply(on); eitiPaintPrefBtn(document.getElementById(p.btn), on);
+        }
+        // Таб-иконки Fluent 3D: только для стандартного набора эмодзи (другие наборы иконок не трогаем).
+        // Класс ставится после загрузки всех 8 картинок → если файл недоступен, остаётся текстовый эмодзи.
+        var EITI_3D_TAB_ICONS = ['speech_balloon', 'notebook', 'books', 'musical_note', 'file_folder', 'memo', 'calendar', 'gear'];
+        var eiti3dIconsReady = null;
+        function eitiApply3dIcons(on) {
+            var de = document.documentElement;
+            var pack = 'emoji_classic';
+            try { pack = (getUIState().iconPack) || (getUIState().design === 'kim3-metal' ? 'kim3' : 'emoji_classic'); } catch (e) {}
+            if (!on || pack !== 'emoji_classic') { de.classList.remove('eiti-3d-icons'); return; }
+            if (!eiti3dIconsReady) {
+                eiti3dIconsReady = Promise.all(EITI_3D_TAB_ICONS.map(function (n) {
+                    return new Promise(function (res, rej) {
+                        var im = new Image(); im.onload = res; im.onerror = rej;
+                        im.src = 'vendor/fluent-emoji-3d/' + n + '.webp';
+                    });
+                })).then(function () { return true; }, function () { return false; });
+            }
+            eiti3dIconsReady.then(function (ok) {
+                if (ok && eitiGetPref('icons3d')) {
+                    var p2 = 'emoji_classic';
+                    try { p2 = getUIState().iconPack || (getUIState().design === 'kim3-metal' ? 'kim3' : 'emoji_classic'); } catch (e) {}
+                    de.classList.toggle('eiti-3d-icons', p2 === 'emoji_classic');
+                }
+            });
+        }
+        window.eitiGetPref = eitiGetPref; window.eitiSetPref = eitiSetPref; window.eitiApply3dIcons = eitiApply3dIcons;
+        document.addEventListener('DOMContentLoaded', function () {
+            Object.keys(EITI_PREFS).forEach(function (n) {
+                var on = eitiGetPref(n); EITI_PREFS[n].apply(on); eitiPaintPrefBtn(document.getElementById(EITI_PREFS[n].btn), on);
+            });
+        });
         window.eitiSetHeaderLarge = eitiSetHeaderLarge;
         document.addEventListener('DOMContentLoaded', function () { eitiApplyHeaderSize(eitiIsHeaderLarge()); });
 

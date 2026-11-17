@@ -46,7 +46,16 @@ var CORE = [
     BASE + 'icon-192.png',
     BASE + 'icon-192-maskable.png',
     BASE + 'icon-512.png',
-    BASE + 'icon-512-maskable.png'
+    BASE + 'icon-512-maskable.png',
+    // v14.16.32: Fluent Emoji 3D (MIT) — иконки таб-бара, ~18 КБ всего; офлайн без CDN
+    BASE + 'vendor/fluent-emoji-3d/speech_balloon.webp',
+    BASE + 'vendor/fluent-emoji-3d/notebook.webp',
+    BASE + 'vendor/fluent-emoji-3d/books.webp',
+    BASE + 'vendor/fluent-emoji-3d/musical_note.webp',
+    BASE + 'vendor/fluent-emoji-3d/file_folder.webp',
+    BASE + 'vendor/fluent-emoji-3d/memo.webp',
+    BASE + 'vendor/fluent-emoji-3d/calendar.webp',
+    BASE + 'vendor/fluent-emoji-3d/gear.webp'
 ];
 
 // Тяжёлые файлы — кешируем в той же install цепочке, но не блокируем
@@ -121,7 +130,7 @@ function swIsAllowlisted(url) {
     if (/\/local\/eiti_[^/]+\.(js|json)$/.test(path)) return true;
     if (/\/offline\/eiti_[^/]+\.js$/.test(path)) return true;
     // v14.16.30 (#27): локальные vendor-библиотеки с точной версией в пути — cache-first, не вытеснять
-    if (path.indexOf(BASE + 'vendor/') === 0 && /\.(m?js)$/.test(path)) return true;
+    if (path.indexOf(BASE + 'vendor/') === 0 && /\.(m?js|webp)$/.test(path)) return true; // v14.16.32: + 3D-иконки
     if (/\/(data|kb)\/[^/]+\.json$/i.test(path)
         || path.endsWith('_kb_v3.json')
         || path.endsWith('lemma.json')
