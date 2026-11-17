@@ -5892,7 +5892,10 @@
         @supports (height: 100dvh) { body.notes-fullscreen .notes-list { max-height: 100dvh !important; height: calc(100dvh - 20px) !important; } } /* v13.8.1: iOS Safari — учитываем панели браузера */
 
         body {
-            font-family: 'Helvetica Neue', 'Roboto', sans-serif;
+            /* v14.16.32: системный шрифт телефона первым (MiSans / One UI Sans / Roboto) — чётче на Android, iOS без изменений */
+            font-family: 'Helvetica Neue', system-ui, 'Roboto', 'Noto Sans', sans-serif;
+            -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+            text-rendering: optimizeLegibility;
             background: var(--bg-color);
             overflow: hidden;
             position: fixed;
@@ -5974,6 +5977,10 @@
             border-radius: 18px;
             animation: messageAppear 0.3s ease-out;
             word-wrap: break-word;
+            /* v14.16.32: длинные слова/ссылки не вылезают за пузырь, русские переносы по слогам */
+            overflow-wrap: anywhere;
+            hyphens: auto; -webkit-hyphens: auto;
+            min-width: 0;
             user-select: text;
             -webkit-user-select: text;
         }
@@ -19601,16 +19608,27 @@
             t = t.replace(/^[\-*•·]\s+\[([ xX])\]\s+(.+)$/gm, function(_m, mark, txt) {
                 return '<div style="padding-left:12px;margin:2px 0;">' + (mark === ' ' ? '☐' : '☑') + ' ' + txt + '</div>';
             });
-            // Bullet list
-            t = t.replace(/^[\-*•·]\s+(.+)$/gm, '<div style="padding-left:12px;margin:2px 0;">· $1</div>');
+            // Bullet list (v14.16.32: висячий отступ — перенос строки пункта встаёт под текст, а не под «·»)
+            t = t.replace(/^[\-*•·]\s+(.+)$/gm, '<div class="md-li" style="padding-left:22px;text-indent:-10px;margin:2px 0;">· $1</div>');
             // Numbered list
-            t = t.replace(/^(\d+)\.\s+(.+)$/gm, '<div style="padding-left:12px;margin:2px 0;">$1. $2</div>');
+            t = t.replace(/^(\d+)\.\s+(.+)$/gm, '<div class="md-li" style="padding-left:26px;text-indent:-14px;margin:2px 0;">$1. $2</div>');
             // Bold **text** or __text__
             t = t.replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>');
             t = t.replace(/__([^_\n]+)__/g, '<b>$1</b>');
             // Italic *text* (v13.7.21: одиночные * больше не удаляются — «2 * 3» остаётся как есть)
             t = t.replace(/(?<![*\w])\*([^*\s\n](?:[^*\n]*[^*\s\n])?)\*(?![*\w])/g, '<i>$1</i>');
             t = t.replace(/(?<![_\w])_([^_\n]+)_(?![_\w])/g, '<i>$1</i>');
+            // v14.16.32: пустые строки вокруг блоков (пункты, заголовки, цитаты, таблицы, <hr>) давали двойные/тройные
+            // зазоры: «</div>\n\n<div>» → </div><br><br><div>. Теперь: 3+ переводов → 2; перевод сразу после блока
+            // съедается; пустая строка рядом с блоком → небольшой отступ 6px вместо пустой строки.
+            t = t.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+            var _mdGap = '<div class="md-gap" style="height:6px;"></div>';
+            t = t.replace(/(<\/div>|<hr[^>]*>)\n\n(?=<div|<hr)/g, '$1' + _mdGap);
+            t = t.replace(/(<\/div>|<hr[^>]*>)\n\n/g, '$1' + _mdGap);
+            t = t.replace(/\n\n(?=<div|<hr)/g, _mdGap);
+            t = t.replace(/(<\/div>|<hr[^>]*>)\n/g, '$1');
+            t = t.replace(/\n(?=<div|<hr)/g, '');
+            t = t.replace(/^\n+|\n+$/g, '');
             // Double newline → paragraph break
             t = t.replace(/\n\n/g, '<br><br>');
             // Single newline → <br>
