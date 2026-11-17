@@ -9042,6 +9042,12 @@
            установка PWA там не нужна */
         html.eiti-phone[data-eiti-phone="native"] .app-header::before { display: none; }
         html.eiti-native #btn-pwa-install, html.eiti-native #pwa-install-banner { display: none !important; }
+        /* v14.16.32: вкладки со своей шапкой (Заметки, Дневник, Лента) — глобальная шапка скрыта, поэтому верхний
+           системный отступ берёт контент; иначе кнопки уходили под статус-бар в APK (edge-to-edge) */
+        html.eiti-phone body.view-notes:not(.notes-fullscreen) .app-content,
+        html.eiti-phone body.view-journal:not(.journal-fullscreen) .app-content,
+        html.eiti-phone body.view-timeline .app-content { padding-top: var(--eiti-top-inset); box-sizing: border-box; }
+        html.eiti-phone body.journal-fullscreen #view-journal { top: var(--eiti-top-inset); height: calc(100% - var(--eiti-top-inset)); }
         /* v14.16.32: 🧊 Объёмный стиль (html.eiti-depth; по умолчанию в APK, на сайте — опция). Раскладка та же,
            возвращается только объём: градиент + внутренняя тень + блик (ориентир — iOS-скриншоты). */
         html.eiti-depth .chat-composer-shell {
