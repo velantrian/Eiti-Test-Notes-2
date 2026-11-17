@@ -3293,7 +3293,7 @@
                 'Медицина': 'Medicine',
                 'Роли': 'Roles',
                 'Вдохновение': 'Inspiration',
-                'Авто': 'Cars',
+                'Авто': 'Auto', // v14.16.32: было 'Cars' — перебивало «Авто» (язык ответа ИИ) в Настройках
                 'Финансы': 'Finance',
                 'Отношения': 'Relationships',
                 'Кулинария': 'Cooking',
@@ -4700,6 +4700,7 @@
     <script src="./local/eiti_action_gate.js" defer></script>
     <script src="./local/eiti_doc_edits.js" defer></script>
     <script src="./local/eiti_device_fit.js" defer></script>
+    <script src="./local/eiti_transfer.js" defer></script>
 <script>
 (function(){
   // v14.16.32: нативное приложение (Capacitor APK) — флаг до первой отрисовки. Мост Capacitor внедряется
@@ -11228,6 +11229,22 @@
                                     <button onclick="eitiImportAllClick()" class="settings-btn">📥 Импорт всего</button>
                                 </div>
                                 <input type="file" id="eiti-import-all-file" accept=".json" style="display:none;" onchange="eitiImportAllFile(this)">
+                            </div>
+
+                            <!-- v14.16.32: перенос всего (настройки, заметки, чаты, дневник, память…) между сайтом и APK -->
+                            <div id="eiti-transfer" style="padding-bottom:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
+                                <div style="font-size:13px;font-weight:600;margin-bottom:6px;" data-i18n="📲 Перенос сайт ⇄ приложение">📲 Перенос сайт ⇄ приложение</div>
+                                <div style="font-size:12px;opacity:0.6;margin-bottom:10px;line-height:1.45;" data-i18n="Все настройки и данные этой копии EITI одним файлом: заметки, чаты, дневник, память, задачи, плейлист-настройки. На другом устройстве — «Загрузить файл переноса».">Все настройки и данные этой копии EITI одним файлом: заметки, чаты, дневник, память, задачи, плейлист-настройки. На другом устройстве — «Загрузить файл переноса».</div>
+                                <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:10px;cursor:pointer;">
+                                    <input type="checkbox" id="eiti-transfer-secrets"> <span data-i18n="🔑 Включить API-ключи (файл хранить как пароль)">🔑 Включить API-ключи (файл хранить как пароль)</span>
+                                </label>
+                                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                                    <button type="button" id="eiti-transfer-export" onclick="eitiTransferExport()" class="settings-btn" data-i18n="📤 Сохранить файл переноса">📤 Сохранить файл переноса</button>
+                                    <button type="button" id="eiti-transfer-import" onclick="document.getElementById('eiti-transfer-file').click()" class="settings-btn" data-i18n="📥 Загрузить файл переноса">📥 Загрузить файл переноса</button>
+                                </div>
+                                <input type="file" id="eiti-transfer-file" accept=".json,application/json" style="display:none;" onchange="eitiTransferImportFile(this)">
+                                <div id="eiti-transfer-providers" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
+                                <div id="eiti-transfer-status" style="font-size:12px;opacity:0.8;margin-top:8px;" aria-live="polite"></div>
                             </div>
 
                             <!-- AI Check -->
@@ -36055,6 +36072,57 @@ window.eitiLLMClearAll = async function() {
             ['eiti-kb-add-triggers','eiti-kb-add-answer'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
             eitiKBRenderStats();
         }
+
+        // ── v14.16.32: перенос сайт ⇄ APK (local/eiti_transfer.js) ─────────────
+        function _eitiTransferStatus(t) { var s = document.getElementById('eiti-transfer-status'); if (s) s.textContent = t; }
+        window.eitiTransferExport = function() {
+            if (!window.EitiTransfer) return Promise.resolve(null);
+            var secrets = !!(document.getElementById('eiti-transfer-secrets') || {}).checked;
+            _eitiTransferStatus('⏳ Собираю данные…');
+            return EitiTransfer.collect({ includeSecrets: secrets }).then(function(b) {
+                var blob = EitiTransfer.toBlob(b), name = EitiTransfer.fileName();
+                var url = URL.createObjectURL(blob), a = document.createElement('a');
+                a.href = url; a.download = name; document.body.appendChild(a); a.click();
+                setTimeout(function() { a.remove(); URL.revokeObjectURL(url); }, 1500);
+                var nStores = 0, nRows = 0;
+                Object.keys(b.idb).forEach(function(d) { Object.keys(b.idb[d]).forEach(function(s) { nStores++; nRows += (b.idb[d][s].rows || []).length; }); });
+                _eitiTransferStatus('✅ ' + name + ' · ' + Math.round(blob.size / 1024) + ' КБ · настроек ' + Object.keys(b.ls).length + ' · записей ' + nRows + (b.skippedSecrets ? ' · ключи не включены (' + b.skippedSecrets + ')' : ''));
+                window._eitiLastTransfer = b;
+                return b;
+            }).catch(function(e) { _eitiTransferStatus('❌ ' + e.message); return null; });
+        };
+        window.eitiTransferImportFile = function(input) {
+            var f = input && input.files && input.files[0];
+            if (!f || !window.EitiTransfer) return Promise.resolve(null);
+            input.value = '';
+            return f.text().then(function(txt) {
+                var b; try { b = JSON.parse(txt); } catch (e) { throw new Error('Неверный JSON'); }
+                var err = EitiTransfer.validate(b); if (err) throw new Error(err);
+                var msg = 'Загрузить данные из файла переноса (' + (b.from === 'apk' ? 'приложение' : 'сайт') + ', v' + b.version + ', ' + String(b.created).slice(0, 10) + ')?\n\nСовпадающие заметки, чаты и настройки будут заменены версиями из файла. Уже введённые здесь API-ключи сохранятся.';
+                if (!window.__eitiTransferNoConfirm && !confirm(msg)) return null;
+                _eitiTransferStatus('⏳ Загружаю…');
+                return EitiTransfer.apply(b, { mode: 'merge', keepLocalSecrets: true }).then(function(r) {
+                    var n = 0; Object.keys(r.idb).forEach(function(d) { Object.keys(r.idb[d]).forEach(function(s) { n += r.idb[d][s]; }); });
+                    _eitiTransferStatus('✅ Перенесено: настроек ' + r.ls + ', записей ' + n + '. Перезапускаю…');
+                    if (!window.__eitiTransferNoReload) setTimeout(function() { location.reload(); }, 1200);
+                    return r;
+                });
+            }).catch(function(e) { _eitiTransferStatus('❌ ' + e.message); return null; });
+        };
+        document.addEventListener('DOMContentLoaded', function() {
+            var box = document.getElementById('eiti-transfer-providers');
+            if (!box || !window.EitiTransfer) return;
+            Object.keys(EitiTransfer.providers).forEach(function(id) {
+                if (id === 'file') return;
+                var p = EitiTransfer.providers[id], b = document.createElement('button');
+                b.type = 'button'; b.className = 'settings-btn'; b.disabled = !p.available();
+                b.setAttribute('data-provider', id);
+                b.textContent = p.label + (p.available() ? '' : ' · скоро');
+                b.title = p.available() ? '' : 'Нужно: ' + p.needs;
+                b.style.opacity = p.available() ? '1' : '0.5';
+                box.appendChild(b);
+            });
+        });
 
         // ── Единый экспорт / импорт (eiti.v5) ────────────────────────────────────
         function eitiExportAll() {
