@@ -4461,6 +4461,8 @@
         window.EITI_I18N.addDict('en', {"Отправить сообщение": "Send message", "Прикрепить файл": "Attach file"}); // v14.16.x: кнопки внутри поля ввода
         window.EITI_I18N.addDict('de', {"Отправить сообщение": "Nachricht senden", "Прикрепить файл": "Datei anhängen"});
         window.EITI_I18N.addDict('en', {"📌 Настройка табов": "📌 Tab settings", "Меньше иконки (small icons)": "Small icons", "Компактные нижние табы и верхние панели — больше места на экране": "Compact bottom tabs and top bars — more room on screen", "🔍 Маленькие иконки включены": "🔍 Small icons on", "🔍 Обычные иконки": "🔍 Regular icons"}); // v14.15.1
+        window.EITI_I18N.addDict('en', {"🔋 Фон и батарея": "🔋 Background & battery", "🔔 Уведомление «EITI работает в фоне»": "🔔 «EITI is running in the background» notification", "🔋 Батарея без ограничений": "🔋 Unrestricted battery", "🪫 Вернуть ограничения (экономия батареи)": "🪫 Restore restrictions (save battery)", "🎵 Вернуть треки по умолчанию": "🎵 Restore default tracks"});
+        window.EITI_I18N.addDict('de', {"🔋 Фон и батарея": "🔋 Hintergrund & Akku", "🔔 Уведомление «EITI работает в фоне»": "🔔 Hinweis «EITI läuft im Hintergrund»", "🔋 Батарея без ограничений": "🔋 Akku ohne Einschränkungen", "🪫 Вернуть ограничения (экономия батареи)": "🪫 Einschränkungen wiederherstellen (Akku sparen)", "🎵 Вернуть треки по умолчанию": "🎵 Standard-Titel wiederherstellen"});
         window.EITI_I18N.addDict('en', {"📚 База знаний на устройстве": "📚 Knowledge base on device", "Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.": "Base sections (~460 MB) are downloaded as needed. To use everything offline, download it all over Wi-Fi.", "📥 Скачать всё по Wi-Fi": "📥 Download all over Wi-Fi"});
         window.EITI_I18N.addDict('de', {"📚 База знаний на устройстве": "📚 Wissensbasis auf dem Gerät", "Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.": "Abschnitte (~460 MB) werden bei Bedarf geladen. Für vollen Offline-Betrieb alles per WLAN laden.", "📥 Скачать всё по Wi-Fi": "📥 Alles per WLAN laden"});
         window.EITI_I18N.addDict('en', {"Объёмный стиль": "3D depth style", "Тени, градиенты и блики на полях и кнопках": "Shadows, gradients and highlights on inputs and buttons", "3D-иконки табов": "3D tab icons", "Fluent Emoji 3D (Microsoft, MIT) — одинаково на всех телефонах": "Fluent Emoji 3D (Microsoft, MIT) — same on every phone"}); // v14.16.32
@@ -10142,6 +10144,21 @@
                                 <option value="fun">😄 С юмором</option>
                             </select>
                             <div style="font-size:11px;opacity:0.45;line-height:1.5;text-align:center;">Без сети, без ключа или при сбое ИИ EITI отвечает офлайн: диалоги, шутки, пословицы, загадки, сказки и предания («сказку на ночь», «дальше», «кто такой Кухулин»).</div>
+                        </div>
+                    </div>
+                    <!-- v14.16.32: APK — работа в фоне, батарея, треки по умолчанию -->
+                    <div class="settings-group eiti-native-only" id="eiti-bg-settings">
+                        <div class="settings-title" data-i18n="🔋 Фон и батарея">🔋 Фон и батарея</div>
+                        <div style="padding:14px;display:flex;flex-direction:column;gap:10px;">
+                            <label style="display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer;">
+                                <input type="checkbox" id="eiti-bg-notify" onchange="eitiBgSetEnabled(this.checked)" style="margin-top:3px;">
+                                <span><b data-i18n="🔔 Уведомление «EITI работает в фоне»">🔔 Уведомление «EITI работает в фоне»</b><br><span style="font-size:11px;opacity:0.6;" data-i18n="Держит приложение живым, когда оно свёрнуто: напоминания, ответы ИИ, музыка. Выкл — Android может выгрузить EITI.">Держит приложение живым, когда оно свёрнуто: напоминания, ответы ИИ, музыка. Выкл — Android может выгрузить EITI.</span></span>
+                            </label>
+                            <button type="button" id="eiti-bg-battery-btn" onclick="eitiBgBattery(true)" style="padding:12px;border-radius:12px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:15px;font-weight:600;cursor:pointer;" data-i18n="🔋 Батарея без ограничений">🔋 Батарея без ограничений</button>
+                            <button type="button" id="eiti-bg-battery-restrict" onclick="eitiBgBattery(false)" style="padding:10px;border-radius:12px;border:1px solid var(--border-color);background:transparent;color:var(--text-color);font-size:13px;cursor:pointer;" data-i18n="🪫 Вернуть ограничения (экономия батареи)">🪫 Вернуть ограничения (экономия батареи)</button>
+                            <div id="eiti-bg-status" style="font-size:12px;opacity:0.75;text-align:center;" aria-live="polite"></div>
+                            <div style="font-size:11px;opacity:0.5;line-height:1.5;" data-i18n="Xiaomi / HyperOS: дополнительно «Настройки → Приложения → EITI → Автозапуск» и «Контроль активности → Нет ограничений».">Xiaomi / HyperOS: дополнительно «Настройки → Приложения → EITI → Автозапуск» и «Контроль активности → Нет ограничений».</div>
+                            <button type="button" id="eiti-default-tracks-restore" onclick="eitiRestoreDefaultTracks()" style="padding:10px;border-radius:12px;border:1px solid var(--border-color);background:transparent;color:var(--text-color);font-size:13px;cursor:pointer;" data-i18n="🎵 Вернуть треки по умолчанию">🎵 Вернуть треки по умолчанию</button>
                         </div>
                     </div>
                     <!-- v14.16.32: APK — база знаний по требованию + «Скачать всё по Wi-Fi» -->
@@ -17379,6 +17396,7 @@
                         var delBtn = document.createElement('div');
                         delBtn.style.cssText = 'position:absolute;right:0;top:0;bottom:0;width:' + DELETE_W + 'px;background:#e53935;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transform:translateX(100%);z-index:2;';
                         delBtn.textContent = 'Удалить';
+                        delBtn.className = 'eiti-track-del'; // v14.16.32: браузер переписывает style в rgb(...) — селектор по цвету не срабатывал
                         wrapper.appendChild(row);
                         wrapper.appendChild(delBtn);
                         list.appendChild(wrapper);
@@ -17431,13 +17449,14 @@
                             list.__swipeState = {};
                         }, { passive: true });
                         list.addEventListener('click', function(e) {
-                            var delBtn = e.target.closest('[style*="background:#e53935"]');
+                            var delBtn = e.target.closest('.eiti-track-del, [style*="background:#e53935"]');
                             var row = delBtn ? delBtn.previousElementSibling : e.target.closest('[data-track-idx]');
                             if (!row) return;
                             if (delBtn) {
                                 e.stopPropagation();
                                 var idx = parseInt(row.getAttribute('data-track-idx'), 10);
                                 var wasActive = (idx === currentTrack);
+                                if (tracks[idx] && tracks[idx]._eitiDefaultId && typeof eitiDefaultTrackRemoved === 'function') eitiDefaultTrackRemoved(tracks[idx]._eitiDefaultId); // v14.16.32
                                 tracks.splice(idx, 1);
                                 if (currentTrack > idx) currentTrack--;
                                 else if (currentTrack >= tracks.length) currentTrack = Math.max(0, tracks.length - 1);
@@ -17677,6 +17696,94 @@
                     });
                 }, 200);
 
+                // ── v14.16.32: треки по умолчанию (только в APK: www/media/default/, в репозитории их нет) ──
+                // Названия правятся здесь. Удалённый трек по умолчанию больше не возвращается (eiti_default_tracks_removed);
+                // «🎵 Вернуть треки по умолчанию» в Настройках — вернуть.
+                window.EITI_DEFAULT_TRACKS = [
+                    { id: 'velan-seul', file: 'media/default/track1.mp3', title: 'Seul', artist: 'Velan', duration: '3:02' },
+                    { id: 'native-lands', file: 'media/default/track2.mp3', title: 'Native Lands', artist: '', duration: '3:19' }
+                ];
+                var EITI_DT_KEY = 'eiti_default_tracks_removed';
+                function _dtRemoved() { try { return JSON.parse(localStorage.getItem(EITI_DT_KEY) || '[]') || []; } catch (e) { return []; } }
+                window.eitiDefaultTrackRemoved = function(id) {
+                    var l = _dtRemoved(); if (l.indexOf(id) === -1) l.push(id);
+                    try { localStorage.setItem(EITI_DT_KEY, JSON.stringify(l)); } catch (e) {}
+                };
+                window.eitiSeedDefaultTracks = function(opts) {
+                    opts = opts || {};
+                    if (!window.EITI_NATIVE && !opts.force) return Promise.resolve(0); // на сайте файлов нет — не запрашиваем
+                    if (window._eitiSeedBusy) return window._eitiSeedBusy;
+                    var p = window._eitiSeedDo().then(function(n) { window._eitiSeedBusy = null; return n; }, function() { window._eitiSeedBusy = null; return 0; });
+                    window._eitiSeedBusy = p;
+                    return p;
+                };
+                window._eitiSeedDo = function() {
+                    var removed = _dtRemoved();
+                    var want = window.EITI_DEFAULT_TRACKS.filter(function(d) {
+                        return removed.indexOf(d.id) === -1 && !tracks.some(function(t) { return t && t._eitiDefaultId === d.id; });
+                    });
+                    if (!want.length) return Promise.resolve(0);
+                    return Promise.all(want.map(function(d) {
+                        return fetch(d.file).then(function(r) { if (!r.ok) throw new Error(r.status); return r.blob(); }).then(function(b) {
+                            var label = d.artist ? d.artist + ' – ' + d.title : d.title;
+                            var f = new File([b], label + '.mp3', { type: 'audio/mpeg' });
+                            f._eitiDefaultId = d.id; f._eitiTitle = d.title; f._eitiArtist = d.artist;
+                            return f;
+                        }).catch(function() { return null; });
+                    })).then(function(files) {
+                        files = files.filter(Boolean);
+                        if (!files.length) return 0;
+                        var wasEmpty = tracks.length === 0;
+                        // порядок как в EITI_DEFAULT_TRACKS, перед пользовательскими не ставим — в конец
+                        tracks = tracks.concat(files);
+                        storage.music = tracks;
+                        if (typeof updateCount === 'function') updateCount('music', tracks.length);
+                        if (wasEmpty) { currentTrack = 0; window._eitiLoadTrack(0); } else window.renderPlayerTrackList();
+                        return files.length;
+                    });
+                };
+                window.eitiRestoreDefaultTracks = function() {
+                    try { localStorage.removeItem(EITI_DT_KEY); } catch (e) {}
+                    return window.eitiSeedDefaultTracks().then(function(n) {
+                        if (typeof showToast === 'function') showToast(n ? '🎵 Треки по умолчанию возвращены: ' + n : '🎵 Треки по умолчанию уже в плейлисте');
+                        return n;
+                    });
+                };
+                setTimeout(function() { window.eitiSeedDefaultTracks(); }, 1200);
+
+                // ── v14.16.32: кнопки плеера в шторке Android (APK). WebView не показывает Media Session сам —
+                // нативный плагин EitiBackground рисует MediaStyle-уведомление и шлёт нажатия сюда.
+                (function() {
+                    function nb() { return window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null; }
+                    var pushT = null;
+                    function push() {
+                        clearTimeout(pushT);
+                        pushT = setTimeout(function() {
+                            var b = nb(); if (!b) return;
+                            var t = tracks[currentTrack];
+                            if (!t) { b.clearMedia(); return; }
+                            var name = t.name.replace(/\.[^/.]+$/, '');
+                            b.media({ title: t._eitiTitle || name, artist: t._eitiDefaultId ? (t._eitiArtist || 'VELANTRIM') : 'VELANTRIM EITI',
+                                      playing: !audio.paused, position: Math.round((audio.currentTime || 0) * 1000), duration: isFinite(audio.duration) ? Math.round(audio.duration * 1000) : 0,
+                                      hasPrev: tracks.length > 1, hasNext: tracks.length > 1 });
+                        }, 120);
+                    }
+                    ['play', 'pause', 'ended', 'loadedmetadata', 'emptied'].forEach(function(ev) { audio.addEventListener(ev, push); });
+                    window._eitiMediaPush = push;
+                    if (window._eitiMediaActionBound) return; // bind-функция вызывается при каждой смене раскладки плеера
+                    window._eitiMediaActionBound = true;
+                    window.addEventListener('eiti-media-action', function(e) {
+                        var a = e && e.detail && e.detail.action;
+                        var audio = document.getElementById('audio'); if (!audio) return;
+                        if (a === 'play') audio.play().catch(function() {});
+                        else if (a === 'pause') audio.pause();
+                        else if (a === 'toggle') { if (audio.paused) audio.play().catch(function() {}); else audio.pause(); }
+                        else if (a === 'next') { var n = document.getElementById('next'); if (n) n.click(); }
+                        else if (a === 'prev') { var p = document.getElementById('prev'); if (p) p.click(); }
+                        else if (a === 'stop') { audio.pause(); }
+                    });
+                })();
+
                 // ── Bind: musicInput ───────────────────────────
                 musicInput.onchange = function(e) {
                     var newFiles = Array.from(e.target.files);
@@ -17808,7 +17915,8 @@
 
                     // Обновляем метаданные при каждой смене трека
                     window._eitiUpdateMediaSession = function(trackName, artwork) {
-                        var meta = { title: trackName || 'VELANTRIM Player', artist: 'VELANTRIM EITI', album: 'Плейлист' };
+                        var _ct = (typeof tracks !== 'undefined' && tracks[currentTrack]) || null; // v14.16.32: название/исполнитель трека по умолчанию
+                        var meta = { title: (_ct && _ct._eitiTitle) || trackName || 'VELANTRIM Player', artist: (_ct && _ct._eitiDefaultId) ? (_ct._eitiArtist || 'VELANTRIM') : 'VELANTRIM EITI', album: 'Плейлист' };
                         if (artwork && artwork.length) meta.artwork = artwork;
                         try { navigator.mediaSession.metadata = new MediaMetadata(meta); } catch(e) {}
                     };
@@ -34272,6 +34380,32 @@ window.eitiLLMClearAll = async function() {
             var onF = function(e) { var t = e.target; if (t && (t.id === 'input' || t.id === 'notesAiInput')) warm(); };
             document.addEventListener('focusin', onF, true);
         });
+        // v14.16.32: 🔋 фон и батарея (APK). Ключ eiti_bg_notify: '0' — выкл, иначе вкл (по умолчанию вкл).
+        function eitiBgIsEnabled() { try { return localStorage.getItem('eiti_bg_notify') !== '0'; } catch (e) { return true; } }
+        function eitiBgStatusPaint() {
+            var st = document.getElementById('eiti-bg-status'), cb = document.getElementById('eiti-bg-notify');
+            if (cb) cb.checked = eitiBgIsEnabled();
+            var b = window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null;
+            if (!b) { if (st) st.textContent = ''; return; }
+            b.status().then(function(s) {
+                if (!st || !s) return;
+                st.textContent = (s.running ? '🟢 Работает в фоне' : '⚪ Фоновое уведомление выключено') + ' · ' + (s.ignoringBattery ? '🔋 без ограничений' : '🪫 батарея ограничена системой');
+            }, function() {});
+        }
+        window.eitiBgSetEnabled = function(on) {
+            try { localStorage.setItem('eiti_bg_notify', on ? '1' : '0'); } catch (e) {}
+            var b = window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null;
+            if (b) (on ? b.start() : b.stop()).then(eitiBgStatusPaint, eitiBgStatusPaint);
+            if (typeof showToast === 'function') showToast(on ? '🔔 EITI работает в фоне' : '🔕 Фоновое уведомление выключено');
+        };
+        window.eitiBgBattery = function(unrestricted) {
+            var b = window.EitiCap && EitiCap.bg && EitiCap.bg.available ? EitiCap.bg : null;
+            if (!b) return;
+            (unrestricted ? b.requestIgnoreBattery() : b.openBatterySettings()).then(function() { setTimeout(eitiBgStatusPaint, 1500); }, function() {});
+        };
+        window.eitiBgStatusPaint = eitiBgStatusPaint;
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(eitiBgStatusPaint, 1500); });
+        document.addEventListener('visibilitychange', function() { if (!document.hidden) eitiBgStatusPaint(); });
         // v14.16.32: «📥 Скачать всю базу знаний (Wi-Fi)» — все шарды и пакеты в кэш устройства (в APK — Cache Storage моста).
         window.eitiKbDownloadAll = function(opts) {
             opts = opts || {};

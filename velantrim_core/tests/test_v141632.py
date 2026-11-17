@@ -101,3 +101,23 @@ def test_manifest_shortcut_icons():
             opaque = sum(1 for a in alpha.getdata() if a > 128)
             assert opaque > px * px * 0.25
             assert im.getpixel((0, 0))[3] == 0  # прозрачные углы
+
+
+def test_default_tracks_apk_only_not_in_repo():
+    # треки по умолчанию лежат только в APK (www/media/default/), в репозитории — лишь константа с названиями
+    assert "window.EITI_DEFAULT_TRACKS = [" in HTML
+    assert "title: 'Seul', artist: 'Velan'" in HTML and "title: 'Native Lands', artist: ''" in HTML
+    assert "if (!window.EITI_NATIVE && !opts.force) return Promise.resolve(0)" in HTML
+    assert "eiti_default_tracks_removed" in HTML and "eitiRestoreDefaultTracks" in HTML
+    assert not list(ROOT.glob("**/media/default/*.mp3"))
+    assert "media/default/*.mp3" in (ROOT / ".gitignore").read_text(encoding="utf-8")
+    assert "media/default" not in SW, "сайт не кэширует несуществующие mp3"
+
+
+def test_background_settings_native_only():
+    i = HTML.index('id="eiti-bg-settings"')
+    assert "eiti-native-only" in HTML[i - 80:i]
+    for s in ("eiti-bg-notify", "eitiBgBattery(true)", "eitiBgBattery(false)", "eiti-default-tracks-restore"):
+        assert s in HTML
+    assert "localStorage.getItem('eiti_bg_notify') !== '0'" in HTML  # по умолчанию включено
+    assert "window._eitiMediaActionBound" in HTML  # один обработчик кнопок шторки на все раскладки плеера
