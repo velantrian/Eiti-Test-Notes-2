@@ -35,6 +35,7 @@ var CORE = [
     BASE + 'local/eiti_journal.js', // v14.9.0: движок дневника (записи, дедуп, миграция)
     BASE + 'local/eiti_action_gate.js', // P0: шлюз AI-действий (propose→validate→authorize→commit→ack)
     BASE + 'local/eiti_doc_edits.js', // v14.16.32: точечные правки длинных текстов + просмотр изменений
+    BASE + 'local/eiti_device_fit.js', // v14.16.32: какие офлайн-модели потянет устройство
     BASE + 'local/eiti_voice.js', // EitiVoice P0: единый голосовой контроллер EitiVoice (состояния, ошибки, адаптеры)
     BASE + 'local/eiti_related.js', // v14.13.0: «Похожие / Рассуждение» (похожие заметки, карточки, настройки)
     BASE + 'local/eiti_typo.js', // v14.8.0: опечатки (нормализация + нечёткое сопоставление)

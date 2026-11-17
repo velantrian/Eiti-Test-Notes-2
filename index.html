@@ -4461,6 +4461,8 @@
         window.EITI_I18N.addDict('en', {"Отправить сообщение": "Send message", "Прикрепить файл": "Attach file"}); // v14.16.x: кнопки внутри поля ввода
         window.EITI_I18N.addDict('de', {"Отправить сообщение": "Nachricht senden", "Прикрепить файл": "Datei anhängen"});
         window.EITI_I18N.addDict('en', {"📌 Настройка табов": "📌 Tab settings", "Меньше иконки (small icons)": "Small icons", "Компактные нижние табы и верхние панели — больше места на экране": "Compact bottom tabs and top bars — more room on screen", "🔍 Маленькие иконки включены": "🔍 Small icons on", "🔍 Обычные иконки": "🔍 Regular icons"}); // v14.15.1
+        window.EITI_I18N.addDict('en', {"📲 Под ваше устройство": "📲 For your device"});
+        window.EITI_I18N.addDict('de', {"📲 Под ваше устройство": "📲 Für Ihr Gerät"});
         window.EITI_I18N.addDict('en', {"🔋 Фон и батарея": "🔋 Background & battery", "🔔 Уведомление «EITI работает в фоне»": "🔔 «EITI is running in the background» notification", "🔋 Батарея без ограничений": "🔋 Unrestricted battery", "🪫 Вернуть ограничения (экономия батареи)": "🪫 Restore restrictions (save battery)", "🎵 Вернуть треки по умолчанию": "🎵 Restore default tracks"});
         window.EITI_I18N.addDict('de', {"🔋 Фон и батарея": "🔋 Hintergrund & Akku", "🔔 Уведомление «EITI работает в фоне»": "🔔 Hinweis «EITI läuft im Hintergrund»", "🔋 Батарея без ограничений": "🔋 Akku ohne Einschränkungen", "🪫 Вернуть ограничения (экономия батареи)": "🪫 Einschränkungen wiederherstellen (Akku sparen)", "🎵 Вернуть треки по умолчанию": "🎵 Standard-Titel wiederherstellen"});
         window.EITI_I18N.addDict('en', {"📚 База знаний на устройстве": "📚 Knowledge base on device", "Разделы базы (~460 МБ) скачиваются по мере надобности. Чтобы всё работало без сети — скачай целиком по Wi-Fi.": "Base sections (~460 MB) are downloaded as needed. To use everything offline, download it all over Wi-Fi.", "📥 Скачать всё по Wi-Fi": "📥 Download all over Wi-Fi"});
@@ -4697,6 +4699,7 @@
     <script src="./local/eiti_voice.js" defer></script>
     <script src="./local/eiti_action_gate.js" defer></script>
     <script src="./local/eiti_doc_edits.js" defer></script>
+    <script src="./local/eiti_device_fit.js" defer></script>
 <script>
 (function(){
   // v14.16.32: нативное приложение (Capacitor APK) — флаг до первой отрисовки. Мост Capacitor внедряется
@@ -11682,6 +11685,13 @@
                             <div id="llm-offline-status" style="padding:8px 12px;background:var(--secondary-color);border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;">
                                 <span id="llm-status-text">❌ Не загружена</span>
                                 <span id="llm-status-model" style="opacity:0.6;font-size:12px;"></span>
+                            </div>
+                            <!-- v14.16.32: модели по мощности устройства (WebLLM 0.2.88) -->
+                            <div id="eiti-llm-fit" style="display:flex;flex-direction:column;gap:8px;">
+                                <div style="font-size:13px;font-weight:600;" data-i18n="📲 Под ваше устройство">📲 Под ваше устройство</div>
+                                <div id="eiti-llm-fit-dev" style="font-size:12px;opacity:0.75;padding:8px 10px;background:var(--secondary-color);border-radius:10px;line-height:1.5;">🔍 Определяю возможности устройства…</div>
+                                <div id="eiti-llm-fit-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+                                <div style="font-size:11px;opacity:0.5;line-height:1.5;">✅ подходит · ⚠️ впритык (может тормозить или выгрузиться) · ⛔ не потянет. Крупные 8–9B — для телефонов с ~12 ГБ ОЗУ (Galaxy S21 Ultra, Xiaomi 13/14, Note 13 Pro+ 12 ГБ). Модель скачивается один раз (Wi-Fi) и работает без интернета.</div>
                             </div>
                             <!-- Выбор модели -->
                             <div style="font-size:13px;font-weight:600;margin-bottom:2px;">Выберите LLM модель:</div>
@@ -30882,6 +30892,46 @@ window.eitiToggleLLM = function() {
     }
 })();
 
+// v14.16.32: список офлайн-моделей с оценкой «потянет ли устройство» (local/eiti_device_fit.js)
+window.eitiLLMFitRender = function(force) {
+    var box = document.getElementById('eiti-llm-fit-list'), devEl = document.getElementById('eiti-llm-fit-dev');
+    if (!box || !window.EitiDeviceFit) return Promise.resolve(null);
+    if (box.getAttribute('data-done') === '1' && !force) return Promise.resolve(window._eitiDeviceFit || null);
+    box.setAttribute('data-done', '1');
+    var F = window.EitiDeviceFit;
+    return F.probe().then(function(dev) {
+        window._eitiDeviceFit = dev;
+        if (devEl) devEl.textContent = F.summary(dev) + (dev.ramCapped && !dev.ramExact ? ' (браузер не сообщает ОЗУ больше 8 ГБ)' : '');
+        var rec = F.recommend(dev);
+        var cur = (document.querySelector('input[name="llm-model"]:checked') || {}).value;
+        try { var saved = typeof _eitiLLMGetConfig === 'function' ? (_eitiLLMGetConfig() || {}).model : ''; if (saved && F.CATALOG.some(function(m) { return m.id === saved; })) cur = saved; } catch (e) {}
+        var html = '';
+        ['fast', 'smart', 'large'].forEach(function(tier) {
+            html += '<div style="font-size:11px;font-weight:700;opacity:0.6;letter-spacing:0.5px;margin-top:4px;">' + F.TIERS[tier] + '</div>';
+            F.CATALOG.filter(function(m) { return m.tier === tier; }).forEach(function(m) {
+                var r = F.rate(m, dev);
+                var badge = r.level === 'ok' ? '✅' : r.level === 'tight' ? '⚠️' : r.level === 'no' ? '⛔' : '❔';
+                var isRec = rec && rec.id === m.id;
+                html += '<label class="eiti-llm-fit-item" data-fit="' + r.level + '"' + (isRec ? ' data-rec="1"' : '') + ' style="display:block;padding:9px 10px;border-radius:10px;cursor:pointer;background:' + (isRec ? 'rgba(255,215,0,0.08)' : 'var(--secondary-color)') + ';border:2px solid ' + (isRec ? 'var(--accent-color)' : 'transparent') + ';' + (r.level === 'no' ? 'opacity:0.55;' : '') + '">'
+                    + '<input type="radio" name="llm-model" value="' + m.id + '"' + (cur === m.id ? ' checked' : '') + ' onchange="eitiLLMRenderBtn()" style="margin-right:8px;">'
+                    + badge + ' <b>' + m.name + '</b>' + (isRec ? ' <span style="color:var(--accent-color);font-size:12px;">★ рекомендуем</span>' : '')
+                    + '<br><span style="font-size:11px;opacity:0.65;margin-left:22px;">≈' + m.dlGB + ' ГБ · ' + m.langs + ' · ' + m.note + (r.reason ? ' · ' + r.reason : '') + '</span></label>';
+            });
+        });
+        box.innerHTML = html;
+        return dev;
+    }).catch(function() { if (devEl) devEl.textContent = '❔ Не удалось определить возможности устройства'; return null; });
+};
+(function() {
+    function arm() {
+        var el = document.getElementById('eiti-llm-fit');
+        if (!el) return;
+        if (!('IntersectionObserver' in window)) { setTimeout(function() { window.eitiLLMFitRender(); }, 4000); return; }
+        var io = new IntersectionObserver(function(es) { if (es.some(function(e) { return e.isIntersecting; })) { io.disconnect(); window.eitiLLMFitRender(); } });
+        io.observe(el);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+})();
 window.eitiActivateLLM = async function() {
     var sel = document.querySelector('input[name="llm-model"]:checked');
     if (!sel) { if (typeof showToast === 'function') showToast('⚠️ Выберите LLM модель', 3000); return; }
