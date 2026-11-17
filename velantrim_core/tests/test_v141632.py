@@ -121,3 +121,11 @@ def test_background_settings_native_only():
         assert s in HTML
     assert "localStorage.getItem('eiti_bg_notify') !== '0'" in HTML  # по умолчанию включено
     assert "window._eitiMediaActionBound" in HTML  # один обработчик кнопок шторки на все раскладки плеера
+
+
+def test_models_nov_2026_and_openrouter_live_catalog():
+    for mid in ("gemini-4-hydrogen", "gemini-4-carbon", "claude-fable-5-2", "gpt-6.1-terra", "qwen4-max", "qwen/qwen4-max"):
+        assert f"'{mid}'" in HTML, mid
+    assert "llama-4-maverick" not in HTML
+    assert "EITI_OR_CAT_KEY = 'eiti_or_catalog_v1'" in HTML and 'list="eiti-or-models-dl"' in HTML
+    assert "deepseek: 3.96" in HTML

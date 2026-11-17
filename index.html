@@ -292,24 +292,24 @@
                     selections: ['deepseek-flash', 'deepseek-v4-pro-low', 'deepseek-v4-pro-high', 'deepseek-v4-pro-max']
                 },
                 gemini: {
-                    defaultId: 'gemini-3.8-flash',
-                    ids: ['gemini-3.8-flash', 'gemini-4-argon', 'gemini-3.6-flash', 'gemini-3.5-flash-lite']
+                    defaultId: 'gemini-4-hydrogen', // v14.16.32: Gemini 4 (ai.google.dev/gemini-api/docs/models, 11.2026)
+                    ids: ['gemini-4-hydrogen', 'gemini-4-carbon', 'gemini-4-argon', 'gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite']
                 },
                 openrouter: {
                     defaultId: 'openrouter/auto',
-                    presets: ['openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'meta-llama/llama-4-maverick']
+                    presets: ['openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'qwen/qwen4-max']
                 },
                 notesAI: {
                     defaultId: 'same',
-                    ids: ['same', 'deepseek', 'gemini', 'openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'meta-llama/llama-4-maverick']
+                    ids: ['same', 'deepseek', 'gemini', 'openrouter/auto', 'openrouter/free', 'anthropic/claude-sonnet-5.5', 'openai/gpt-6.1-sol', 'qwen/qwen4-max']
                 },
                 openai: {
                     defaultId: 'gpt-6.1-sol',
-                    ids: ['gpt-6-astra', 'gpt-6.1-sol', 'gpt-6-luna', 'gpt-5.5']
+                    ids: ['gpt-6-astra', 'gpt-6.1-sol', 'gpt-6.1-terra', 'gpt-6-luna', 'gpt-5.5']
                 },
                 anthropic: {
                     defaultId: 'claude-sonnet-5-5',
-                    ids: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5']
+                    ids: ['claude-fable-5-2', 'claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5']
                 },
                 grokVision: {
                     defaultId: 'grok-4.7',
@@ -317,7 +317,7 @@
                 },
                 qwen: {
                     defaultId: 'qwen-plus-latest',
-                    ids: ['qwen3.8-max', 'qwen3.8-flash', 'qwen-plus-latest', 'qwen-max', 'qwen-turbo-latest', 'qwen-long']
+                    ids: ['qwen4-max', 'qwen3.8-max', 'qwen3.8-flash', 'qwen-plus-latest', 'qwen-max', 'qwen-turbo-latest', 'qwen-long']
                 },
                 embeddings: {
                     defaultId: 'offline-minilm',
@@ -9515,13 +9515,21 @@
                                 <div style="font-size:13px;font-weight:600;margin-bottom:8px;">⚡ Google Gemini</div>
                                 <!-- Выбор модели Gemini -->
                                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+                                    <button id="gm-model-4hydrogen" onclick="eitiSetGeminiModel('gemini-4-hydrogen')"
+                                        style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
+                                        4 Hydrogen ⭐<br><span style="font-size:9px;opacity:0.6;font-weight:400;">новый · быстро</span>
+                                    </button>
+                                    <button id="gm-model-4carbon" onclick="eitiSetGeminiModel('gemini-4-carbon')"
+                                        style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
+                                        4 Carbon<br><span style="font-size:9px;opacity:0.6;font-weight:400;">флагман</span>
+                                    </button>
                                     <button id="gm-model-38flash" onclick="eitiSetGeminiModel('gemini-3.8-flash')"
                                         style="padding:8px 4px;border-radius:10px;border:2px solid var(--accent-color);background:rgba(255,215,0,0.12);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
-                                        3.8 Flash ⭐<br><span style="font-size:9px;opacity:0.6;font-weight:400;">актуальный Flash</span>
+                                        3.8 Flash<br><span style="font-size:9px;opacity:0.6;font-weight:400;">прошлый Flash</span>
                                     </button>
                                     <button id="gm-model-4argon" onclick="eitiSetGeminiModel('gemini-4-argon')"
                                         style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
-                                        4 Argon<br><span style="font-size:9px;opacity:0.6;font-weight:400;">флагман · reasoning</span>
+                                        4 Argon<br><span style="font-size:9px;opacity:0.6;font-weight:400;">reasoning · дешевле Carbon</span>
                                     </button>
                                     <button id="gm-model-36flash" onclick="eitiSetGeminiModel('gemini-3.6-flash')"
                                         style="padding:8px 4px;border-radius:10px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:11px;font-weight:700;cursor:pointer;">
@@ -9804,11 +9812,12 @@
                                             style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">Claude</button>
                                         <button id="or-model-gpt" onclick="eitiSetORModel('openai/gpt-6.1-sol')"
                                             style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">GPT</button>
-                                        <button id="or-model-llama" onclick="eitiSetORModel('meta-llama/llama-4-maverick')"
-                                            style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">Llama</button>
+                                        <button id="or-model-qwen" onclick="eitiSetORModel('qwen/qwen4-max')"
+                                            style="flex:1;min-width:80px;padding:8px 6px;border-radius:9px;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;font-weight:700;cursor:pointer;">Qwen 4</button>
                                     </div>
                                     <div style="display:flex;gap:6px;align-items:center;">
-                                        <input type="text" id="openrouter-model-custom" placeholder="provider/model-name"
+                                        <datalist id="eiti-or-models-dl"></datalist>
+                                        <input type="text" id="openrouter-model-custom" list="eiti-or-models-dl" onfocus="if (typeof eitiLoadORModelMeta === 'function') eitiLoadORModelMeta()" placeholder="provider/model-name"
                                                style="flex:1;padding:9px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--panel-bg);color:var(--text-color);font-size:13px;"
                                                oninput="eitiSetORModel(this.value.trim()||'openrouter/auto')">
                                         <button onclick="window.open('https://openrouter.ai/models','_blank')"
@@ -9873,7 +9882,7 @@
                                             <button type="button" id="notes-ai-model-or-free" onclick="eitiNotesAISetModel('openrouter/free')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Free</button>
                                             <button type="button" id="notes-ai-model-or-claude" onclick="eitiNotesAISetModel('anthropic/claude-sonnet-5.5')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Claude</button>
                                             <button type="button" id="notes-ai-model-or-gpt" onclick="eitiNotesAISetModel('openai/gpt-6.1-sol')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">GPT</button>
-                                            <button type="button" id="notes-ai-model-or-llama" onclick="eitiNotesAISetModel('meta-llama/llama-4-maverick')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Llama</button>
+                                            <button type="button" id="notes-ai-model-or-qwen" onclick="eitiNotesAISetModel('qwen/qwen4-max')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);font-size:12px;cursor:pointer;">Qwen 4</button>
                                         </div>
                                         <input type="text" id="notes-ai-model-custom" placeholder="provider/model (OpenRouter)"
                                                style="width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border-color);background:var(--panel-bg);color:var(--text-color);font-size:13px;"
@@ -10064,6 +10073,9 @@
                             <div style="display:flex;gap:6px;flex-wrap:wrap;">
                                 <button id="qwen-model-qwen-max" onclick="eitiQwenSetModel('qwen-max')" style="flex:1;min-width:80px;padding:8px 4px;border-radius:9px;font-size:11px;cursor:pointer;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);">
                                     <div>Qwen Max</div><div style="font-size:9px;opacity:0.5;">Умнейший</div>
+                                </button>
+                                <button id="qwen-model-qwen4-max" onclick="eitiQwenSetModel('qwen4-max')" style="flex:1;min-width:80px;padding:8px 4px;border-radius:9px;font-size:11px;cursor:pointer;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);">
+                                    <div>Qwen4 Max</div><div style="font-size:9px;opacity:0.5;">Новый флагман</div>
                                 </button>
                                 <button id="qwen-model-qwen3-8-max" onclick="eitiQwenSetModel('qwen3.8-max')" style="flex:1;min-width:80px;padding:8px 4px;border-radius:9px;font-size:11px;cursor:pointer;border:2px solid var(--border-color);background:var(--secondary-color);color:var(--text-color);">
                                     <div>Qwen3.8 Max</div><div style="font-size:9px;opacity:0.5;">Флагман</div>
@@ -13258,6 +13270,8 @@
         function eitiRenderGeminiModel() {
             var cur = eitiGetGeminiModel();
             var map = {
+                'gemini-4-hydrogen': 'gm-model-4hydrogen',
+                'gemini-4-carbon': 'gm-model-4carbon',
                 'gemini-3.8-flash': 'gm-model-38flash',
                 'gemini-4-argon': 'gm-model-4argon',
                 'gemini-3.6-flash': 'gm-model-36flash',
@@ -13272,8 +13286,10 @@
             });
             var desc = document.getElementById('gm-model-desc');
             var descs = {
-                'gemini-3.8-flash': '3.8 Flash: актуальный Flash · быстро и сильно',
-                'gemini-4-argon': '4 Argon: флагман reasoning · сложные задачи',
+                'gemini-4-hydrogen': '4 Hydrogen: новое поколение · быстро, 1M контекст',
+                'gemini-4-carbon': '4 Carbon: флагман · код, наука, сложные задачи',
+                'gemini-3.8-flash': '3.8 Flash: прошлое поколение Flash',
+                'gemini-4-argon': '4 Argon: reasoning · дешевле Carbon',
                 'gemini-3.6-flash': '3.6 Flash: замена 3.5 Flash · баланс',
                 'gemini-3.5-flash-lite': '3.5 Lite: максимум скорости · минимум цены'
             };
@@ -23269,7 +23285,7 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                 'or-model-free-auto':'openrouter/free',
                 'or-model-claude':'anthropic/claude-sonnet-5.5',
                 'or-model-gpt':'openai/gpt-6.1-sol',
-                'or-model-llama':'meta-llama/llama-4-maverick'
+                'or-model-qwen':'qwen/qwen4-max'
             };
             Object.keys(presetMap).forEach(function(id) {
                 var btn = document.getElementById(id);
@@ -23431,13 +23447,42 @@ registerProcessor('grok-pcm-processor', GrokPCMProcessor);`;
                 };
             });
         }
+        // v14.16.32: живой каталог OpenRouter (GET /api/v1/models, без ключа) с кэшем на 24 ч — подсказки в поле «provider/model-name»
+        var EITI_OR_CAT_KEY = 'eiti_or_catalog_v1', EITI_OR_CAT_TTL = 24 * 3600e3;
+        function eitiORCatalogFill() {
+            var dl = document.getElementById('eiti-or-models-dl');
+            if (!dl) return;
+            var ids = Object.keys(_eitiORModelMeta).filter(function(id) { return !/:batch$/.test(id); });
+            if (dl.childElementCount === ids.length) return;
+            var frag = document.createDocumentFragment();
+            ids.forEach(function(id) { var o = document.createElement('option'); o.value = id; if (_eitiORModelMeta[id].name) o.label = _eitiORModelMeta[id].name; frag.appendChild(o); });
+            dl.innerHTML = ''; dl.appendChild(frag);
+        }
+        function eitiORCatalogFromCache() {
+            try {
+                var c = JSON.parse(localStorage.getItem(EITI_OR_CAT_KEY) || 'null');
+                if (!c || !Array.isArray(c.m)) return false;
+                c.m.forEach(function(x) { _eitiORModelMeta[x[0]] = { name: x[1] || '', supported: x[2], mandatory: !!x[3] }; });
+                eitiORCatalogFill();
+                return Date.now() - (c.ts || 0) < EITI_OR_CAT_TTL;
+            } catch (e) { return false; }
+        }
+        function eitiORCatalogSave() {
+            try {
+                var m = Object.keys(_eitiORModelMeta).map(function(id) { var v = _eitiORModelMeta[id]; return [id, v.name, v.supported, v.mandatory ? 1 : 0]; });
+                localStorage.setItem(EITI_OR_CAT_KEY, JSON.stringify({ ts: Date.now(), m: m }));
+            } catch (e) {}
+        }
+        window.eitiORCatalogIds = function() { return Object.keys(_eitiORModelMeta); };
         function eitiLoadORModelMeta() {
-            if (_eitiORMetaLoading || Object.keys(_eitiORModelMeta).length) return;
+            if (_eitiORMetaLoading) return;
+            if (!Object.keys(_eitiORModelMeta).length && eitiORCatalogFromCache()) return;
+            if (Object.keys(_eitiORModelMeta).length && window._eitiORCatFresh) return;
             _eitiORMetaLoading = true;
             eitiFetchWithTimeout('https://openrouter.ai/api/v1/models', {}, 12000)
                 .then(function(r) { return r.ok ? r.json() : null; })
                 .then(function(p) {
-                    if (p && Array.isArray(p.data)) eitiORCacheModelMeta(p.data);
+                    if (p && Array.isArray(p.data)) { eitiORCacheModelMeta(p.data); window._eitiORCatFresh = true; eitiORCatalogSave(); eitiORCatalogFill(); }
                     _eitiORMetaLoading = false;
                     try { eitiRenderORThinking(); } catch (e) {}
                 })
@@ -42387,7 +42432,7 @@ window.eitiLLMClearAll = async function() {
                 { id: 'openrouter/free', label: 'OpenRouter Free' },
                 { id: 'anthropic/claude-sonnet-5.5', label: 'Claude' },
                 { id: 'openai/gpt-6.1-sol', label: 'GPT' },
-                { id: 'meta-llama/llama-4-maverick', label: 'Llama' }
+                { id: 'qwen/qwen4-max', label: 'Qwen 4' }
             ];
         }
         function eitiNotesAIModelButtonMap() {
@@ -42399,7 +42444,7 @@ window.eitiLLMClearAll = async function() {
                 'openrouter/free': 'notes-ai-model-or-free',
                 'anthropic/claude-sonnet-5.5': 'notes-ai-model-or-claude',
                 'openai/gpt-6.1-sol': 'notes-ai-model-or-gpt',
-                'meta-llama/llama-4-maverick': 'notes-ai-model-or-llama'
+                'qwen/qwen4-max': 'notes-ai-model-or-qwen'
             };
         }
         function eitiSettingsFindGroupByKey(key) {
@@ -49952,7 +49997,8 @@ window._eitiInitSQL = _initSQL;
             defs: [
                 { id: 'gpt-6.1-sol',   label: 'GPT-6.1 Sol', desc: 'Баланс ✓' },
                 { id: 'gpt-6-astra',   label: 'GPT-6 Astra', desc: 'Флагман' },
-                { id: 'gpt-6-luna',    label: 'GPT-6 Luna',  desc: 'Быстро' },
+                { id: 'gpt-6.1-terra', label: 'GPT-6.1 Terra', desc: 'Быстро · зрение' },
+                { id: 'gpt-6-luna',    label: 'GPT-6 Luna',  desc: 'Дёшево' },
                 { id: 'gpt-5.5',       label: 'GPT-5.5',     desc: 'Legacy' },
             ]
         },
@@ -49960,6 +50006,7 @@ window._eitiInitSQL = _initSQL;
             title: '🟠 Модель Claude',
             key: 'eiti_anthropic_model',
             defs: [
+                { id: 'claude-fable-5-2',  label: 'Fable 5.2',  desc: 'Макс. reasoning' },
                 { id: 'claude-opus-5-5',   label: 'Opus 5.5',   desc: 'Флагман' },
                 { id: 'claude-sonnet-5-5', label: 'Sonnet 5.5', desc: 'Баланс ✓' },
                 { id: 'claude-haiku-5-5',  label: 'Haiku 5.5',  desc: 'Быстро' },
@@ -52410,6 +52457,7 @@ var QWEN = {
     // Поиск через специальную модель
     SEARCH_MODEL: 'qwen-plus-latest',
     MODELS: [
+        { id: 'qwen4-max',          label: 'Qwen4 Max',       desc: 'Новый флагман' },
         { id: 'qwen3.8-max',        label: 'Qwen3.8 Max',     desc: 'Флагман' },
         { id: 'qwen3.8-flash',      label: 'Qwen3.8 Flash',   desc: 'Быстрый' },
         { id: 'qwen-plus-latest',   label: 'Qwen Plus',       desc: 'Баланс' },
@@ -53531,7 +53579,7 @@ function _eitiOpenAIVision(userText, images, history) {
     var _dk = function(k) { return (typeof _deobfKey === 'function') ? _deobfKey(localStorage.getItem(k) || '') : (localStorage.getItem(k) || ''); };
     var key = _dk('eiti_openai_key') || _dk('eiti_apikey_openai');
     if (!key) return Promise.reject(new Error('Нет OpenAI ключа'));
-    var model = localStorage.getItem('eiti_openai_model') || 'gpt-5.5';
+    var model = localStorage.getItem('eiti_openai_model') || 'gpt-6.1-sol';
     var sysMsg = history.find(function(m) { return m.role === 'system'; });
     var apiMsgs = [];
     if (sysMsg) apiMsgs.push({ role: 'system', content: sysMsg.content });
@@ -56385,7 +56433,7 @@ if (window.EITI_DEBUG) console.log('%c📷 Vision chip fix loaded', 'color:#4CAF
         var EITI_DOCAI_OUT_CAP = { deepseek: 131072, gemini: 65536, openai: 128000, grok: 131072, openrouter: 65536 };
         var EITI_DOCAI_CTX = { deepseek: 1000000, gemini: 1000000, openai: 1000000, grok: 2000000, openrouter: 200000 };
         // оценка цены вывода, $ за 1M токенов (для подтверждения больших правок; правится здесь)
-        var EITI_DOCAI_OUT_PRICE = { deepseek: 2.19, gemini: 2.5, openai: 10, grok: 15, openrouter: 10 };
+        var EITI_DOCAI_OUT_PRICE = { deepseek: 3.96, gemini: 2.5, openai: 10, grok: 15, openrouter: 10 }; // $/1M вых. токенов, верхняя граница (DeepSeek V4 Pro peak, GPT-6.1 Sol)
         var EITI_DOCAI_CONFIRM_TOKENS = 50000;
         function target0() { try { return (typeof eitiNotesAIResolveTarget === 'function' && eitiNotesAIResolveTarget()) || {}; } catch (e) { return {}; } }
         // Подтверждение перед правкой, которая может выдать > 50K токенов (полное переписывание длинного текста)
