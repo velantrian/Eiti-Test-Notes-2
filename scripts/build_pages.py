@@ -36,6 +36,26 @@ REQUIRED_FILES = (
     'vendor/pdfjs/6.5.438/pdf.min.mjs',
     'vendor/pdfjs/6.5.438/pdf.worker.min.mjs',
     'vendor/pdfjs/6.5.438/LICENSE',
+    # v14.16.32: Fluent Emoji 3D (MIT, Microsoft) — 3D-иконки нижнего таб-бара, локально (без CDN)
+    'vendor/fluent-emoji-3d/LICENSE',
+    # v14.16.32: иконки ярлыков PWA (manifest.json → shortcuts; долгое нажатие на иконку в лаунчере)
+    'vendor/fluent-emoji-3d/shortcuts/chat-96.png',
+    'vendor/fluent-emoji-3d/shortcuts/chat-192.png',
+    'vendor/fluent-emoji-3d/shortcuts/notes-96.png',
+    'vendor/fluent-emoji-3d/shortcuts/notes-192.png',
+    'vendor/fluent-emoji-3d/shortcuts/player-96.png',
+    'vendor/fluent-emoji-3d/shortcuts/player-192.png',
+    'vendor/fluent-emoji-3d/shortcuts/memory-96.png',
+    'vendor/fluent-emoji-3d/shortcuts/memory-192.png',
+    'vendor/fluent-emoji-3d/README.md',
+    'vendor/fluent-emoji-3d/speech_balloon.webp',
+    'vendor/fluent-emoji-3d/notebook.webp',
+    'vendor/fluent-emoji-3d/books.webp',
+    'vendor/fluent-emoji-3d/musical_note.webp',
+    'vendor/fluent-emoji-3d/file_folder.webp',
+    'vendor/fluent-emoji-3d/memo.webp',
+    'vendor/fluent-emoji-3d/calendar.webp',
+    'vendor/fluent-emoji-3d/gear.webp',
 )
 
 # The explicit patterns reflect the currently documented browser runtime.
