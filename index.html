@@ -8363,7 +8363,7 @@
             display: none;
             position: absolute;
             left: 10px; right: 10px;
-            bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(10px + var(--eiti-nai-sb, 0px)); /* v14.16.32: safe-area — у таб-бара */
             z-index: 16;
             align-items: center;
             flex-wrap: wrap;
@@ -8400,16 +8400,28 @@
         /* v13.7.23: без Notes AI нижней панели нет — теги прижаты к нижней навигации (раньше 52px пустоты) */
         .note-editor-overlay.active .note-editor-body,
         .note-editor-overlay.active .note-editor-hl { padding-bottom: 16px; }
-        .note-editor-overlay.active .note-tags-row { padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
+        .note-editor-overlay.active .note-tags-row { padding-bottom: 6px; } /* v14.16.32: safe-area — у таб-бара */
         /* с Notes AI — место ровно под плавающую панель 🔍 / Ask AI / ✎ (44px + 10px отступ) */
         .note-editor-overlay.notes-ai-on .note-editor-body,
         .note-editor-overlay.notes-ai-on .note-editor-hl { padding-bottom: 78px; }
-        .note-editor-overlay.notes-ai-on .note-tags-row { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
+        .note-editor-overlay.notes-ai-on .note-tags-row { padding-bottom: 60px; }
+        /* v14.16.32: таб-бара под редактором нет (полный экран / «табы скрыты») → системный отступ возвращается */
+        .note-editor-overlay.editor-fullscreen, body.notes-fullscreen .note-editor-overlay,
+        html.eiti-chat-only-tabs .note-editor-overlay { --eiti-nai-sb: var(--eiti-bottom-inset, var(--eiti-env-bottom)); }
+        .note-editor-overlay.editor-fullscreen .notes-ai-panel,
+        body.notes-fullscreen .notes-ai-panel,
+        html.eiti-chat-only-tabs .notes-ai-panel { padding-bottom: var(--eiti-bottom-inset, var(--eiti-env-bottom)); }
+        .note-editor-overlay.editor-fullscreen.active .note-tags-row,
+        body.notes-fullscreen .note-editor-overlay.active .note-tags-row,
+        html.eiti-chat-only-tabs .note-editor-overlay.active .note-tags-row { padding-bottom: calc(6px + var(--eiti-bottom-inset, var(--eiti-env-bottom))); }
+        .note-editor-overlay.editor-fullscreen.notes-ai-on .note-tags-row,
+        body.notes-fullscreen .note-editor-overlay.notes-ai-on .note-tags-row,
+        html.eiti-chat-only-tabs .note-editor-overlay.notes-ai-on .note-tags-row { padding-bottom: calc(60px + var(--eiti-bottom-inset, var(--eiti-env-bottom))); }
         .notes-ai-find {
             display: none;
             position: absolute;
             left: 10px; right: 10px;
-            bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(62px + var(--eiti-nai-sb, 0px));
             z-index: 17;
             align-items: center; gap: 6px;
             background: var(--secondary-color);
@@ -8434,7 +8446,9 @@
             border-top: 1px solid var(--border-color);
             border-radius: 18px 18px 0 0;
             box-shadow: 0 -8px 28px rgba(0,0,0,0.35);
-            padding-bottom: env(safe-area-inset-bottom, 0px);
+            /* v14.16.32: системный отступ снизу уже забирает нижний таб-бар → здесь 0 (был зазор ~48px над табами
+               на Android с кнопочной навигацией). Отступ нужен, только когда табов под панелью нет — см. ниже. */
+            padding-bottom: 0;
             max-height: min(72vh, calc(100% - 8px));
             transition: height .18s ease;
         }

@@ -38,3 +38,11 @@ def test_pwa_install_hidden_in_native():
 def test_header_size_setting():
     assert 'id="eiti-header-size-btn"' in HTML
     assert "function eitiSetHeaderLarge(" in HTML and "function eitiIsHeaderLarge(" in HTML
+
+
+# ── item 10: Заметки AI — без зазора над таб-баром ──
+def test_notes_ai_no_double_safe_area():
+    i = HTML.index(".notes-ai-panel {\n            display: none;")
+    block = HTML[i: HTML.index("}", i)]
+    assert "padding-bottom: 0;" in block and "env(safe-area-inset-bottom" not in block
+    assert "--eiti-nai-sb: var(--eiti-bottom-inset, var(--eiti-env-bottom))" in HTML

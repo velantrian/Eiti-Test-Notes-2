@@ -67,4 +67,20 @@ test.describe('v14.16.32 native shell', () => {
     }));
     expect(r).toEqual({ native: false, phone: false, compact: false, h: 88, isNative: false });
   });
+
+  test('Notes AI: no empty band above the tab bar (item 10)', async ({ page }) => {
+    await boot(page, true, { eiti_notes_ai_enabled: '1' });
+    const pad = async () => page.evaluate(() => {
+      const overlay = document.getElementById('noteEditorOverlay');
+      overlay.classList.add('active');
+      window.eitiNotesAIOnEditorOpen(); window.eitiNotesAITogglePanel(true);
+      const p = document.getElementById('notesAiPanel');
+      return { panel: parseFloat(getComputedStyle(p).paddingBottom),
+               tags: parseFloat(getComputedStyle(overlay.querySelector('.note-tags-row')).paddingBottom) };
+    });
+    expect(await pad()).toEqual({ panel: 0, tags: 60 });
+    // таб-бара нет (полноэкранный редактор) → системный отступ нужен
+    await page.evaluate(() => document.getElementById('noteEditorOverlay').classList.add('editor-fullscreen'));
+    expect((await pad()).panel).toBe(48);
+  });
 });
